@@ -3,6 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Working Page</title>
   <script type="text/javascript" src="lib/Utils.js"></script>
+  <script type="text/javascript" src="lib/Color.js"></script>
   <script type="text/javascript" src="lib/c64Screen.js"></script>
   <script type="text/javascript" src="lib/PixPathTypes.js"></script>
   <script type="text/javascript" src="lib/CharacterMaps.js"></script>
@@ -39,7 +40,7 @@
 
     var x = 0, y = 0;
     Object.keys(c64Style.CharacterMaps).forEach(function(key) {
-      c64Style.log("drawing:" + key);
+      // c64Style.log("drawing:" + key);
       textLayer.drawSymbol(c64Style.CharacterMaps[key], x, y, "white");
       x++;
       if (x > 18) {
