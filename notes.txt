@@ -1,0 +1,4 @@
+Color string format
+rgb(255, 255, 255)
+#FFFFFF
+white
