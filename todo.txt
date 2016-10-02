@@ -1,3 +1,10 @@
 TODO
 
+set border/background color on Screen
+
+Mouse handlers
+
+events and observer notification
+
+Bounds checking on text layer
 Text wrapping on text layer

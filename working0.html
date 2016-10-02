@@ -4,6 +4,7 @@
   <title>C64Style Working Page</title>
   <script type="text/javascript" src="lib/Utils.js"></script>
   <script type="text/javascript" src="lib/Color.js"></script>
+  <script type="text/javascript" src="lib/Constants.js"></script>
   <script type="text/javascript" src="lib/c64Screen.js"></script>
   <script type="text/javascript" src="lib/PixPathTypes.js"></script>
   <script type="text/javascript" src="lib/CharacterMap.js"></script>
@@ -17,31 +18,30 @@
   <div id="buttons"><button onclick="screen.setPaused(!screen.getPaused());">Pause</button></div>
   <div id="info"></div>
   <script type="text/javascript">
-  var c64Style = c64Style || {};
-  var screen = null, textLayer = null;
+  var C64Style = C64Style || {};
+  var screen = null, textLayer = null, textLayer2 = null;
   var config = {
-
+    "rows" : 25,
+    "cols" : 40,
+    "scaleX" : 1,
+    "scaleY" : 1,
   };
+
+
   function initialize(targetDiv, config) {
-    screen = new c64Style.Screen(0,0,document.getElementById('info'));
+    screen = new C64Style.Screen(targetDiv,0,0,document.getElementById('info'), config);
 
-    var canvas = document.createElement("CANVAS");
-    targetDiv.appendChild(canvas);
-    canvas.id = "c64TextLayerCanvas";
-    canvas.width = 640;
-    canvas.height = 400;
-    var context = canvas.getContext("2d");
+    screen.initialize();
 
-    textLayer = new c64Style.TextLayer(context, {scaleX:1, scaleY:1});
-
-    screen.addLayer(textLayer);
+    textLayer = screen.createLayer("TextLayer");
+    textLayer2 = screen.createLayer("TextLayer");
 
     screen.render(1);
 
     var x = 0, y = 0;
-    Object.keys(c64Style.CharacterMap).forEach(function(key) {
-      // c64Style.log("drawing:" + key);
-      textLayer.drawSymbol(c64Style.CharacterMap[key], x, y, "white");
+    Object.keys(C64Style.CharacterMap).forEach(function(key) {
+      // C64Style.log("drawing:" + key);
+      textLayer.drawSymbol(C64Style.CharacterMap[key], x, y, "white");
       x++;
       if (x > 18) {
         x = 0;

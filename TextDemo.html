@@ -1,0 +1,56 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style Text Demo</title>
+  <script type="text/javascript" src="lib/Utils.js"></script>
+  <script type="text/javascript" src="lib/Color.js"></script>
+  <script type="text/javascript" src="lib/Constants.js"></script>
+  <script type="text/javascript" src="lib/c64Screen.js"></script>
+  <script type="text/javascript" src="lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="lib/TextLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="content">
+  </div>
+  <div id="buttons"><button onclick="screen.setPaused(!screen.getPaused());">Pause</button></div>
+  <div id="info"></div>
+  <script type="text/javascript">
+
+  /************************************************
+  *** Empty config, use defaults for everything ***
+  *************************************************/
+  var config = {};
+
+  var screen = null, textLayer = null;
+
+  function initialize(targetDiv, config) {
+
+    // Create the C64 Screen
+    screen = new C64Style.Screen(targetDiv,0,0,document.getElementById('info'), config);
+    screen.initialize();
+    textLayer = screen.createLayer("TextLayer");
+    screen.render();
+
+    // Write some characters to it
+    textLayer.writeText("This is a demo of the text drawing", 0, 0, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("capabilities of C64Style.", 0, 1, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("Enjoy!", 0, 2, C64Style.Color.CYAN);
+
+    // Draw all mapped symbols.
+    var x = 0, y = 5;
+    Object.keys(C64Style.CharacterMap).forEach(function(key) {
+      textLayer.drawSymbol(C64Style.CharacterMap[key], x, y, C64Style.Color.WHITE);
+      x++;
+      if (x > 18) {
+        x = 0;
+        y++;
+      }
+    });
+  }
+  initialize(document.getElementById("content"), config);
+  </script>
+</body>
+</html>

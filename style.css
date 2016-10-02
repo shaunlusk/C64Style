@@ -2,8 +2,3 @@ body {
   background-color: black;
   color: white;
 }
-
-canvas {
-  border:20px solid rgb(160, 160, 255);
-  background-color: rgb(53, 40, 121);
-}
