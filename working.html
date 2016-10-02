@@ -6,7 +6,7 @@
   <script type="text/javascript" src="lib/Color.js"></script>
   <script type="text/javascript" src="lib/c64Screen.js"></script>
   <script type="text/javascript" src="lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="lib/CharacterMaps.js"></script>
+  <script type="text/javascript" src="lib/CharacterMap.js"></script>
   <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
   <script type="text/javascript" src="lib/TextLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
@@ -39,9 +39,9 @@
     screen.render(1);
 
     var x = 0, y = 0;
-    Object.keys(c64Style.CharacterMaps).forEach(function(key) {
+    Object.keys(c64Style.CharacterMap).forEach(function(key) {
       // c64Style.log("drawing:" + key);
-      textLayer.drawSymbol(c64Style.CharacterMaps[key], x, y, "white");
+      textLayer.drawSymbol(c64Style.CharacterMap[key], x, y, "white");
       x++;
       if (x > 18) {
         x = 0;
