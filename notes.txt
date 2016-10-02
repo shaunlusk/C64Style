@@ -2,3 +2,23 @@ Color string format
 rgb(255, 255, 255)
 #FFFFFF
 white
+
+
+
+ccs64 palette, not used, but might be good.
+Black: 0 0 0
+White: 255 255 255
+Red: 224 64 64
+Cyan: 96 255 255
+Magenta: 224 96 224
+Green: 64 224 64
+Blue: 64 64 224
+Yellow: 255 255 64
+Orange: 224 160 64
+Brown: 156 116 72
+Pink: 255 160 160
+DGrey: 84 84 84
+Grey: 136 136 136
+LGreen: 160 255 160
+LBlue: 160 160 255
+LGrey: 192 192 192
