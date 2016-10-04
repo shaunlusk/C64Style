@@ -1,5 +1,11 @@
 TODO
 
+Gfx Elements
+must provide layer at creation time
+refactor check for collisions
+element finalize
+
+--------------------------------------
 set border/background color on Screen
 
 Mouse handlers
