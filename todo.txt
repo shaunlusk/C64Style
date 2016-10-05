@@ -1,5 +1,7 @@
 TODO
 
+collisionLast flag - how deal with in terms of drawing/setting clearing.
+
 Gfx Elements
 must provide layer at creation time
 refactor check for collisions
