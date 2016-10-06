@@ -12,9 +12,15 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   element.isDirty = function() {return this.dirty;};
   element.hidden = props.hidden || false;
   element.isHidden = function() {return this.hidden;};
-  element.getZIndexComparable = function() {return {};};
+  element.setHidden = function(val) {this.hidden = val;};
+  element.getZIndexComparable = function() {return {getElement : function() {return element;}};};
   element.collidesWith = function() {return false;};
-  element.collidesWith_LastPosition = function() {return false;};
-
+  element.setHasCollision = function(val) {this.collision = val;};
+  element.collision = props.collision || false;
+  element.hasCollision = function() {return this.collision;};
+  element.clear = function() {};
+  element.render = function() {};
+  element.finalize = function() {};
+  
   return element;
 };

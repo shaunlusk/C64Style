@@ -41,6 +41,16 @@ describe("GfxLayer", function() {
       assert(removed.isDirty(), "element should have been marked dirty");
       done();
     });
+    it("should mark element hidden", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
+      gfxLayer.addElement(mockElement);
+
+      var removed = gfxLayer.removeElementById("mockElement");
+
+      assert(removed.isHidden(), "element should have been marked dirty");
+      done();
+    });
   });
   describe("#removeElement()", function() {
     it("should call removeElementById with element id", function(done) {
@@ -109,42 +119,53 @@ describe("GfxLayer", function() {
   describe("#_collisionCheckElementsIfNeeded()", function() {
     it("should skip collision check if both elements dirty", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
-      gfxLayer._collisionCheck = function() {this.calledIt = true;};
       var mockElement1 = C64Style.Mocks.getMockGfxElement({dirty:true});
+      mockElement1.collidesWith = function() {this.calledIt = true;};
       var mockElement2 = C64Style.Mocks.getMockGfxElement({dirty:true});
 
       gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
 
-      assert(gfxLayer.calledIt === undefined, "should not have called _collisionCheck");
+      assert(mockElement1.calledIt === undefined, "should not have called _collisionCheck");
       done();
     });
     it("should skip collision check if both elements hidden", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
-      gfxLayer._collisionCheck = function() {this.calledIt = true;};
       var mockElement1 = C64Style.Mocks.getMockGfxElement({hidden:true});
+      mockElement1.collidesWith = function() {this.calledIt = true;};
       var mockElement2 = C64Style.Mocks.getMockGfxElement({hidden:true});
 
       gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
 
-      assert(gfxLayer.calledIt === undefined, "should not have called _collisionCheck");
+      assert(mockElement1.calledIt === undefined, "should not have called _collisionCheck");
+      done();
+    });
+    it("should skip collision check if both elements already had collisions", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement({collision:true});
+      mockElement1.collidesWith = function() {this.calledIt = true;};
+      var mockElement2 = C64Style.Mocks.getMockGfxElement({collision:true});
+
+      gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
+
+      assert(mockElement1.calledIt === undefined, "should not have called _collisionCheck");
       done();
     });
     it("should call collision check if either element is visible or not dirty", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
-      gfxLayer._collisionCheck = function() {this.calledIt = true; return false;};
       var mockElement1 = C64Style.Mocks.getMockGfxElement({dirty:true});
+      mockElement1.collidesWith = function() {this.calledIt = true;};
       var mockElement2 = C64Style.Mocks.getMockGfxElement({hidden:true});
 
       gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
 
-      assert(gfxLayer.calledIt === true, "should have called _collisionCheck");
+      assert(mockElement1.calledIt === true, "should have called _collisionCheck");
       done();
     });
     it("should not call update on collision if collisionCheck is false", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
-      gfxLayer._collisionCheck = function() {return false;};
       gfxLayer._updateElementOnCollision = function() {this.calledIt = true;};
       var mockElement1 = C64Style.Mocks.getMockGfxElement();
+      mockElement1.collidesWith = function() {return false;};
       var mockElement2 = C64Style.Mocks.getMockGfxElement();
 
       gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
@@ -154,10 +175,10 @@ describe("GfxLayer", function() {
     });
     it("should call updateOnCollision for each element if collisionCheck is true", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
-      gfxLayer._collisionCheck = function() {return true;};
       gfxLayer.calledItCount = 0;
       gfxLayer._updateElementOnCollision = function() {this.calledItCount++;};
       var mockElement1 = C64Style.Mocks.getMockGfxElement();
+      mockElement1.collidesWith = function() {return true;};
       var mockElement2 = C64Style.Mocks.getMockGfxElement();
 
       gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
@@ -166,17 +187,109 @@ describe("GfxLayer", function() {
       done();
     });
   });
-  describe("#_collisionCheck()", function() {
-    it("should return true if elements collide", function(done) {
+  describe("#_updateElementOnCollision()", function() {
+    it("should set element hasCollision", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
       var mockElement1 = C64Style.Mocks.getMockGfxElement();
-      mockElement1.collidesWith = function() {return true;};
-      var mockElement2 = C64Style.Mocks.getMockGfxElement();
-      mockElement2.collidesWith = function() {return true;};
 
-      var result = gfxLayer._collisionCheck(mockElement1,mockElement2);
+      gfxLayer._updateElementOnCollision(mockElement1);
 
-      assert(result === true, "should have returned true");
+      assert(mockElement1.collision === true, "should have called setHasCollision");
+      done();
+    });
+    it("should set element dirty", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement();
+
+      gfxLayer._updateElementOnCollision(mockElement1);
+
+      assert(mockElement1.dirty === true, "should have set dirty");
+      done();
+    });
+    it("should add element to dirty elements list, if wasn't dirty", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement();
+
+      gfxLayer._updateElementOnCollision(mockElement1);
+
+      assert(gfxLayer._dirtyElements.size() === 1, "should have added to dirty list");
+      done();
+    });
+    it("should not add element to dirty elements list, if was dirty", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement({dirty:true});
+
+      gfxLayer._updateElementOnCollision(mockElement1);
+
+      assert(gfxLayer._dirtyElements.size() === 0, "should not have added to dirty list");
+      done();
+    });
+  });
+  describe("#render()", function() {
+    it("should call clear on dirtyElements", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement();
+      mockElement1.clear = function() {this.calledIt = true;};
+      gfxLayer._dirtyElements.push(mockElement1.getZIndexComparable());
+
+      gfxLayer.render();
+
+      assert(mockElement1.calledIt === true, "should have called clear");
+      done();
+    });
+    it("should call render on dirtyElements", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement();
+      mockElement1.render = function() {this.calledIt = true;};
+      gfxLayer._dirtyElements.push(mockElement1.getZIndexComparable());
+
+      gfxLayer.render();
+
+      assert(mockElement1.calledIt === true, "should have called render");
+      done();
+    });
+  });
+  describe("#_cleanUp()", function() {
+    it("should call finalize on each removed element.", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
+      mockElement1.finalize = function() {this.calledIt = true;};
+      gfxLayer._removedElements.mockElement = mockElement1;
+
+      gfxLayer._cleanUp();
+
+      assert(mockElement1.calledIt === true, "should have called finalize");
+      done();
+    });
+    it("should remove elements from elements list.", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
+      gfxLayer._removedElements.mockElement = mockElement1;
+      gfxLayer._elements.push(mockElement1);
+
+      gfxLayer._cleanUp();
+
+      assert(gfxLayer._elements.length === 0, "should have removed element from list");
+      done();
+    });
+    it("should clear removed elements.", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
+      gfxLayer._removedElements.mockElement = mockElement1;
+
+      gfxLayer._cleanUp();
+
+      assert(gfxLayer._removedElements.mockElement === undefined, "should have cleared removed elements");
+      done();
+    });
+    it("should clear dirty elements.", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
+      gfxLayer._dirtyElements.push(mockElement1.getZIndexComparable());
+
+      gfxLayer._cleanUp();
+
+      assert(gfxLayer._dirtyElements.size() === 0, "should have cleared dirty elements");
       done();
     });
   });
