@@ -12,6 +12,7 @@
   <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
   <script type="text/javascript" src="lib/Layer.js"></script>
   <script type="text/javascript" src="lib/TextLayer.js"></script>
+  <script type="text/javascript" src="lib/GfxElement.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -40,6 +41,8 @@
     textLayer2 = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
+    var element = new C64Style.GfxElement(screen, gfxLayer, gfxLayer.getCanvasContext(), 1, 1, {});
+    gfxLayer.addElement(element);
     screen.render(1);
 
     var x = 0, y = 0;
