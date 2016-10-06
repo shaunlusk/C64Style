@@ -3,14 +3,16 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Working Page</title>
   <script type="text/javascript" src="lib/Utils.js"></script>
+  <script type="text/javascript" src="lib/PriorityQueue.js"></script>
   <script type="text/javascript" src="lib/Color.js"></script>
   <script type="text/javascript" src="lib/Constants.js"></script>
   <script type="text/javascript" src="lib/c64Screen.js"></script>
   <script type="text/javascript" src="lib/PixPathTypes.js"></script>
   <script type="text/javascript" src="lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="lib/CharacterRenderer.js"></script
+  <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
   <script type="text/javascript" src="lib/Layer.js"></script>
   <script type="text/javascript" src="lib/TextLayer.js"></script>
+  <script type="text/javascript" src="lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -20,7 +22,7 @@
   <div id="info"></div>
   <script type="text/javascript">
   var C64Style = C64Style || {};
-  var screen = null, textLayer = null, textLayer2 = null;
+  var screen = null, textLayer = null, textLayer2 = null, gfxLayer = null;
   var config = {
     "rows" : 25,
     "cols" : 40,
@@ -36,6 +38,7 @@
 
     textLayer = screen.createLayer("TextLayer");
     textLayer2 = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
 
     screen.render(1);
 
