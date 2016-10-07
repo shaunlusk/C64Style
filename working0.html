@@ -41,7 +41,7 @@
     textLayer2 = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
-    var element = new C64Style.GfxElement(screen, gfxLayer, gfxLayer.getCanvasContext(), 1, 1, {});
+    var element = new C64Style.GfxElement(screen, gfxLayer, {});
     gfxLayer.addElement(element);
     screen.render(1);
 

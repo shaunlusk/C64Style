@@ -2,9 +2,9 @@ describe("GfxLayer", function() {
   describe("#addElement()", function() {
     it("should add an element to _elements array.", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
-      var element = {};
+      var mockElement = C64Style.Mocks.getMockGfxElement();
 
-      gfxLayer.addElement(element);
+      gfxLayer.addElement(mockElement);
 
       assert(gfxLayer._elements.length === 1, "should have added element");
       done();
