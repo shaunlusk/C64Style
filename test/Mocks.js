@@ -23,6 +23,12 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   element.clear = function() {};
   element.render = function() {};
   element.finalize = function() {};
+  element.x = props.x || 0;
+  element.y = props.y || 0;
+  element.getX = function() {return this.x;};
+  element.getY = function() {return this.y;};
+  element.setX = function(x) {this.x = x;};
+  element.setY = function(y) {this.y = y;};
 
   return element;
 };
