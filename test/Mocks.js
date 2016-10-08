@@ -30,8 +30,10 @@ C64Style.Mocks.getMockGfxElement = function(props) {
 C64Style.Mocks.getMockScreen = function(props) {
   props = props || {};
   var screen = {};
-  screen.getScaleX = function() {return 1;};
-  screen.getScaleY = function() {return 1;};
+  screen.scaleX = props.scaleX || 1;
+  screen.scaleY = props.scaleY || 1;
+  screen.getScaleX = function() {return this.scaleX;};
+  screen.getScaleY = function() {return this.scaleY;};
   return screen;
 };
 
