@@ -1,12 +1,45 @@
 TODO
 
-collisionLast flag - how deal with in terms of drawing/setting clearing.
-
 Gfx Elements
+scale methods:
+  element get/set scale (just get/setScale?)
+  get Environment scale
+  get total scale
+change render to not scale position if only element itself is scaled
+
+events
+  collisions with other elements
+  collisions with border
 must provide layer at creation time
-refactor check for collisions
 element finalize
 
+
+
+Event Stuff
+engine.on("event", callback)
+
+internally
+eventMap {
+	"eventKey":[
+		callbacks
+	]
+
+}
+
+events:
+ELEMENT_MOVED
+BEFORE_RENDER
+AFTER_RENDER
+ELEMENT_STARTED_MOVING
+ELEMENT_STOPPED_MOVING
+ELEMENT_COLLISION
+ELEMENT_HIT_LEFT_EDGE
+ELEMENT_HIT_RIGHT_EDGE
+ELEMENT_HIT_TOP
+ELEMENT_HIT_BOTTOM
+
+ENGINE_PAUSED
+ENGINE_RESUMED
 
 --------------------------------------
 set border/background color on Screen
