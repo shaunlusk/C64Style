@@ -215,13 +215,13 @@ describe("GfxLayer", function() {
       assert(gfxLayer._dirtyElements.size() === 1, "should have added to dirty list");
       done();
     });
-    it("should not add element to dirty elements list, if was dirty", function(done) {
+    it("should add element to dirty elements list, even if was dirty", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
       var mockElement1 = C64Style.Mocks.getMockGfxElement({dirty:true});
 
       gfxLayer._updateElementOnCollision(mockElement1);
 
-      assert(gfxLayer._dirtyElements.size() === 0, "should not have added to dirty list");
+      assert(gfxLayer._dirtyElements.size() === 1, "should not have added to dirty list");
       done();
     });
   });

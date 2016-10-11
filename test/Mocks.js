@@ -29,6 +29,9 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   element.getY = function() {return this.y;};
   element.setX = function(x) {this.x = x;};
   element.setY = function(y) {this.y = y;};
+  element.zIndex = props.zIndex || -1;
+  element.getZIndex = function() {return this.zIndex;};
+  element.setZIndex = function(zidx) {this.zIndex = zidx;};
 
   return element;
 };

@@ -24,8 +24,8 @@ describe("PixImage", function() {
       };
       var pixImage = new C64Style.PixImage(mockScreen, mockLayer, props);
 
-      assert(pixImage.getWidth() === 60, "should have set width = 60");
-      assert(pixImage.getHeight() === 144, "should have set height = 144");
+      assert(pixImage.getWidth() === 4, "should have set width = 4");
+      assert(pixImage.getHeight() === 6, "should have set height = 6");
       done();
     });
   });
