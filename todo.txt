@@ -1,5 +1,7 @@
 TODO
 
+functionality and unit tests for UniquePriorityQueue
+
 Gfx Elements
 scale methods:
   element get/set scale (just get/setScale?)
