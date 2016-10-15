@@ -69,6 +69,7 @@ describe("GfxLayer", function() {
     it("should call update on each element", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
       gfxLayer._handleCollisions = function() {};
+      gfxLayer._checkBorderCollision = function() {};
       var mockElement = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
       mockElement.update = function() {this.calledIt = true;};
       gfxLayer.addElement(mockElement);
@@ -85,6 +86,7 @@ describe("GfxLayer", function() {
     it("should add dirty elements to dirty elements list", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
       gfxLayer._handleCollisions = function() {};
+      gfxLayer._checkBorderCollision = function() {};
       var mockElement = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
       mockElement.update = function() {return true;};
       gfxLayer.addElement(mockElement);
@@ -97,6 +99,7 @@ describe("GfxLayer", function() {
     it("should not add non-dirty elements to dirty elements list", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
       gfxLayer._handleCollisions = function() {};
+      gfxLayer._checkBorderCollision = function() {};
       var mockElement = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
       mockElement.update = function() {return false;};
       gfxLayer.addElement(mockElement);

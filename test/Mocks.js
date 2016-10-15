@@ -19,6 +19,8 @@ C64Style.Mocks.getMockGfxElement = function(props) {
     };
   };
   element.collidesWith = function() {return false;};
+  element.collidesWithX = function() {return false;};
+  element.collidesWithY = function() {return false;};
   element.setHasCollision = function(val) {this.collision = val;};
   element.collision = props.collision || false;
   element.hasCollision = function() {return this.collision;};
