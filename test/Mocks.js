@@ -14,7 +14,9 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   element.setHidden = function(val) {this.hidden = val;};
   element.getZIndexComparable = function() {
     return {
-      getElement : function() {return element;}};
+      getElement : function() {return element;},
+      getKey : function() {return 0;}
+    };
   };
   element.collidesWith = function() {return false;};
   element.setHasCollision = function(val) {this.collision = val;};

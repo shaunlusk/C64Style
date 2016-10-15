@@ -117,39 +117,6 @@ describe("GfxLayer", function() {
     });
   });
   describe("#_collisionCheckElementsIfNeeded()", function() {
-    it("should skip collision check if both elements dirty", function(done) {
-      var gfxLayer = new C64Style.GfxLayer();
-      var mockElement1 = C64Style.Mocks.getMockGfxElement({dirty:true});
-      mockElement1.collidesWith = function() {this.calledIt = true;};
-      var mockElement2 = C64Style.Mocks.getMockGfxElement({dirty:true});
-
-      gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
-
-      assert(mockElement1.calledIt === undefined, "should not have called _collisionCheck");
-      done();
-    });
-    it("should skip collision check if both elements hidden", function(done) {
-      var gfxLayer = new C64Style.GfxLayer();
-      var mockElement1 = C64Style.Mocks.getMockGfxElement({hidden:true});
-      mockElement1.collidesWith = function() {this.calledIt = true;};
-      var mockElement2 = C64Style.Mocks.getMockGfxElement({hidden:true});
-
-      gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
-
-      assert(mockElement1.calledIt === undefined, "should not have called _collisionCheck");
-      done();
-    });
-    it("should skip collision check if both elements already had collisions", function(done) {
-      var gfxLayer = new C64Style.GfxLayer();
-      var mockElement1 = C64Style.Mocks.getMockGfxElement({collision:true});
-      mockElement1.collidesWith = function() {this.calledIt = true;};
-      var mockElement2 = C64Style.Mocks.getMockGfxElement({collision:true});
-
-      gfxLayer._collisionCheckElementsIfNeeded(mockElement1,mockElement2);
-
-      assert(mockElement1.calledIt === undefined, "should not have called _collisionCheck");
-      done();
-    });
     it("should call collision check if either element is visible or not dirty", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
       var mockElement1 = C64Style.Mocks.getMockGfxElement({dirty:true});
