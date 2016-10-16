@@ -1,7 +1,15 @@
 TODO
 
 text inversion
-rename c64screen
+
+events
+  collisions with other elements
+  "ELEMENT_MOVED" : "ELEMENT_MOVED",
+  "ELEMENT_STARTED_MOVING" : "ELEMENT_STARTED_MOVING",
+  "ELEMENT_STOPPED_MOVING" : "ELEMENT_STOPPED_MOVING",
+  "ELEMENT_COLLISION" : "ELEMENT_COLLISION",
+  "ENGINE_PAUSED" : "ENGINE_PAUSED",
+  "ENGINE_RESUMED" : "ENGINE_RESUMED"
 
 pix sprite
 image element
@@ -36,16 +44,6 @@ tests for
 
 change render to not scale position if only element itself is scaled
 
-
-
-events
-  collisions with other elements
-  "ELEMENT_MOVED" : "ELEMENT_MOVED",
-  "ELEMENT_STARTED_MOVING" : "ELEMENT_STARTED_MOVING",
-  "ELEMENT_STOPPED_MOVING" : "ELEMENT_STOPPED_MOVING",
-  "ELEMENT_COLLISION" : "ELEMENT_COLLISION",
-  "ENGINE_PAUSED" : "ENGINE_PAUSED",
-  "ENGINE_RESUMED" : "ENGINE_RESUMED"
 
 element finalize
 
