@@ -1,54 +1,58 @@
 TODO
 
+text inversion
+rename c64screen
+
+pix sprite
+image element
+image sprite
+
+element from text
+
 functionality and unit tests for UniquePriorityQueue
 
-Gfx Elements
-scale methods:
-  element get/set scale (just get/setScale?)
-  get Environment scale
-  get total scale
+license
+
+demos
+  text graphics
+  sprite
+  image sprite
+
+loading animation
+cursor / prompt
+
+add additional char maps
+
+tests for
+  priority queue
+  c64screen
+  colorpointer
+  gfxElement
+  gfxElementzindex comparable
+  gfx layer
+  layer
+  piximage
+  text layer
+
 change render to not scale position if only element itself is scaled
+
+
 
 events
   collisions with other elements
-  collisions with border
-must provide layer at creation time
+  "ELEMENT_MOVED" : "ELEMENT_MOVED",
+  "ELEMENT_STARTED_MOVING" : "ELEMENT_STARTED_MOVING",
+  "ELEMENT_STOPPED_MOVING" : "ELEMENT_STOPPED_MOVING",
+  "ELEMENT_COLLISION" : "ELEMENT_COLLISION",
+  "ENGINE_PAUSED" : "ENGINE_PAUSED",
+  "ENGINE_RESUMED" : "ENGINE_RESUMED"
+
 element finalize
-
-
-
-Event Stuff
-engine.on("event", callback)
-
-internally
-eventMap {
-	"eventKey":[
-		callbacks
-	]
-
-}
-
-events:
-ELEMENT_MOVED
-BEFORE_RENDER
-AFTER_RENDER
-ELEMENT_STARTED_MOVING
-ELEMENT_STOPPED_MOVING
-ELEMENT_COLLISION
-ELEMENT_HIT_LEFT_EDGE
-ELEMENT_HIT_RIGHT_EDGE
-ELEMENT_HIT_TOP
-ELEMENT_HIT_BOTTOM
-
-ENGINE_PAUSED
-ENGINE_RESUMED
 
 --------------------------------------
 set border/background color on Screen
 
 Mouse handlers
-
-events and observer notification
 
 Bounds checking on text layer
 Text wrapping on text layer
