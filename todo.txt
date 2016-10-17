@@ -10,6 +10,9 @@ pix sprite
 image element
 image sprite
 
+Mouse handlers
+
+
 element from text
 
 functionality and unit tests for UniquePriorityQueue
@@ -45,9 +48,7 @@ change render to not scale position if only element itself is scaled
 element finalize
 
 --------------------------------------
-set border/background color on Screen
 
-Mouse handlers
 
 Bounds checking on text layer
 Text wrapping on text layer
