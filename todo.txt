@@ -2,16 +2,14 @@ TODO
 
 text inversion
 
-events
-  "ELEMENT_STARTED_MOVING" : "ELEMENT_STARTED_MOVING",
-  "ELEMENT_STOPPED_MOVING" : "ELEMENT_STOPPED_MOVING"
-
 pix sprite
 image element
 image sprite
 
 Mouse handlers
 
+rename engine context to screen context
+rename C64Screen to Screen
 
 element from text
 
