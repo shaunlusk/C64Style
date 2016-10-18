@@ -1,7 +1,6 @@
 TODO
 
-text inversion
-
+refactor more of text rending from text layer into CharacterRenderer
 pix sprite
 image element
 image sprite
