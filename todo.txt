@@ -12,10 +12,7 @@ pix sprite
 
 change render to not scale position if only element itself is scaled
 
-Mouse handlers
-
 rename engine context to screen context
-rename C64Screen to Screen
 
 functionality and unit tests for UniquePriorityQueue
 
