@@ -11,7 +11,7 @@
   <script type="text/javascript" src="lib/Constants.js"></script>
   <script type="text/javascript" src="lib/EventType.js"></script>
   <script type="text/javascript" src="lib/Event.js"></script>
-  <script type="text/javascript" src="lib/c64Screen.js"></script>
+  <script type="text/javascript" src="lib/Screen.js"></script>
   <script type="text/javascript" src="lib/PixPathTypes.js"></script>
   <script type="text/javascript" src="lib/CharacterMap.js"></script>
   <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
@@ -90,12 +90,10 @@
   }
   initialize(document.getElementById("content"), config);
 
-  // document.getElementById("content").addEventListener("mousemove",
-  //   handleMouse
-  //   , false);
-  function handleMouse(e) {
-    document.getElementById("mCoords").innerHTML = "c:" + (e.pageX - 28) + "," + (e.pageY - 28);
-  }
+
+  // function handleMouse(e) {
+  //   document.getElementById("mCoords").innerHTML = "c:" + (e.pageX - 28) + "," + (e.pageY - 28);
+  // }
 
   </script>
 </body>
