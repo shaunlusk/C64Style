@@ -32,7 +32,7 @@
   function initialize(targetDiv, config) {
 
     // Create the C64 Screen
-    screen = new C64Style.Screen(targetDiv,0,0,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     screen.render();

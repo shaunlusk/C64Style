@@ -54,11 +54,11 @@
     "rows" : 25,
     "cols" : 40,
     "scaleX" : 1,
-    "scaleY" : 1,
+    "scaleY" : 0,
   };
 
   function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv,0,0,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
 
     screen.initialize();
 
@@ -90,9 +90,9 @@
   }
   initialize(document.getElementById("content"), config);
 
-  document.getElementById("content").addEventListener("mousemove",
-    handleMouse
-    , false);
+  // document.getElementById("content").addEventListener("mousemove",
+  //   handleMouse
+  //   , false);
   function handleMouse(e) {
     document.getElementById("mCoords").innerHTML = "c:" + (e.pageX - 28) + "," + (e.pageY - 28);
   }

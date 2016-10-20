@@ -1,18 +1,25 @@
 TODO
 
 refactor more of text rending from text layer into CharacterRenderer
-pix sprite
+element from text
+
 image element
+
+props vs config consistency
+
 image sprite
+pix sprite
+
+change render to not scale position if only element itself is scaled
 
 Mouse handlers
 
 rename engine context to screen context
 rename C64Screen to Screen
 
-element from text
-
 functionality and unit tests for UniquePriorityQueue
+
+support for multicolor characters
 
 license
 
@@ -39,13 +46,10 @@ tests for
   piximage
   text layer
 
-change render to not scale position if only element itself is scaled
-
+screen.settimeout
+screen.setinterval
 
 element finalize
-
---------------------------------------
-
 
 Bounds checking on text layer
 Text wrapping on text layer

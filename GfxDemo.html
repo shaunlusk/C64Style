@@ -70,7 +70,7 @@
   };
 
   function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv,0,0,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
 
     screen.initialize();
 
