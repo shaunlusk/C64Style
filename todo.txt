@@ -1,6 +1,7 @@
 TODO
 
 refactor more of text rending from text layer into CharacterRenderer
+char render - precalc actual cell width
 element from text
 
 image element
