@@ -6,9 +6,6 @@ PixRenderer
 
 image element
 
-props vs config consistency
-
-
 image sprite
 pix sprite
 -- each frame should render itself, no need for img vs pix sprite
