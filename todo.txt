@@ -14,7 +14,7 @@ change render to not scale position if only element itself is scaled
 
 functionality and unit tests for UniquePriorityQueue
 
-support for multicolor characters
+support for multicolor characters?
 
 license
 

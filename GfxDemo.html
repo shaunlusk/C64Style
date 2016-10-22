@@ -106,25 +106,25 @@
 
       screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
         var element = event.data;
-        element.setX(3);
+        // element.setX(3);
         element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
       });
 
       screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
         var element = event.data;
-        element.setX( xBounds - 3 );
+        // element.setX( xBounds - 3 );
         element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
       });
 
       screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
         var element = event.data;
-        element.setY(3);
+        // element.setY(3);
         element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
       });
 
       screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
         var element = event.data;
-        element.setY(yBounds - 3);
+        // element.setY(yBounds - 3);
         element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
       });
 
