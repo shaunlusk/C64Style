@@ -1,15 +1,17 @@
 TODO
 
-refactor more of text rending from text layer into CharacterRenderer
-char render - precalc actual cell width
 element from text
+
+PixRenderer
 
 image element
 
 props vs config consistency
 
+
 image sprite
 pix sprite
+-- each frame should render itself, no need for img vs pix sprite
 
 change render to not scale position if only element itself is scaled
 
