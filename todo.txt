@@ -1,8 +1,8 @@
 TODO
 
-element from text
-
 PixRenderer
+
+text element demo - text with background
 
 image element
 
