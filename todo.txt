@@ -10,7 +10,6 @@ image sprite
 pix sprite
 -- each frame should render itself, no need for img vs pix sprite
 
-change render to not scale position if only element itself is scaled
 
 functionality and unit tests for UniquePriorityQueue
 
@@ -21,7 +20,6 @@ license
 demos
   rename current gfxdemo
   demo directory
-  text graphics
   sprite
   image sprite
 
