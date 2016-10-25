@@ -1,15 +1,11 @@
 TODO
 
-PixRenderer
-
 text element demo - text with background
 
+image renderer
 image element
-
 image sprite
-pix sprite
--- each frame should render itself, no need for img vs pix sprite
-
+textSprite
 
 functionality and unit tests for UniquePriorityQueue
 

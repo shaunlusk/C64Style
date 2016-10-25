@@ -22,6 +22,8 @@
   <script type="text/javascript" src="lib/GfxElement.js"></script>
   <script type="text/javascript" src="lib/PixRenderer.js"></script>
   <script type="text/javascript" src="lib/PixImage.js"></script>
+  <script type="text/javascript" src="lib/Sprite.js"></script>
+  <script type="text/javascript" src="lib/PixSprite.js"></script>
   <script type="text/javascript" src="lib/TextElement.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
@@ -43,11 +45,17 @@
       C64Style.Color.RED
     ],
     colorPointer = new C64Style.ColorPointer(C64Style.Color.WHITE);
-    pixPathArray = [
+    pixPathArray1 = [
       // {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: C64Style.Color.BLACK},
       // {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: C64Style.Color.RED}
       {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: colorPointer},
       {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: 1}
+    ],
+    pixPathArray2 = [
+      // {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: C64Style.Color.BLACK},
+      // {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: C64Style.Color.RED}
+      {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: colorPointer},
+      {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: 0}
     ],
     element = null,
     element2 = null,
@@ -69,37 +77,38 @@
     textLayer2 = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
-    element = new C64Style.PixImage(screen, gfxLayer, {
+    // element = new C64Style.PixImage(screen, gfxLayer, {
+    //   scaleX:1,
+    //   scaleY:1,
+    //    pixPathArray : pixPathArray,
+    //    defaultPalette : defaultPalette
+    // });
+    // element.setX(8);
+    // element.setY(8);
+    // gfxLayer.addElement(element);
+    //
+    // element2 = new C64Style.PixImage(screen, gfxLayer, {
+    //   scaleX:2,
+    //   scaleY:2,
+    //    pixPathArray : pixPathArray,
+    //    defaultPalette : defaultPalette
+    // });
+    // element2.setX(25);
+    // element2.setY(25);
+    // gfxLayer.addElement(element2);
+
+    element = new C64Style.PixSprite(screen, gfxLayer, {
       scaleX:1,
       scaleY:1,
-       pixPathArray : pixPathArray,
-       defaultPalette : defaultPalette
+     defaultPalette : defaultPalette,
+     frames:[
+       new C64Style.PixSpriteFrame(pixPathArray1,500),
+       new C64Style.PixSpriteFrame(pixPathArray2,500)
+     ]
     });
     element.setX(8);
     element.setY(8);
     gfxLayer.addElement(element);
-
-    element2 = new C64Style.PixImage(screen, gfxLayer, {
-      scaleX:2,
-      scaleY:2,
-       pixPathArray : pixPathArray,
-       defaultPalette : defaultPalette
-    });
-    element2.setX(25);
-    element2.setY(25);
-    gfxLayer.addElement(element2);
-
-    element3 = new C64Style.TextElement(screen, gfxLayer, {
-      scaleX:2,
-      scaleY:2,
-      // text:"Test",
-      symbolName:"CHECK",
-      color:C64Style.Color.LIGHTGREEN,
-      backgroundColor:C64Style.Color.BLACK
-    });
-    element3.setX(50);
-    element3.setY(50);
-    gfxLayer.addElement(element3);
 
     screen.render(1);
   }
