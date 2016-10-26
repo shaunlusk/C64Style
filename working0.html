@@ -26,6 +26,7 @@
   <script type="text/javascript" src="lib/PixSprite.js"></script>
   <script type="text/javascript" src="lib/TextElement.js"></script>
   <script type="text/javascript" src="lib/ImageRenderer.js"></script>
+  <script type="text/javascript" src="lib/ImageElement.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -124,10 +125,26 @@
       imageScaleY = 3;
     image.onload = function() {
       console.log("loaded.");
-        imageRender.renderImage(gfxLayer.getCanvasContext(), image,
-          sx, sy, sWidth, sHeight,
-          x, y, width, height,
-          imageScaleX, imageScaleY);
+        // imageRender.renderImage(gfxLayer.getCanvasContext(), image,
+        //   sx, sy, sWidth, sHeight,
+        //   x, y, width, height,
+        //   imageScaleX, imageScaleY);
+
+          element = new C64Style.ImageElement(screen, gfxLayer, {
+            scaleX:1,
+            scaleY:1,
+            image:image,
+            sourceX:0,
+            sourceY:0,
+            sourceWidth:8,
+            sourceHeight:8,
+
+            width:8,
+            height:8
+          });
+          element.setX(8);
+          element.setY(8);
+          gfxLayer.addElement(element);
     };
 
     screen.render(1);
