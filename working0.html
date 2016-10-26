@@ -25,6 +25,7 @@
   <script type="text/javascript" src="lib/Sprite.js"></script>
   <script type="text/javascript" src="lib/PixSprite.js"></script>
   <script type="text/javascript" src="lib/TextElement.js"></script>
+  <script type="text/javascript" src="lib/ImageRenderer.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -40,6 +41,7 @@
     textLayer = null,
     textLayer2 = null,
     gfxLayer = null,
+    imageRender = null,
     defaultPalette = [
       C64Style.Color.BLACK,
       C64Style.Color.RED
@@ -108,7 +110,25 @@
     });
     element.setX(8);
     element.setY(8);
-    gfxLayer.addElement(element);
+    // gfxLayer.addElement(element);
+
+    imageRender = new C64Style.ImageRenderer(2,2);
+
+    var image = new Image();
+    image.src = "resources/avatar.png";
+    var sx = 0, sy = 0,
+      sWidth = 8, sHeight = 8,
+      x = 50, y = 50,
+      width = 8, height = 8,
+      imageScaleX = 3,
+      imageScaleY = 3;
+    image.onload = function() {
+      console.log("loaded.");
+        imageRender.renderImage(gfxLayer.getCanvasContext(), image,
+          sx, sy, sWidth, sHeight,
+          x, y, width, height,
+          imageScaleX, imageScaleY);
+    };
 
     screen.render(1);
   }
