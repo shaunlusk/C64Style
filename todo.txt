@@ -5,8 +5,6 @@ textSprite
 
 functionality and unit tests for UniquePriorityQueue
 
-support for multicolor characters?
-
 license
 
 demos
