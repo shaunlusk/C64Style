@@ -1,10 +1,6 @@
 TODO
 
 text element demo - text with background
-
-image renderer
-image element
-image sprite
 textSprite
 
 functionality and unit tests for UniquePriorityQueue
@@ -34,9 +30,6 @@ tests for
   layer
   piximage
   text layer
-
-screen.settimeout
-screen.setinterval
 
 element finalize
 
