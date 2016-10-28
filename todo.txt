@@ -1,0 +1,35 @@
+TODO
+
+text element demo - text with background
+textSprite
+
+functionality and unit tests for UniquePriorityQueue
+
+license
+
+demos
+  rename current gfxdemo
+  demo directory
+  sprite
+  image sprite
+
+loading animation
+cursor / prompt
+
+add additional char maps
+
+tests for
+  priority queue
+  c64screen
+  colorpointer
+  gfxElement
+  gfxElementzindex comparable
+  gfx layer
+  layer
+  piximage
+  text layer
+
+element finalize
+
+Bounds checking on text layer
+Text wrapping on text layer

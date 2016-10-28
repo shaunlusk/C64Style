@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+    <style>
+      body {
+        background: #331800;
+        color: #FFFFFF;
+      }
+      #mocha-stats em {
+        color: #FFFFFF;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+    <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+    <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+    <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+    <script type="text/javascript" src="../lib/Layer.js"></script>
+    <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+    <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+    <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+    <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+    <script type="text/javascript" src="../lib/GfxElement.js"></script>
+    <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+    <script type="text/javascript" src="../lib/PixImage.js"></script>
+    <script type="text/javascript" src="../lib/EventType.js"></script>
+    <script type="text/javascript" src="./Mocks.js"></script>
+    <script type="text/javascript" src="./testUtil.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script>mocha.setup('bdd');</script>
+    <script src="GfxLayer.test.js"></script>
+    <script src="PixImage.test.js"></script>
+    <script src="MoveOrder.test.js"></script>
+    <script src="GfxElement.test.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>

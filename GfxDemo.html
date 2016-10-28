@@ -1,0 +1,140 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style GfxElement Demo</title>
+  <script type="text/javascript" src="lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="lib/Color.js"></script>
+  <script type="text/javascript" src="lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="lib/Constants.js"></script>
+  <script type="text/javascript" src="lib/EventType.js"></script>
+  <script type="text/javascript" src="lib/Event.js"></script>
+  <script type="text/javascript" src="lib/Screen.js"></script>
+  <script type="text/javascript" src="lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="lib/Layer.js"></script>
+  <script type="text/javascript" src="lib/TextLayer.js"></script>
+  <script type="text/javascript" src="lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="lib/GfxElement.js"></script>
+  <script type="text/javascript" src="lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="lib/PixImage.js"></script>
+  <script type="text/javascript" src="lib/GfxLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="content">
+  </div>
+  <div id="buttons"><button onclick="screen.setPaused(!screen.getPaused());">Pause</button></div>
+  <div id="info"></div>
+  <script type="text/javascript">
+  var C64Style = C64Style || {};
+  var screen = null,
+    textLayer = null,
+    gfxLayer = null,
+    pixPathArray = [
+      {type:"RECTANGLE", x:1, y: 5, width:1, height:6, color: 0},
+      {type:"RECTANGLE", x:5, y: 1, width:6, height:1, color: 0},
+      {type:"RECTANGLE", x:5, y: 14, width:6, height:1, color: 0},
+      {type:"RECTANGLE", x:14, y: 5, width:1, height:6, color: 0},
+
+      {type:"PIXEL", x:2, y: 4, color: 0},
+      {type:"PIXEL", x:3, y: 3, color: 0},
+      {type:"PIXEL", x:4, y: 2, color: 0},
+
+      {type:"PIXEL", x:11, y: 2, color: 0},
+      {type:"PIXEL", x:12, y: 3, color: 0},
+      {type:"PIXEL", x:13, y: 4, color: 0},
+
+      {type:"PIXEL", x:2, y: 11, color: 0},
+      {type:"PIXEL", x:3, y: 12, color: 0},
+      {type:"PIXEL", x:4, y: 13, color: 0},
+
+      {type:"PIXEL", x:11, y: 13, color: 0},
+      {type:"PIXEL", x:12, y: 12, color: 0},
+      {type:"PIXEL", x:13, y: 11, color: 0},
+
+      {type:"RECTANGLE", x:2, y: 5, width:12, height:6, color: 1},
+      {type:"RECTANGLE", x:5, y: 2, width:6, height:12, color: 1},
+      {type:"RECTANGLE", x:3, y: 4, width:10, height:8, color: 1},
+      {type:"RECTANGLE", x:4, y: 3, width:8, height:10, color: 1},
+    ],
+    element = null;
+  var config = {
+    "rows" : 50,
+    "cols" : 80,
+    "scaleX" : 1,
+    "scaleY" : 1,
+  };
+
+  function initialize(targetDiv, config) {
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+
+    screen.initialize();
+
+    textLayer = screen.createLayer("TextLayer");
+    textLayer.writeText("This is probably a bit more than C64 could have handled.",11,24, C64Style.Color.WHITE);
+
+    gfxLayer = screen.createLayer("GfxLayer");
+
+    var xBounds = config.cols * C64Style.CELLWIDTH - 16;
+    var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
+
+    var moveRateMin = 3;
+    var moveRateMax = 300;
+
+    for (var i = 0; i < 600; i++) {
+      var x = Math.floor(Math.random() * xBounds);
+      var y = Math.floor(Math.random() * yBounds);
+      element = new C64Style.PixImage(screen, gfxLayer, {
+        scaleX:1,
+        scaleY:1,
+         pixPathArray : pixPathArray,
+         defaultPalette : [
+           C64Style.Color.getByIndex(Math.floor(Math.random() * 16)),
+           C64Style.Color.getByIndex(Math.floor(Math.random() * 16))
+         ]
+      });
+      element.setX(x);
+      element.setY(y);
+
+      var xMoveRate = Math.floor(0 - (2 * Math.random() * (moveRateMax - moveRateMin)) + moveRateMin);
+      var yMoveRate = Math.floor(Math.random() * (moveRateMax - moveRateMin) + moveRateMin);
+      element.setMoveRates(xMoveRate, yMoveRate);
+
+      screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
+        var element = event.data;
+        // element.setX(3);
+        element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
+      });
+
+      screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
+        var element = event.data;
+        // element.setX( xBounds - 3 );
+        element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
+      });
+
+      screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
+        var element = event.data;
+        // element.setY(3);
+        element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
+      });
+
+      screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
+        var element = event.data;
+        // element.setY(yBounds - 3);
+        element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
+      });
+
+      gfxLayer.addElement(element);
+    }
+
+    screen.render(1);
+  }
+  initialize(document.getElementById("content"), config);
+  </script>
+</body>
+</html>
