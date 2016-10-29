@@ -1,0 +1,8 @@
+TextCursor stuff
+
+bind keyboard event
+listener
+on/off
+get current input
+set prompt
+set location
