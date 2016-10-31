@@ -210,6 +210,255 @@ describe("TextPrompt", function() {
       assert(prompt._parentLayer.calledIt === true, "should return call clear length");
       done();
     });
+    it("should clear input", function(done) {
+      var prompt = getTextPrompt();
+      prompt._input.push('a');
+
+      prompt.clearInput();
+
+      assert(prompt._input.length === 0, "should clear input");
+      done();
+    });
+  });
+  describe("#clearPrompt()", function() {
+    it("should call clearLength", function(done) {
+      var prompt = getTextPrompt();
+      prompt._x = 10;
+      prompt._y = 12;
+      prompt._prompt = "check";
+      prompt._cursorXOrigin = prompt._x + prompt._prompt.length;
+      prompt._input = "input";
+      prompt._parentLayer.callCount = 0;
+      prompt._parentLayer.callArgs = [];
+      prompt._parentLayer.clearLength = function(x, y, length) {
+        this.callCount++;
+        this.callArgs.push({x:x, y:y, length:length});
+      };
+
+      prompt.clearPrompt();
+
+      assert(prompt._parentLayer.callCount === 2, "should call clearLength");
+      assert(prompt._parentLayer.callArgs[0].x === prompt._x, "should call clearLength with proper x value");
+      assert(prompt._parentLayer.callArgs[0].y === prompt._y, "should call clearLength with proper y value");
+      assert(prompt._parentLayer.callArgs[0].length === prompt._prompt.length, "should call clearLength with proper length value");
+      assert(prompt._parentLayer.callArgs[1].x === prompt._cursorXOrigin, "should call clearLength with proper x value");
+      assert(prompt._parentLayer.callArgs[1].y === prompt._y, "should call clearLength with proper y value");
+      assert(prompt._parentLayer.callArgs[1].length === prompt._input.length + 1, "should call clearLength with proper length value");
+      done();
+    });
+  });
+  describe("#clearCursor()", function() {
+    it("should call clearLength", function(done) {
+      var prompt = getTextPrompt();
+      prompt._y = 12;
+      prompt._cursorX = 5;
+      prompt._parentLayer.callCount = 0;
+      prompt._parentLayer.callArgs = [];
+      prompt._parentLayer.clearLength = function(x, y, length) {
+        this.callCount++;
+        this.callArgs.push({x:x, y:y, length:length});
+      };
+
+      prompt.clearCursor();
+
+      assert(prompt._parentLayer.callCount === 1, "should call clearLength");
+      assert(prompt._parentLayer.callArgs[0].x === prompt._cursorX, "should call clearLength with proper x value");
+      assert(prompt._parentLayer.callArgs[0].y === prompt._y, "should call clearLength with proper y value");
+      assert(prompt._parentLayer.callArgs[0].length === 1, "should call clearLength with proper length value");
+      done();
+    });
+  });
+  describe("#drawCursor()", function() {
+    it("should call drawSymbol", function(done) {
+      var prompt = getTextPrompt();
+      prompt._y = 12;
+      prompt._cursorX = 2;
+      prompt._color = "WHITE";
+      prompt._parentLayer.callCount = 0;
+      prompt._parentLayer.callArgs = [];
+      prompt._parentLayer.drawSymbol = function(id, x, y, color) {
+        this.callCount++;
+        this.callArgs.push({id:id, x:x, y:y, color:color});
+      };
+
+      prompt.drawCursor();
+
+      assert(prompt._parentLayer.callCount === 1, "should call clearLength");
+      assert(prompt._parentLayer.callArgs[0].id === "BLOCK", "should call clearLength with \"BLOCK\" symbol id");
+      assert(prompt._parentLayer.callArgs[0].x === prompt._cursorX, "should call clearLength with proper x value");
+      assert(prompt._parentLayer.callArgs[0].y === prompt._y, "should call clearLength with proper y value");
+      assert(prompt._parentLayer.callArgs[0].color === prompt._color, "should call clearLength with proper length value");
+      done();
+    });
+  });
+  describe("#_handleEnterKey()", function() {
+    it("should return false if not enter key", function(done) {
+      var prompt = getTextPrompt();
+      var event = {key:"Any"};
+
+      var result = prompt._handleEnterKey(event);
+
+      assert(result === false, "should have returned false");
+      done();
+    });
+    it("should return true if enter key", function(done) {
+      var prompt = getTextPrompt();
+      var event = {key:"Enter"};
+
+      var result = prompt._handleEnterKey(event);
+
+      assert(result === true, "should have returned true");
+      done();
+    });
+    it("should call callback if enter key", function(done) {
+      var prompt = getTextPrompt();
+      prompt._callback = function() {
+        this.calledIt = true;
+      };
+      var event = {key:"Enter"};
+
+      var result = prompt._handleEnterKey(event);
+
+      assert(prompt.calledIt === true, "should have called callback");
+      done();
+    });
+  });
+  describe("#_handleBackspaceKey()", function() {
+    it("should return false if not backspace key", function(done) {
+      var prompt = getTextPrompt();
+      var event = {key:"Any"};
+
+      var result = prompt._handleBackspaceKey(event);
+
+      assert(result === false, "should have returned false");
+      done();
+    });
+    it("should return true if backspace key", function(done) {
+      var prompt = getTextPrompt();
+      var event = {key:"Backspace"};
+
+      var result = prompt._handleBackspaceKey(event);
+
+      assert(result === true, "should have returned true");
+      done();
+    });
+    it("should return remove last input char", function(done) {
+      var prompt = getTextPrompt();
+      prompt._input = ['c','h'];
+      var event = {key:"Backspace"};
+
+      var result = prompt._handleBackspaceKey(event);
+
+      assert(prompt._input.length === 1, "should have removed last char");
+      done();
+    });
+    it("should decrement cursorx", function(done) {
+      var prompt = getTextPrompt();
+      prompt._cursorX = 5;
+      var event = {key:"Backspace"};
+
+      var result = prompt._handleBackspaceKey(event);
+
+      assert(prompt._cursorX === 4, "should have decremented cursorx");
+      done();
+    });
+  });
+  describe("#_handleSpaceKey()", function() {
+    it("should return false if not space key", function(done) {
+      var prompt = getTextPrompt();
+      var event = {key:"Any"};
+
+      var result = prompt._handleSpaceKey(event);
+
+      assert(result === false, "should have returned false");
+      done();
+    });
+    it("should return true if space key", function(done) {
+      var prompt = getTextPrompt();
+      var event = {key:" "};
+
+      var result = prompt._handleSpaceKey(event);
+
+      assert(result === true, "should have returned true");
+      done();
+    });
+    it("should add space to char input", function(done) {
+      var prompt = getTextPrompt();
+      prompt._input = ['c','h'];
+      var event = {key:" "};
+
+      var result = prompt._handleSpaceKey(event);
+
+      assert(prompt._input.length === 3, "should have added space char");
+      assert(prompt._input[2] === " ", "should have added space char");
+      done();
+    });
+    it("should increment cursorx", function(done) {
+      var prompt = getTextPrompt();
+      prompt._cursorX = 5;
+      var event = {key:" "};
+
+      var result = prompt._handleSpaceKey(event);
+
+      assert(prompt._cursorX === 6, "should have incremented cursorx");
+      done();
+    });
+  });
+  describe("#handleKeyboardEvent()", function() {
+    it("should not add key if prompt not on", function(done) {
+      var prompt = getTextPrompt();
+      prompt._on = false;
+      prompt._input = ['a'];
+      var event = {key:"b"};
+
+      prompt.handleKeyboardEvent(event);
+
+      assert(prompt._input.length === 1, "should not have added key to input");
+      done();
+    });
+    it("should not add key if input length === maxlength", function(done) {
+      var prompt = getTextPrompt();
+      prompt._on = true;
+      prompt._input = ['a'];
+      prompt._maxLength = 1;
+      var event = {key:"b"};
+
+      prompt.handleKeyboardEvent(event);
+
+      assert(prompt._input.length === 1, "should not have added key to input");
+      done();
+    });
+    it("should not add key if char not found in map", function(done) {
+      var prompt = getTextPrompt();
+      prompt._on = true;
+      var event = {key:"œ"};
+
+      prompt.handleKeyboardEvent(event);
+
+      assert(prompt._input.length === 0, "should not have added key to input");
+      done();
+    });
+    it("should add key", function(done) {
+      var prompt = getTextPrompt();
+      prompt._on = true;
+      var event = {key:"a"};
+
+      prompt.handleKeyboardEvent(event);
+
+      assert(prompt._input.length === 1, "should have added key to input");
+      done();
+    });
+    it("should increment cursorx", function(done) {
+      var prompt = getTextPrompt();
+      prompt._on = true;
+      prompt._cursorX = 3;
+      var event = {key:"a"};
+
+      prompt.handleKeyboardEvent(event);
+
+      assert(prompt._cursorX === 4, "should have incremented cursorx");
+      done();
+    });
   });
 });
 
