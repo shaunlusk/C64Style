@@ -1,0 +1,15 @@
+TextCursor stuff
+
+bind keyboard event
+listener
+on/off
+  on, listen, update display
+  off, hide, ignore input, but maintain current input state
+get current input
+clear input
+set prompt
+set location
+
+attach to textLayer?
+have elements on text layer?
+or just special handling for prompt?

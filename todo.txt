@@ -1,7 +1,14 @@
 TODO
 
+more events?
+per layer/element events?
+
+webpage intro
+
+documentation
+
 text element demo - text with background
-textSprite
+textSprite?
 
 functionality and unit tests for UniquePriorityQueue
 
