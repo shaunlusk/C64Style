@@ -16,6 +16,7 @@
   <script type="text/javascript" src="lib/CharacterMap.js"></script>
   <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
   <script type="text/javascript" src="lib/Layer.js"></script>
+  <script type="text/javascript" src="lib/TextPrompt.js"></script>
   <script type="text/javascript" src="lib/TextLayer.js"></script>
   <script type="text/javascript" src="lib/MoveOrder.js"></script>
   <script type="text/javascript" src="lib/GfxElementZIndexComparable.js"></script>
@@ -78,7 +79,7 @@
     screen.initialize();
 
     textLayer = screen.createLayer("TextLayer");
-    textLayer2 = screen.createLayer("TextLayer");
+    // textLayer2 = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
     // element = new C64Style.PixImage(screen, gfxLayer, {
@@ -148,10 +149,16 @@
           });
           element.setX(8);
           element.setY(8);
-          gfxLayer.addElement(element);
+          // gfxLayer.addElement(element);
     };
 
+    // document.onkeydown = textLayer._textPrompt.handleKeyboardEvent;
+
+    textLayer.prompt("Input: ", 0, 10, C64Style.Color.LIGHTBLUE, 10, function(value){
+      console.log("rcvd:" +value);
+    });
     screen.render(1);
+
   }
   initialize(document.getElementById("content"), config);
 
