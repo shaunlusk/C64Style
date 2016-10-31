@@ -154,8 +154,9 @@
 
     // document.onkeydown = textLayer._textPrompt.handleKeyboardEvent;
 
-    textLayer.prompt("Input: ", 0, 10, C64Style.Color.LIGHTBLUE, 10, function(value){
+    var p = textLayer.prompt("Input: ", 0, 10, C64Style.Color.LIGHTBLUE, 10, function(value){
       console.log("rcvd:" +value);
+      p.clearPrompt();
     });
     screen.render(1);
 

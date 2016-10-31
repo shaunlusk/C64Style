@@ -47,14 +47,24 @@ C64Style.Mocks.getMockScreen = function(props) {
   screen.scaleY = props.scaleY || 1;
   screen.getScaleX = function() {return this.scaleX;};
   screen.getScaleY = function() {return this.scaleY;};
+  screen.addEventListener = function() {};
   return screen;
 };
-
 
 C64Style.Mocks.getMockLayer = function(props) {
   props = props || {};
   var layer = {};
   layer.getCanvasContext = function() {return {};};
+
+  return layer;
+};
+
+C64Style.Mocks.getMockTextLayer = function(props) {
+  props = props || {};
+  var layer = {};
+  layer.writeText = function() {};
+  layer.clearLength = function() {};
+  layer.drawSymbol = function() {};
 
   return layer;
 };
