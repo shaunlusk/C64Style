@@ -1,5 +1,6 @@
 TODO
 
+click returns gfx elements, text layer coords, text layer char?
 more events?
 per layer/element events?
 
