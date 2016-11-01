@@ -17,7 +17,9 @@
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="blanket.min.js"></script>
+    <script src="mocha.js"></script>
+    <script src="blanket.min.js" data-cover-adapter="mocha-blanket.js"></script>
+    <script>mocha.setup('bdd');</script>
     <script type="text/javascript" src="../lib/Common/PriorityQueue.js" data-cover></script>
     <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js" data-cover></script>
     <script type="text/javascript" src="../lib/Common/Queue.js" data-cover></script>
@@ -36,8 +38,6 @@
     <script type="text/javascript" src="../lib/TextPrompt.js" data-cover></script>
     <script type="text/javascript" src="./Mocks.js"></script>
     <script type="text/javascript" src="./testUtil.js"></script>
-    <script src="mocha.js"></script>
-    <script>mocha.setup('bdd');</script>
     <script src="GfxLayer.test.js"></script>
     <script src="PixImage.test.js"></script>
     <script src="MoveOrder.test.js"></script>
