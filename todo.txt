@@ -1,5 +1,8 @@
 TODO
 
+
+GFxDemo, move event handler setup out of loop
+fix y move rate on gfx demo 
 click returns gfx elements, text layer coords, text layer char?
 more events?
 per layer/element events?
