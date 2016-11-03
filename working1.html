@@ -141,11 +141,7 @@
     });
 
     screen.on(C64Style.EventType.MOUSE_DOWN, function(event) {
-      var layer = event.data.elementsByLayer[1];
-      var element = layer.length > 0 ? layer[0] : null;
-      if (layer.length > 1) {
-        console.log("Multiple Elements in event");
-      }
+      var element = getElementFromEvent(event);
       if (element !== null) {
         draggedElement = element;
         draggedElement.setMoveRates(0, 0);
@@ -163,13 +159,26 @@
       }
     });
     screen.on(C64Style.EventType.MOUSE_MOVE, function(event) {
-      if (draggedElement === null) return;
+      if (draggedElement === null) {
+        var element = getElementFromEvent(event);
+        if (element) console.log("Mouse over element " + element.getId());
+        return;
+      }
       draggedElement.setX(event.data.x - xOffset);
       draggedElement.setY(event.data.y - yOffset);
     });
     screen.render(1);
   }
   initialize(document.getElementById("content"), config);
+
+  function getElementFromEvent(event) {
+    var layer = event.data.elementsByLayer[1];
+    var element = layer.length > 0 ? layer[0] : null;
+    if (layer.length > 1) {
+      console.log("Multiple Elements in event");
+    }
+    return element;
+  }
   </script>
 </body>
 </html>
