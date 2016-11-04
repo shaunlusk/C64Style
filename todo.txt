@@ -19,7 +19,6 @@ functionality and unit tests for UniquePriorityQueue
 loading animation
 
 add additional char maps
-  filled in rounded corners
   person
   caret
   tilda
