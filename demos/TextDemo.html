@@ -47,8 +47,10 @@
     var x = 0, y = 5;
     Object.keys(C64Style.CharacterMap).forEach(function(key) {
       textLayer.drawSymbol(key, x, y, C64Style.Color.WHITE);
+      // Draw inverse characters
+      textLayer.drawSymbol(key, x, y + 10, C64Style.Color.BLUE, C64Style.Color.LIGHTBLUE);
       x++;
-      if (x > 18) {
+      if (x > 24) {
         x = 0;
         y++;
       }
