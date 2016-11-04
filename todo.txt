@@ -18,6 +18,8 @@ functionality and unit tests for UniquePriorityQueue
 
 loading animation
 
+known issue: in text layer, strings that are rendered in same frame may be written on top of eachother without clearing (clearing comes before drawing)
+
 add additional char maps
   person
   caret

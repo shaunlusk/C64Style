@@ -1,0 +1,91 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style>
+#content {
+  margin : auto
+}
+</style>
+</head>
+<body>
+  <div id="content">
+  </div>
+  <script type="text/javascript">
+
+  var config = {
+      "rows" : 25,
+      "cols" : 40,
+      "scaleX" : 2,
+      "scaleY" : 2,
+    };
+
+  var screen = null, textLayer = null;
+
+  function initialize(targetDiv, config) {
+
+    // Create the C64 Screen
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+    screen.initialize();
+    textLayer = screen.createLayer("TextLayer");
+    screen.render();
+
+    drawTextButton("Download  .zip", 12, 7, C64Style.Color.LIGHTBLUE, false);
+    drawTextButton("Download .tar.gz", 11, 10, C64Style.Color.LIGHTBLUE, false);
+    drawTextButton("View On GitHub", 12, 13, C64Style.Color.LIGHTBLUE, false);
+    drawTextButton("Demos!", 16, 16, C64Style.Color.LIGHTBLUE, false);
+    textLayer.writeText("C64Style", 16, 1, C64Style.Color.WHITE, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("A framework for rendering Commodore 64", 1, 3, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("style graphics with JavaScript and ", 2, 4, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("HTML5 Canvas.", 13, 5, C64Style.Color.LIGHTBLUE);
+
+    textLayer.writeText("Shaun Lusk", 0, 23, C64Style.Color.LIGHTBLUE);
+  }
+
+  function drawTextButton(text, x, y, color, on) {
+    var edgeX;
+    var rightEdge = x + text.length + 1;
+    if (on) {
+      for (edgeX = x + 1; edgeX < rightEdge; edgeX++) {
+        textLayer.drawSymbol("BAR_120", edgeX, y, screen.getBackgroundColor(), color);
+        textLayer.drawSymbol("BAR_121", edgeX, y + 2, screen.getBackgroundColor(), color);
+      }
+      textLayer.drawSymbol("PIPE_117", x, y + 1, screen.getBackgroundColor(), color);
+      textLayer.drawSymbol("PIPE_118", rightEdge, y + 1, screen.getBackgroundColor(), color);
+      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_TOP_LEFT", x, y, color);
+      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_TOP_RIGHT", rightEdge, y, color);
+      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_BOTTOM_LEFT", x, y + 2, color);
+      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_BOTTOM_RIGHT", rightEdge, y + 2, color);
+      textLayer.writeText(text, x + 1, y + 1, screen.getBackgroundColor(), color);
+    } else {
+      for (edgeX = x + 1; edgeX < rightEdge; edgeX++) {
+        textLayer.drawSymbol("BAR", edgeX, y, color);
+        textLayer.drawSymbol("BAR", edgeX, y + 2, color);
+      }
+      textLayer.writeText("|", x, y + 1, color);
+      textLayer.writeText("|", rightEdge, y + 1, color);
+      textLayer.drawSymbol("ROUNDED_CORNER_TOP_LEFT", x, y, color);
+      textLayer.drawSymbol("ROUNDED_CORNER_TOP_RIGHT", rightEdge, y, color);
+      textLayer.drawSymbol("ROUNDED_CORNER_BOTTOM_LEFT", x, y + 2, color);
+      textLayer.drawSymbol("ROUNDED_CORNER_BOTTOM_RIGHT", rightEdge, y + 2, color);
+      textLayer.writeText(text, x + 1, y + 1, color);
+    }
+
+  };
+  initialize(document.getElementById("content"), config);
+  </script>
+</body>
+</html>
