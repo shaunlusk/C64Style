@@ -71,6 +71,18 @@
     "scaleY" : 1,
   };
 
+  var xBounds = config.cols * C64Style.CELLWIDTH - 16;
+  var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
+
+  var moveRateMin = 3;
+  var moveRateMax = 300;
+
+  function getRandomMoveRate() {
+    var rate = Math.floor(Math.random() * (moveRateMax - moveRateMin)) + moveRateMin;
+    rate = Math.random() >= 0.5 ? rate : 0 - rate;
+    return rate;
+  }
+
   function initialize(targetDiv, config) {
     screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
 
@@ -80,12 +92,6 @@
     textLayer.writeText("This is probably a bit more than C64 could have handled.",11,24, C64Style.Color.WHITE);
 
     gfxLayer = screen.createLayer("GfxLayer");
-
-    var xBounds = config.cols * C64Style.CELLWIDTH - 16;
-    var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
-
-    var moveRateMin = 3;
-    var moveRateMax = 300;
 
     for (var i = 0; i < 600; i++) {
       var x = Math.floor(Math.random() * xBounds);
@@ -102,36 +108,32 @@
       element.setX(x);
       element.setY(y);
 
-      var xMoveRate = Math.floor(0 - (2 * Math.random() * (moveRateMax - moveRateMin)) + moveRateMin);
-      var yMoveRate = Math.floor(Math.random() * (moveRateMax - moveRateMin) + moveRateMin);
+      var xMoveRate = getRandomMoveRate();
+      var yMoveRate = getRandomMoveRate();
       element.setMoveRates(xMoveRate, yMoveRate);
-
-      screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
-        var element = event.data;
-        // element.setX(3);
-        element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
-      });
-
-      screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
-        var element = event.data;
-        // element.setX( xBounds - 3 );
-        element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
-      });
-
-      screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
-        var element = event.data;
-        // element.setY(3);
-        element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
-      });
-
-      screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
-        var element = event.data;
-        // element.setY(yBounds - 3);
-        element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
-      });
 
       gfxLayer.addElement(element);
     }
+
+    screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
+      var element = event.data;
+      element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
+    });
+
+    screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
+      var element = event.data;
+      element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
+    });
+
+    screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
+      var element = event.data;
+      element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
+    });
+
+    screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
+      var element = event.data;
+      element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
+    });
 
     screen.render(1);
   }

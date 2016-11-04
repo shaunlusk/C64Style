@@ -1,10 +1,5 @@
 TODO
 
-
-GFxDemo, move event handler setup out of loop
-fix y move rate on gfx demo 
-click returns gfx elements, text layer coords, text layer char?
-more events?
 per layer/element events?
 
 webpage intro
@@ -12,7 +7,6 @@ webpage intro
 documentation
 
 text element demo - text with background
-textSprite?
 
 functionality and unit tests for UniquePriorityQueue
 
@@ -23,11 +17,16 @@ demos
   demo directory
   sprite
   image sprite
+  drag and drop
+  mouse over
 
 loading animation
 cursor / prompt
 
 add additional char maps
+
+
+textSprite?
 
 tests for
   priority queue
@@ -42,5 +41,5 @@ tests for
 
 element finalize
 
-Bounds checking on text layer
-Text wrapping on text layer
+Bounds checking on text layer?
+Text wrapping on text layer?
