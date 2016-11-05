@@ -140,7 +140,8 @@
       element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
     });
 
-    screen.on(C64Style.EventType.MOUSE_DOWN, function(event) {
+    screen.on(C64Style.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
+      console.log("clicked");
       var element = getElementFromEvent(event);
       if (element !== null) {
         draggedElement = element;
@@ -150,7 +151,7 @@
       }
     });
 
-    screen.on(C64Style.EventType.MOUSE_UP, function(event) {
+    screen.on(C64Style.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
       if (draggedElement) {
         var xMoveRate = getRandomMoveRate();
         var yMoveRate = getRandomMoveRate();
@@ -172,12 +173,13 @@
   initialize(document.getElementById("content"), config);
 
   function getElementFromEvent(event) {
-    var layer = event.data.elementsByLayer[1];
-    var element = layer.length > 0 ? layer[0] : null;
-    if (layer.length > 1) {
-      console.log("Multiple Elements in event");
-    }
-    return element;
+    // var layer = event.data.elementsByLayer[1];
+    // var element = layer.length > 0 ? layer[0] : null;
+    // if (layer.length > 1) {
+    //   console.log("Multiple Elements in event");
+    // }
+    // return element;
+    return event.data.element;
   }
   </script>
 </body>
