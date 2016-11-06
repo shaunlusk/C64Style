@@ -23,6 +23,7 @@
   <script type="text/javascript" src="lib/GfxElement.js"></script>
   <script type="text/javascript" src="lib/TextElement.js"></script>
   <script type="text/javascript" src="lib/TextLink.js"></script>
+  <script type="text/javascript" src="lib/TextButton.js"></script>
   <script type="text/javascript" src="lib/PixRenderer.js"></script>
   <script type="text/javascript" src="lib/PixImage.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
@@ -38,10 +39,11 @@
   var screen = null,
     textLayer = null,
     gfxLayer = null,
-    element = null;
+    element = null,
+    element2 = null;
   var config = {
-    "rows" : 50,
-    "cols" : 80,
+    "rows" : 25,
+    "cols" : 40,
     "scaleX" : 1,
     "scaleY" : 1,
   };
@@ -74,6 +76,28 @@
     //   backgroundColor:C64Style.Color.BLUE
     // });
     gfxLayer.addElement(element);
+
+    var props2 = {
+      x:50,y:50,
+      "scaleX" : 1,
+      "scaleY" : 1,
+      text:"test",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLUE,
+
+      buttonColor : C64Style.Color.WHITE,
+      textColor : C64Style.Color.LIGHTGREEN,
+      highlightButtonColor : C64Style.Color.BLACK,
+      highlightTextColor : C64Style.Color.CYAN,
+
+      onClick: function() {
+        console.log("clicked");
+        return false;
+      },
+      href:"http://www.google.com"
+    };
+    element2 = new C64Style.TextButton(screen, gfxLayer, props2);
+    gfxLayer.addElement(element2);
 
     screen.render(1);
   }

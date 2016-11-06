@@ -55,36 +55,7 @@
     textLayer.writeText("Shaun Lusk", 0, 23, C64Style.Color.LIGHTBLUE);
   }
 
-  function drawTextButton(text, x, y, color, on) {
-    var edgeX;
-    var rightEdge = x + text.length + 1;
-    if (on) {
-      for (edgeX = x + 1; edgeX < rightEdge; edgeX++) {
-        textLayer.drawSymbol("BAR_120", edgeX, y, screen.getBackgroundColor(), color);
-        textLayer.drawSymbol("BAR_121", edgeX, y + 2, screen.getBackgroundColor(), color);
-      }
-      textLayer.drawSymbol("PIPE_117", x, y + 1, screen.getBackgroundColor(), color);
-      textLayer.drawSymbol("PIPE_118", rightEdge, y + 1, screen.getBackgroundColor(), color);
-      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_TOP_LEFT", x, y, color);
-      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_TOP_RIGHT", rightEdge, y, color);
-      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_BOTTOM_LEFT", x, y + 2, color);
-      textLayer.drawSymbol("ROUNDED_CORNER_FILLED_BOTTOM_RIGHT", rightEdge, y + 2, color);
-      textLayer.writeText(text, x + 1, y + 1, screen.getBackgroundColor(), color);
-    } else {
-      for (edgeX = x + 1; edgeX < rightEdge; edgeX++) {
-        textLayer.drawSymbol("BAR", edgeX, y, color);
-        textLayer.drawSymbol("BAR", edgeX, y + 2, color);
-      }
-      textLayer.writeText("|", x, y + 1, color);
-      textLayer.writeText("|", rightEdge, y + 1, color);
-      textLayer.drawSymbol("ROUNDED_CORNER_TOP_LEFT", x, y, color);
-      textLayer.drawSymbol("ROUNDED_CORNER_TOP_RIGHT", rightEdge, y, color);
-      textLayer.drawSymbol("ROUNDED_CORNER_BOTTOM_LEFT", x, y + 2, color);
-      textLayer.drawSymbol("ROUNDED_CORNER_BOTTOM_RIGHT", rightEdge, y + 2, color);
-      textLayer.writeText(text, x + 1, y + 1, color);
-    }
 
-  };
   initialize(document.getElementById("content"), config);
   </script>
 </body>
