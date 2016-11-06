@@ -141,7 +141,7 @@
     });
 
     screen.on(C64Style.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
-      console.log("clicked");
+      if (draggedElement) return;
       var element = getElementFromEvent(event);
       if (element !== null) {
         draggedElement = element;

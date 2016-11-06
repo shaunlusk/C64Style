@@ -1,0 +1,85 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style GfxElement Demo</title>
+  <script type="text/javascript" src="lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="lib/Color.js"></script>
+  <script type="text/javascript" src="lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="lib/Constants.js"></script>
+  <script type="text/javascript" src="lib/EventType.js"></script>
+  <script type="text/javascript" src="lib/Event.js"></script>
+  <script type="text/javascript" src="lib/Screen.js"></script>
+  <script type="text/javascript" src="lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="lib/Layer.js"></script>
+  <script type="text/javascript" src="lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="lib/TextLayer.js"></script>
+  <script type="text/javascript" src="lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="lib/GfxElement.js"></script>
+  <script type="text/javascript" src="lib/TextElement.js"></script>
+  <script type="text/javascript" src="lib/TextLink.js"></script>
+  <script type="text/javascript" src="lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="lib/PixImage.js"></script>
+  <script type="text/javascript" src="lib/GfxLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="content">
+  </div>
+  <div id="buttons"><button onclick="screen.setPaused(!screen.getPaused());">Pause</button></div>
+  <div id="info"></div>
+  <script type="text/javascript">
+  var C64Style = C64Style || {};
+  var screen = null,
+    textLayer = null,
+    gfxLayer = null,
+    element = null;
+  var config = {
+    "rows" : 50,
+    "cols" : 80,
+    "scaleX" : 1,
+    "scaleY" : 1,
+  };
+
+  function initialize(targetDiv, config) {
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+    screen.initialize();
+    textLayer = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
+
+    var props = {
+      x:10,y:10,
+      text:"test",
+      color:C64Style.Color.BLUE,
+      backgroundColor:C64Style.Color.LIGHTBLUE,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      onClick: function() {
+        console.log("clicked");
+        return false;
+      },
+      href:"http://www.google.com"
+    };
+    element = new C64Style.TextLink(screen, gfxLayer, props);
+    // element = new C64Style.TextElement(screen, gfxLayer, {
+    //   scaleX:1,
+    //   scaleY:1,
+    //   text:"Regular Text",
+    //   color:C64Style.Color.LIGHTBLUE,
+    //   backgroundColor:C64Style.Color.BLUE
+    // });
+    gfxLayer.addElement(element);
+
+    screen.render(1);
+  }
+  initialize(document.getElementById("content"), config);
+
+
+  </script>
+</body>
+</html>

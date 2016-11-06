@@ -1,23 +1,14 @@
 TODO
 
---X--? move current event creation of mouse|element events to separate
-for buttons/links/gfxElement mouse event handling:
-_getElementsForMouseEvent - change to propagateEventAndReturnElements
-element function - handle mouse event
-  collision
-  return true if collision
-  listener code
-
-  element events
-    mouse over
-    mouse down
-    mouse up
 
 screen
   store bg, border colors
   separate element mouse down events? - separate from mouse down/up/over?
 
 throw error on unimplemented methods in layer - but not propagateEvent
+
+mouse over event
+
 
 demos
   text input
