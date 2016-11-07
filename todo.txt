@@ -1,14 +1,12 @@
 TODO
 
+screen.set border size does nothing
 
 screen
   store bg, border colors
   separate element mouse down events? - separate from mouse down/up/over?
 
 throw error on unimplemented methods in layer - but not propagateEvent
-
-mouse over event
-
 
 demos
   text input

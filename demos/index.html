@@ -3,6 +3,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style</title>
   <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
   <script type="text/javascript" src="../lib/Color.js"></script>
   <script type="text/javascript" src="../lib/Constants.js"></script>
   <script type="text/javascript" src="../lib/EventType.js"></script>
@@ -14,6 +17,12 @@
   <script type="text/javascript" src="../lib/Layer.js"></script>
   <script type="text/javascript" src="../lib/TextPrompt.js"></script>
   <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/TextElement.js"></script>
+  <script type="text/javascript" src="../lib/TextLink.js"></script>
+  <script type="text/javascript" src="../lib/TextButton.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
 #content {
@@ -33,7 +42,7 @@
       "scaleY" : 2,
     };
 
-  var screen = null, textLayer = null;
+  var screen = null, textLayer = null, gfxLayer;
 
   function initialize(targetDiv, config) {
 
@@ -41,20 +50,86 @@
     screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
     screen.render();
 
-    drawTextButton("Download  .zip", 12, 7, C64Style.Color.LIGHTBLUE, false);
-    drawTextButton("Download .tar.gz", 11, 10, C64Style.Color.LIGHTBLUE, false);
-    drawTextButton("View On GitHub", 12, 13, C64Style.Color.LIGHTBLUE, false);
-    drawTextButton("Demos!", 16, 16, C64Style.Color.LIGHTBLUE, false);
+    // drawTextButton("Download  .zip", 12, 7, C64Style.Color.LIGHTBLUE, false);
+    // drawTextButton("Download .tar.gz", 11, 10, C64Style.Color.LIGHTBLUE, false);
+    // drawTextButton("View On GitHub", 12, 13, C64Style.Color.LIGHTBLUE, false);
+    // drawTextButton("Demos!", 16, 16, C64Style.Color.LIGHTBLUE, false);
+
+    element = new C64Style.TextButton(screen, gfxLayer, {
+      x:12 * C64Style.CELLWIDTH,
+      y:7 * C64Style.CELLHEIGHT,
+      text:"Download .zip",
+      backgroundColor:C64Style.Color.BLUE,
+      buttonColor : C64Style.Color.LIGHTBLUE,
+      textColor : C64Style.Color.LIGHTBLUE,
+      highlightButtonColor : C64Style.Color.LIGHTBLUE,
+      highlightTextColor : C64Style.Color.BLUE,
+      // href:"http://www.google.com"
+    });
+    gfxLayer.addElement(element);
+    element = new C64Style.TextButton(screen, gfxLayer, {
+      x:10 * C64Style.CELLWIDTH + 4,
+      y:10 * C64Style.CELLHEIGHT,
+      text:"Download .tar.gz",
+      backgroundColor:C64Style.Color.BLUE,
+      buttonColor : C64Style.Color.LIGHTBLUE,
+      textColor : C64Style.Color.LIGHTBLUE,
+      highlightButtonColor : C64Style.Color.LIGHTBLUE,
+      highlightTextColor : C64Style.Color.BLUE,
+      // href:"http://www.google.com"
+    });
+    gfxLayer.addElement(element);
+    element = new C64Style.TextButton(screen, gfxLayer, {
+      x:11 * C64Style.CELLWIDTH + 4,
+      y:13 * C64Style.CELLHEIGHT,
+      text:"View On GitHub",
+      backgroundColor:C64Style.Color.BLUE,
+      buttonColor : C64Style.Color.LIGHTBLUE,
+      textColor : C64Style.Color.LIGHTBLUE,
+      highlightButtonColor : C64Style.Color.LIGHTBLUE,
+      highlightTextColor : C64Style.Color.BLUE,
+      // href:"http://www.google.com"
+    });
+    gfxLayer.addElement(element);
+    element = new C64Style.TextButton(screen, gfxLayer, {
+      x:15 * C64Style.CELLWIDTH + 4,
+      y:16 * C64Style.CELLHEIGHT,
+      text:"Demos!",
+      backgroundColor:C64Style.Color.BLUE,
+      buttonColor : C64Style.Color.LIGHTBLUE,
+      textColor : C64Style.Color.LIGHTBLUE,
+      highlightButtonColor : C64Style.Color.LIGHTBLUE,
+      highlightTextColor : C64Style.Color.BLUE,
+      // href:"http://www.google.com"
+    });
+    gfxLayer.addElement(element);
+
     textLayer.writeText("C64Style", 16, 1, C64Style.Color.WHITE, C64Style.Color.LIGHTBLUE);
     textLayer.writeText("A framework for rendering Commodore 64", 1, 3, C64Style.Color.LIGHTBLUE);
     textLayer.writeText("style graphics with JavaScript and ", 2, 4, C64Style.Color.LIGHTBLUE);
     textLayer.writeText("HTML5 Canvas.", 13, 5, C64Style.Color.LIGHTBLUE);
 
-    textLayer.writeText("Shaun Lusk", 0, 23, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("(c) 2016 Shaun Lusk", 0, 23, C64Style.Color.LIGHTBLUE);
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:20 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+      text:"(License)",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.BLUE,
+      mouseOverBackgroundColor: C64Style.Color.LIGHTBLUE,
+      // href:"LICENSE.txt"
+    });
+    element.on("MOUSE_UP_ON_ELEMENT", function(e){
+      var link = e.data.element;
+      console.log("mouse:", e.data.x, e.data.y);
+      console.log("element:", link.getX(), link.getY(), "; ", link.getWidth(), link.getHeight());
+      console.log("colBox:", link.getCollisionBoxX(), link.getCollisionBoxY(), "; ", link.getCollisionBoxWidth(), link.getCollisionBoxHeight());
+    });
+    gfxLayer.addElement(element);
   }
-
 
   initialize(document.getElementById("content"), config);
   </script>
