@@ -62,7 +62,8 @@
       textColor : C64Style.Color.LIGHTBLUE,
       highlightButtonColor : C64Style.Color.LIGHTBLUE,
       highlightTextColor : C64Style.Color.BLUE,
-      // href:"http://www.google.com"
+      href:"https://github.com/shaunlusk/C64Style/zipball/master",
+      newWindow : true
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton(screen, gfxLayer, {
@@ -74,7 +75,8 @@
       textColor : C64Style.Color.LIGHTBLUE,
       highlightButtonColor : C64Style.Color.LIGHTBLUE,
       highlightTextColor : C64Style.Color.BLUE,
-      // href:"http://www.google.com"
+      href:"https://github.com/shaunlusk/C64Style/tarball/master",
+      newWindow : true
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton(screen, gfxLayer, {
@@ -86,7 +88,8 @@
       textColor : C64Style.Color.LIGHTBLUE,
       highlightButtonColor : C64Style.Color.LIGHTBLUE,
       highlightTextColor : C64Style.Color.BLUE,
-      // href:"http://www.google.com"
+      href:"https://github.com/shaunlusk/C64Style",
+      newWindow : true
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton(screen, gfxLayer, {
@@ -98,7 +101,10 @@
       textColor : C64Style.Color.LIGHTBLUE,
       highlightButtonColor : C64Style.Color.LIGHTBLUE,
       highlightTextColor : C64Style.Color.BLUE,
-      // href:"http://www.google.com"
+      href:"demos/index.html",
+      onClick: function(e) {
+        console.log(e);
+      }
     });
     gfxLayer.addElement(element);
 
@@ -107,15 +113,16 @@
     textLayer.writeText("style graphics with JavaScript and ", 2, 4, C64Style.Color.LIGHTBLUE);
     textLayer.writeText("HTML5 Canvas.", 13, 5, C64Style.Color.LIGHTBLUE);
 
-    textLayer.writeText("(c) 2016 Shaun Lusk", 0, 23, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("C64Style is maintained by", 0, 23, C64Style.Color.LIGHTBLUE);
     element = new C64Style.TextLink(screen, gfxLayer, {
-      x:20 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
-      text:"(License)",
+      x:26 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+      text:"shaunlusk",
       color:C64Style.Color.LIGHTBLUE,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.BLUE,
       mouseOverBackgroundColor: C64Style.Color.LIGHTBLUE,
-      // href:"LICENSE.txt"
+      href:"https://github.com/shaunlusk",
+      newWindow : true
     });
     gfxLayer.addElement(element);
   }
