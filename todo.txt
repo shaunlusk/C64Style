@@ -1,29 +1,44 @@
 TODO
 
-more events?
-per layer/element events?
+screen.set border size does nothing
+
+screen
+  store bg, border colors
+  separate element mouse down events? - separate from mouse down/up/over?
+
+throw error on unimplemented methods in layer - but not propagateEvent
+
+demos
+  text input
+  sprite
+  image sprite
+  drag and drop
+  mouse over
+
+per layer events
+  before / after render
+
+
+
 
 webpage intro
 
 documentation
 
-text element demo - text with background
-textSprite?
-
+license
 functionality and unit tests for UniquePriorityQueue
 
-license
-
-demos
-  rename current gfxdemo
-  demo directory
-  sprite
-  image sprite
-
 loading animation
-cursor / prompt
+
+known issue: in text layer, strings that are rendered in same frame may be written on top of eachother without clearing (clearing comes before drawing)
 
 add additional char maps
+  person
+  caret
+  tilda
+  curly braces
+
+textSprite?
 
 tests for
   priority queue
@@ -38,5 +53,5 @@ tests for
 
 element finalize
 
-Bounds checking on text layer
-Text wrapping on text layer
+Bounds checking on text layer?
+Text wrapping on text layer?

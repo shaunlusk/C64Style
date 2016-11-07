@@ -2,17 +2,18 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Text Demo</title>
-  <script type="text/javascript" src="lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="lib/Color.js"></script>
-  <script type="text/javascript" src="lib/Constants.js"></script>
-  <script type="text/javascript" src="lib/EventType.js"></script>
-  <script type="text/javascript" src="lib/Event.js"></script>
-  <script type="text/javascript" src="lib/Screen.js"></script>
-  <script type="text/javascript" src="lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="lib/Layer.js"></script>
-  <script type="text/javascript" src="lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -46,8 +47,10 @@
     var x = 0, y = 5;
     Object.keys(C64Style.CharacterMap).forEach(function(key) {
       textLayer.drawSymbol(key, x, y, C64Style.Color.WHITE);
+      // Draw inverse characters
+      textLayer.drawSymbol(key, x, y + 10, C64Style.Color.BLUE, C64Style.Color.LIGHTBLUE);
       x++;
-      if (x > 18) {
+      if (x > 24) {
         x = 0;
         y++;
       }

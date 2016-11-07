@@ -2,28 +2,28 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style GfxElement Demo</title>
-  <script type="text/javascript" src="lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="lib/Color.js"></script>
-  <script type="text/javascript" src="lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="lib/Constants.js"></script>
-  <script type="text/javascript" src="lib/EventType.js"></script>
-  <script type="text/javascript" src="lib/Event.js"></script>
-  <script type="text/javascript" src="lib/Screen.js"></script>
-  <script type="text/javascript" src="lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="lib/Layer.js"></script>
-  <script type="text/javascript" src="lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="lib/TextLayer.js"></script>
-  <script type="text/javascript" src="lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="lib/GfxElement.js"></script>
-  <script type="text/javascript" src="lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="lib/PixImage.js"></script>
-  <script type="text/javascript" src="lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixImage.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -36,9 +36,6 @@
   var screen = null,
     textLayer = null,
     gfxLayer = null,
-    draggedElement = null,
-    xOffset = 0;
-    yOffset = 0;
     pixPathArray = [
       {type:"RECTANGLE", x:1, y: 5, width:1, height:6, color: 0},
       {type:"RECTANGLE", x:5, y: 1, width:6, height:1, color: 0},
@@ -74,11 +71,13 @@
     "scaleY" : 1,
   };
 
+  var xBounds = config.cols * C64Style.CELLWIDTH - 16;
+  var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
+
   var moveRateMin = 3;
-  var moveRateMax = 20;
-  // -20 to -3 or 3 to 20
+  var moveRateMax = 300;
+
   function getRandomMoveRate() {
-    // Math.floor(0 - (2 * Math.random() * (moveRateMax - moveRateMin)) + moveRateMin)
     var rate = Math.floor(Math.random() * (moveRateMax - moveRateMin)) + moveRateMin;
     rate = Math.random() >= 0.5 ? rate : 0 - rate;
     return rate;
@@ -90,18 +89,16 @@
     screen.initialize();
 
     textLayer = screen.createLayer("TextLayer");
+    textLayer.writeText("This is probably a bit more than C64 could have handled.",11,24, C64Style.Color.WHITE);
 
     gfxLayer = screen.createLayer("GfxLayer");
 
-    var xBounds = config.cols * C64Style.CELLWIDTH - 16;
-    var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
-
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 600; i++) {
       var x = Math.floor(Math.random() * xBounds);
       var y = Math.floor(Math.random() * yBounds);
       element = new C64Style.PixImage(screen, gfxLayer, {
-        scaleX:2,
-        scaleY:2,
+        scaleX:1,
+        scaleY:1,
          pixPathArray : pixPathArray,
          defaultPalette : [
            C64Style.Color.getByIndex(Math.floor(Math.random() * 16)),
@@ -114,73 +111,33 @@
       var xMoveRate = getRandomMoveRate();
       var yMoveRate = getRandomMoveRate();
       element.setMoveRates(xMoveRate, yMoveRate);
+
       gfxLayer.addElement(element);
     }
+
     screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
       var element = event.data;
-      // element.setX(3);
       element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
     });
 
     screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
       var element = event.data;
-      // element.setX( xBounds - 3 );
       element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
     });
 
     screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
       var element = event.data;
-      // element.setY(3);
       element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
     });
 
     screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
       var element = event.data;
-      // element.setY(yBounds - 3);
       element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
     });
 
-    screen.on(C64Style.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
-      if (draggedElement) return;
-      var element = getElementFromEvent(event);
-      if (element !== null) {
-        draggedElement = element;
-        draggedElement.setMoveRates(0, 0);
-        xOffset = event.data.x - draggedElement.getX();
-        yOffset = event.data.y - draggedElement.getY();
-      }
-    });
-
-    screen.on(C64Style.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
-      if (draggedElement) {
-        var xMoveRate = getRandomMoveRate();
-        var yMoveRate = getRandomMoveRate();
-        draggedElement.setMoveRates(xMoveRate, yMoveRate);
-        draggedElement = null;
-      }
-    });
-    screen.on(C64Style.EventType.MOUSE_MOVE, function(event) {
-      if (draggedElement === null) {
-        var element = getElementFromEvent(event);
-        if (element) console.log("Mouse over element " + element.getId());
-        return;
-      }
-      draggedElement.setX(event.data.x - xOffset);
-      draggedElement.setY(event.data.y - yOffset);
-    });
     screen.render(1);
   }
   initialize(document.getElementById("content"), config);
-
-  function getElementFromEvent(event) {
-    // var layer = event.data.elementsByLayer[1];
-    // var element = layer.length > 0 ? layer[0] : null;
-    // if (layer.length > 1) {
-    //   console.log("Multiple Elements in event");
-    // }
-    // return element;
-    return event.data.element;
-  }
   </script>
 </body>
 </html>

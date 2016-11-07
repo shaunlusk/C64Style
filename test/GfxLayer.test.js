@@ -263,4 +263,41 @@ describe("GfxLayer", function() {
       done();
     });
   });
+  describe("#_getElementsForMouseEvent()", function() {
+    it("should return empty array if no elements", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+
+      var result = gfxLayer._getElementsForMouseEvent(10,10);
+
+      assert(result.length === 0, "should have returned empty list");
+      done();
+    });
+    it("should not return non-colliding element", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement();
+      gfxLayer.addElement(mockElement1);
+
+      var result = gfxLayer._getElementsForMouseEvent();
+
+      assert(result.length === 0, "should have returned empty list");
+      done();
+    });
+    it("should return colliding elements", function(done) {
+      var gfxLayer = new C64Style.GfxLayer();
+      var mockElement1 = C64Style.Mocks.getMockGfxElement();
+      mockElement1.collidesWithCoordinates = function(x,y) {return true;};
+      var mockElement2 = C64Style.Mocks.getMockGfxElement();
+      mockElement2.collidesWithCoordinates = function(x,y) {return false;};
+      var mockElement3 = C64Style.Mocks.getMockGfxElement();
+      mockElement3.collidesWithCoordinates = function(x,y) {return true;};
+      gfxLayer.addElement(mockElement1);
+      gfxLayer.addElement(mockElement2);
+      gfxLayer.addElement(mockElement3);
+
+      var result = gfxLayer._getElementsForMouseEvent();
+
+      assert(result.length === 2, "should have returned 2 elements");
+      done();
+    });
+  });
 });

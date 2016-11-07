@@ -36,6 +36,7 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   element.zIndex = props.zIndex || -1;
   element.getZIndex = function() {return this.zIndex;};
   element.setZIndex = function(zidx) {this.zIndex = zidx;};
+  element.collidesWithCoordinates = function(x,y) {return false;};
 
   return element;
 };

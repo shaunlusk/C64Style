@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>C64Style Working Page</title>
+  <title>C64Style GfxElement Demo</title>
   <script type="text/javascript" src="lib/Common/Utils.js"></script>
   <script type="text/javascript" src="lib/Common/PriorityQueue.js"></script>
   <script type="text/javascript" src="lib/Common/UniquePriorityQueue.js"></script>
@@ -16,13 +16,16 @@
   <script type="text/javascript" src="lib/CharacterMap.js"></script>
   <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
   <script type="text/javascript" src="lib/Layer.js"></script>
+  <script type="text/javascript" src="lib/TextPrompt.js"></script>
   <script type="text/javascript" src="lib/TextLayer.js"></script>
   <script type="text/javascript" src="lib/MoveOrder.js"></script>
   <script type="text/javascript" src="lib/GfxElementZIndexComparable.js"></script>
   <script type="text/javascript" src="lib/GfxElement.js"></script>
+  <script type="text/javascript" src="lib/TextElement.js"></script>
+  <script type="text/javascript" src="lib/TextLink.js"></script>
+  <script type="text/javascript" src="lib/TextButton.js"></script>
   <script type="text/javascript" src="lib/PixRenderer.js"></script>
   <script type="text/javascript" src="lib/PixImage.js"></script>
-  <script type="text/javascript" src="lib/TextElement.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -31,16 +34,13 @@
   </div>
   <div id="buttons"><button onclick="screen.setPaused(!screen.getPaused());">Pause</button></div>
   <div id="info"></div>
-  <div id="mCoords"></div>
   <script type="text/javascript">
   var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
-    textLayer2 = null,
     gfxLayer = null,
     element = null,
-    element2 = null,
-    element3 = null;
+    element2 = null;
   var config = {
     "rows" : 25,
     "cols" : 40,
@@ -49,75 +49,61 @@
   };
 
   function initialize(targetDiv, config) {
-    var xBounds = config.cols * C64Style.CELLWIDTH - 16;
-    var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
-
     screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
-
     screen.initialize();
-
+    textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
-    element = new C64Style.TextElement(screen, gfxLayer, {
-      scaleX:1,
-      scaleY:1,
-      text:"Regular Text",
-      color:C64Style.Color.LIGHTBLUE,
-      backgroundColor:C64Style.Color.BLUE
-    });
-    element.setX(10);
-    element.setY(10);
-    element.setMoveRates(25, 10);
+    var props = {
+      x:10,y:10,
+      text:"test",
+      color:C64Style.Color.BLUE,
+      backgroundColor:C64Style.Color.LIGHTBLUE,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      onClick: function() {
+        console.log("clicked");
+        return false;
+      },
+      href:"http://www.google.com"
+    };
+    element = new C64Style.TextLink(screen, gfxLayer, props);
+    // element = new C64Style.TextElement(screen, gfxLayer, {
+    //   scaleX:1,
+    //   scaleY:1,
+    //   text:"Regular Text",
+    //   color:C64Style.Color.LIGHTBLUE,
+    //   backgroundColor:C64Style.Color.BLUE
+    // });
     gfxLayer.addElement(element);
 
-    element2 = new C64Style.TextElement(screen, gfxLayer, {
-      scaleX:2,
-      scaleY:2,
-      text:"SCALED TEXT!",
-      color:C64Style.Color.GREEN,
-      backgroundColor:C64Style.Color.BLACK
-    });
-    element2.setX(20);
-    element2.setY(20);
-    element2.setMoveRates(35, 20);
+    var props2 = {
+      x:50,y:50,
+      "scaleX" : 2,
+      "scaleY" : 2,
+      text:"test",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLUE,
+
+      buttonColor : C64Style.Color.WHITE,
+      textColor : C64Style.Color.LIGHTGREEN,
+      highlightButtonColor : C64Style.Color.BLACK,
+      highlightTextColor : C64Style.Color.CYAN,
+
+      onClick: function() {
+        console.log("clicked");
+        return false;
+      },
+      href:"http://www.google.com"
+    };
+    element2 = new C64Style.TextButton(screen, gfxLayer, props2);
     gfxLayer.addElement(element2);
-
-    element3 = new C64Style.TextElement(screen, gfxLayer, {
-      scaleX:2,
-      scaleY:2,
-
-      symbolName:"HEART",
-      color:C64Style.Color.RED,
-      backgroundColor:C64Style.Color.PINK
-    });
-    element3.setX(50);
-    element3.setY(50);
-    element3.setMoveRates(20,20);
-    gfxLayer.addElement(element3);
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
-    });
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
-    });
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
-    });
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
-    });
 
     screen.render(1);
   }
   initialize(document.getElementById("content"), config);
+
+
   </script>
 </body>
 </html>
