@@ -1,0 +1,98 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style Working Page</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixImage.js"></script>
+  <script type="text/javascript" src="../lib/Sprite.js"></script>
+  <script type="text/javascript" src="../lib/PixSprite.js"></script>
+  <script type="text/javascript" src="../lib/TextElement.js"></script>
+  <script type="text/javascript" src="../lib/ImageRenderer.js"></script>
+  <script type="text/javascript" src="../lib/ImageElement.js"></script>
+  <script type="text/javascript" src="../lib/ImageSprite.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="content">
+  </div>
+  <div id="buttons"><button onclick="screen.setPaused(!screen.getPaused());">Pause</button></div>
+  <div id="info"></div>
+  <div id="mCoords"></div>
+  <script type="text/javascript">
+  var C64Style = C64Style || {};
+  var screen = null,
+    textLayer = null,
+    textLayer2 = null,
+    gfxLayer = null,
+    imageRender = null,
+    defaultPalette = [
+      C64Style.Color.BLACK,
+      C64Style.Color.RED
+    ],
+    colorPointer = new C64Style.ColorPointer(C64Style.Color.WHITE);
+    pixPathArray1 = [
+      // {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: C64Style.Color.BLACK},
+      // {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: C64Style.Color.RED}
+      {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: colorPointer},
+      {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: 1}
+    ],
+    pixPathArray2 = [
+      // {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: C64Style.Color.BLACK},
+      // {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: C64Style.Color.RED}
+      {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: colorPointer},
+      {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: 0}
+    ],
+    element = null,
+    element2 = null,
+    element3 = null;
+  var debug = false;
+  var config = {
+    "rows" : 25,
+    "cols" : 40,
+    "scaleX" : 1,
+    "scaleY" : 1,
+  };
+
+  function initialize(targetDiv, config) {
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+
+    screen.initialize();
+
+    textLayer = screen.createLayer("TextLayer");
+    // textLayer2 = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
+
+
+    var p = textLayer.prompt("Input: ", 0, 10, C64Style.Color.LIGHTBLUE, 10, function(value){
+      console.log("rcvd:" +value);
+      // p.clearInput();
+      p.reset();
+    });
+    screen.render(1);
+
+  }
+  initialize(document.getElementById("content"), config);
+
+  </script>
+</body>
+</html>
