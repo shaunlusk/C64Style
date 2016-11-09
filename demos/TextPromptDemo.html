@@ -43,6 +43,7 @@
   var screen = null,
     textLayer = null,
     textLayer2 = null,
+    p = null,
     gfxLayer = null,
     imageRender = null,
     defaultPalette = [
@@ -83,15 +84,20 @@
     gfxLayer = screen.createLayer("GfxLayer");
 
 
-    var p = textLayer.prompt("Input: ", 0, 10, C64Style.Color.LIGHTBLUE, 10, function(value){
-      console.log("rcvd:" +value);
-      // p.clearInput();
-      p.reset();
-    });
+    p = textLayer.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
     screen.render(1);
 
   }
   initialize(document.getElementById("content"), config);
+
+  function promptCallback(value) {
+    console.log("rcvd:" +value);
+    textLayer.clearLength(0, 5, 40);
+    textLayer.writeText("Last Input:", 0, 5, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText(value, 13, 5, C64Style.Color.WHITE);
+    p.reset();
+    p.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
+  }
 
   </script>
 </body>
