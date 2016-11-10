@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>C64Style Working Page</title>
+  <title>C64Style Text Prompt Demo</title>
   <script type="text/javascript" src="../lib/Common/Utils.js"></script>
   <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
   <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
@@ -42,30 +42,8 @@
   var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
-    textLayer2 = null,
     p = null,
-    gfxLayer = null,
-    imageRender = null,
-    defaultPalette = [
-      C64Style.Color.BLACK,
-      C64Style.Color.RED
-    ],
-    colorPointer = new C64Style.ColorPointer(C64Style.Color.WHITE);
-    pixPathArray1 = [
-      // {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: C64Style.Color.BLACK},
-      // {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: C64Style.Color.RED}
-      {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: colorPointer},
-      {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: 1}
-    ],
-    pixPathArray2 = [
-      // {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: C64Style.Color.BLACK},
-      // {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: C64Style.Color.RED}
-      {type:"RECTANGLE", x:1, y: 1, width:14, height:14, color: colorPointer},
-      {type:"RECTANGLE", x:2, y: 2, width:12, height:12, color: 0}
-    ],
-    element = null,
-    element2 = null,
-    element3 = null;
+    gfxLayer = null
   var debug = false;
   var config = {
     "rows" : 25,
@@ -80,9 +58,6 @@
     screen.initialize();
 
     textLayer = screen.createLayer("TextLayer");
-    // textLayer2 = screen.createLayer("TextLayer");
-    gfxLayer = screen.createLayer("GfxLayer");
-
 
     p = textLayer.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
     screen.render(1);
@@ -95,7 +70,7 @@
     textLayer.clearLength(0, 5, 40);
     textLayer.writeText("Last Input:", 0, 5, C64Style.Color.LIGHTBLUE);
     textLayer.writeText(value, 13, 5, C64Style.Color.WHITE);
-    p.reset();
+
     p.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
   }
 
