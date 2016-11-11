@@ -49,8 +49,9 @@
   var C64Style = C64Style || {};
   var screen = null,
     previewScreen = null,
+    gfxLayer = null,
     textLayer = null,
-    gfxLayer,
+    previewGfxLayer,
     color = C64Style.Color.BLACK,
     pixPathArray = null,
     element = null,
@@ -70,14 +71,16 @@
     screen = new C64Style.Screen(targetDiv, null, config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
+    drawGrid(gfxLayer);
 
     previewScreen = new C64Style.Screen(document.getElementById("preview"), null,
       {rows:2, cols:2, scaleX:2, scaleY:2, borderSize:2}
     );
     previewScreen.initialize();
-    gfxLayer = previewScreen.createLayer("GfxLayer");
-    element = new C64Style.PixImage(previewScreen, gfxLayer, {pixPathArray : pixPathArray});
-    gfxLayer.addElement(element);
+    previewGfxLayer = previewScreen.createLayer("GfxLayer");
+    element = new C64Style.PixImage(previewScreen, previewGfxLayer, {pixPathArray : pixPathArray});
+    previewGfxLayer.addElement(element);
 
     reset();
 
@@ -157,6 +160,26 @@
       for (var x = 0; x < config.cols; x++) {
         map[y].push(null);
       }
+    }
+  }
+
+  function drawGrid(gfxLayer) {
+    var context = gfxLayer.getCanvasContext();
+    var xBounds = config.cols * config.scaleX * C64Style.CELLWIDTH;
+    var yBounds = config.rows * config.scaleY * C64Style.CELLHEIGHT;
+    for (var x = config.scaleX * C64Style.CELLWIDTH; x < xBounds; x += config.scaleX * C64Style.CELLWIDTH) {
+      context.beginPath();
+      context.moveTo(x, 0);
+      context.lineTo(x, yBounds);
+      context.closePath();
+      context.stroke();
+    }
+    for (var y = config.scaleY * C64Style.CELLHEIGHT; y < yBounds; y += config.scaleY * C64Style.CELLHEIGHT) {
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(xBounds, y);
+      context.closePath();
+      context.stroke();
     }
   }
 
