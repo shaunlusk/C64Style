@@ -72,7 +72,8 @@
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
-    drawGrid(gfxLayer);
+    drawGrid();
+    drawBoxAroundSelectedColor(0);
 
     previewScreen = new C64Style.Screen(document.getElementById("preview"), null,
       {rows:2, cols:2, scaleX:2, scaleY:2, borderSize:2}
@@ -88,6 +89,7 @@
       drawOn = true;
       if (event.data.row === 16) {
         color = C64Style.Color.getByIndex(event.data.col);
+        redrawGfx(event);
       } else {
         draw(event);
       }
@@ -138,6 +140,13 @@
 
   function eraser() {
     color = "eraser";
+    redrawGfx();
+  }
+
+  function redrawGfx(event) {
+    gfxLayer.clearLayer();
+    drawGrid();
+    drawBoxAroundSelectedColor(event ? event.data.col : 17);
   }
 
   function reset() {
@@ -163,8 +172,9 @@
     }
   }
 
-  function drawGrid(gfxLayer) {
+  function drawGrid() {
     var context = gfxLayer.getCanvasContext();
+    context.strokeStyle = 'black';
     var xBounds = config.cols * config.scaleX * C64Style.CELLWIDTH;
     var yBounds = config.rows * config.scaleY * C64Style.CELLHEIGHT;
     for (var x = config.scaleX * C64Style.CELLWIDTH; x < xBounds; x += config.scaleX * C64Style.CELLWIDTH) {
@@ -181,6 +191,21 @@
       context.closePath();
       context.stroke();
     }
+  }
+
+  function drawBoxAroundSelectedColor(col) {
+    var x, y, width, height;
+    var context = gfxLayer.getCanvasContext();
+    x = col * C64Style.CELLWIDTH * config.scaleX;
+    y = (config.rows - 1) * C64Style.CELLHEIGHT * config.scaleY;
+    width = C64Style.CELLWIDTH * config.scaleX;
+    height = C64Style.CELLHEIGHT * config.scaleY;
+    context.beginPath();
+    context.rect(x, y, width, height);
+    context.lineWidth = 2;
+    context.strokeStyle = col === 1 ? '#999999' : 'white';
+    context.closePath();
+    context.stroke();
   }
 
   initialize(document.getElementById("content"), config);
