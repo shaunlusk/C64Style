@@ -40,6 +40,7 @@
   <div id="buttons">
     <button onclick="reset();">Clear</button>
     <button onclick="eraser();">Eraser</button>
+    <input type="checkbox" id="colorIdxCheckBox" onchange="changeColorStrategy()"> Use Color Index instead of Hex String
   </div>
   <div id="json">
     <textarea name="jsonData" id="jsonData" rows="8" cols="40"></textarea>
@@ -52,10 +53,12 @@
     gfxLayer = null,
     textLayer = null,
     previewGfxLayer,
-    color = C64Style.Color.BLACK,
     pixPathArray = null,
     element = null,
-    drawOn = false;
+    drawOn = false,
+    useColorIndex = document.getElementById("colorIdxCheckBox").checked;
+    color = C64Style.Color.BLACK,
+    colorIdx = 0,
     map = null;
   var config = {
     "rows" : 17,
@@ -80,7 +83,14 @@
     );
     previewScreen.initialize();
     previewGfxLayer = previewScreen.createLayer("GfxLayer");
-    element = new C64Style.PixImage(previewScreen, previewGfxLayer, {pixPathArray : pixPathArray});
+    element = new C64Style.PixImage(
+      previewScreen,
+      previewGfxLayer,
+      {
+        pixPathArray : pixPathArray,
+        defaultPalette : C64Style.Color.getDefaultPalette()
+      }
+    );
     previewGfxLayer.addElement(element);
 
     reset();
@@ -89,6 +99,7 @@
       drawOn = true;
       if (event.data.row === 16) {
         color = C64Style.Color.getByIndex(event.data.col);
+        colorIdx = event.data.col;
         redrawGfx(event);
       } else {
         draw(event);
@@ -117,7 +128,7 @@
       map[event.data.row][event.data.col] = null;
       textLayer.clearLength(event.data.col, event.data.row, 1);
     } else {
-      map[event.data.row][event.data.col] = color;
+      map[event.data.row][event.data.col] = colorIdx;
       textLayer.drawSymbol("BLOCK", event.data.col, event.data.row, color);
     }
   }
@@ -127,8 +138,8 @@
     for (var y = 0; y < config.rows; y++) {
       for (var x = 0; x < config.cols; x++) {
           cellColor = map[y][x];
-          if (cellColor) {
-            pixPathArray.push({type:"PIXEL", x:x, y:y, color: cellColor});
+          if (cellColor !== null) {
+            pixPathArray.push({type:"PIXEL", x:x, y:y, color: useColorIndex ? cellColor : C64Style.Color.getByIndex(cellColor)});
           }
       }
     }
@@ -206,6 +217,16 @@
     context.strokeStyle = col === 1 ? '#999999' : 'white';
     context.closePath();
     context.stroke();
+  }
+
+  function changeColorStrategy() {
+    var box = document.getElementById("colorIdxCheckBox");
+    if (box.checked) {
+      useColorIndex = true;
+    } else {
+      useColorIndex = false;
+    }
+    updateJson();
   }
 
   initialize(document.getElementById("content"), config);
