@@ -5,12 +5,13 @@ PERSON = [{"type":"PIXEL","x":2,"y":0,"color":"#000000"},{"type":"PIXEL","x":3,"
 screen
   separate element mouse down events? - separate from mouse down/up/over?
 
+make sprite frames consistent - image frames use duration first then props; pix sprites use pix array first then duration
+
 throw error on unimplemented methods in layer?
 
 demos
-  sprite
-  image sprite
-  drag and drop / mouse events
+  ---x drag and drop / mouse events
+  pix sprite and palette switching
   mouse over
   loading indicator
   move orders
@@ -19,14 +20,13 @@ demos
 per layer events
   before / after render
 
+Sprite.prototype.doEndOfAnimation
 
-
-
-webpage intro
+clean up move order
+make move order work with pause
 
 documentation
 
-license
 functionality and unit tests for UniquePriorityQueue
 
 loading animation

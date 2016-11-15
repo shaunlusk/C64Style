@@ -1,0 +1,117 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style Confetti Demo</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixImage.js"></script>
+  <script type="text/javascript" src="../lib/Sprite.js"></script>
+  <script type="text/javascript" src="../lib/PixSprite.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="content">
+  </div>
+  <div id="buttons"><button onclick="screen.setPaused(!screen.getPaused());">Pause</button></div>
+  <div id="info"></div>
+  <script type="text/javascript">
+  var C64Style = C64Style || {};
+  var screen = null,
+    textLayer = null,
+    gfxLayer = null,
+    pixPathArray1 = [{"type":"PIXEL","x":3,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":7,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":7,"color":"#A0A0FF"}],
+    pixPathArray2 = [{"type":"PIXEL","x":3,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":3,"color":"#A0FFA0"},{"type":"PIXEL","x":4,"y":3,"color":"#A0FFA0"},{"type":"PIXEL","x":6,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":4,"color":"#A0FFA0"},{"type":"PIXEL","x":4,"y":4,"color":"#A0FFA0"},{"type":"PIXEL","x":6,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":7,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":7,"color":"#A0A0FF"}],
+    pixPathArray3 = [{"type":"PIXEL","x":3,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":7,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":7,"color":"#60FFFF"}],
+    pixPathArray4 = [{"type":"PIXEL","x":3,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":3,"color":C64Style.Color.RED},{"type":"PIXEL","x":4,"y":3,"color":C64Style.Color.RED},{"type":"PIXEL","x":6,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":4,"color":C64Style.Color.RED},{"type":"PIXEL","x":4,"y":4,"color":C64Style.Color.RED},{"type":"PIXEL","x":6,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":7,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":7,"color":"#60FFFF"}],
+    sprite1 = null,
+    sprite2 = null,
+    element = null,
+    xOffset = null,
+    yOffset = null,
+    dragOn;
+  var config = {
+    "rows" : 25,
+    "cols" : 40,
+    "scaleX" : 1,
+    "scaleY" : 1,
+  };
+
+  function initialize(targetDiv, config) {
+    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+
+    screen.initialize();
+    textLayer = screen.createLayer("TextLayer");
+    textLayer.writeText("Try clicking and dragging", 4,1,C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("the PixSprite.", 4,2,C64Style.Color.LIGHTBLUE);
+
+    gfxLayer = screen.createLayer("GfxLayer");
+
+    sprite1 = new C64Style.PixSprite(screen, gfxLayer, {
+      x:10, y:10,
+      scaleX:2, scaleY:2,
+      frames:[
+        new C64Style.PixSpriteFrame(pixPathArray1, 400),
+        new C64Style.PixSpriteFrame(pixPathArray2, 400),
+      ]
+    });
+    sprite2 = new C64Style.PixSprite(screen, gfxLayer, {
+      x:10, y:10,
+      scaleX:2, scaleY:2,
+      hidden:true,
+      frames:[
+        new C64Style.PixSpriteFrame(pixPathArray3, 400),
+        new C64Style.PixSpriteFrame(pixPathArray4, 400),
+      ]
+    });
+    gfxLayer.addElement(sprite1);
+    gfxLayer.addElement(sprite2);
+
+    screen.on(C64Style.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
+      dragOn = true;
+      xOffset = event.data.x - sprite1.getX();
+      yOffset = event.data.y - sprite1.getY();
+      sprite1.hide();
+      sprite2.show();
+    });
+    screen.on(C64Style.EventType.MOUSE_UP, function(event) {
+      dragOn = false;
+    });
+    screen.on(C64Style.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
+      dragOn = false;
+      sprite1.setX(sprite2.getX());
+      sprite1.setY(sprite2.getY());
+      sprite2.hide();
+      sprite1.show();
+    });
+    screen.on(C64Style.EventType.MOUSE_MOVE, function(event) {
+      if (dragOn) {
+        sprite2.setX(event.data.x - xOffset);
+        sprite2.setY(event.data.y - yOffset);
+      }
+    });
+
+    screen.render(1);
+  }
+  initialize(document.getElementById("content"), config);
+  </script>
+</body>
+</html>
