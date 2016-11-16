@@ -9,9 +9,11 @@ make sprite frames consistent - image frames use duration first then props; pix 
 
 throw error on unimplemented methods in layer?
 
+ability set sprite frame idx manually, turn off frame duration
+
 demos
+  Better sprite demo
   ---x drag and drop / mouse events
-  pix sprite and palette switching
   mouse over
   loading indicator
   move orders
@@ -24,6 +26,11 @@ Sprite.prototype.doEndOfAnimation
 
 clean up move order
 make move order work with pause
+
+MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT
+MOUSE_OUT event?
+
+7 & 1 = chalice?
 
 documentation
 
@@ -54,5 +61,6 @@ tests for
 
 element finalize
 
+option for disabling collision checking?
 Bounds checking on text layer?
 Text wrapping on text layer?
