@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>C64Style PixSprite Demo</title>
+  <title>C64Style Mouse Event Demo</title>
   <script type="text/javascript" src="../lib/Common/Utils.js"></script>
   <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
   <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
@@ -67,6 +67,12 @@
     textLayer.writeText("Try clicking and dragging", 4,1,C64Style.Color.LIGHTBLUE);
     textLayer.writeText("the PixSprite.", 4,2,C64Style.Color.LIGHTBLUE);
 
+    textLayer.writeText("Mouse X:", 1,19,C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("Mouse Y:", 1,20,C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("Mouse Column:", 1,21,C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("Mouse Row:", 1,22,C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("Mouse Over Element?", 1,23,C64Style.Color.LIGHTBLUE);
+
     gfxLayer = screen.createLayer("GfxLayer");
 
     sprite1 = new C64Style.PixSprite(screen, gfxLayer, {
@@ -101,20 +107,36 @@
     });
     screen.on(C64Style.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
       dragOn = false;
-      sprite1.setX(sprite2.getX());
-      sprite1.setY(sprite2.getY());
       sprite2.hide();
       sprite1.show();
     });
     screen.on(C64Style.EventType.MOUSE_MOVE, function(event) {
+      updateMouseStats(event);
       if (dragOn) {
         sprite2.setX(event.data.x - xOffset);
         sprite2.setY(event.data.y - yOffset);
+        sprite1.setX(event.data.x - xOffset);
+        sprite1.setY(event.data.y - yOffset);
       }
     });
 
     screen.render(1);
   }
+
+  function updateMouseStats(event) {
+    textLayer.clearLength(15,19,4);
+    textLayer.writeText(event.data.x.toString(), 15,19,C64Style.Color.LIGHTGREEN);
+    textLayer.clearLength(15,20,4);
+    textLayer.writeText(event.data.y.toString(), 15,20,C64Style.Color.LIGHTGREEN);
+    textLayer.clearLength(15,21,4);
+    textLayer.writeText(event.data.col.toString(), 15,21,C64Style.Color.LIGHTGREEN);
+    textLayer.clearLength(15,22,4);
+    textLayer.writeText(event.data.row.toString(), 15,22,C64Style.Color.LIGHTGREEN);
+    textLayer.clearLength(21,23,6);
+    var mouseIsOver = sprite1.collidesWithCoordinates(event.data.x, event.data.y);
+    textLayer.writeText(mouseIsOver.toString(), 21,23,C64Style.Color.LIGHTGREEN);
+  }
+
   initialize(document.getElementById("content"), config);
   </script>
 </body>

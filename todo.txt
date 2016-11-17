@@ -6,9 +6,7 @@ ReadMe
 
 demos
   do more robust pix sprite demo
-  more robust mouse event demo
   more comments
-  back buttons
 
 documentation
 make sprite frames consistent - image frames use duration first then props; pix sprites use pix array first then duration
