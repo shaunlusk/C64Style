@@ -1,4 +1,18 @@
 body {
   background-color: black;
   color: white;
+  font-family: monospace;
+}
+
+#backLink {
+  padding-top:8px;
+}
+
+#buttons {
+  padding-top:16px;
+  padding-bottom:8px;
+}
+
+a {
+  color:#A0A0FF;
 }

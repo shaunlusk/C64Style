@@ -1,53 +1,31 @@
-TODO
+###############################################################################
+### TODO
+###############################################################################
 
-PERSON = [{"type":"PIXEL","x":2,"y":0,"color":"#000000"},{"type":"PIXEL","x":3,"y":0,"color":"#000000"},{"type":"PIXEL","x":4,"y":0,"color":"#000000"},{"type":"PIXEL","x":5,"y":0,"color":"#000000"},{"type":"PIXEL","x":2,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":1,"color":"#000000"},{"type":"PIXEL","x":4,"y":1,"color":"#000000"},{"type":"PIXEL","x":5,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":2,"color":"#000000"},{"type":"PIXEL","x":4,"y":2,"color":"#000000"},{"type":"PIXEL","x":0,"y":3,"color":"#000000"},{"type":"PIXEL","x":1,"y":3,"color":"#000000"},{"type":"PIXEL","x":2,"y":3,"color":"#000000"},{"type":"PIXEL","x":3,"y":3,"color":"#000000"},{"type":"PIXEL","x":4,"y":3,"color":"#000000"},{"type":"PIXEL","x":5,"y":3,"color":"#000000"},{"type":"PIXEL","x":6,"y":3,"color":"#000000"},{"type":"PIXEL","x":7,"y":3,"color":"#000000"},{"type":"PIXEL","x":0,"y":4,"color":"#000000"},{"type":"PIXEL","x":1,"y":4,"color":"#000000"},{"type":"PIXEL","x":3,"y":4,"color":"#000000"},{"type":"PIXEL","x":4,"y":4,"color":"#000000"},{"type":"PIXEL","x":6,"y":4,"color":"#000000"},{"type":"PIXEL","x":7,"y":4,"color":"#000000"},{"type":"PIXEL","x":2,"y":5,"color":"#000000"},{"type":"PIXEL","x":3,"y":5,"color":"#000000"},{"type":"PIXEL","x":4,"y":5,"color":"#000000"},{"type":"PIXEL","x":5,"y":5,"color":"#000000"},{"type":"PIXEL","x":1,"y":6,"color":"#000000"},{"type":"PIXEL","x":2,"y":6,"color":"#000000"},{"type":"PIXEL","x":5,"y":6,"color":"#000000"},{"type":"PIXEL","x":6,"y":6,"color":"#000000"},{"type":"PIXEL","x":0,"y":7,"color":"#000000"},{"type":"PIXEL","x":1,"y":7,"color":"#000000"},{"type":"PIXEL","x":6,"y":7,"color":"#000000"},{"type":"PIXEL","x":7,"y":7,"color":"#000000"}]
-
-screen
-  separate element mouse down events? - separate from mouse down/up/over?
-
-make sprite frames consistent - image frames use duration first then props; pix sprites use pix array first then duration
-
-throw error on unimplemented methods in layer?
-
-ability set sprite frame idx manually, turn off frame duration
+ReadMe
 
 demos
-  Better sprite demo
-  ---x drag and drop / mouse events
-  mouse over
-  loading indicator
-  move orders
+  do more robust pix sprite demo
+  more robust mouse event demo
+  more comments
   back buttons
 
-per layer events
-  before / after render
+documentation
+make sprite frames consistent - image frames use duration first then props; pix sprites use pix array first then duration
+
+tool: image2PixMap
+
 
 Sprite.prototype.doEndOfAnimation
 
 clean up move order
-make move order work with pause
 
 MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT
 MOUSE_OUT event?
 
 7 & 1 = chalice?
 
-documentation
-
 functionality and unit tests for UniquePriorityQueue
-
-loading animation
-
-known issue: in text layer, strings that are rendered in same frame may be written on top of eachother without clearing (clearing comes before drawing)
-
-add additional char maps
-  person
-  caret
-  tilda
-  curly braces
-
-textSprite?
-
 tests for
   priority queue
   c64screen
@@ -59,8 +37,33 @@ tests for
   piximage
   text layer
 
+add additional char maps
+  person
+  PERSON = [{"type":"PIXEL","x":2,"y":0,"color":"#000000"},{"type":"PIXEL","x":3,"y":0,"color":"#000000"},{"type":"PIXEL","x":4,"y":0,"color":"#000000"},{"type":"PIXEL","x":5,"y":0,"color":"#000000"},{"type":"PIXEL","x":2,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":1,"color":"#000000"},{"type":"PIXEL","x":4,"y":1,"color":"#000000"},{"type":"PIXEL","x":5,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":2,"color":"#000000"},{"type":"PIXEL","x":4,"y":2,"color":"#000000"},{"type":"PIXEL","x":0,"y":3,"color":"#000000"},{"type":"PIXEL","x":1,"y":3,"color":"#000000"},{"type":"PIXEL","x":2,"y":3,"color":"#000000"},{"type":"PIXEL","x":3,"y":3,"color":"#000000"},{"type":"PIXEL","x":4,"y":3,"color":"#000000"},{"type":"PIXEL","x":5,"y":3,"color":"#000000"},{"type":"PIXEL","x":6,"y":3,"color":"#000000"},{"type":"PIXEL","x":7,"y":3,"color":"#000000"},{"type":"PIXEL","x":0,"y":4,"color":"#000000"},{"type":"PIXEL","x":1,"y":4,"color":"#000000"},{"type":"PIXEL","x":3,"y":4,"color":"#000000"},{"type":"PIXEL","x":4,"y":4,"color":"#000000"},{"type":"PIXEL","x":6,"y":4,"color":"#000000"},{"type":"PIXEL","x":7,"y":4,"color":"#000000"},{"type":"PIXEL","x":2,"y":5,"color":"#000000"},{"type":"PIXEL","x":3,"y":5,"color":"#000000"},{"type":"PIXEL","x":4,"y":5,"color":"#000000"},{"type":"PIXEL","x":5,"y":5,"color":"#000000"},{"type":"PIXEL","x":1,"y":6,"color":"#000000"},{"type":"PIXEL","x":2,"y":6,"color":"#000000"},{"type":"PIXEL","x":5,"y":6,"color":"#000000"},{"type":"PIXEL","x":6,"y":6,"color":"#000000"},{"type":"PIXEL","x":0,"y":7,"color":"#000000"},{"type":"PIXEL","x":1,"y":7,"color":"#000000"},{"type":"PIXEL","x":6,"y":7,"color":"#000000"},{"type":"PIXEL","x":7,"y":7,"color":"#000000"}]
+  caret
+  tilda
+  curly braces
+
 element finalize
 
-option for disabling collision checking?
+
+###############################################################################
+### Future work
+###############################################################################
+make move order work with pause
+screen
+  separate element mouse down events? - separate from mouse down/up/over?
+throw error on unimplemented methods in layer?
+option for disabling collision checking - and force full clear and redraw?
+ability set sprite frame idx manually, turn off frame duration
+per layer events
+  before / after render
+loading indicator & demo
+textSprite?
 Bounds checking on text layer?
 Text wrapping on text layer?
+
+###############################################################################
+### Known issues
+###############################################################################
+This is probably ok though: in text layer, strings that are rendered in same frame may be written on top of eachother without clearing (clearing comes before drawing)
