@@ -120,6 +120,18 @@
       href:"PixSpriteDemo.html"
     });
     gfxLayer.addElement(element);
+
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+      text:"Back to Main Index",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLACK,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"../index.html"
+    });
+    gfxLayer.addElement(element);
   }
 
   initialize(document.getElementById("content"), config);

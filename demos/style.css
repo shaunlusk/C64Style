@@ -4,12 +4,12 @@ body {
   font-family: monospace;
 }
 
-#backLink {
-  padding-top:8px;
+#backLinks {
+  padding-top:16px;
 }
 
 #buttons {
-  padding-top:16px;
+  padding-top:8px;
   padding-bottom:8px;
 }
 
