@@ -4,12 +4,13 @@
 
 ReadMe
 
+import for pixmapbuilder
+
 demos
   do more robust pix sprite demo
   more comments
 
 documentation
-make sprite frames consistent - image frames use duration first then props; pix sprites use pix array first then duration
 
 tool: image2PixMap
 
