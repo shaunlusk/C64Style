@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>C64Style Text Element Demo</title>
+  <title>C64Style Text Prompt Demo</title>
   <script type="text/javascript" src="../lib/Common/Utils.js"></script>
   <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
   <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
@@ -23,7 +23,12 @@
   <script type="text/javascript" src="../lib/GfxElement.js"></script>
   <script type="text/javascript" src="../lib/PixRenderer.js"></script>
   <script type="text/javascript" src="../lib/PixImage.js"></script>
+  <script type="text/javascript" src="../lib/Sprite.js"></script>
+  <script type="text/javascript" src="../lib/PixSprite.js"></script>
   <script type="text/javascript" src="../lib/TextElement.js"></script>
+  <script type="text/javascript" src="../lib/ImageRenderer.js"></script>
+  <script type="text/javascript" src="../lib/ImageElement.js"></script>
+  <script type="text/javascript" src="../lib/ImageSprite.js"></script>
   <script type="text/javascript" src="../lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -36,15 +41,14 @@
     <a href="index.html">Back to Demos Index</a><br /><br />
     <a href="../index.html">Back to Main Index</a>
   </div>
+  <div id="mCoords"></div>
   <script type="text/javascript">
   var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
-    textLayer2 = null,
-    gfxLayer = null,
-    element = null,
-    element2 = null,
-    element3 = null;
+    p = null,
+    gfxLayer = null
+  var debug = false;
   var config = {
     "rows" : 25,
     "cols" : 40,
@@ -53,75 +57,27 @@
   };
 
   function initialize(targetDiv, config) {
-    var xBounds = config.cols * C64Style.CELLWIDTH - 16;
-    var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
-
     screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
 
     screen.initialize();
 
-    gfxLayer = screen.createLayer("GfxLayer");
+    textLayer = screen.createLayer("TextLayer");
 
-    element = new C64Style.TextElement(screen, gfxLayer, {
-      scaleX:1,
-      scaleY:1,
-      text:"Regular Text",
-      color:C64Style.Color.LIGHTBLUE,
-      backgroundColor:C64Style.Color.BLUE
-    });
-    element.setX(10);
-    element.setY(10);
-    element.setMoveRates(25, 10);
-    gfxLayer.addElement(element);
-
-    element2 = new C64Style.TextElement(screen, gfxLayer, {
-      scaleX:2,
-      scaleY:2,
-      text:"SCALED TEXT!",
-      color:C64Style.Color.GREEN,
-      backgroundColor:C64Style.Color.BLACK
-    });
-    element2.setX(20);
-    element2.setY(20);
-    element2.setMoveRates(35, 20);
-    gfxLayer.addElement(element2);
-
-    element3 = new C64Style.TextElement(screen, gfxLayer, {
-      scaleX:2,
-      scaleY:2,
-
-      symbolName:"HEART",
-      color:C64Style.Color.RED,
-      backgroundColor:C64Style.Color.PINK
-    });
-    element3.setX(50);
-    element3.setY(50);
-    element3.setMoveRates(20,20);
-    gfxLayer.addElement(element3);
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
-    });
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
-    });
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
-    });
-
-    screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
-      var element = event.data;
-      element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
-    });
-
+    p = textLayer.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
     screen.render(1);
+
   }
   initialize(document.getElementById("content"), config);
+
+  function promptCallback(value) {
+    console.log("rcvd:" +value);
+    textLayer.clearLength(0, 5, 40);
+    textLayer.writeText("Last Input:", 0, 5, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText(value, 13, 5, C64Style.Color.WHITE);
+
+    p.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
+  }
+
   </script>
 </body>
 </html>

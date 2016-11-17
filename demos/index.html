@@ -87,6 +87,51 @@
       href:"Confetti.html"
     });
     gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:10 * C64Style.CELLHEIGHT,
+      text:"Image Sprite Demo",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLACK,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"ImageSpriteDemo.html"
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:12 * C64Style.CELLHEIGHT,
+      text:"Palette Demo",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLACK,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"PaletteDemo.html"
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:14 * C64Style.CELLHEIGHT,
+      text:"Mouse Event Demo",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLACK,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"MouseEventDemo.html"
+    });
+    gfxLayer.addElement(element);
+
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+      text:"Back to Main Index",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLACK,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"../index.html"
+    });
+    gfxLayer.addElement(element);
   }
 
   initialize(document.getElementById("content"), config);
