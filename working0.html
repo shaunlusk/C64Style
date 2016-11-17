@@ -107,8 +107,8 @@
       scaleY:1,
      defaultPalette : defaultPalette,
      frames:[
-       new C64Style.PixSpriteFrame(pixPathArray1,500),
-       new C64Style.PixSpriteFrame(pixPathArray2,500)
+       new C64Style.PixSpriteFrame({pixArray:pixPathArray1, duration:500}),
+       new C64Style.PixSpriteFrame({pixArray:pixPathArray2, duration:500})
      ]
     });
     element.setX(8);
@@ -135,12 +135,12 @@
             width:32,
             height:32,
             frames:[
-              new C64Style.ImageSpriteFrame(500,{
+              new C64Style.ImageSpriteFrame({duration:500,
                 sourceX:0,
                 sourceY:0,
                 sourceWidth:32,
                 sourceHeight:32,}),
-              new C64Style.ImageSpriteFrame(500,{
+              new C64Style.ImageSpriteFrame({duration:500,
                 sourceX:32,
                 sourceY:0,
                 sourceWidth:32,

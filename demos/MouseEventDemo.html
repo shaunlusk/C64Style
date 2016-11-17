@@ -79,8 +79,8 @@
       x:10, y:10,
       scaleX:2, scaleY:2,
       frames:[
-        new C64Style.PixSpriteFrame(pixPathArray1, 400),
-        new C64Style.PixSpriteFrame(pixPathArray2, 400),
+        new C64Style.PixSpriteFrame({pixArray:pixPathArray1, duration:400}),
+        new C64Style.PixSpriteFrame({pixArray:pixPathArray2, duration:400}),
       ]
     });
     sprite2 = new C64Style.PixSprite(screen, gfxLayer, {
@@ -88,8 +88,8 @@
       scaleX:2, scaleY:2,
       hidden:true,
       frames:[
-        new C64Style.PixSpriteFrame(pixPathArray3, 400),
-        new C64Style.PixSpriteFrame(pixPathArray4, 400),
+        new C64Style.PixSpriteFrame({pixArray:pixPathArray3, duration:400}),
+        new C64Style.PixSpriteFrame({pixArray:pixPathArray4, duration:400}),
       ]
     });
     gfxLayer.addElement(sprite1);
