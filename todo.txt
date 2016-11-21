@@ -5,7 +5,8 @@
 ReadMe
 
 tools directory
-tool: image2PixMap
+tools documentation
+cleanup, document pixmapextractor, move to tools
 
 remove element.finalize
 
@@ -17,12 +18,14 @@ demos
 
   more comments
 
+clean up utils
+  move RArray to own file
+  
 documentation
   CharacterMap
   CharacterRenderer
   Color
   ColorPointer
-  Common/
   Constants
   Event
   EventType
@@ -52,6 +55,8 @@ documentation
   Utils
 generat html files
 
+doc done:
+
 Sprite.prototype.doEndOfAnimation
 
 clean up move order
@@ -63,12 +68,11 @@ MOUSE_OUT event?
 
 functionality and unit tests for UniquePriorityQueue
 
-tests for
+tests TODO
   CharacterMap
   CharacterRenderer
   Color
   ColorPointer
-  Common/
   Constants
   Event
   EventType
@@ -96,6 +100,9 @@ tests for
   Queue
   UniquePriorityQueue
   Utils
+
+Tests Done
+
 
 add additional char maps
   person
