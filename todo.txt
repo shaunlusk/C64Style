@@ -20,9 +20,8 @@ demos
 
 clean up utils
   move RArray to own file
-  
+
 documentation
-  CharacterMap
   CharacterRenderer
   Color
   ColorPointer
@@ -56,6 +55,7 @@ documentation
 generat html files
 
 doc done:
+CharacterMap
 
 Sprite.prototype.doEndOfAnimation
 
