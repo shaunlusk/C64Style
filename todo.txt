@@ -69,7 +69,6 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  CharacterMap
   CharacterRenderer
   Color
   ColorPointer

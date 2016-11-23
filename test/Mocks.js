@@ -69,3 +69,10 @@ C64Style.Mocks.getMockTextLayer = function(props) {
 
   return layer;
 };
+
+C64Style.Mocks.getMockCanvasContext = function(props) {
+  props = props || {};
+  var context = {};
+  context.clearRect = function(x, y, width, height) {};
+  return context;
+};
