@@ -4,6 +4,9 @@
 
 ReadMe
 
+release blueblal Sprite
+
+
 tools directory
 tools documentation
 cleanup, document pixmapextractor, move to tools
@@ -11,11 +14,6 @@ cleanup, document pixmapextractor, move to tools
 remove element.finalize
 
 demos
-  do more robust pix sprite demo
-    git sprite from open game art
-    convert to pixmap
-    build demo
-
   more comments
 
 clean up utils

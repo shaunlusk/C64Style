@@ -101,7 +101,7 @@
 
     element = new C64Style.TextLink(screen, gfxLayer, {
       x:1 * C64Style.CELLWIDTH, y:12 * C64Style.CELLHEIGHT,
-      text:"Palette Demo",
+      text:"Palette Demo 1",
       color:C64Style.Color.LIGHTBLUE,
       backgroundColor:C64Style.Color.BLACK,
       mouseOverColor: C64Style.Color.CYAN,
@@ -112,6 +112,17 @@
 
     element = new C64Style.TextLink(screen, gfxLayer, {
       x:1 * C64Style.CELLWIDTH, y:14 * C64Style.CELLHEIGHT,
+      text:"Palette Demo 2",
+      color:C64Style.Color.LIGHTBLUE,
+      backgroundColor:C64Style.Color.BLACK,
+      mouseOverColor: C64Style.Color.CYAN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"PaletteDemo2.html"
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:16 * C64Style.CELLHEIGHT,
       text:"Mouse Event Demo",
       color:C64Style.Color.LIGHTBLUE,
       backgroundColor:C64Style.Color.BLACK,
