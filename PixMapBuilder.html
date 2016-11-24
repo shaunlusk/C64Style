@@ -229,6 +229,29 @@
     updateJson();
   }
 
+  function importData() {
+    textLayer.clearLayer();
+    initializeMap();
+    drawPalette();
+    document.getElementById("colorIdxCheckBox").checked = true;
+    useColorIndex = true;
+
+    var stringData = document.getElementById("jsonData").value;
+    try{
+      var jsonData = JSON.parse(stringData);
+
+      for (var i = 0; i < jsonData.length; i++) {
+        var entry = jsonData[i];
+        map[entry.y][entry.x] = entry.color;
+        textLayer.drawSymbol("BLOCK", entry.x, entry.y, C64Style.Color.getByIndex(entry.color));
+      }
+      updateJson();
+      console.log("Import successful.");
+    } catch (e) {
+      alert("Import Failed.");
+    }
+  }
+
   initialize(document.getElementById("content"), config);
   </script>
 </body>

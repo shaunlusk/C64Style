@@ -4,16 +4,56 @@
 
 ReadMe
 
-import for pixmapbuilder
+release blueblal Sprite
+
+
+tools directory
+tools documentation
+cleanup, document pixmapextractor, move to tools
+
+remove element.finalize
 
 demos
-  do more robust pix sprite demo
   more comments
 
+clean up utils
+  move RArray to own file
+
 documentation
+  CharacterRenderer
+  Color
+  ColorPointer
+  Constants
+  Event
+  EventType
+  GfxElement
+  GfxElementZIndexComparable
+  GfxLayer
+  ImageElement
+  ImageRenderer
+  ImageSprite
+  Layer
+  MoveOrder
+  PixImage
+  PixPathTypes
+  PixRenderer
+  PixSprite
+  Screen
+  Sprite
+  TextButton
+  TextElement
+  TextLayer
+  TextLink
+  TextPrompt
+  LinkedList
+  PriorityQueue
+  Queue
+  UniquePriorityQueue
+  Utils
+generat html files
 
-tool: image2PixMap
-
+doc done:
+CharacterMap
 
 Sprite.prototype.doEndOfAnimation
 
@@ -25,16 +65,41 @@ MOUSE_OUT event?
 7 & 1 = chalice?
 
 functionality and unit tests for UniquePriorityQueue
-tests for
-  priority queue
-  c64screen
-  colorpointer
-  gfxElement
-  gfxElementzindex comparable
-  gfx layer
-  layer
-  piximage
-  text layer
+
+tests TODO
+  CharacterRenderer
+  Color
+  ColorPointer
+  Constants
+  Event
+  EventType
+  GfxElement
+  GfxElementZIndexComparable
+  GfxLayer
+  ImageElement
+  ImageRenderer
+  ImageSprite
+  Layer
+  MoveOrder
+  PixImage
+  PixPathTypes
+  PixRenderer
+  PixSprite
+  Screen
+  Sprite
+  TextButton
+  TextElement
+  TextLayer
+  TextLink
+  TextPrompt
+  LinkedList
+  PriorityQueue
+  Queue
+  UniquePriorityQueue
+  Utils
+
+Tests Done
+
 
 add additional char maps
   person
@@ -43,12 +108,10 @@ add additional char maps
   tilda
   curly braces
 
-element finalize
-
-
 ###############################################################################
 ### Future work
 ###############################################################################
+element finalize?
 make move order work with pause
 screen
   separate element mouse down events? - separate from mouse down/up/over?
@@ -58,9 +121,11 @@ ability set sprite frame idx manually, turn off frame duration
 per layer events
   before / after render
 loading indicator & demo
+change size for pixmap builder?
 textSprite?
 Bounds checking on text layer?
 Text wrapping on text layer?
+
 
 ###############################################################################
 ### Known issues

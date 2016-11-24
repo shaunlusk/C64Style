@@ -16,3 +16,9 @@ body {
 a {
   color:#A0A0FF;
 }
+
+.textBox {
+  width:400px;
+  padding: 8px;
+  border: 2px solid grey;
+}
