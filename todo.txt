@@ -4,9 +4,6 @@
 
 ReadMe
 
-release blueblal Sprite
-
-
 tools directory
 tools documentation
 cleanup, document pixmapextractor, move to tools
