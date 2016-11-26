@@ -1,6 +1,11 @@
 describe("CharacterRenderer", function() {
-  var renderer = new C64Style.CharacterRenderer(1,1);
-  var renderer_2x2 = new C64Style.CharacterRenderer(2,2);
+  var renderer;
+  var renderer_2x2;
+
+  before(function() {
+    renderer = new C64Style.CharacterRenderer(1,1);
+    renderer_2x2 = new C64Style.CharacterRenderer(2,2);
+  });
 
   describe("#getScaleX()", function() {
     it("should return scaleX", function(done) {
@@ -340,6 +345,17 @@ describe("CharacterRenderer", function() {
       renderer._renderPixPath(context, pixPath);
 
       assert(context.fillStyle === expectedColor, "should have set color=" + expectedColor + " (actual: " + context.fillStyle + ")");
+      done();
+    });
+    it("should throw error on unrecognized pix path type", function(done) {
+      var context = C64Style.Mocks.getMockCanvasContext();
+      var pixPath = {type:"VOXEL", x:1,y:2};
+
+      var result = throwsException(function() {
+        renderer._renderPixPath(context, pixPath);
+      });
+
+      assert(result === true, "should have thrown exception.");
       done();
     });
   });

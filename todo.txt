@@ -47,7 +47,7 @@ documentation
   Queue
   UniquePriorityQueue
   Utils
-generat html files
+generate html files
 
 doc done:
 CharacterMap
@@ -64,10 +64,8 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  CharacterRenderer
   Color
   ColorPointer
-  Constants
   Event
   EventType
   GfxElement
@@ -96,7 +94,8 @@ tests TODO
   Utils
 
 Tests Done
-
+  CharacterRenderer
+  Constants
 
 add additional char maps
   person
