@@ -64,7 +64,6 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  Event
   EventType
   GfxElement
   GfxElementZIndexComparable
@@ -96,6 +95,7 @@ Tests Done
   Constants
   ColorPointer
   Color
+  Event
 
 add additional char maps
   person
