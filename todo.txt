@@ -64,8 +64,6 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  Color
-  ColorPointer
   Event
   EventType
   GfxElement
@@ -96,6 +94,8 @@ tests TODO
 Tests Done
   CharacterRenderer
   Constants
+  ColorPointer
+  Color
 
 add additional char maps
   person
