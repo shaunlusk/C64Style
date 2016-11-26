@@ -17,7 +17,11 @@
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="blanket.js"></script>
+    <div id="messages"></div>
+    <div id="fixtures"></div>
+    <script src="mocha.js"></script>
+    <script src="blanket.min.js" data-cover-adapter="mocha-blanket.js"></script>
+    <script>mocha.setup('bdd');</script>
     <script type="text/javascript" src="../lib/Constants.js" data-cover></script>
     <script type="text/javascript" src="../lib/Common/PriorityQueue.js" data-cover></script>
     <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js" data-cover></script>
@@ -39,14 +43,13 @@
     <script type="text/javascript" src="../lib/TextPrompt.js" data-cover></script>
     <script type="text/javascript" src="./Mocks.js"></script>
     <script type="text/javascript" src="./testUtil.js"></script>
-    <script src="../node_modules/mocha/mocha.js"></script>
-    <script>mocha.setup('bdd');</script>
+    <script src="CharacterRenderer.test.js"></script>
+    <script src="ColorPointer.test.js"></script>
     <script src="GfxLayer.test.js"></script>
     <script src="PixImage.test.js"></script>
     <script src="MoveOrder.test.js"></script>
     <script src="GfxElement.test.js"></script>
     <script src="TextPrompt.test.js"></script>
-    <script src="CharacterRenderer.test.js"></script>
     <script>
       mocha.run();
     </script>
