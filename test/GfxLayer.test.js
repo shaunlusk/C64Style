@@ -220,17 +220,17 @@ describe("GfxLayer", function() {
     });
   });
   describe("#_cleanUp()", function() {
-    it("should call finalize on each removed element.", function(done) {
-      var gfxLayer = new C64Style.GfxLayer();
-      var mockElement1 = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
-      mockElement1.finalize = function() {this.calledIt = true;};
-      gfxLayer._removedElements.mockElement = mockElement1;
-
-      gfxLayer._cleanUp();
-
-      assert(mockElement1.calledIt === true, "should have called finalize");
-      done();
-    });
+    // it("should call finalize on each removed element.", function(done) {
+    //   var gfxLayer = new C64Style.GfxLayer();
+    //   var mockElement1 = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
+    //   mockElement1.finalize = function() {this.calledIt = true;};
+    //   gfxLayer._removedElements.mockElement = mockElement1;
+    //
+    //   gfxLayer._cleanUp();
+    //
+    //   assert(mockElement1.calledIt === true, "should have called finalize");
+    //   done();
+    // });
     it("should remove elements from elements list.", function(done) {
       var gfxLayer = new C64Style.GfxLayer();
       var mockElement1 = C64Style.Mocks.getMockGfxElement({id:"mockElement"});
