@@ -64,7 +64,6 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  GfxElementZIndexComparable
   GfxLayer
   ImageElement
   ImageRenderer
@@ -96,6 +95,7 @@ Tests Done
   Event
   EventType
   GfxElement
+  GfxElementZIndexComparable
 
 add additional char maps
   person
