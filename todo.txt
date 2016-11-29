@@ -4,6 +4,8 @@
 
 ReadMe
 
+check - need collision check on removed elements in gfxLayer
+
 tools directory
 tools documentation
 cleanup, document pixmapextractor, move to tools
