@@ -41,6 +41,12 @@ describe("GfxLayer", function() {
       assert(removed.isHidden(), "element should have been marked dirty");
       done();
     });
+    it("should return null if element not present", function(done) {
+      var removed = gfxLayer.removeElementById("mockElement2");
+
+      assert(removed === null, "should have returned null");
+      done();
+    });
   });
   describe("#removeElement()", function() {
     it("should call removeElementById with element id", function(done) {
@@ -293,6 +299,16 @@ describe("GfxLayer", function() {
       gfxLayer._handleCollisions();
 
       assert(calledIt === true, "should have called _collisionCheckElementsIfNeeded");
+      done();
+    });
+  });
+  describe("#handleMouseEvent()", function() {
+    it("should call handleMouseEvent on elements", function(done) {
+      mockElement.handleMouseEvent = function() {this.calledIt = true;};
+
+      gfxLayer.handleMouseEvent({});
+
+      assert(mockElement.calledIt === true, "should have called handleMouseEvent on element");
       done();
     });
   });
