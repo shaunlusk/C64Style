@@ -69,7 +69,6 @@ tests TODO
   ImageElement
   ImageRenderer
   ImageSprite
-  Layer
   MoveOrder
   PixImage
   PixPathTypes
@@ -98,6 +97,7 @@ Tests Done
   GfxElement
   GfxElementZIndexComparable
   GfxLayer
+  Layer
 
 add additional char maps
   person
