@@ -22,7 +22,7 @@
   <script type="text/javascript" src="lib/GfxElementZIndexComparable.js"></script>
   <script type="text/javascript" src="lib/GfxElement.js"></script>
   <script type="text/javascript" src="lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="lib/PixImage.js"></script>
+  <script type="text/javascript" src="lib/PixElement.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -55,7 +55,7 @@
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
-    element = new C64Style.PixImage(screen, gfxLayer, {
+    element = new C64Style.PixElement(screen, gfxLayer, {
       x:2,y:2,scaleX:1, scaleY:1,
       pixPathArray:[
 

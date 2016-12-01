@@ -1,10 +1,10 @@
-describe("PixImage", function() {
+describe("PixElement", function() {
   describe("#setDimensions()", function() {
     it("should set dimensions to 0 if no pixPaths", function(done) {
       var mockScreen = C64Style.Mocks.getMockScreen();
       var mockLayer = C64Style.Mocks.getMockLayer();
 
-      var pixImage = new C64Style.PixImage(mockScreen, mockLayer);
+      var pixImage = new C64Style.PixElement(mockScreen, mockLayer);
 
       assert(pixImage.getWidth() === 0, "should have set width = 0");
       assert(pixImage.getHeight() === 0, "should have set height = 0");
@@ -22,7 +22,7 @@ describe("PixImage", function() {
           {type:"RECTANGLE", x: 2, y: 2, width: 1, height: 1},
         ]
       };
-      var pixImage = new C64Style.PixImage(mockScreen, mockLayer, props);
+      var pixImage = new C64Style.PixElement(mockScreen, mockLayer, props);
 
       assert(pixImage.getWidth() === 4, "should have set width = 4");
       assert(pixImage.getHeight() === 6, "should have set height = 6");
