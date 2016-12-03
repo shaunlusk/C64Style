@@ -66,9 +66,6 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  ImageSprite
-  MoveOrder
-  PixElement
   PixPathTypes
   PixRenderer
   PixSprite
@@ -84,6 +81,7 @@ tests TODO
   Queue
   UniquePriorityQueue
   Utils
+  MoveOrder
 
 Tests Done
   CharacterRenderer
@@ -98,6 +96,9 @@ Tests Done
   Layer
   ImageElement
   ImageRenderer
+  ImageSprite
+  PixElement
+
 
 add additional char maps
   person
