@@ -66,8 +66,6 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  PixPathTypes
-  PixRenderer
   PixSprite
   Screen
   Sprite
@@ -98,6 +96,8 @@ Tests Done
   ImageRenderer
   ImageSprite
   PixElement
+  PixPathTypes
+  PixRenderer
 
 
 add additional char maps
