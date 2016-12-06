@@ -111,6 +111,7 @@ add additional char maps
 ### Future work
 ###############################################################################
 element finalize?
+Change variable names from "screen" to a something else (screen exists in browser)
 make move order work with pause
 screen
   separate element mouse down events? - separate from mouse down/up/over?
