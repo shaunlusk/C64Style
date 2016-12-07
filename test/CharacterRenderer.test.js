@@ -351,7 +351,7 @@ describe("CharacterRenderer", function() {
       var context = C64Style.Mocks.getMockCanvasContext();
       var pixPath = {type:"VOXEL", x:1,y:2};
 
-      var result = throwsException(function() {
+      var result = throwsError(function() {
         renderer._renderPixPath(context, pixPath);
       });
 

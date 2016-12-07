@@ -3,7 +3,7 @@ function assert(statement, desc) {
   throw "Fail: " + (desc || "Assertion failed.");
 }
 
-function throwsException(callback) {
+function throwsError(callback) {
   var threwit = false;
   try {
     callback();

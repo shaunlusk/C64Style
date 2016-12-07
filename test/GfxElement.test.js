@@ -859,7 +859,7 @@ describe("GfxElement", function() {
     it("should throw error", function(done) {
       var eventType = "newType";
 
-      var result = throwsException(element.clearEventHandlers.bind(element, eventType));
+      var result = throwsError(element.clearEventHandlers.bind(element, eventType));
 
       assert(result === true, "should have thrown error");
       done();
@@ -869,7 +869,7 @@ describe("GfxElement", function() {
     it("should throw error", function(done) {
       var event = {type:"blerg"};
 
-      var result = throwsException(element.notify.bind(element,event));
+      var result = throwsError(element.notify.bind(element,event));
 
       assert(result === true, "should have thrown error");
       done();

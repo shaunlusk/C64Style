@@ -26,7 +26,7 @@ describe("PixRenderer", function() {
     it("throws error if color not in palette", function(done) {
       pixPath.color = 1;
 
-      var result = throwsException(pixRenderer.renderPixPath.bind(pixRenderer, context, 0, 0, pixPath, palette, 1, 1));
+      var result = throwsError(pixRenderer.renderPixPath.bind(pixRenderer, context, 0, 0, pixPath, palette, 1, 1));
 
       assert(result === true, "should have thrown error");
       done();
@@ -59,7 +59,7 @@ describe("PixRenderer", function() {
     it("should throw error for unknown pix path type", function(done) {
       pixPath.type = "fake";
 
-      var result = throwsException(pixRenderer.renderPixPath.bind(pixRenderer, context, 0, 0, pixPath, palette, 1, 1));
+      var result = throwsError(pixRenderer.renderPixPath.bind(pixRenderer, context, 0, 0, pixPath, palette, 1, 1));
 
       assert(result === true, "should throw error");
       done();
