@@ -219,5 +219,141 @@ describe("Screen", function() {
       done();
     });
   });
-  
+  describe("#render()", function() {
+    it("should return if paused or tab not visible", function(done) {
+      c64scrn.setPaused(true);
+      var calledInternalRender = false;
+      c64scrn._render = function() {calledInternalRender = true;};
+
+      c64scrn.render(1);
+
+      assert(calledInternalRender === false, "should have returned.");
+      done();
+    });
+    it("should call handleMouseMoveEvent if mouse moved", function(done) {
+      c64scrn._mouseMoved = true;
+      var calledIt = false;
+      c64scrn._handleMouseMoveEvent = function() {calledIt = true;};
+
+      c64scrn.render(1);
+
+      assert(calledIt === true, "should have called handleMouseMoveEvent.");
+      done();
+    });
+    it("should notify before and after render event", function(done) {
+      var eventTypes = [];
+      c64scrn.notify = function(event) {eventTypes.push(event.type);};
+
+      c64scrn.render(1);
+
+      assert(eventTypes[0] === C64Style.EventType.BEFORE_RENDER, "should have notified of before render event.");
+      assert(eventTypes[1] === C64Style.EventType.AFTER_RENDER, "should have notified of after render event.");
+      done();
+    });
+    it("should call updateFps", function(done) {
+      var calledIt = false;
+      c64scrn._updateFps = function() {calledIt = true;};
+
+      c64scrn.render(1);
+
+      assert(calledIt === true, "should have called updateFps.");
+      done();
+    });
+    it("should call _update", function(done) {
+      var calledIt = false;
+      c64scrn._update = function() {calledIt = true;};
+
+      c64scrn.render(1);
+
+      assert(calledIt === true, "should have called _update.");
+      done();
+    });
+    it("should call _render", function(done) {
+      var calledIt = false;
+      c64scrn._render = function() {calledIt = true;};
+
+      c64scrn.render(1);
+
+      assert(calledIt === true, "should have called _render.");
+      done();
+    });
+    it("should call requestAnimationFrame", function(done) {
+      c64scrn.render(1);
+
+      assert(calledRequestAnimationFrame === true, "should have called requestAnimationFrame.");
+      done();
+    });
+    it("should unpause", function(done) {
+      var time = 100;
+      c64scrn.setPaused(true);
+      c64scrn.setPaused(false);
+      assert(c64scrn._unpaused === true, "unpaused should be true here");
+
+      c64scrn.render(time);
+
+      assert(c64scrn._unpaused === false, "should have reset unpaused flag.");
+      done();
+    });
+    it("should calculate diff based on unpause", function(done) {
+      var time = 100;
+      var calledWithDiff = null;
+      c64scrn._update = function(time,diff) {calledWithDiff = diff;};
+      c64scrn.setPaused(true);
+      c64scrn.setPaused(false);
+
+      c64scrn.render(time);
+
+      assert(calledWithDiff === 1, "should calculated diff properly.");
+      done();
+    });
+  });
+  describe("#_handleMouseMoveEvent()", function() {
+    it("should notify mouse move event", function(done) {
+      var eventType = null;
+      c64scrn.notify = function(event) {eventType = event.type;};
+
+      c64scrn._handleMouseMoveEvent();
+
+      assert(eventType === C64Style.EventType.MOUSE_MOVE, "should have notified of before mouse move event.");
+      done();
+    });
+    it("should propagate event", function(done) {
+      var calledIt = null;
+      c64scrn.propagateMouseEventThroughLayers = function() {calledIt = true;};
+
+      c64scrn._handleMouseMoveEvent();
+
+      assert(calledIt === true, "should have propagated event.");
+      done();
+    });
+    it("should reset mouseMoved", function(done) {
+      c64scrn._mouseMoved = true;
+
+      c64scrn._handleMouseMoveEvent();
+
+      assert(c64scrn._mouseMoved === false, "should have reset mouseMoved.");
+      done();
+    });
+  });
+  describe("#_updateFps()", function() {
+    it("should add fps to _fpsMonitorArray", function(done) {
+      c64scrn._showFps = true;
+
+      c64scrn._updateFps(100);
+
+      assert(c64scrn._fpsMonitorArray.length === 1, "Should have pushed fps to _fps");
+      assert(c64scrn._fpsMonitorArray[0] === 10, "Should have pushed fps to _fps");
+      done();
+    });
+    it("should reset _fpsMonitorIndex", function(done) {
+      c64scrn._showFps = true;
+      for(var i = 0; i < 29; i++) c64scrn._fpsMonitorArray.push(10);
+      c64scrn._fpsMonitorIndex = 29;
+
+      c64scrn._updateFps(100);
+
+      assert(c64scrn._fpsMonitorIndex === 0, "Should have reset _fpsMonitorIndex");
+      done();
+    });
+  });
 });
