@@ -345,6 +345,16 @@ describe("Screen", function() {
       assert(c64scrn._fpsMonitorArray[0] === 10, "Should have pushed fps to _fps");
       done();
     });
+    it("should add fps to _fpsMonitorArray", function(done) {
+      c64scrn._showFps = true;
+      for(var i = 0; i < 30; i++) c64scrn._fpsMonitorArray.push(10);
+      c64scrn._fpsMonitorIndex = 30;
+
+      c64scrn._updateFps(100);
+
+      assert(c64scrn._fpsMonitorArray.length === 31, "Should have pushed fps to _fps");
+      done();
+    });
     it("should reset _fpsMonitorIndex", function(done) {
       c64scrn._showFps = true;
       for(var i = 0; i < 29; i++) c64scrn._fpsMonitorArray.push(10);
@@ -354,6 +364,51 @@ describe("Screen", function() {
 
       assert(c64scrn._fpsMonitorIndex === 0, "Should have reset _fpsMonitorIndex");
       done();
+    });
+  });
+  describe("#_update()", function() {
+    it("should call update on each layer", function(done) {
+      var calledUpdate1 = false;
+      var layer1 = {
+        update : function() {calledUpdate1 = true;}
+      };
+      var calledUpdate2 = false;
+      var layer2 = {
+        update : function() {calledUpdate2 = true;}
+      };
+      c64scrn.addLayer(layer1);
+      c64scrn.addLayer(layer2);
+
+      c64scrn._update(1,1);
+
+      assert(calledUpdate1 === true, "should have called update on layer1");
+      assert(calledUpdate2 === true, "should have called update on layer2");
+      done();
+    });
+  });
+  describe("#_render()", function() {
+    it("should call update on each layer", function(done) {
+      var calledRender1 = false;
+      var layer1 = {
+        render : function() {calledRender1 = true;}
+      };
+      var calledRender2 = false;
+      var layer2 = {
+        render : function() {calledRender2 = true;}
+      };
+      c64scrn.addLayer(layer1);
+      c64scrn.addLayer(layer2);
+
+      c64scrn._render(1,1);
+
+      assert(calledRender1 === true, "should have called render on layer1");
+      assert(calledRender2 === true, "should have called render on layer2");
+      done();
+    });
+  });
+  describe("#handleMouseEvent()", function() {
+    it("should not update _mouseMoved if paused", function() {
+
     });
   });
 });
