@@ -406,9 +406,113 @@ describe("Screen", function() {
       done();
     });
   });
-  describe("#handleMouseEvent()", function() {
-    it("should not update _mouseMoved if paused", function() {
+  describe("#handleMouseMoveEvent()", function() {
+    it("should not update _mouseMoved if paused", function(done) {
+      var e = {};
+      c64scrn.setPaused(true);
+      c64scrn._mouseMoved = false;
 
+      c64scrn.handleMouseMoveEvent(e);
+
+      assert(c64scrn._mouseMoved === false, "should not have updated _mouseMoved");
+      done();
+    });
+    it("should set mouse coords if x < 0", function(done) {
+      var e = {};
+      c64scrn.getXFromMouseEvent = function() {return -1;};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+
+      c64scrn.handleMouseMoveEvent(e);
+
+      assert(c64scrn._mouseMoved === true, "should have updated _mouseMoved");
+      assert(c64scrn._mouseX === -1, "should have updated mouseX");
+      assert(c64scrn._mouseY === -1, "should have updated mouseY");
+      assert(c64scrn._mouseRow === -1, "should have updated mouseRow");
+      assert(c64scrn._mouseCol === -1, "should have updated mouseCol");
+      done();
+    });
+    it("should set mouse coords if y < 0", function(done) {
+      var e = {};
+      c64scrn.getXFromMouseEvent = function() {return 1;};
+      c64scrn.getYFromMouseEvent = function() {return -1;};
+
+      c64scrn.handleMouseMoveEvent(e);
+
+      assert(c64scrn._mouseMoved === true, "should have updated _mouseMoved");
+      assert(c64scrn._mouseX === -1, "should have updated mouseX");
+      assert(c64scrn._mouseY === -1, "should have updated mouseY");
+      assert(c64scrn._mouseRow === -1, "should have updated mouseRow");
+      assert(c64scrn._mouseCol === -1, "should have updated mouseCol");
+      done();
+    });
+    it("should set mouse coords if x >= screenWidth", function(done) {
+      var e = {};
+      c64scrn.getXFromMouseEvent = function() {return c64scrn.getWidth();};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+
+      c64scrn.handleMouseMoveEvent(e);
+
+      assert(c64scrn._mouseMoved === true, "should have updated _mouseMoved");
+      assert(c64scrn._mouseX === -1, "should have updated mouseX");
+      assert(c64scrn._mouseY === -1, "should have updated mouseY");
+      assert(c64scrn._mouseRow === -1, "should have updated mouseRow");
+      assert(c64scrn._mouseCol === -1, "should have updated mouseCol");
+      done();
+    });
+    it("should set mouse coords if y >= screen height", function(done) {
+      var e = {};
+      c64scrn.getXFromMouseEvent = function() {return -1;};
+      c64scrn.getYFromMouseEvent = function() {return c64scrn.getHeight();};
+
+      c64scrn.handleMouseMoveEvent(e);
+
+      assert(c64scrn._mouseMoved === true, "should have updated _mouseMoved");
+      assert(c64scrn._mouseX === -1, "should have updated mouseX");
+      assert(c64scrn._mouseY === -1, "should have updated mouseY");
+      assert(c64scrn._mouseRow === -1, "should have updated mouseRow");
+      assert(c64scrn._mouseCol === -1, "should have updated mouseCol");
+      done();
+    });
+    it("should set mouse coords", function(done) {
+      var e = {};
+      c64scrn.getXFromMouseEvent = function() {return 5;};
+      c64scrn.getYFromMouseEvent = function() {return 7;};
+      c64scrn.getRowFromMouseEvent = function() {return 8;};
+      c64scrn.getColFromMouseEvent = function() {return 4;};
+
+      c64scrn.handleMouseMoveEvent(e);
+
+      assert(c64scrn._mouseMoved === true, "should have updated _mouseMoved");
+      assert(c64scrn._mouseX === 5, "should have updated mouseX");
+      assert(c64scrn._mouseY === 7, "should have updated mouseY");
+      assert(c64scrn._mouseRow === 8, "should have updated mouseRow");
+      assert(c64scrn._mouseCol === 4, "should have updated mouseCol");
+      done();
+    });
+  });
+  describe("#handleMouseEvent()", function() {
+    it("should not update _mouseMoved if paused", function(done) {
+      var e = {};
+      var calledPropagate = false;
+      c64scrn.setPaused(true);
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(calledPropagate === false, "should not have propagated");
+      done();
+    });
+    it("should return if not in bounds", function(done) {
+      var e = {};
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return -1;};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(calledPropagate === false, "should not have propagated");
+      done();
     });
   });
 });
