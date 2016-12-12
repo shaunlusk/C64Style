@@ -132,6 +132,18 @@
     });
     gfxLayer.addElement(element);
 
+    if (new Date().getMonth() === 11) {
+      element = new C64Style.TextLink(screen, gfxLayer, {
+        x:1 * C64Style.CELLWIDTH, y:21 * C64Style.CELLHEIGHT,
+        text:"Christmas Demo",
+        color:C64Style.Color.LIGHTGREEN,
+        backgroundColor:C64Style.Color.BLUE,
+        mouseOverColor: C64Style.Color.GREEN,
+        mouseOverBackgroundColor: C64Style.Color.BLACK,
+        href:"ChristmasDemo.html"
+      });
+      gfxLayer.addElement(element);
+    }
 
     element = new C64Style.TextLink(screen, gfxLayer, {
       x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,

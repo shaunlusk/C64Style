@@ -1,9 +1,9 @@
 function assert(statement, desc) {
   if (statement) return true;
-  throw "Fail: " + desc;
+  throw "Fail: " + (desc || "Assertion failed.");
 }
 
-function throwsException(callback) {
+function throwsError(callback) {
   var threwit = false;
   try {
     callback();

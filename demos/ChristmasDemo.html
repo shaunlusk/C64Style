@@ -1,0 +1,192 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style Christmas Demo Demo</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixElement.js"></script>
+  <script type="text/javascript" src="../lib/TextElement.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style>
+#content {
+  margin : auto
+}
+</style>
+</head>
+<body>
+  <div id="content">
+  </div>
+  <div id="backLinks">
+    <a href="index.html">Back to Demos Index</a><br /><br />
+    <a href="../index.html">Back to Main Index</a>
+  </div>
+  <script type="text/javascript">
+  var C64Style = C64Style || {};
+  var screen = null,
+    textLayer = null,
+    textLayer2 = null,
+    gfxLayer = null;
+  var config = {
+    "rows" : 30,
+    "cols" : 44,
+    "scaleX" : 2,
+    "scaleY" : 2,
+  };
+
+  var lightTargets;
+  function initialize(targetDiv, config) {
+
+    screen = new C64Style.Screen(targetDiv, null, config);
+
+    screen.initialize();
+    screen.setBackgroundColor(C64Style.Color.BLACK);
+    screen.setBorderColor(C64Style.Color.RED);
+    screen.setBorderSize(35);
+
+    textLayer = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
+
+    textLayer.writeText("Merry Christmas", 12, 1, C64Style.Color.LIGHTGREEN);
+    textLayer.writeText("" + (new Date().getYear() + 1900), 28, 1, C64Style.Color.LIGHTGREEN);
+    textLayer.writeText("Commodore 64 Style", 13, 3, C64Style.Color.LIGHTGREEN);
+
+    textLayer.drawSymbol("BLOCK", 21, 25, C64Style.Color.BROWN);
+    textLayer.drawSymbol("BLOCK", 22, 25, C64Style.Color.BROWN);
+    textLayer.drawSymbol("BLOCK", 21, 26, C64Style.Color.BROWN);
+    textLayer.drawSymbol("BLOCK", 22, 26, C64Style.Color.BROWN);
+
+    lightTargets = [];
+    var i = 0;
+    for (var y = 6; y < 25; y++) {
+      if (y === 7 || isEven(y)) i++;
+      for (var x = 22 - i; x < 22 + i; x++) {
+        textLayer.drawSymbol("BLOCK", x, y, C64Style.Color.GREEN);
+        if (x === 22 - i) textLayer.drawSymbol("DIAGONAL_FILL_TOP_LEFT", x, y, C64Style.Color.BLACK, C64Style.Color.GREEN);
+        if (x === 22 + i - 1) textLayer.drawSymbol("DIAGONAL_FILL_TOP_RIGHT", x, y, C64Style.Color.BLACK,  C64Style.Color.GREEN);
+        if (x !== 22 - i && x !== 22 + i - 1 && y > 6 && y < 24) {
+          lightTargets.push({x:x, y:y});
+        }
+      }
+    }
+
+    var lightCoords = [
+      {x: 21, y: 7},
+      {x: 22, y: 8},
+
+      {x: 20, y: 9},
+      {x: 21, y: 10},
+      {x: 23, y: 10},
+
+      {x: 19, y: 11},
+      {x: 20, y: 12},
+      {x: 22, y: 13},
+      {x: 24, y: 13},
+
+      {x: 18, y: 14},
+      {x: 19, y: 15},
+      {x: 20, y: 16},
+      {x: 22, y: 16},
+      {x: 23, y: 16},
+      {x: 25, y: 16},
+      {x: 26, y: 15},
+
+      {x: 17, y: 17},
+      {x: 18, y: 18},
+      {x: 19, y: 19},
+      {x: 21, y: 19},
+      {x: 23, y: 19},
+      {x: 25, y: 19},
+      {x: 27, y: 18},
+
+      {x: 15, y: 20},
+      {x: 16, y: 21},
+      {x: 17, y: 22},
+      {x: 19, y: 22},
+      {x: 21, y: 22},
+      {x: 23, y: 22},
+      {x: 25, y: 22},
+      {x: 27, y: 21},
+      {x: 29, y: 20},
+    ];
+
+    var lights = [];
+    for (i = 0; i < lightCoords.length; i++) {
+      var element = new C64Style.TextElement(screen, gfxLayer, {
+        symbolName:"DOT",
+        color:getRandomLightColor()
+      });
+      element.setX(lightCoords[i].x * C64Style.CELLWIDTH);
+      element.setY(lightCoords[i].y * C64Style.CELLHEIGHT);
+      gfxLayer.addElement(element);
+      lights.push(element);
+    }
+
+    setInterval(function() {
+      for (var i = 0; i < lights.length; i++) {
+        var light = lights[i];
+        if (light.isHidden()) light.show();
+        else {
+          if (Math.random() < 0.25) light.hide();
+          if (Math.random() < 0.25) light.setColor(getRandomLightColor());
+        }
+      }
+    }, 100);
+
+    var star = new C64Style.TextElement(screen, gfxLayer, {
+      scaleX:1,
+      scaleY:1,
+      text:"*",
+      color:C64Style.Color.YELLOW
+    });
+    star.setX(21 * C64Style.CELLWIDTH + (C64Style.CELLWIDTH / 2));
+    star.setY(5 * C64Style.CELLHEIGHT);
+    gfxLayer.addElement(star);
+    var starOn = true;
+    setInterval(function() {
+      if (starOn) {
+        star.hide();
+        starOn = false;
+      } else {
+        star.show();
+        starOn = true;
+      }
+    }, 35);
+
+    screen.render(1);
+  }
+
+  function isEven(n) {
+    return n % 2 === 0;
+  }
+
+  function getRandomLightColor() {
+    var color;
+    do {
+      color = C64Style.Color.getByIndex(Math.floor(Math.random() * 15 + 1))
+    } while (color === C64Style.Color.GREEN);
+    return color;
+  }
+
+  initialize(document.getElementById("content"), config);
+  </script>
+</body>
+</html>
