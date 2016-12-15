@@ -4,6 +4,8 @@
 
 ReadMe
 
+funcitonal test on sprite stuff (ttl, ltl, reset, event)
+
 check - need collision check on removed elements in gfxLayer
 
 tools directory
@@ -66,7 +68,6 @@ MOUSE_OUT event?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  Screen
   Sprite
   TextButton
   TextElement
@@ -98,6 +99,7 @@ Tests Done
   PixPathTypes
   PixRenderer
   PixSprite
+  Screen
 
 
 add additional char maps
