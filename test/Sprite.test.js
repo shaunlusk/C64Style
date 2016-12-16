@@ -2,7 +2,11 @@ describe("Sprite", function() {
   var sprite, screenContext, parentLayer, props;
 
   beforeEach(function() {
-    screenContext = {};
+    screenContext = {
+      notify : function() {
+        
+      }
+    };
     parentLayer = {
       getCanvasContext : function() {
         return {};
@@ -184,6 +188,17 @@ describe("Sprite", function() {
       assert(sprite.isDone() === false, "should have reset done");
       assert(sprite.getLoopCount() === 0, "should have reset loop count");
       assert(sprite._elapsed === 0, "should have reset elapsed");
+      done();
+    });
+  });
+  describe("#doEndOfAnimation()", function() {
+    it("should call notify", function(done) {
+      var calledIt = false;
+      sprite.notify = function() {calledIt = true;};
+
+      sprite.doEndOfAnimation();
+
+      assert(calledIt === true, "should have called notify");
       done();
     });
   });

@@ -134,6 +134,9 @@
             image:image,
             width:32,
             height:32,
+            // ttl:12000,
+            freezeFrameIdx:1,
+            loopsToLive:5,
             frames:[
               new C64Style.ImageSpriteFrame({duration:500,
                 sourceX:0,
@@ -149,15 +152,9 @@
           });
           element.setX(8);
           element.setY(8);
-          // gfxLayer.addElement(element);
+          gfxLayer.addElement(element);
     };
 
-    // document.onkeydown = textLayer._textPrompt.handleKeyboardEvent;
-
-    var p = textLayer.prompt("Input: ", 0, 10, C64Style.Color.LIGHTBLUE, 10, function(value){
-      console.log("rcvd:" +value);
-      p.clearPrompt();
-    });
     screen.render(1);
 
   }

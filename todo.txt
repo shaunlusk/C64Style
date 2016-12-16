@@ -4,8 +4,6 @@
 
 ReadMe
 
-funcitonal test on sprite stuff (ttl, ltl, reset, event)
-
 check - need collision check on removed elements in gfxLayer
 
 tools directory
@@ -55,8 +53,6 @@ generate html files
 
 doc done:
 CharacterMap
-
-Sprite.prototype.doEndOfAnimation
 
 clean up move order
 
