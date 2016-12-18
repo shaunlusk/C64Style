@@ -61,10 +61,11 @@ MOUSE_OUT event? - if put in gfx element, could probably remove mouse handling s
 
 7 & 1 = chalice?
 
+consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
+
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  TextLayer
   TextPrompt
   LinkedList
   PriorityQueue
@@ -96,6 +97,7 @@ Tests Done
   TextButton
   TextLink
   TextElement
+  TextLayer
 
 add additional char maps
   person
