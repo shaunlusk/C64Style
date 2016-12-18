@@ -57,18 +57,15 @@ CharacterMap
 clean up move order
 
 MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT
-MOUSE_OUT event?
+MOUSE_OUT event? - if put in gfx element, could probably remove mouse handling stuff from textlink
 
 7 & 1 = chalice?
 
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  Sprite
-  TextButton
   TextElement
   TextLayer
-  TextLink
   TextPrompt
   LinkedList
   PriorityQueue
@@ -96,7 +93,9 @@ Tests Done
   PixRenderer
   PixSprite
   Screen
-
+  Sprite
+  TextButton
+  TextLink
 
 add additional char maps
   person
