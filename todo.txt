@@ -64,7 +64,6 @@ MOUSE_OUT event? - if put in gfx element, could probably remove mouse handling s
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  TextElement
   TextLayer
   TextPrompt
   LinkedList
@@ -96,6 +95,7 @@ Tests Done
   Sprite
   TextButton
   TextLink
+  TextElement
 
 add additional char maps
   person
