@@ -4,6 +4,8 @@
 
 ReadMe
 
+common lib
+
 check - need collision check on removed elements in gfxLayer
 
 tools directory
@@ -44,7 +46,6 @@ documentation
   TextLayer
   TextLink
   TextPrompt
-  LinkedList
   PriorityQueue
   Queue
   UniquePriorityQueue
@@ -66,9 +67,6 @@ consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  TextPrompt
-  LinkedList
-  PriorityQueue
   Queue
   UniquePriorityQueue
   Utils
@@ -98,6 +96,8 @@ Tests Done
   TextLink
   TextElement
   TextLayer
+  TextPrompt
+  PriorityQueue
 
 add additional char maps
   person
