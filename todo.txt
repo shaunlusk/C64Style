@@ -18,7 +18,6 @@ demos
   more comments
 
 clean up utils
-  move RArray to own file
 
 documentation
   CharacterRenderer
@@ -69,7 +68,7 @@ functionality and unit tests for UniquePriorityQueue
 tests TODO
   UniquePriorityQueue
   Utils
-  MoveOrder
+
 
 Tests Done
   CharacterRenderer
@@ -98,6 +97,7 @@ Tests Done
   TextPrompt
   PriorityQueue
   Queue
+  MoveOrder
 
 add additional char maps
   person

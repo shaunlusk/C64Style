@@ -106,7 +106,7 @@ describe("TextLayer", function() {
       layer.writeText("new text",0,0,C64Style.Color.BLACK, C64Style.Color.WHITE);
 
       assert(layer._pendingTextStrings.length === 1, "should have added pending string");
-      assert(layer._pendingTextStrings.get(0).string === "new text", "should have added pending string");
+      assert(layer._pendingTextStrings[0].string === "new text", "should have added pending string");
       done();
     });
   });
@@ -115,7 +115,7 @@ describe("TextLayer", function() {
       layer.drawSymbol("SYMBOL",0,0,C64Style.Color.BLACK, C64Style.Color.WHITE);
 
       assert(layer._pendingTextStrings.length === 1, "should have added pending string");
-      assert(layer._pendingTextStrings.get(0).pixMapId === "SYMBOL", "should have added pending string");
+      assert(layer._pendingTextStrings[0].pixMapId === "SYMBOL", "should have added pending string");
       done();
     });
   });
