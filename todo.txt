@@ -67,7 +67,6 @@ consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
 functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  Queue
   UniquePriorityQueue
   Utils
   MoveOrder
@@ -98,6 +97,7 @@ Tests Done
   TextLayer
   TextPrompt
   PriorityQueue
+  Queue
 
 add additional char maps
   person
