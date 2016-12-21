@@ -26,7 +26,6 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   element.hasCollision = function() {return this.collision;};
   element.clear = function() {};
   element.render = function() {};
-  element.finalize = function() {};
   element.x = props.x || 0;
   element.y = props.y || 0;
   element.getX = function() {return this.x;};
