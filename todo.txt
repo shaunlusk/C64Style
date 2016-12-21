@@ -63,10 +63,8 @@ MOUSE_OUT event? - if put in gfx element, could probably remove mouse handling s
 
 consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
 
-functionality and unit tests for UniquePriorityQueue
 
 tests TODO
-  UniquePriorityQueue
   Utils
 
 
@@ -98,6 +96,7 @@ Tests Done
   PriorityQueue
   Queue
   MoveOrder
+  UniquePriorityQueue
 
 add additional char maps
   person
