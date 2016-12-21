@@ -24,8 +24,8 @@ describe("Screen", function() {
       offsetTop : 16
     };
     fpsElem = {};
-    config = {};
-    c64scrn = new C64Style.Screen(targetDiv, fpsElem, config);
+    config = {"fpsElem" : document.getElementById('info')};
+    c64scrn = new C64Style.Screen(targetDiv, config);
   });
 
   describe("#initialize()", function() {

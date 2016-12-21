@@ -40,6 +40,7 @@
       "cols" : 40,
       "scaleX" : 2,
       "scaleY" : 2,
+      "fpsElem" : document.getElementById('info')
     };
 
   var screen = null, textLayer = null, gfxLayer;
@@ -47,7 +48,7 @@
   function initialize(targetDiv, config) {
 
     // Create the C64 Screen
-    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv, config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");

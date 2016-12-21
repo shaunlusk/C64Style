@@ -71,10 +71,11 @@
     "cols" : 40,
     "scaleX" : 1,
     "scaleY" : 1,
+    "fpsElem" : document.getElementById('info')
   };
 
   function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv, config);
 
     screen.initialize();
 
