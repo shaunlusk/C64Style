@@ -17,6 +17,7 @@ Create a div to hold the screen and its components:
 
 Then setup your screen:
 
+```javascript
 // get the screen element
 var targetDiv = document.getElementById("content");
 
@@ -37,3 +38,4 @@ textLayer.writeText("Hello World", 0, 0, C64Style.Color.LIGHTBLUE);
 
 // Start rendering!
 screen.render();
+```
