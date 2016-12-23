@@ -1,0 +1,107 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style Tools</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/TextElement.js"></script>
+  <script type="text/javascript" src="../lib/TextLink.js"></script>
+  <script type="text/javascript" src="../lib/TextButton.js"></script>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style>
+#content {
+  margin : auto
+}
+</style>
+</head>
+<body>
+  <div id="content">
+  </div>
+  <script type="text/javascript">
+
+  var config = {
+      "rows" : 25,
+      "cols" : 40,
+      "scaleX" : 2,
+      "scaleY" : 2,
+      "fpsElem" : document.getElementById('info')
+    };
+
+  var screen = null, textLayer = null, gfxLayer;
+
+  function initialize(targetDiv, config) {
+
+    // Create the C64 Screen
+    screen = new C64Style.Screen(targetDiv, config);
+    screen.initialize();
+    textLayer = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
+    screen.render();
+
+    textLayer.writeText("C64Style Tools", 1, 1, C64Style.Color.WHITE, C64Style.Color.BLUE);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:4 * C64Style.CELLHEIGHT,
+      text:"PixMap Builder",
+      color:C64Style.Color.LIGHTGREEN,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.GREEN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"PixMapBuilder.html"
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:6 * C64Style.CELLHEIGHT,
+      text:"PixMap Import Preview",
+      color:C64Style.Color.LIGHTGREEN,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.GREEN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"PixMapImportPreview.html"
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:8 * C64Style.CELLHEIGHT,
+      text:"C64PixMapExtractor Documentation",
+      color:C64Style.Color.LIGHTGREEN,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.GREEN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"C64PixMapExtractorDoc.html"
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+      text:"Back to Main Index",
+      color:C64Style.Color.LIGHTGREEN,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.GREEN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"../index.html"
+    });
+    gfxLayer.addElement(element);
+  }
+
+  initialize(document.getElementById("content"), config);
+  </script>
+</body>
+</html>

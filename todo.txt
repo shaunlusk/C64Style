@@ -3,12 +3,10 @@
 ###############################################################################
 
 ReadMe
+  more examples & best practices
+  link to demos
 
 check - need collision check on removed elements in gfxLayer
-
-tools directory
-tools documentation
-cleanup, document pixmapextractor, move to tools
 
 demos
   more comments
@@ -69,6 +67,8 @@ add additional char maps
 ###############################################################################
 ### Future work
 ###############################################################################
+tools
+  C64PixMapExtractor - linux shell script
 Change variable names from "screen" to a something else (screen exists in browser)
 make move order work with pause
 screen

@@ -1,40 +1,48 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <title>C64Style Pix Map Import Test</title>
-  <script type="text/javascript" src="lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="lib/Color.js"></script>
-  <script type="text/javascript" src="lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="lib/Constants.js"></script>
-  <script type="text/javascript" src="lib/EventType.js"></script>
-  <script type="text/javascript" src="lib/Event.js"></script>
-  <script type="text/javascript" src="lib/Screen.js"></script>
-  <script type="text/javascript" src="lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="lib/Layer.js"></script>
-  <script type="text/javascript" src="lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="lib/TextLayer.js"></script>
-  <script type="text/javascript" src="lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="lib/GfxElement.js"></script>
-  <script type="text/javascript" src="lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="lib/PixElement.js"></script>
-  <script type="text/javascript" src="lib/GfxLayer.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
+  <title>C64Style Pix Map Import Preview</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixElement.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+<link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
   <div id="content">
   </div>
-  <div id="buttons"><button onclick="screen.setPaused(!screen.isPaused());">Pause</button></div>
-  <div id="info"></div>
+  <div id="info">
+    <p>PixMap Import Preview: For previewing your PixElements</p>
+    <p>Paste a valid PixMap array into the box below, click the import button, and it will be displayed on the screen above.</p>
+    <p>Format must be correct, e.g., [{"type":"PIXEL","x":1,"y":0,"color":15}, {"type":"PIXEL","x":2,"y":3,"color":3}, {"type":"PIXEL","x":10,"y":2,"color":5}]</p>
+    <p>Note: Preview shown here is 2x scaled.</p>
+  </div>
   <div><textarea id="pixArray"></textarea>
   </div>
   <div>
     <button onclick="importData()">Import PixArray</button>
+  </div>
+  <div id="backLinks">
+    <a href="index.html">Back to Tools Index</a><br /><br />
+    <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
   var C64Style = C64Style || {};
@@ -43,11 +51,10 @@
     gfxLayer = null,
     element = null;
   var config = {
-    "rows" : 50,
-    "cols" : 80,
+    "rows" : 30,
+    "cols" : 50,
     "scaleX" : 1,
-    "scaleY" : 1,
-    "fpsElem" : document.getElementById('info')
+    "scaleY" : 1
   };
 
   function initialize(targetDiv, config) {
@@ -57,7 +64,7 @@
     gfxLayer = screen.createLayer("GfxLayer");
 
     element = new C64Style.PixElement(screen, gfxLayer, {
-      x:2,y:2,scaleX:1, scaleY:1,
+      x:2,y:2,scaleX:2, scaleY:2,
       pixPathArray:[
 
       ],
