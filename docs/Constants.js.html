@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: GfxElementZIndexComparable.js</title>
+    <title>JSDoc: Source: Constants.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: GfxElementZIndexComparable.js</h1>
+    <h1 class="page-title">Source: Constants.js</h1>
 
     
 
@@ -26,34 +26,21 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>C64Style.GfxElementZIndexComparable = function(parentElement) {
-  this._parentElement = parentElement;
-};
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
-C64Style.GfxElementZIndexComparable.prototype.getElement = function() {return this._parentElement;};
+// Not really constants, but it probably isn't a good idea to change these :)
 
 /**
-* @function
-* @name IComparable#compareTo
-* @param other {Object} The object to compare to this one.
-* @returns {int} -1: less than the other object; 0 equivalent to the other object; 1 greater than the other object.
+* Pixel width of character cells.
+* @constant
 */
-C64Style.GfxElementZIndexComparable.prototype.compareTo = function(other) {
-  if (this._parentElement.getZIndex() &lt; other._parentElement.getZIndex()) return -1;
-  if (this._parentElement.getZIndex() === other._parentElement.getZIndex()) return 0;
-  return 1;
-};
-
-C64Style.GfxElementZIndexComparable.prototype.equals = function(other) {
-  return this._parentElement.getZIndex() === other._parentElement.getZIndex();
-};
+C64Style.CELLWIDTH = 8;
 
 /**
-* Implementation for getKey for UniquePriorityQueue
+* Pixel height of character cells.
+* @constant
 */
-C64Style.GfxElementZIndexComparable.prototype.getKey = function() {
-  return this._parentElement.getId();
-};
+C64Style.CELLHEIGHT = 8;
 </code></pre>
         </article>
     </section>

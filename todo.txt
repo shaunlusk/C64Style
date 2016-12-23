@@ -5,6 +5,7 @@
 ReadMe
   more examples & best practices
   link to demos
+  link to docs
 
 check - need collision check on removed elements in gfxLayer
 
@@ -12,8 +13,6 @@ demos
   more comments
 
 documentation
-  Color
-  ColorPointer
   Constants
   Event
   EventType
@@ -43,9 +42,11 @@ documentation
 generate html files
 
 doc done:
-CharacterMap
-CharacterRenderer
-
+  CharacterMap
+  CharacterRenderer
+  Color
+  ColorPointer
+  
 clean up move order
 
 MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT

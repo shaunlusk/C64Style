@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: GfxElementZIndexComparable.js</title>
+    <title>JSDoc: Source: ColorPointer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: GfxElementZIndexComparable.js</h1>
+    <h1 class="page-title">Source: ColorPointer.js</h1>
 
     
 
@@ -26,33 +26,30 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>C64Style.GfxElementZIndexComparable = function(parentElement) {
-  this._parentElement = parentElement;
-};
-
-C64Style.GfxElementZIndexComparable.prototype.getElement = function() {return this._parentElement;};
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
 /**
-* @function
-* @name IComparable#compareTo
-* @param other {Object} The object to compare to this one.
-* @returns {int} -1: less than the other object; 0 equivalent to the other object; 1 greater than the other object.
+* For use with PixMap entries in {@link C64Style.PixElements} and {@link C64Style.PixSprites}
+* @constructor
+* @param {Color} defaultColor The starting color for the ColorPointer
 */
-C64Style.GfxElementZIndexComparable.prototype.compareTo = function(other) {
-  if (this._parentElement.getZIndex() &lt; other._parentElement.getZIndex()) return -1;
-  if (this._parentElement.getZIndex() === other._parentElement.getZIndex()) return 0;
-  return 1;
-};
-
-C64Style.GfxElementZIndexComparable.prototype.equals = function(other) {
-  return this._parentElement.getZIndex() === other._parentElement.getZIndex();
+C64Style.ColorPointer = function(defaultColor) {
+  this.currentColor = defaultColor || C64Style.Color.BLACK;
 };
 
 /**
-* Implementation for getKey for UniquePriorityQueue
+* Return the current color.
 */
-C64Style.GfxElementZIndexComparable.prototype.getKey = function() {
-  return this._parentElement.getId();
+C64Style.ColorPointer.prototype.getColor = function() {
+  return this.currentColor;
+};
+
+/**
+* Set the current color.
+* @param {Color} color The color to set on the pointer.
+*/
+C64Style.ColorPointer.prototype.setColor = function(color) {
+  this.currentColor = color;
 };
 </code></pre>
         </article>
