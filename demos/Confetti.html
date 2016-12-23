@@ -73,6 +73,7 @@
     "cols" : 80,
     "scaleX" : 1,
     "scaleY" : 1,
+    "fpsElem" : document.getElementById('info')
   };
 
   var xBounds = config.cols * C64Style.CELLWIDTH - 16;
@@ -88,7 +89,7 @@
   }
 
   function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv, config);
 
     screen.initialize();
 

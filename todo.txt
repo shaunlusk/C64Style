@@ -3,20 +3,13 @@
 ###############################################################################
 
 ReadMe
+  more examples & best practices
+  link to demos
 
 check - need collision check on removed elements in gfxLayer
 
-tools directory
-tools documentation
-cleanup, document pixmapextractor, move to tools
-
-remove element.finalize
-
 demos
   more comments
-
-clean up utils
-  move RArray to own file
 
 documentation
   CharacterRenderer
@@ -44,7 +37,6 @@ documentation
   TextLayer
   TextLink
   TextPrompt
-  LinkedList
   PriorityQueue
   Queue
   UniquePriorityQueue
@@ -54,50 +46,15 @@ generate html files
 doc done:
 CharacterMap
 
-Sprite.prototype.doEndOfAnimation
-
 clean up move order
 
 MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT
-MOUSE_OUT event?
+MOUSE_OUT event? - if put in gfx element, could probably remove mouse handling stuff from textlink
 
 7 & 1 = chalice?
 
-functionality and unit tests for UniquePriorityQueue
+consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
 
-tests TODO
-  Screen
-  Sprite
-  TextButton
-  TextElement
-  TextLayer
-  TextLink
-  TextPrompt
-  LinkedList
-  PriorityQueue
-  Queue
-  UniquePriorityQueue
-  Utils
-  MoveOrder
-
-Tests Done
-  CharacterRenderer
-  Constants
-  ColorPointer
-  Color
-  Event
-  EventType
-  GfxElement
-  GfxElementZIndexComparable
-  GfxLayer
-  Layer
-  ImageElement
-  ImageRenderer
-  ImageSprite
-  PixElement
-  PixPathTypes
-  PixRenderer
-  PixSprite
 
 
 add additional char maps
@@ -110,7 +67,8 @@ add additional char maps
 ###############################################################################
 ### Future work
 ###############################################################################
-element finalize?
+tools
+  C64PixMapExtractor - linux shell script
 Change variable names from "screen" to a something else (screen exists in browser)
 make move order work with pause
 screen

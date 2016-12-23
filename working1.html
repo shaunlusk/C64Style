@@ -24,6 +24,9 @@
   <script type="text/javascript" src="lib/PixRenderer.js"></script>
   <script type="text/javascript" src="lib/PixElement.js"></script>
   <script type="text/javascript" src="lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="lib/TextElement.js"></script>
+  <script type="text/javascript" src="lib/TextLink.js"></script>
+  <script type="text/javascript" src="lib/TextButton.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -41,16 +44,18 @@
   var screen = null,
     textLayer = null,
     gfxLayer = null,
-    element = null;
+    element = null,
+    element1 = null;
   var config = {
     "rows" : 50,
     "cols" : 80,
-    "scaleX" : 1,
+    "scaleX" : 2,
     "scaleY" : 1,
+    "fpsElem" : document.getElementById('info')
   };
 
   function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv, config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
@@ -63,6 +68,14 @@
       defaultPalette:C64Style.Color.getDefaultPalette()
     });
     gfxLayer.addElement(element);
+
+    element1 = new C64Style.TextButton(screen, gfxLayer, {
+      text:"test",
+      x:50,y:50,
+      scaleX:2,
+      scaleY:1
+    });
+    gfxLayer.addElement(element1);
 
     screen.render(1);
   }

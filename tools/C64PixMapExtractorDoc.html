@@ -1,0 +1,102 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64PixMapExtractor Documentation</title>
+
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style>
+.textContent {
+  margin:auto;
+}
+</style>
+</head>
+<body>
+  <div class="textContent">
+    <h1>C64PixMapExtractor Documentation</h1>
+    <p>
+      <b>C64PixMapExtractor</b> is a Java utility included in the 'tools' directory (<a href="https://github.com/shaunlusk/C64Style">github</a>).
+      It's purpose is to convert images into PixMap format for rendering as PixElements / PixSprites.
+    </p>
+    <p>
+      <h2>Build:</h2>
+    </p>
+    <p>
+      <div class="code">
+        build.bat
+      </div>
+    </p>
+    <p>
+      Ensure 'javac' is in your path.
+    </p>
+    <p>
+      <h2>Usage:</h2>
+      <div class="code">
+        C64PixMapExtractor.bat imagePath outFilePath targetWidth targetHeight coerceToC64Palette useIdx</br>
+      </div>
+    </p>
+    <p>
+      Ensure 'java' is in your path.
+    </p>
+    <p>
+      <b>Parameters</b>:
+      <ol>
+        <li> <b>imagePath</b> : the full file path to the input image </li>
+        <li> <b>outFilePath</b> : the target file for writing the output </li>
+        <li> <b>targetWidth</b> : the target pixel width for the PixArray </li>
+        <li> <b>targetHeight</b> : the target pixel height for the PixArray </li>
+        <li> <b>coerceToC64Palette</b> : boolean. true = for each PixMapEntry, pick the closest C64 color; false = use original color </li>
+        <li> <b>useIdx</b> : boolean. false = use the color value (e.g. "rgb(50,100,255)"); true = Only if coerceToC64Palette is also true, use the color index instead of the color value (for use with color palettes)</li>
+      </ol>
+    </p>
+    <p>
+      <b>Example</b>:</br>
+      <div class="code">
+        C64PixMapExtractor.bat C:\Pictures\luigiPalm.png c:\temp\testOut.txt 32 32 true false
+      </div>
+      This example uses luigiPalm.png as the input image, testOut.txt as the output file for the PixArray, Width and height 32x32 (will resize appropriately), coerces the colors to C64 colors, and uses the color values in the Pix entries.
+    </p>
+    <p>
+      <b>Output Format</b>:</br>
+      PixArrays are produced in the following format when color values are used:
+      <div class="code">
+        [{"type":"PIXEL", "x":0, "y":0, "color":"rgb(229,234,234)"},</br>
+        {"type":"PIXEL", "x":1, "y":0, "color":"rgb(231,235,231)"},</br>
+        {"type":"PIXEL", "x":2, "y":0, "color":"rgb(212,215,210)"}]</br>
+      </div>
+    </p>
+    <p>
+      And in the this format when index values are used:
+      <div class="code">
+        [{"type":"PIXEL", "x":0, "y":0, "color":0},</br>
+        {"type":"PIXEL", "x":1, "y":0, "color":5},</br>
+        {"type":"PIXEL", "x":2, "y":0, "color":15}]</br>
+      </div>
+    </p>
+    <p>
+      This format is suitable to be previewed in the <a href="PixMapImportPreview.html">PixMapImportPreview</a> and for use in creating PixElements and PixSprites.
+    </p>
+    <p>
+      <b>Note</b>: Large PixElements and PixSprites are not recommended;
+      they are not designed with performance in mind, and canvas doesn't handle
+      them to well above a certain size.  Drawing a large
+      PixElement to a static GfxLayer (where there are no redraws, maybe a
+      background layer for example) should be fine.  However, moving large
+      PixElements around will suffer from rendering degradation.  In those
+      situations you will be better off using the original image.  I haven't
+      done any research to determine what constitutes "large" exactly.
+      But aside from drawing static backgrounds, I don't see much of a use
+      case for very large PixElements, since this library is intending for
+      mimicking old style graphics and games :)
+    </p>
+    <p>Also note that contiguous regions of color can be drawn more efficiently
+      if broken into "RECTANGLE"s and "PIXEL"s in the PixArrays, instead of
+      using "PIXEL"s only.  This program does not attempt to make that
+      optimization; it only generates "PIXEL" entries.
+    </p>
+    <div id="backLinks">
+      <a href="index.html">Back to Tools Index</a><br /><br />
+      <a href="../index.html">Back to Main Index</a>
+    </div>
+  </div>
+</body>
+</html>

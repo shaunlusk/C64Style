@@ -26,7 +26,6 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   element.hasCollision = function() {return this.collision;};
   element.clear = function() {};
   element.render = function() {};
-  element.finalize = function() {};
   element.x = props.x || 0;
   element.y = props.y || 0;
   element.getX = function() {return this.x;};
@@ -89,4 +88,25 @@ C64Style.Mocks.getMockCanvasContext = function(props) {
     this.filledHeight = height;
   };
   return context;
+};
+
+C64Style.Mocks.getMockCharacterRenderer = function(props) {
+  props = props || {};
+  var renderer = {};
+  renderer.scaleX = props.scaleX || 1;
+  renderer.scaleY = props.scaleY || 1;
+  renderer.getScaleX = function() {return this.scaleX;};
+  renderer.getScaleY = function() {return this.scaleY;};
+  renderer.clearRect = function(context, x, y, length) {this.calledClearRect = {x:x, y:y, length:length};};
+  renderer.renderSymbol = function(context, char, x, y, color, backgroundColor) {
+    this.calledRenderSymbol = {char:char, x:x, y:y, color:color, backgroundColor:backgroundColor};
+  };
+  renderer.renderString = function(context, text, x, y, color, backgroundColor) {
+    this.calledRenderString = {text:text, x:x, y:y, color:color, backgroundColor:backgroundColor};
+  };
+  renderer.setCursorLocation = function(x,y) {this.calledSetCursorLocation = {x:x,y:y};};
+  renderer.advanceCursor = function() {this.calledAdvanceCursor = true;};
+  renderer.setColor = function(color) {this.calledSetColor = {color:color};};
+  renderer.setBackgroundColor = function(backgroundColor) {this.calledBackgroundColor = {backgroundColor:backgroundColor};};
+  return renderer;
 };

@@ -20,12 +20,12 @@ describe("Screen", function() {
         this.eventListeners[type] = callback;
       },
       appendChild : function() {},
-      offsetLeft : 0,
-      offsetTop : 0
+      offsetLeft : 16,
+      offsetTop : 16
     };
     fpsElem = {};
-    config = {};
-    c64scrn = new C64Style.Screen(targetDiv, fpsElem, config);
+    config = {"fpsElem" : document.getElementById('info')};
+    c64scrn = new C64Style.Screen(targetDiv, config);
   });
 
   describe("#initialize()", function() {
@@ -502,7 +502,7 @@ describe("Screen", function() {
       assert(calledPropagate === false, "should not have propagated");
       done();
     });
-    it("should return if not in bounds", function(done) {
+    it("should return if not in bounds, x < 0", function(done) {
       var e = {};
       var calledPropagate = false;
       c64scrn.getXFromMouseEvent = function() {return -1;};
@@ -512,6 +512,176 @@ describe("Screen", function() {
       c64scrn.handleMouseEvent(e);
 
       assert(calledPropagate === false, "should not have propagated");
+      done();
+    });
+    it("should return if not in bounds, x = width", function(done) {
+      var e = {};
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return c64scrn.getWidth();};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(calledPropagate === false, "should not have propagated");
+      done();
+    });
+    it("should return if not in bounds, y < 0", function(done) {
+      var e = {};
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return 1;};
+      c64scrn.getYFromMouseEvent = function() {return -1;};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(calledPropagate === false, "should not have propagated");
+      done();
+    });
+    it("should return if not in bounds, y = height", function(done) {
+      var e = {};
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return 1;};
+      c64scrn.getYFromMouseEvent = function() {return c64scrn.getHeight();};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(calledPropagate === false, "should not have propagated");
+      done();
+    });
+    it("should notify mouseup", function(done) {
+      var e = {
+        type:"mouseup",
+        button:1
+      };
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return 1;};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+      var eventType = null;
+      c64scrn.notify = function(event) {eventType = event.type;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(eventType === C64Style.EventType.MOUSE_UP, "should have notified mouseup event");
+      done();
+    });
+    it("should notify mouseup", function(done) {
+      var e = {
+        type:"mousedown",
+        button:1
+      };
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return 1;};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+      var eventType = null;
+      c64scrn.notify = function(event) {eventType = event.type;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(eventType === C64Style.EventType.MOUSE_DOWN, "should have notified mousedown event");
+      done();
+    });
+    it("should propagate", function(done) {
+      var e = {
+        type:"mousedown",
+        button:0
+      };
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return 1;};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+
+      c64scrn.handleMouseEvent(e);
+
+      assert(calledPropagate === true, "should have propagated");
+      done();
+    });
+    it("should return false if button 1", function(done) {
+      var e = {
+        type:"mousedown",
+        button:1
+      };
+      var calledPropagate = false;
+      c64scrn.getXFromMouseEvent = function() {return 1;};
+      c64scrn.getYFromMouseEvent = function() {return 1;};
+      c64scrn.propagateMouseEventThroughLayers = function() {calledPropagate = true;};
+
+      var result = c64scrn.handleMouseEvent(e);
+
+      assert(result === false, "should have returned false");
+      done();
+    });
+  });
+  describe("#propagateMouseEventThroughLayers()", function() {
+    it("should call handleMouseEvent on each layer", function(done) {
+      var calledLayer1 = false;
+      var layer1 = {
+        handleMouseEvent : function() {calledLayer1 = true;}
+      };
+      var calledLayer2 = false;
+      var layer2 = {
+        handleMouseEvent : function() {calledLayer2 = true;}
+      };
+      c64scrn.addLayer(layer1);
+      c64scrn.addLayer(layer2);
+
+      c64scrn.propagateMouseEventThroughLayers();
+
+      assert(calledLayer1 === true, "should have propagated to layer1");
+      assert(calledLayer2 === true, "should have propagated to layer2");
+      done();
+    });
+  });
+  describe("#getXFromMouseEvent()", function() {
+    it("should return y value", function(done) {
+      var e = {pageX: 60};
+
+      var result = c64scrn.getXFromMouseEvent(e);
+
+      var expected = e.pageX - (c64scrn._targetDiv.offsetLeft + c64scrn.getBorderSize());
+      assert(result === expected, "should have returned correct x value (expected: " + expected + ", actual: " + result + ")");
+      done();
+    });
+  });
+  describe("#getYFromMouseEvent()", function() {
+    it("should return y value", function(done) {
+      var e = {pageY: 43};
+
+      var result = c64scrn.getYFromMouseEvent(e);
+
+      var expected = e.pageY - (c64scrn._targetDiv.offsetTop + c64scrn.getBorderSize());
+      assert(result === expected, "should have returned correct y value (expected: " + expected + ", actual: " + result + ")");
+      done();
+    });
+  });
+  describe("#getColFromMouseEvent()", function() {
+    it("should return col value", function(done) {
+      var scaleX = 2;
+      c64scrn._scaleX = scaleX;
+      var mouseEventX = 50;
+      c64scrn.getXFromMouseEvent = function() {return mouseEventX;};
+
+      var result = c64scrn.getColFromMouseEvent();
+
+      var expected = Math.floor(mouseEventX / (C64Style.CELLWIDTH * scaleX));
+      assert(result === expected, "should have returned correct col value (expected: " + expected + ", actual: " + result + ")");
+      done();
+    });
+  });
+  describe("#getRowFromMouseEvent()", function() {
+    it("should return row value", function(done) {
+      var scaleY = 2;
+      c64scrn._scaleY = scaleY;
+      var mouseEventY = 50;
+      c64scrn.getYFromMouseEvent = function() {return mouseEventY;};
+
+      var result = c64scrn.getRowFromMouseEvent();
+
+      var expected = Math.floor(mouseEventY / (C64Style.CELLHEIGHT * scaleY));
+      assert(result === expected, "should have returned correct row value (expected: " + expected + ", actual: " + result + ")");
       done();
     });
   });

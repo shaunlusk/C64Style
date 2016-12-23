@@ -40,6 +40,7 @@
       "cols" : 40,
       "scaleX" : 2,
       "scaleY" : 2,
+      "fpsElem" : document.getElementById('info')
     };
 
   var screen = null, textLayer = null, gfxLayer;
@@ -47,7 +48,7 @@
   function initialize(targetDiv, config) {
 
     // Create the C64 Screen
-    screen = new C64Style.Screen(targetDiv,document.getElementById('info'), config);
+    screen = new C64Style.Screen(targetDiv, config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
@@ -67,21 +68,8 @@
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton(screen, gfxLayer, {
-      x:10 * C64Style.CELLWIDTH + 4,
-      y:10 * C64Style.CELLHEIGHT,
-      text:"Download .tar.gz",
-      backgroundColor:C64Style.Color.BLUE,
-      buttonColor : C64Style.Color.LIGHTBLUE,
-      textColor : C64Style.Color.LIGHTBLUE,
-      highlightButtonColor : C64Style.Color.LIGHTBLUE,
-      highlightTextColor : C64Style.Color.BLUE,
-      href:"https://github.com/shaunlusk/C64Style/tarball/master",
-      newWindow : true
-    });
-    gfxLayer.addElement(element);
-    element = new C64Style.TextButton(screen, gfxLayer, {
       x:11 * C64Style.CELLWIDTH + 4,
-      y:13 * C64Style.CELLHEIGHT,
+      y:10 * C64Style.CELLHEIGHT,
       text:"View On GitHub",
       backgroundColor:C64Style.Color.BLUE,
       buttonColor : C64Style.Color.LIGHTBLUE,
@@ -90,6 +78,18 @@
       highlightTextColor : C64Style.Color.BLUE,
       href:"https://github.com/shaunlusk/C64Style",
       newWindow : true
+    });
+    gfxLayer.addElement(element);
+    element = new C64Style.TextButton(screen, gfxLayer, {
+      x:16 * C64Style.CELLWIDTH,
+      y:13 * C64Style.CELLHEIGHT,
+      text:"Tools",
+      backgroundColor:C64Style.Color.BLUE,
+      buttonColor : C64Style.Color.LIGHTBLUE,
+      textColor : C64Style.Color.LIGHTBLUE,
+      highlightButtonColor : C64Style.Color.LIGHTBLUE,
+      highlightTextColor : C64Style.Color.BLUE,
+      href:"tools/index.html"
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton(screen, gfxLayer, {
