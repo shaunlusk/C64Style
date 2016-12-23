@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Sprite.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Sprite.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
+
+/** @interface
+* Required by Sprite
+*/
+C64Style.AnimationFrame = function() {};
+C64Style.AnimationFrame.prototype.getDuration = function() {throw new Error("getDuration Not Implemented on this AnimationFrame");};
+
+C64Style.Sprite = function(screenContext, parentLayer, props) {
+  props = props || {};
+  C64Style.GfxElement.call(this, screenContext, parentLayer, props);
+
+  this._frames = props.frames || [];
+  this._ttl = props.ttl || -1;
+  this._loop = props.loop === false ? false : true;
+  this._loopsToLive = props.loopsToLive || -1;
+  this._freezeFrameIdx = props.freezeFrameIdx || -1;
+
+  this._fidx = 0;
+  this._currentFrameElapsed = 0;
+  this._done = false;
+  this._loopCount = 0;
+  this._elapsed = 0;
+
+  this._eventListeners[C64Style.EventType.SPRITE_ANIMATION_DONE] = [];
+};
+
+C64Style.Sprite.prototype = new C64Style.GfxElement();
+C64Style.Sprite.prototype.constructor = C64Style.Sprite;
+
+C64Style.Sprite.prototype.getFrames = function() {return this._frames;};
+C64Style.Sprite.prototype.setFrames = function(frames) {this._frames = frames;};
+C64Style.Sprite.prototype.addFrame = function(frame) {this._frames.push(frame);};
+
+C64Style.Sprite.prototype.getTtl = function() {return this._ttl;};
+C64Style.Sprite.prototype.setTtl = function(ttl) {this._ttl = ttl;};
+
+C64Style.Sprite.prototype.doesLoop = function() {return this._loop;};
+C64Style.Sprite.prototype.setDoLoop = function(loop) {this._loop = loop;};
+
+C64Style.Sprite.prototype.getLoopsToLive = function() {return this._loopsToLive;};
+C64Style.Sprite.prototype.setLoopsToLive = function(loopsToLive) {this._loopsToLive = loopsToLive;};
+
+C64Style.Sprite.prototype.isDone = function() {return this._done;};
+C64Style.Sprite.prototype.setDone = function(done) {this._done = done;};
+
+C64Style.Sprite.prototype.getFreezeFrameIndex = function() {return this._freezeFrameIdx;};
+C64Style.Sprite.prototype.setFreezeFrameIndex = function(idx) {this._freezeFrameIdx = idx;};
+
+C64Style.Sprite.prototype.getLoopCount = function() {return this._loopCount;};
+
+C64Style.Sprite.prototype.getCurrentFrameIndex = function() {return this._fidx;};
+C64Style.Sprite.prototype.setCurrentFrameIndex = function(idx) {this._fidx = idx;};
+
+C64Style.Sprite.prototype.reset = function() {
+  this._fidx = 0;
+  this._currentFrameElapsed = 0;
+  this._done = false;
+  this._loopCount = 0;
+  this._elapsed = 0;
+};
+
+C64Style.Sprite.prototype.update = function (time,diff) {
+  C64Style.GfxElement.prototype.update.call(this, time, diff);
+
+  if (this._frames.length === 0 || this._done) return null;
+
+  if (this._ttl > -1) {
+    this._elapsed += diff;
+    if (this._elapsed >= this._ttl){
+      this._done = true;
+    }
+  }
+
+  this._currentFrameElapsed += diff;
+  if (this._currentFrameElapsed >= this._frames[this._fidx].getDuration()) {
+    while (this._currentFrameElapsed >= this._frames[this._fidx].getDuration()) {
+      this._currentFrameElapsed -= this._frames[this._fidx].getDuration();
+      this._fidx++;
+      if (this._fidx === this._frames.length) {
+        this._fidx = 0;
+        this._loopCount++;
+        if (!this._loop) {
+          this._done = true;
+          if (this._freezeFrameIdx > -1) this._fidx = this._freezeFrameIdx;
+        } else if (this._loopsToLive > -1 &amp;&amp; this._loopCount >= this._loopsToLive) {
+          this._done = true;
+        }
+      }
+    }
+    this.setDirty(true);
+  }
+  if (this._done) {
+    this.doEndOfAnimation();
+  }
+  if (this.isDirty()) return this;
+
+  return null;
+};
+
+C64Style.Sprite.prototype.render = function(time,diff) {
+  if (this.isHidden() || !this.isDirty()) return;
+
+  this.renderFrame(time, diff, this._frames[this._fidx]);
+
+  C64Style.GfxElement.prototype.render.call(this, time, diff);
+};
+
+/** override me
+*/
+C64Style.Sprite.prototype.renderFrame = function(time, diff, frame) {
+
+};
+
+C64Style.Sprite.prototype.doEndOfAnimation = function() {
+  var event = new C64Style.Event(
+    C64Style.EventType.SPRITE_ANIMATION_DONE,
+    {
+      element:this
+    }
+  );
+  this.notify(event);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Dec 22 2016 22:18:45 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
