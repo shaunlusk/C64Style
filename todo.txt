@@ -12,7 +12,6 @@ demos
   more comments
 
 documentation
-  CharacterRenderer
   Color
   ColorPointer
   Constants
@@ -45,6 +44,7 @@ generate html files
 
 doc done:
 CharacterMap
+CharacterRenderer
 
 clean up move order
 
