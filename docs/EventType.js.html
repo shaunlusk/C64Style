@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ColorPointer.js</title>
+    <title>JSDoc: Source: EventType.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ColorPointer.js</h1>
+    <h1 class="page-title">Source: EventType.js</h1>
 
     
 
@@ -29,27 +29,36 @@
             <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
 /**
-* For use with PixMap entries in {@link C64Style.PixElements} and {@link C64Style.PixSprites}
-* @constructor
-* @param {Color} defaultColor The starting color for the ColorPointer
+* C64Style.Event Types
+* @static
+* @enum
 */
-C64Style.ColorPointer = function(defaultColor) {
-  this.currentColor = defaultColor || C64Style.Color.BLACK;
-};
-
-/**
-* Return the current color.
-*/
-C64Style.ColorPointer.prototype.getColor = function() {
-  return this.currentColor;
-};
-
-/**
-* Set the current color.
-* @param {Color} color The color to set on the pointer.
-*/
-C64Style.ColorPointer.prototype.setColor = function(color) {
-  this.currentColor = color;
+C64Style.EventType = {
+  /** Emitted by an element when it moves */
+  "ELEMENT_MOVED" : "ELEMENT_MOVED",
+  /** Emitted by the screen before a render cycle */
+  "BEFORE_RENDER" : "BEFORE_RENDER",
+  /** Emitted by the screen after a render cycle */
+  "AFTER_RENDER" : "AFTER_RENDER",
+  /** Emitted when an element starts moving */
+  "ELEMENT_STARTED_MOVING" : "ELEMENT_STARTED_MOVING",
+  /** Emitted by a moving element when it stops moving */
+  "ELEMENT_STOPPED_MOVING" : "ELEMENT_STOPPED_MOVING",
+  "ELEMENT_COLLISION" : "ELEMENT_COLLISION",
+  "ELEMENT_HIT_LEFT_EDGE" : "ELEMENT_HIT_LEFT_EDGE",
+  "ELEMENT_HIT_RIGHT_EDGE" : "ELEMENT_HIT_RIGHT_EDGE",
+  "ELEMENT_HIT_TOP_EDGE" : "ELEMENT_HIT_TOP_EDGE",
+  "ELEMENT_HIT_BOTTOM_EDGE" : "ELEMENT_HIT_BOTTOM_EDGE",
+  "SCREEN_PAUSED" : "SCREEN_PAUSED",
+  "SCREEN_RESUMED" : "SCREEN_RESUMED",
+  "MOUSE_MOVE" : "MOUSE_MOVE",
+  "MOUSE_DOWN" : "MOUSE_DOWN",
+  "MOUSE_UP" : "MOUSE_UP",
+  "MOUSE_OVER_ELEMENT" : "MOUSE_OVER_ELEMENT",
+  "MOUSE_MOVE_OVER_ELEMENT" : "MOUSE_MOVE_OVER_ELEMENT",
+  "MOUSE_DOWN_ON_ELEMENT" : "MOUSE_DOWN_ON_ELEMENT",
+  "MOUSE_UP_ON_ELEMENT" : "MOUSE_UP_ON_ELEMENT",
+  "SPRITE_ANIMATION_DONE" : "SPRITE_ANIMATION_DONE"
 };
 </code></pre>
         </article>

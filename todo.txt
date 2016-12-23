@@ -13,7 +13,6 @@ demos
   more comments
 
 documentation
-  Constants
   Event
   EventType
   GfxElement
@@ -46,7 +45,8 @@ doc done:
   CharacterRenderer
   Color
   ColorPointer
-  
+  Constants
+
 clean up move order
 
 MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT
