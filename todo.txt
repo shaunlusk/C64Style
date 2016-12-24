@@ -15,7 +15,6 @@ demos
 better docs on events?
 
 documentation
-  GfxElementZIndexComparable
   GfxLayer
   ImageElement
   ImageRenderer
@@ -48,6 +47,7 @@ doc done:
   Event
   EventType
   GfxElement
+  GfxElementZIndexComparable
 
 clean up move order
 
