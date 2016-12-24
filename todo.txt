@@ -15,7 +15,6 @@ demos
 better docs on events?
 
 documentation
-  GfxElement
   GfxElementZIndexComparable
   GfxLayer
   ImageElement
@@ -48,7 +47,8 @@ doc done:
   Constants
   Event
   EventType
-  
+  GfxElement
+
 clean up move order
 
 7 & 1 = chalice?
@@ -81,9 +81,11 @@ change size for pixmap builder?
 textSprite?
 Bounds checking on text layer?
 Text wrapping on text layer?
+extract "on" function in screen, gfxelement, to its own mixin component
 
 
 ###############################################################################
 ### Known issues
 ###############################################################################
+MoveOrders do not take pause into account and so will tend to cause elements to "jump" to final destination when screen is resumed.
 This is probably ok though: in text layer, strings that are rendered in same frame may be written on top of eachother without clearing (clearing comes before drawing)

@@ -102,6 +102,9 @@
         
             <dt><a href="C64Style.Event.html">Event</a></dt>
             <dd></dd>
+        
+            <dt><a href="C64Style.GfxElement.html">GfxElement</a></dt>
+            <dd></dd>
         </dl>
     
 
@@ -4580,7 +4583,7 @@
 
         
             
-<h4 class="name" id=".EventType"><span class="type-signature">(static) </span>EventType<span class="type-signature"></span></h4>
+<h4 class="name" id=".EventType"><span class="type-signature">(static) </span>EventType<span class="type-signature"> :string</span></h4>
 
 
 
@@ -4591,413 +4594,16 @@
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_MOVED</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by an C64Style.GfxElement when it moves</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>BEFORE_RENDER</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by a C64Style.Screen before a render cycle</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>AFTER_RENDER</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by a C64Style.Screen after a render cycle</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_STARTED_MOVING</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted when an C64Style.GfxElement starts moving</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_STOPPED_MOVING</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by a moving C64Style.GfxElement when it stops moving</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_COLLISION</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by an C64Style.GfxElement when two elements collide</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_HIT_LEFT_EDGE</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its left edge</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_HIT_RIGHT_EDGE</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its right edge</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_HIT_TOP_EDGE</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its top edge</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ELEMENT_HIT_BOTTOM_EDGE</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its bottom edge</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>SCREEN_PAUSED</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.Screen when it is paused</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>SCREEN_RESUMED</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.Screen when it is unpaused</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_MOVE</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.Screen when the mouse moves somewhere inside its boundaries</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_DOWN</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.Screen when a mouse down event occurs on it</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_UP</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.Screen when a mouse down event occurs on it</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_ENTER_ELEMENT</code></td>
+    <h5>Type:</h5>
+    <ul>
+        <li>
             
+<span class="param-type">string</span>
 
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.GfxElement when the mouse enters its bounding box</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_EXIT_ELEMENT</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.GfxElement when the mouse leaves its bounding box</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_MOVE_OVER_ELEMENT</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.GfxElement when the mouse moves inside its bounding box</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_DOWN_ON_ELEMENT</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.GfxElement when a mouse down event occurs on it</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>MOUSE_UP_ON_ELEMENT</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Emmited by a C64Style.GfxElement when a mouse up event occurs on it</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>SPRITE_ANIMATION_DONE</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
 
-            <td class="description last">Emmited by a C64Style.Sprite when its animation cycle completes (only for non-looping sprites)</td>
-        </tr>
+        </li>
+    </ul>
 
-    
-    </tbody>
-</table>
 
 
 
@@ -5031,7 +4637,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="EventType.js.html">EventType.js</a>, <a href="EventType.js.html#line8">line 8</a>
+        <a href="EventType.js.html">EventType.js</a>, <a href="EventType.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -5151,13 +4757,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 23 2016 23:18:34 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 24 2016 14:16:20 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

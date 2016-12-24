@@ -28,6 +28,21 @@
         <article>
             <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
+/**
+* Graphics element base class.
+* @constructor
+* @param {C64Style.Screen} screenContext The target screen.
+* @param {C64Style.GfxLayer} parentLayer The parent layer that will draw this element.
+* @param {Object} props Properties for this GfxElement.  Supports:
+*   &lt;ul>
+*     &lt;li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>hidden - boolean - Whether to hide this element.&lt;/li>
+*     &lt;li>x - number - The X coordinate for this element.&lt;/li>
+*     &lt;li>y - number - The Y coordinate for this element.&lt;/li>
+*     &lt;li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).&lt;/li>
+*   &lt;/ul>
+*/
 C64Style.GfxElement = function(screenContext, parentLayer, props) {
   props = props || {};
   this._id = C64Style.GfxElement.id++;
@@ -59,10 +74,6 @@ C64Style.GfxElement = function(screenContext, parentLayer, props) {
     "ELEMENT_STARTED_MOVING" : [],
     "ELEMENT_STOPPED_MOVING" : [],
     "ELEMENT_COLLISION" : [],
-    "ELEMENT_HIT_LEFT_EDGE" : [],
-    "ELEMENT_HIT_RIGHT_EDGE" : [],
-    "ELEMENT_HIT_TOP_EDGE" : [],
-    "ELEMENT_HIT_BOTTOM_EDGE" : [],
     "MOUSE_ENTER_ELEMENT" : [],
     "MOUSE_EXIT_ELEMENT" : [],
     "MOUSE_MOVE_OVER_ELEMENT" : [],
@@ -70,60 +81,217 @@ C64Style.GfxElement = function(screenContext, parentLayer, props) {
     "MOUSE_UP_ON_ELEMENT" : [],
   };
 };
+/** @private */
 C64Style.GfxElement.id = 0;
 
+/** Return the unique id of this element.
+* @return {integer} This element's unique id.
+*/
 C64Style.GfxElement.prototype.getId = function() {return this._id;};
+
+/** Return whether this element is dirty.
+* @return {boolean}
+*/
 C64Style.GfxElement.prototype.isDirty = function() {
   return this._dirty || this._hasCollision || this._hadCollisionPreviousFrame;
 };
+
+/**
+* Set whether element is dirty.  If dirty, the element will be cleared and redrawn during the next render phase.
+* @param {boolean} dirty
+*/
 C64Style.GfxElement.prototype.setDirty = function(dirty) {this._dirty = dirty;};
+
+/** Return whether this element is hidden.
+* @return {boolean}
+*/
 C64Style.GfxElement.prototype.isHidden = function() {return this._hidden;};
+
+/**
+* Set whether element is hidden.
+* @param {boolean} hidden
+*/
 C64Style.GfxElement.prototype.setHidden = function(hidden) {this._hidden = hidden;};
-C64Style.GfxElement.prototype.setHasCollision = function(hasCollision) {this._hasCollision = hasCollision;};
+
+/** Return whether this element had a collision during the most recent update phase.
+* @return {boolean}
+*/
 C64Style.GfxElement.prototype.hasCollision = function() {return this._hasCollision;};
+
+/**
+* Set whether the element has a collision. If a collision has occurred the element will be cleared and redrawn during the next render phase.
+* @param {boolean} hidden
+*/
+C64Style.GfxElement.prototype.setHasCollision = function(hasCollision) {this._hasCollision = hasCollision;};
+
+/**
+* Return this element's zIndex.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getZIndex = function() {return this._zIndex;};
+
+/**
+* Set this element's zIndex. Elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).
+* @param {number} zIndex
+*/
 C64Style.GfxElement.prototype.setZIndex = function(zIndex) {
   this._zIndex = zIndex;
   this.setDirty(true);
 };
+
+/** Return this element's zindeComparable.
+* Used by parent layer to determine rendering order.
+* @return {C64Style.GfxElementZIndexComparable}
+*/
+C64Style.GfxElement.prototype.getZIndexComparable = function() {
+  return this._zIndexComparable;
+};
+
+/**
+* Return this element's parent layer.
+* @return {C64Style.GfxLayer}
+*/
 C64Style.GfxElement.prototype.getParentLayer = function() {return this._parentLayer;};
+
+/**
+* Return the canvas context for this element's parent layer.
+* @return {CanvasContext}
+*/
 C64Style.GfxElement.prototype.getCanvasContext = function() {return this._canvasContext;};
+
+/**
+* Return the parent Screen for this element.
+* @return {C64Style.Screen}
+*/
 C64Style.GfxElement.prototype.getScreenContext = function() {return this._screenContext;};
 
+/**
+* Return the horizontal scale of this element's parent screen.
+* @return {integer}
+*/
 C64Style.GfxElement.prototype.getScreenScaleX = function() {return this.getScreenContext().getScaleX();};
+
+/**
+* Return the vertical scale of this element's parent screen.
+* @return {integer}
+*/
 C64Style.GfxElement.prototype.getScreenScaleY = function() {return this.getScreenContext().getScaleY();};
 
+/**
+* Return the total horizontal scale for this element (screen scale * element scale).
+* @return {integer}
+*/
 C64Style.GfxElement.prototype.getTotalScaleX = function() {return this.getElementScaleX() * this.getScreenContext().getScaleX();};
+
+/**
+* Return the total vertical scale for this element (screen scale * element scale).
+* @return {integer}
+*/
 C64Style.GfxElement.prototype.getTotalScaleY = function() {return this.getElementScaleY() * this.getScreenContext().getScaleY();};
 
+/**
+* Return the horizontal scale of this element.
+* @return {integer}
+*/
 C64Style.GfxElement.prototype.getElementScaleX = function() {return this._scaleX;};
+
+/**
+* Return the vertical scale of this element.
+* @return {integer}
+*/
 C64Style.GfxElement.prototype.getElementScaleY = function() {return this._scaleY;};
+
+/**
+* Set the horizontal scale of this element.
+* @param {integer} scaleX
+*/
 C64Style.GfxElement.prototype.setElementScaleX = function(scaleX) {
   this._scaleX = scaleX;
 };
+
+/**
+* Set the vertical scale of this element.
+* @param {integer} scaleY
+*/
 C64Style.GfxElement.prototype.setElementScaleY = function(scaleY) {this._scaleY = scaleY;};
 
+/**
+* Get the x coordinate of this element.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getX = function() {return this._x;};
+
+/**
+* Get the y coordinate of this element.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getY = function() {return this._y;};
+
+/**
+* Set the x coordinate of this element.
+* @param {number} x
+*/
 C64Style.GfxElement.prototype.setX = function(x) {
   if (x !== this._x) this.setDirty(true);
   this._x = x;
 };
+
+/**
+* Set the y coordinate of this element.
+* @param {number} y
+*/
 C64Style.GfxElement.prototype.setY = function(y) {
   if (y !== this._y) this.setDirty(true);
   this._y = y;
 };
 
+/**
+* Get the x coordinate of this element for the previous frame.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getLastX = function() {return this._lastX;};
-C64Style.GfxElement.prototype.getLastY = function() {return this._lastY;};
-C64Style.GfxElement.prototype.setLastX = function(x) {this._lastX = x;};
-C64Style.GfxElement.prototype.isMouseOver = function() {return this._mouseIsOver;};
 
+/**
+* Get the y coordinate of this element for the previous frame.
+* @return {number}
+*/
+C64Style.GfxElement.prototype.getLastY = function() {return this._lastY;};
+
+/** @private */
+C64Style.GfxElement.prototype.setLastX = function(x) {this._lastX = x;};
+/** @private */
 C64Style.GfxElement.prototype.setLastY = function(y) {this._lastY = y;};
 
+/**
+* Return whether the mouse is over this element.
+* @return {boolean}
+*/
+C64Style.GfxElement.prototype.isMouseOver = function() {return this._mouseIsOver;};
+
+/**
+* Return this element's width. &lt;b>Sub-classes must implement this method!&lt;/b>
+* @abstract
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getWidth = function() {throw new Error("getWidth needs to be implemented on this element.");};
+
+/**
+* Return this elements height. &lt;b>Sub-classes must implement this method!&lt;/b>
+* @abstract
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getHeight = function() {throw new Error("getHeight needs to be implemented on this element.");};
 
+/**
+* Set the horizontal and vertical movement rates for this element.
+* Rates will be treated as approximately pixels per second.
+* Negative values will move the element left for xMoveRate or up for yMoveRate.
+* Zero values will halt movement on a given axis.
+* Positive values will move the element right for xMoveRate or down for yMoveRate.
+* Note that moveTo instructions will supercede movement rates in determining the element's position.
+* @param {number} xMoveRate Horizontal movement rate
+* @param {number} yMoveRate Vertical movement rate
+*/
 C64Style.GfxElement.prototype.setMoveRates = function(xMoveRate, yMoveRate) {
   if (xMoveRate === 0 &amp;&amp; yMoveRate === 0 &amp;&amp; this._currentMove === null &amp;&amp; (this._xMoveRate !== 0 || this._yMoveRate !== 0)) {
     this.notify(
@@ -138,11 +306,28 @@ C64Style.GfxElement.prototype.setMoveRates = function(xMoveRate, yMoveRate) {
   this._xMoveRate = xMoveRate;
   this._yMoveRate = yMoveRate;
 };
+
+/**
+* Return the current x movement rate.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getMoveRateX = function() {return this._xMoveRate;};
+
+/**
+* Return the current y movement rate.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getMoveRateY = function() {return this._yMoveRate;};
 
+/**
+* Move the element to the specified coordinate over the course of specified duration.
+* Calls to this method are queued and executed one after the other.
+* Note that movement effect created by this method will supercede any movement rates for the given duration.
+* @param {number} x The target x coordinate
+* @param {number} y The target y coordinate
+* @param {number} duration How long it should take the element to move from its current position to the target position, in milliseconds.
+*/
 C64Style.GfxElement.prototype.moveTo = function(x,y,duration) {
-  // TODO account for scale
   duration = duration || 16;
   var moveOrder = new C64Style.MoveOrder(this, x, y, duration, this.moveOrderCallback.bind(this));
   this._moveQueue.push(moveOrder);
@@ -157,6 +342,7 @@ C64Style.GfxElement.prototype.moveTo = function(x,y,duration) {
   }
 };
 
+/** @private */
 C64Style.GfxElement.prototype._runMove = function() {
   if (this._moveQueue.size() > 0) {
     this._currentMove = this._moveQueue.pop();
@@ -173,15 +359,24 @@ C64Style.GfxElement.prototype._runMove = function() {
   return false;
 };
 
+/** @private */
 C64Style.GfxElement.prototype.moveOrderCallback = function() {
   this._currentMove = null;
   this._runMove();
 };
 
+/**
+* Clear any queued moveTo instructions.
+* Does not effect a currently running moveTo, or any movement rates.
+*/
 C64Style.GfxElement.prototype.clearMoveQueue = function() {
   this._moveQueue.clear();
 };
 
+/**
+* Turn the element "off".
+* All movement will cease and element will be hidden.
+*/
 C64Style.GfxElement.prototype.turnOff = function() {
   this._moveQueue.clear();
   this._currentMove = null;
@@ -192,16 +387,23 @@ C64Style.GfxElement.prototype.turnOff = function() {
   this.hide();
 };
 
+/** Show the element. */
 C64Style.GfxElement.prototype.show = function() {
   this._hidden = false;
   this.setDirty(true);
 };
 
+/** Hide the element */
 C64Style.GfxElement.prototype.hide = function() {
   this._hidden = true;
   this.setDirty(true);
 };
 
+/** Update the element.  Will update location based on current time/diff.
+* @param {number} time The current time.  Not specifically used, but provided for extension.
+* @param {number} diff The difference between the previous time and the current time. Use to calculate element's position if it is moving.
+* @return {C64Style.GfxElement} Returns this element if it needs to be redrawn, null otherwise.
+*/
 C64Style.GfxElement.prototype.update = function(time,diff) {
   this._updateLocationFromMoveRates(time,diff);
   // Will take precedence over move rate
@@ -224,6 +426,11 @@ C64Style.GfxElement.prototype.update = function(time,diff) {
   return null;
 };
 
+/** Updates the elements position using movement rates and the time diff.
+* @private
+* @param {number} time
+* @param {number} diff
+*/
 C64Style.GfxElement.prototype._updateLocationFromMoveRates = function(time, diff) {
   var amount,sign,intAmount;
 
@@ -249,6 +456,11 @@ C64Style.GfxElement.prototype._updateLocationFromMoveRates = function(time, diff
   }
 };
 
+/** Updates the elements position based on the current moveTo instruction.
+* @private
+* @param {number} time
+* @param {number} diff
+*/
 C64Style.GfxElement.prototype._updateMoveOrder = function(time,diff) {
   if (this._currentMove !== null) {
     this._currentMove.update(time,diff);
@@ -256,6 +468,10 @@ C64Style.GfxElement.prototype._updateMoveOrder = function(time,diff) {
   }
 };
 
+/** Clears this element's bounding box. Time parameters are not used, just made available here for extension.
+* @param {number} time
+* @param {number} diff
+*/
 C64Style.GfxElement.prototype.clear = function(time, diff) {
   this.getCanvasContext().clearRect(
     this.getLastX() * this.getScreenScaleX() - 1,
@@ -265,7 +481,11 @@ C64Style.GfxElement.prototype.clear = function(time, diff) {
 };
 
 /**
-* Override me, but call this method when other rendering work is done.
+* GfxElement does not actually render anything, it only provides post-render clean up.
+* The render method should be implemented in subclasses, which should call this base method when done.
+* Time parameters provided for extension.
+* @param {number} time
+* @param {number} diff
 */
 C64Style.GfxElement.prototype.render = function(time, diff) {
   this.setLastX( this.getX() );
@@ -275,6 +495,11 @@ C64Style.GfxElement.prototype.render = function(time, diff) {
   this.setHasCollision(false);
 };
 
+/** Check whether this element collidesWith another element.
+* Compares the boundaries of this element and the other to check for overlap; if so return true, else return false.
+* @param {C64Style.GfxElement} element
+* @return {boolean}
+*/
 C64Style.GfxElement.prototype.collidesWith = function(element) {
   var thisX = this.getCollisionBoxX();
   var thatX = element.getCollisionBoxX();
@@ -299,6 +524,11 @@ C64Style.GfxElement.prototype.collidesWith = function(element) {
   return result;
 };
 
+/** Check whether this element intersects a specific point on the screen.
+* @param {number} x
+* @param {number} y
+* @return {boolean}
+*/
 C64Style.GfxElement.prototype.collidesWithCoordinates = function(x, y) {
   var result = x >= this.getCollisionBoxX() &amp;&amp;
     x &lt;= this.getCollisionBoxX() + this.getCollisionBoxWidth() &amp;&amp;
@@ -307,22 +537,65 @@ C64Style.GfxElement.prototype.collidesWithCoordinates = function(x, y) {
   return result;
 };
 
+/** Check whether this element intersects an x coordinate.
+* @param {number} x
+* @return {boolean}
+*/
 C64Style.GfxElement.prototype.collidesWithX = function(x) {
   var result = x >= this.getCollisionBoxX() &amp;&amp;
     x &lt;= this.getCollisionBoxX() + this.getCollisionBoxWidth();
   return result;
 };
+
+/** Check whether this element intersects an y coordinate.
+* @param {number} x
+* @return {boolean}
+*/
 C64Style.GfxElement.prototype.collidesWithY = function(y) {
   var result = y >= this.getCollisionBoxY() &amp;&amp;
       y &lt;= this.getCollisionBoxY() + this.getCollisionBoxHeight();
   return result;
 };
 
+/** Returns the x value of the collision box.  Incorporates screen scale.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getCollisionBoxX = function() {return this.getX() * this.getScreenScaleX() - 1;};
+
+/** Returns the y value of the collision box.  Incorporates screen scale.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getCollisionBoxY = function() {return this.getY() * this.getScreenScaleY() - 1;};
+
+/** Returns the width value of the collision box.  Incorporates total scale.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getCollisionBoxWidth = function() {return this.getWidth() * this.getTotalScaleX() + 2;};
+
+/** Returns the height value of the collision box.  Incorporates total scale.
+* @return {number}
+*/
 C64Style.GfxElement.prototype.getCollisionBoxHeight = function() {return this.getHeight() * this.getTotalScaleY() + 2;};
 
+/** Fires events if the mouse event is on this element.&lt;/br>
+* Events emitted:
+* &lt;ul>
+*   &lt;li>C64Style.EventType.MOUSE_ENTER_ELEMENT&lt;/li>
+*   &lt;li>C64Style.EventType.MOUSE_EXIT_ELEMENT&lt;/li>
+*   &lt;li>C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT&lt;/li>
+*   &lt;li>C64Style.EventType.MOUSE_DOWN_ON_ELEMENT&lt;/li>
+*   &lt;li>C64Style.EventType.MOUSE_UP_ON_ELEMENT&lt;/li>
+* &lt;/ul>
+* For these events, data is as follows:
+*   &lt;ul>
+*     &lt;li>x : mouse event x value&lt;/li>
+*     &lt;li>y : mouse event y value&lt;/li>
+*     &lt;li>row : mouse event row value&lt;/li>
+*     &lt;li>col : mouse event col value&lt;/li>
+*     &lt;li>element : this element&lt;/li>
+*   &lt;/ul>
+* @param {C64Style.Event}
+*/
 C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
   if (this.collidesWithCoordinates(event.data.x, event.data.y)) {
     if (!this.isMouseOver()) {
@@ -382,6 +655,22 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
   }
 };
 
+/** Add an event handler to this element.
+* Supported events:
+* &lt;ul>
+*	&lt;li>{@link C64Style.EventType.ELEMENT_MOVED}&lt;/li>
+*	&lt;li>{@link C64Style.EventType.ELEMENT_STARTED_MOVING}&lt;/li>
+*	&lt;li>{@link C64Style.EventType.ELEMENT_STOPPED_MOVING}&lt;/li>
+*	&lt;li>{@link C64Style.EventType.ELEMENT_COLLISION}&lt;/li>
+*	&lt;li>{@link C64Style.EventType.MOUSE_ENTER_ELEMENT}&lt;/li>
+*	&lt;li>{@link C64Style.EventType.MOUSE_EXIT_ELEMENT}&lt;/li>
+*	&lt;li>{@link C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT}&lt;/li>
+*	&lt;li>{@link C64Style.EventType.MOUSE_DOWN_ON_ELEMENT}&lt;/li>
+*	&lt;li{@link C64Style.EventType.MOUSE_UP_ON_ELEMENT}&lt;/li>
+* &lt;/ul>
+* @param {C64Style.EventType} eventType
+* @param {function} callback Function to call when the event occurs.  The C64Style.Event will be passed in.
+*/
 C64Style.GfxElement.prototype.on = function(eventType, callback) {
   if (!this._eventListeners[eventType]) {
     this._eventListeners[eventType] = [];
@@ -389,13 +678,20 @@ C64Style.GfxElement.prototype.on = function(eventType, callback) {
   this._eventListeners[eventType].push(callback);
 };
 
-C64Style.GfxElement.prototype.clearEventHandlers = function(event) {
-  if (!this._eventListeners[event]) {
-    throw new Error("Unknown event type:" + event);
+/** Clear the list of event handlers for a given eventType
+* @param {C64Style.EventType} eventType
+*/
+C64Style.GfxElement.prototype.clearEventHandlers = function(eventType) {
+  if (!this._eventListeners[eventType]) {
+    throw new Error("Unknown event type:" + eventType);
   }
-  this._eventListeners[event] = [];
+  this._eventListeners[eventType] = [];
 };
 
+/** Notify this element that an event has occurred.
+* This will call any attached event handlers for this event type, and will notify the parent Screen as well.
+* @param {C64Style.Event} event
+*/
 C64Style.GfxElement.prototype.notify = function(event) {
   if (!this._eventListeners[event.type]) {
     throw new Error("Unknown event type:" + event.type);
@@ -404,10 +700,6 @@ C64Style.GfxElement.prototype.notify = function(event) {
     if (C64Style.isFunction(this._eventListeners[event.type][i])) this._eventListeners[event.type][i](event);
   }
   this.getScreenContext().notify(event);
-};
-
-C64Style.GfxElement.prototype.getZIndexComparable = function() {
-  return this._zIndexComparable;
 };
 </code></pre>
         </article>
@@ -419,13 +711,13 @@ C64Style.GfxElement.prototype.getZIndexComparable = function() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 23 2016 23:18:34 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 24 2016 14:16:20 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
