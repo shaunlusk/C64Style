@@ -47,7 +47,7 @@ describe("TextLink", function() {
 
       link.handleMouseEvent(event);
 
-      assert(eventType === C64Style.EventType.MOUSE_OVER_ELEMENT, "should have called notify");
+      assert(eventType === C64Style.EventType.MOUSE_ENTER_ELEMENT, "should have called notify");
       done();
     });
     it("should notify mouse move over element", function(done) {

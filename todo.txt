@@ -12,9 +12,9 @@ check - need collision check on removed elements in gfxLayer
 demos
   more comments
 
+better docs on events?
+
 documentation
-  Event
-  EventType
   GfxElement
   GfxElementZIndexComparable
   GfxLayer
@@ -46,17 +46,14 @@ doc done:
   Color
   ColorPointer
   Constants
-
+  Event
+  EventType
+  
 clean up move order
-
-MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT
-MOUSE_OUT event? - if put in gfx element, could probably remove mouse handling stuff from textlink
 
 7 & 1 = chalice?
 
 consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
-
-
 
 add additional char maps
   person
