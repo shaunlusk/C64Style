@@ -15,7 +15,6 @@ demos
 better docs on events?
 
 documentation
-  GfxLayer
   ImageElement
   ImageRenderer
   ImageSprite
@@ -36,7 +35,6 @@ documentation
   Queue
   UniquePriorityQueue
   Utils
-generate html files
 
 doc done:
   CharacterMap
@@ -48,6 +46,7 @@ doc done:
   EventType
   GfxElement
   GfxElementZIndexComparable
+  GfxLayer
 
 clean up move order
 

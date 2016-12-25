@@ -1,6 +1,34 @@
-var C64Style = C64Style || {};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: GfxLayer.js</title>
 
-/** Graphics layer.
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: GfxLayer.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
+
+/** Graphics layer
 * Generally, the use of C64Style.Screen.createLayer("GfxLayer") is preferred over creating layer by hand.
 * @constructor
 * @param {C64Style.Screen} screenContext The parent screen for this layer.
@@ -61,24 +89,24 @@ C64Style.GfxLayer.prototype.removeElement = function(element) {
 /** Update the layer.
 * Calls update on each element.
 * Checks for elements colliding with the layer boundary and emits events accordingly:
-* <ul>
-* <li>C64Style.EventType.ELEMENT_HIT_LEFT_EDGE</li>
-* <li>C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE</li>
-* <li>C64Style.EventType.ELEMENT_HIT_TOP_EDGE</li>
-* <li>C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE</li>
-* </ul>
+* &lt;ul>
+* &lt;li>C64Style.EventType.ELEMENT_HIT_LEFT_EDGE&lt;/li>
+* &lt;li>C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE&lt;/li>
+* &lt;li>C64Style.EventType.ELEMENT_HIT_TOP_EDGE&lt;/li>
+* &lt;li>C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE&lt;/li>
+* &lt;/ul>
 * The data for these events consists of:
-* <ul>
-* <li>element : The element that hit the border</li>
-* <li>layer : This layer</li>
-* </ul>
+* &lt;ul>
+* &lt;li>element : The element that hit the border&lt;/li>
+* &lt;li>layer : This layer&lt;/li>
+* &lt;/ul>
 * @param {number} time The current time (milliseconds)
 * @param {number} diff The difference between the last time and the current time  (milliseconds)
 */
 C64Style.GfxLayer.prototype.update = function(time,diff) {
   var dirtyElement;
   var i;
-  for (i = 0; i < this._elements.length; i++) {
+  for (i = 0; i &lt; this._elements.length; i++) {
       dirtyElement = this._elements[i].update(time,diff);
       if (dirtyElement) {
         this._dirtyElements.push(this._elements[i].getZIndexComparable());
@@ -91,13 +119,13 @@ C64Style.GfxLayer.prototype.update = function(time,diff) {
 
 /** @private */
 C64Style.GfxLayer.prototype._checkBorderCollision = function(element,time) {
-  if (element.getCollisionBoxX() <= 0) {
+  if (element.getCollisionBoxX() &lt;= 0) {
     this.getScreenContext().notify(new C64Style.Event(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, {layer:this, element:element}, time));
   }
   if (element.getCollisionBoxX() + element.getCollisionBoxWidth() > this.getCanvas().width) {
     this.getScreenContext().notify(new C64Style.Event(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, {layer:this, element:element}, time));
   }
-  if (element.getCollisionBoxY() <= 0) {
+  if (element.getCollisionBoxY() &lt;= 0) {
     this.getScreenContext().notify(new C64Style.Event(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, {layer:this, element:element}, time));
   }
   if (element.getCollisionBoxY() + element.getCollisionBoxHeight() > this.getCanvas().height) {
@@ -108,16 +136,16 @@ C64Style.GfxLayer.prototype._checkBorderCollision = function(element,time) {
 /** @private */
 C64Style.GfxLayer.prototype._handleCollisions = function() {
   var element1, element2, j;
-  for (i = 0; i < this._elements.length - 1; i++) {
+  for (i = 0; i &lt; this._elements.length - 1; i++) {
     element1 = this._elements[i];
-    for (j = i+1; j < this._elements.length; j++) {
+    for (j = i+1; j &lt; this._elements.length; j++) {
       element2 = this._elements[j];
 
       this._collisionCheckElementsIfNeeded(element1, element2);
     }
 
     // var removedKeys = Object.keys(this._removedElements);
-    // for (j = 0; j < removedKeys.length; j++) {
+    // for (j = 0; j &lt; removedKeys.length; j++) {
     //   key = removedKeys[j];
     //   element2 = this._removedElements[key];
     //
@@ -151,7 +179,7 @@ C64Style.GfxLayer.prototype._updateElementOnCollision = function(element) {
 C64Style.GfxLayer.prototype.render = function(time,diff) {
   var i;
 
-  for (i = 0; i < this._dirtyElements.size(); i++) {
+  for (i = 0; i &lt; this._dirtyElements.size(); i++) {
     this._dirtyElements.getByIndex(i).getElement().clear(time,diff);
   }
 
@@ -178,7 +206,30 @@ C64Style.GfxLayer.prototype._cleanUp = function() {
 * @param {C64Style.Event} event
 */
 C64Style.GfxLayer.prototype.handleMouseEvent = function(event) {
-  for (var i = 0; i < this._elements.length; i++) {
+  for (var i = 0; i &lt; this._elements.length; i++) {
     this._elements[i].handleMouseEvent(event);
   }
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 24 2016 21:24:00 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
