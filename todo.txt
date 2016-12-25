@@ -15,7 +15,6 @@ demos
 better docs on events?
 
 documentation
-  ImageElement
   ImageRenderer
   ImageSprite
   Layer
@@ -47,6 +46,7 @@ doc done:
   GfxElement
   GfxElementZIndexComparable
   GfxLayer
+  ImageElement
 
 clean up move order
 
