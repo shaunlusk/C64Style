@@ -28,6 +28,42 @@
         <article>
             <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
+/** Animated element that displays images frames in succession.&lt;br />
+* &lt;b>Extends&lt;/b> {@link C64Style.Sprite}, extends {@link C64Style.GfxElement}&lt;br />
+* Uses {@link C64Style.ImageSpriteFrame} for its frames.
+* @constructor
+* @param {C64Style.Screen} screenContext The parent screen
+* @param {C64Style.GfxLayer} parentLayer The parent layer.
+* @param {Object} props The properties for this ImageSprite.
+*   from GfxElement:
+*   &lt;ul>
+*     &lt;li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>hidden - boolean - Whether to hide this element.&lt;/li>
+*     &lt;li>x - number - The X coordinate for this element.&lt;/li>
+*     &lt;li>y - number - The Y coordinate for this element.&lt;/li>
+*     &lt;li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).&lt;/li>
+*   &lt;/ul>
+*   from Sprite:
+*   &lt;ul>
+*     &lt;li>frames - Array - Optional. An array of C64Style.AnimationFrame's. Default: empty array
+*     &lt;li>ttl - number - Optional. Time-to-live.  The time (milliseconds) to continue the Sprites animation.  Default: -1 (unlimited time)
+*     &lt;li>loop - boolean - Optional.  Whether to loop the animation or not. Default: true.
+*     &lt;li>loopsToLive - integer - Optional. If loop is true, the number of loops to execute.  Default: -1 (unlimited loops)
+*     &lt;li>freezeFrameIdx - integer - Optional.
+*        When animation completes, switch to the frame indicated by the freeze frame index
+*        (referring to the index of the frame in the frames array). Default: -1 (don't change frames when animation stops, stay with the final frame)
+*   &lt;/ul>
+*   for ImageSprite:
+*   &lt;ul>
+*     &lt;li>image - Image - the image to pull animation frames from.&lt;/li>
+*     &lt;li>width - number - the width of the Sprite&lt;/li>
+*     &lt;li>height - number - the height of the Sprite&lt;/li>
+*     &lt;li>imageRenderer - {@link C64Style.ImageRenderer} - Optional.  The ImageRenderer that will draw on the canvas.
+*       If not provided, this element will create one.
+*       If using multiple ImageElement's or ImageSprite's it is good practice to create a single ImageRenderer and pass the reference to each element via this property.&lt;/li>
+*   &lt;/ul>
+*/
 C64Style.ImageSprite = function(screenContext, parentLayer, props) {
   props = props || {};
   C64Style.Sprite.call(this, screenContext, parentLayer, props);
@@ -42,11 +78,26 @@ C64Style.ImageSprite = function(screenContext, parentLayer, props) {
 C64Style.ImageSprite.prototype = new C64Style.Sprite();
 C64Style.ImageSprite.prototype.constructor = C64Style.ImageSprite;
 
+/** Return the source image.
+* @returns {Image}
+*/
 C64Style.ImageSprite.prototype.getImage = function() {return this._image;};
+
+/** Returns the Sprite width.
+* @returns {number}
+*/
 C64Style.ImageSprite.prototype.getWidth = function() {return this._width;};
+
+/** Returns the Sprite height.
+* @returns {number}
+*/
 C64Style.ImageSprite.prototype.getHeight = function() {return this._height;};
 
-/** @override
+/** Render the specified frame.
+* @override
+* @param {number} time The current time (milliseconds).
+* @param {number} diff The difference between the previous render cycle and the current cycle (milliseconds).
+* @param {C64Style.AnimationFrame} frame The C64Style.ImageSpriteFrame to be rendered.
 */
 C64Style.ImageSprite.prototype.renderFrame = function(time, diff, frame) {
 
@@ -66,6 +117,17 @@ C64Style.ImageSprite.prototype.renderFrame = function(time, diff, frame) {
   );
 };
 
+/** ImageSprite implementation of AnimationFrame.
+* @constructor
+* @params {Object} props Properties supported:
+* &lt;ul>
+*   &lt;li>duration - number - How long (milliseconds) to display this frame.
+*   &lt;li>sourceX - number - The starting x of the sub-section of the image for this frame.
+*   &lt;li>sourceY - number - The starting x of the sub-section of the image for this frame.
+*   &lt;li>sourceWidth - number - The width of the sub-section of the image for this frame.
+*   &lt;li>sourceHeight - number - The height of the sub-section of the image for this frame.
+* &lt;/ul>
+*/
 C64Style.ImageSpriteFrame = function(props) {
   props = props || {};
   C64Style.AnimationFrame.call(this);
@@ -78,12 +140,30 @@ C64Style.ImageSpriteFrame = function(props) {
 C64Style.ImageSpriteFrame.prototype = new C64Style.AnimationFrame();
 C64Style.ImageSpriteFrame.prototype.callback = C64Style.ImageSpriteFrame;
 
-/** @override */
+/** Return the duration of this frame.
+* @override
+* @returns {number}
+*/
 C64Style.ImageSpriteFrame.prototype.getDuration = function() {return this._duration;};
 
+/** Return the starting x point on the source Image for this frame
+* @returns {number}
+*/
 C64Style.ImageSpriteFrame.prototype.getSourceX = function() {return this._sx;};
+
+/** Return the starting y point on the source Image for this frame
+* @returns {number}
+*/
 C64Style.ImageSpriteFrame.prototype.getSourceY = function() {return this._sy;};
+
+/** Return the width of the subsection of the source Image for this frame
+* @returns {number}
+*/
 C64Style.ImageSpriteFrame.prototype.getSourceWidth = function() {return this._sWidth;};
+
+/** Return the height of the subsection of the source Image for this frame
+* @returns {number}
+*/
 C64Style.ImageSpriteFrame.prototype.getSourceHeight = function() {return this._sHeight;};
 </code></pre>
         </article>
@@ -95,13 +175,13 @@ C64Style.ImageSpriteFrame.prototype.getSourceHeight = function() {return this._s
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 24 2016 22:55:39 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Dec 25 2016 16:22:48 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

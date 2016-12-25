@@ -48,7 +48,7 @@
 
 
 <div class="description">
-    Graphics element that uses part or all of an Image.</br><b>Extends</b> <a href="C64Style.GfxElement.html">C64Style.GfxElement</a></br>It is good practice to have a single or few Images that have many tiles on themto make efficient use of memory and screen drawing. Using ImageElement, youcan treat tiles from the source image as discrete screen elements that can bemoved and interacted with.For animations, see <a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a>
+    Graphics element that uses part or all of an Image.<br /><b>Extends</b> <a href="C64Style.GfxElement.html">C64Style.GfxElement</a><br />It is good practice to have a single or few Images that have many tiles on themto make efficient use of memory and screen drawing. Using ImageElement, youcan treat tiles from the source image as discrete screen elements that can bemoved and interacted with.For animations, see <a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a>
 </div>
 
 
@@ -146,7 +146,7 @@
 
             
 
-            <td class="description last">The properties for this object:<ul><li>image - Image - The image to use for this element. Can be created via html (<img>) or javascript (new Image()).</li><li>sourceX - number - The x starting point of the desired subsection of the image<li>sourceY - number - The y starting point of the desired subsection of the image<li>sourceWidth - number - The width of the desired subsection of the image<li>sourceHeight - number - The height of the desired subsection of the image<li>width - number - The desired width of the ImageElement; if this differs from the source dimensions, the image will be stretched or shrunk accordingly</li><li>height - number - The desired height of the ImageElement; if this differs from the source dimensions, the image will be stretched or shrunk accordingly</li><li>imageRenderer - C64Style.ImageRenderer - Optional.  The ImageRenderer that will draw on the canvas.  If not provided, this element will create one.  If using multiple ImageElement's or ImageSprite's it is good practice to create a single ImageRenderer and pass the reference to each element via this property.</li></ul></td>
+            <td class="description last">The properties for this object.from C64Style.GfxElement:  <ul>    <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>    <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>    <li>hidden - boolean - Whether to hide this element.</li>    <li>x - number - The X coordinate for this element.</li>    <li>y - number - The Y coordinate for this element.</li>    <li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).</li>  </ul>for C64Style.ImageElement:<ul><li>image - Image - The image to use for this element. Can be created via html (&lt;img&gt;) or javascript (new Image()).</li><li>sourceX - number - The x starting point of the desired subsection of the image<li>sourceY - number - The y starting point of the desired subsection of the image<li>sourceWidth - number - The width of the desired subsection of the image<li>sourceHeight - number - The height of the desired subsection of the image<li>width - number - The desired width of the ImageElement; if this differs from the source dimensions, the image will be stretched or shrunk accordingly</li><li>height - number - The desired height of the ImageElement; if this differs from the source dimensions, the image will be stretched or shrunk accordingly</li><li>imageRenderer - <a href="C64Style.ImageRenderer.html">C64Style.ImageRenderer</a> - Optional.  The ImageRenderer that will draw on the canvas.  If not provided, this element will create one.  If using multiple ImageElement's or ImageSprite's it is good practice to create a single ImageRenderer and pass the reference to each element via this property.</li></ul></td>
         </tr>
 
     
@@ -187,7 +187,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line29">line 29</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -296,7 +296,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line62">line 62</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -396,7 +396,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line50">line 50</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -496,7 +496,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line82">line 82</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line92">line 92</a>
     </li></ul></dd>
     
 
@@ -596,7 +596,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line77">line 77</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -696,7 +696,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line67">line 67</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -796,7 +796,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line72">line 72</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -896,7 +896,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line56">line 56</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -1068,7 +1068,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line89">line 89</a>
+        <a href="ImageElement.js.html">ImageElement.js</a>, <a href="ImageElement.js.html#line99">line 99</a>
     </li></ul></dd>
     
 
@@ -1110,13 +1110,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="Required.html">Required</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 24 2016 22:55:39 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Dec 25 2016 16:22:49 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

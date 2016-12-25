@@ -31,7 +31,7 @@
     <p>
       <h2>Usage:</h2>
       <div class="code">
-        C64PixMapExtractor.bat imagePath outFilePath targetWidth targetHeight coerceToC64Palette useIdx</br>
+        C64PixMapExtractor.bat imagePath outFilePath targetWidth targetHeight coerceToC64Palette useIdx<br />
       </div>
     </p>
     <p>
@@ -49,27 +49,27 @@
       </ol>
     </p>
     <p>
-      <b>Example</b>:</br>
+      <b>Example</b>:<br />
       <div class="code">
         C64PixMapExtractor.bat C:\Pictures\luigiPalm.png c:\temp\testOut.txt 32 32 true false
       </div>
       This example uses luigiPalm.png as the input image, testOut.txt as the output file for the PixArray, Width and height 32x32 (will resize appropriately), coerces the colors to C64 colors, and uses the color values in the Pix entries.
     </p>
     <p>
-      <b>Output Format</b>:</br>
+      <b>Output Format</b>:<br />
       PixArrays are produced in the following format when color values are used:
       <div class="code">
-        [{"type":"PIXEL", "x":0, "y":0, "color":"rgb(229,234,234)"},</br>
-        {"type":"PIXEL", "x":1, "y":0, "color":"rgb(231,235,231)"},</br>
-        {"type":"PIXEL", "x":2, "y":0, "color":"rgb(212,215,210)"}]</br>
+        [{"type":"PIXEL", "x":0, "y":0, "color":"rgb(229,234,234)"},<br />
+        {"type":"PIXEL", "x":1, "y":0, "color":"rgb(231,235,231)"},<br />
+        {"type":"PIXEL", "x":2, "y":0, "color":"rgb(212,215,210)"}]<br />
       </div>
     </p>
     <p>
       And in the this format when index values are used:
       <div class="code">
-        [{"type":"PIXEL", "x":0, "y":0, "color":0},</br>
-        {"type":"PIXEL", "x":1, "y":0, "color":5},</br>
-        {"type":"PIXEL", "x":2, "y":0, "color":15}]</br>
+        [{"type":"PIXEL", "x":0, "y":0, "color":0},<br />
+        {"type":"PIXEL", "x":1, "y":0, "color":5},<br />
+        {"type":"PIXEL", "x":2, "y":0, "color":15}]<br />
       </div>
     </p>
     <p>

@@ -15,8 +15,6 @@ demos
 better docs on events?
 
 documentation
-  ImageRenderer
-  ImageSprite
   Layer
   MoveOrder
   PixElement
@@ -24,7 +22,6 @@ documentation
   PixRenderer
   PixSprite
   Screen
-  Sprite
   TextButton
   TextElement
   TextLayer
@@ -47,6 +44,9 @@ doc done:
   GfxElementZIndexComparable
   GfxLayer
   ImageElement
+  ImageRenderer
+  ImageSprite
+  Sprite
 
 clean up move order
 
