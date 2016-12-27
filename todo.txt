@@ -15,7 +15,6 @@ demos
 better docs on events?
 
 documentation
-  PixElement
   PixPathTypes
   PixRenderer
   PixSprite
@@ -47,6 +46,7 @@ doc done:
   Sprite
   Layer
   MoveOrder
+  PixElement
 
 7 & 1 = chalice?
 
