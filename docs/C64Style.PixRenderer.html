@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ImageRenderer</title>
+    <title>JSDoc: Class: PixRenderer</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ImageRenderer</h1>
+    <h1 class="page-title">Class: PixRenderer</h1>
 
     
 
@@ -29,7 +29,7 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="C64Style.html">C64Style</a>.</span>ImageRenderer</h2>
+            <span class="ancestors"><a href="C64Style.html">C64Style</a>.</span>PixRenderer</h2>
         
     
 </header>
@@ -41,14 +41,14 @@
 
     
 
-    <h4 class="name" id="ImageRenderer"><span class="type-signature"></span>new ImageRenderer<span class="signature">(screenScaleX, screenScaleY)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="PixRenderer"><span class="type-signature"></span>new PixRenderer<span class="signature">(screenScaleX, screenScaleY)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Draws images to a canvas.<br />Can be used to draw all or portions of images to a canvas.
+    Draws Pix Arrays to a canvas.
 </div>
 
 
@@ -100,7 +100,7 @@
 
             
 
-            <td class="description last">Horizontal scale of the C64Style.Screen</td>
+            <td class="description last">scale x of the screen</td>
         </tr>
 
     
@@ -123,7 +123,7 @@
 
             
 
-            <td class="description last">Vertical scale of the C64Style.Screen</td>
+            <td class="description last">scale y of the screen</td>
         </tr>
 
     
@@ -164,21 +164,12 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageRenderer.js.html">ImageRenderer.js</a>, <a href="ImageRenderer.js.html#line11">line 11</a>
+        <a href="PixRenderer.js.html">PixRenderer.js</a>, <a href="PixRenderer.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="C64Style.ImageElement.html">C64Style.ImageElement</a></li>
-        
-            <li><a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -273,7 +264,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageRenderer.js.html">ImageRenderer.js</a>, <a href="ImageRenderer.js.html#line47">line 47</a>
+        <a href="PixRenderer.js.html">PixRenderer.js</a>, <a href="PixRenderer.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -373,7 +364,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageRenderer.js.html">ImageRenderer.js</a>, <a href="ImageRenderer.js.html#line53">line 53</a>
+        <a href="PixRenderer.js.html">PixRenderer.js</a>, <a href="PixRenderer.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -522,7 +513,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageRenderer.js.html">ImageRenderer.js</a>, <a href="ImageRenderer.js.html#line60">line 60</a>
+        <a href="PixRenderer.js.html">PixRenderer.js</a>, <a href="PixRenderer.js.html#line61">line 61</a>
     </li></ul></dd>
     
 
@@ -671,7 +662,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageRenderer.js.html">ImageRenderer.js</a>, <a href="ImageRenderer.js.html#line67">line 67</a>
+        <a href="PixRenderer.js.html">PixRenderer.js</a>, <a href="PixRenderer.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -720,14 +711,14 @@
 
     
 
-    <h4 class="name" id="renderImage"><span class="type-signature"></span>renderImage<span class="signature">(context, image, sx, sy, sWidth, sHeight, x, y, width, height, imageScaleX, imageScaleY)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="renderPixPath"><span class="type-signature"></span>renderPixPath<span class="signature">(context, x, y, palette, pixPathScaleX, pixPathScaleY)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Draws an image or portion of an image to the canvas.
+    Render a pix path to a canvas.
 </div>
 
 
@@ -779,122 +770,7 @@
 
             
 
-            <td class="description last">The canvas to draw to.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>image</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Image</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Image reference, created by &lt;img&gt; or new Image();</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sx</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The x starting point of a subsection of the image to draw.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sy</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The y starting point of a subsection of the image to draw.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sWidth</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The width of a subsection of the image to draw.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sHeight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The height of a subsection of the image to draw.</td>
+            <td class="description last">The canvas context.</td>
         </tr>
 
     
@@ -917,7 +793,7 @@
 
             
 
-            <td class="description last">The target x position of the canvas to draw the image to.</td>
+            <td class="description last">The x location to draw</td>
         </tr>
 
     
@@ -940,20 +816,20 @@
 
             
 
-            <td class="description last">The target y position of the canvas to draw the image to.</td>
+            <td class="description last">The y location to draw</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>width</code></td>
+                <td class="name"><code>palette</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">array</span>
 
 
             
@@ -963,37 +839,14 @@
 
             
 
-            <td class="description last">The target width of the drawn image. If different than the dimensions of the image subsection, the image subsection will be stretched or shrunk.</td>
+            <td class="description last">the palette to use.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>height</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The target height of the drawn image. If different than the dimensions of the image subsection, the image subsection will be stretched or shrunk.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>imageScaleX</code></td>
+                <td class="name"><code>pixPathScaleX</code></td>
             
 
             <td class="type">
@@ -1009,14 +862,14 @@
 
             
 
-            <td class="description last">The amount to scale the drawn image horizontally.</td>
+            <td class="description last">x-scale</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>imageScaleY</code></td>
+                <td class="name"><code>pixPathScaleY</code></td>
             
 
             <td class="type">
@@ -1032,7 +885,7 @@
 
             
 
-            <td class="description last">The amount to scale the drawn image vertically.</td>
+            <td class="description last">y-scale</td>
         </tr>
 
     
@@ -1073,7 +926,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ImageRenderer.js.html">ImageRenderer.js</a>, <a href="ImageRenderer.js.html#line30">line 30</a>
+        <a href="PixRenderer.js.html">PixRenderer.js</a>, <a href="PixRenderer.js.html#line21">line 21</a>
     </li></ul></dd>
     
 

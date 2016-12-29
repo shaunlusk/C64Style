@@ -15,8 +15,6 @@ demos
 better docs on events?
 
 documentation
-  PixPathTypes
-  PixRenderer
   PixSprite
   Screen
   TextButton
@@ -47,6 +45,8 @@ doc done:
   Layer
   MoveOrder
   PixElement
+  PixPathTypes
+  PixRenderer
 
 7 & 1 = chalice?
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: PixPathTypes.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,60 +17,28 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: PixPathTypes.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1>C64Style</h1><h2>What is it?</h2><p>A framework for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.</p>
-<h2>What isn't it?</h2><p>C64Style is not an emulator.</p>
-<h2>How do I use it?</h2><h3>Basic Usage</h3><p>Create a div to hold the screen and its components:</p>
-<pre class="prettyprint source"><code>&lt;div id=&quot;content&quot;>
-&lt;/div></code></pre><p>Then setup your screen:</p>
-<pre class="prettyprint source lang-javascript"><code>// get the screen element
-var targetDiv = document.getElementById(&quot;content&quot;);
+        <article>
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
-// empty config = use defaults for everything
-var config = {};
-
-// create the screen
-screen = new C64Style.Screen(targetDiv, config);
-
-// call initialize on screen
-screen.initialize();
-
-// add a layer to draw to
-textLayer = screen.createLayer(&quot;TextLayer&quot;);
-
-// Write some text to the layer
-textLayer.writeText(&quot;Hello World&quot;, 0, 0, C64Style.Color.LIGHTBLUE);
-
-// Start rendering!
-screen.render();</code></pre></article>
+/** Types for PixPaths for PixElements and PixSprites.
+* @static
+* @enum
+*/
+C64Style.PixPathTypes = {
+  "PIXEL":"PIXEL",
+  "RECTANGLE":"RECTANGLE"
+};
+</code></pre>
+        </article>
     </section>
-
-
 
 
 
