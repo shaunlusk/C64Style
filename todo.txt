@@ -15,6 +15,7 @@ demos
 better docs on events?
 
 documentation
+  PixElement needs info on defaultPalette
   PixPathTypes
   PixRenderer
   PixSprite

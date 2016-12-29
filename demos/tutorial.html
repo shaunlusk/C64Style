@@ -1,0 +1,589 @@
+This tutorial assumes at least a basic working knowledge of HTML and Javascript.  
+
+First, let's get some basic page stuff out of the way.  Start your HTML page and import all the Javascript files:
+
+<html>
+<head>
+  <title>C64Style Tutorial - Alien Invasion</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixElement.js"></script>
+  <script type="text/javascript" src="../lib/Sprite.js"></script>
+  <script type="text/javascript" src="../lib/PixSprite.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+</head>
+
+You can also include any css files in the head if you want special page styling.
+Setup the page body:
+
+<body>
+  <h1>Tutorial - Alien Invasion</h1>
+  <div id="content"></div>
+</body>
+
+The "content" div will hold our C64 screen.
+
+So now, let's create a bare-bones screen:
+
+<script>
+var GameContext = GameContext || {};
+
+var config = {
+  "rows" : 25,
+  "cols" : 40,
+  "scaleX" : 2,
+  "scaleY" : 2
+};
+
+function initialize(targetDiv, config) {
+  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen.initialize();
+  GameContext.screen.render();
+}
+
+initialize(document.getElementById("content"), config);
+</script>
+
+And be sure to close your HTML tag.
+</html>
+
+If you save your html file and open it in the browser, it should look something like this:
+
+<IMAGE1>
+
+Pretty basic.
+Let's change the colors a bit on the screen.  We can add this to the config variable:
+
+var config = {
+  "rows" : 25,
+  "cols" : 40,
+  "scaleX" : 2,
+  "scaleY" : 2,
+  "backgroundColor" : C64Style.Color.BLACK,
+  "borderColor" : C64Style.Color.DARKGREY
+};
+
+You now have:
+
+<IMAGE2>
+
+Let's create a text layer and write to the screen.  You'll notice in the example above, we've created a GameContext variable in the global scope.  
+That is going to store all the variables and things that we create, so that we have easy access to them from anywhere (you could just put all the variables in the global scope, but this is a little cleaner).  You can already see that we create a 'screen' property, that is a reference to our C64 Screen.
+
+
+We'll do the same thing to add a text layer:
+
+function initialize(targetDiv, config) {
+  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen.initialize();
+
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
+
+  GameContext.screen.render();
+}
+
+This gives you:
+
+<IMAGE3>
+
+Not much going on so far.  Let's make things interesting by creating a space ship.  We'll use an ImageElement for this, and load up a png.
+We need to adjust a couple of things to accommodate the time it takes to load an image - we want to ensure that the image has finished loading before we start rendering the screen.
+
+At the bottom of your script, replace this:
+initialize(document.getElementById("content"), config);
+with this:
+
+GameContext.shipPng = new Image();
+GameContext.shipPng.src = "ship.png";
+GameContext.shipPng.onload = function() {
+	initialize(document.getElementById("content"), config);
+}
+This way, our initialization code is only called when the image is done.
+So we have our image loaded now, but we need a way to put it on our screen.
+
+
+Below the code that creates the text layer, let's add a graphics layer:
+
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
+
+  GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
+  
+Now it's time to create the element for the ship:
+
+  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+    image: GameContext.shipPng,
+    sourceX:0,
+    sourceY:0,
+    sourceWidth:32,
+    sourceHeight:32,
+    width:32,
+    height:32,
+    x:144,
+    y:160
+  });
+
+Then add the element to your graphics layer:
+
+  GameContext.gfxLayer.addElement(GameContext.shipElement);
+
+Your initialize function should look like this:
+
+function initialize(targetDiv, config) {
+  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen.initialize();
+
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
+
+  GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
+
+  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+    image: GameContext.shipPng,
+    sourceX:0,
+    sourceY:0,
+    sourceWidth:32,
+    sourceHeight:32,
+    width:32,
+    height:32,
+    x:144,
+    y:160
+  });
+
+  GameContext.gfxLayer.addElement(GameContext.shipElement);
+
+  GameContext.screen.render();
+}
+
+And your page should look like this:
+
+<IMAGE4>
+  
+Things are getting exciting!
+
+Let's add some aliens.
+Instead of using an image, let's create aliens using pix arrays.  This will let us use multiple palettes.
+We will use two sets of pix arrays and create a sprite.
+The code for the arrays is kind of long and uninteresting.  We'll load it from separate files.
+Add these two lines to your <head> section:
+
+  <script type="text/javascript" src="alienPix1.js"></script>
+  <script type="text/javascript" src="alienPix2.js"></script> 
+  
+These will load alienPix1 and alienPix2 into our GameContext.
+
+We want a bunch of aliens, so let's make an array for them after the code that adds the ship element:
+
+  GameContext.aliens = [];
+
+Set up our sprite frames:
+  var frame1 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix1, duration:200});
+  var frame2 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix2, duration:200});
+  
+  These reference the alienPix arrays we imported. duration tells us how long (milliseconds) to display each frame.
+  
+  Now let's use a loop to create the sprites and position them on the screen:
+  
+  var x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+      frames:[frame1,frame2],
+      x:x,
+      y:32,
+      defaultPalette: C64Style.Color.getDefaultPalette()
+    });
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+  
+ There is a lot going on there!  Notice that we are creating an array of frames using the frames we setup in the previous step.  
+ We are pulling in the default palette provided by the C64Style.Color enum.
+ Also notice we advance the x position each time we create and alien, and that we add the alien to both the GameContext.aliens array and to the gfxLayer.
+ 
+ If all went well, your screen ought to look like this:
+ 
+ <IMAGE5>
+ 
+ This is a static image; what you should see is some animated aliens.
+ 
+ Let's add another row of aliens.  We can do the same thing, but let's use a different palette.
+ 
+   var altPalette = [
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.YELLOW,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.RED,
+    C64Style.Color.LIGHTGREEN
+  ];
+  
+ Now we can just copy and paste the loop code, reset our x variable, bump the y position a little bit, and plugin the new palette:
+ 
+   x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+      frames:[frame1,frame2],
+      x:x,
+      y:48,
+      defaultPalette: altPalette
+    });
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+ 
+ (Hint for the pros: you could easily refactor this code into a function and avoid the duplication that we did here.)
+ 
+ Now you should have this:
+ 
+ <IMAGE6>
+ 
+ And your initialize function should look like this:
+ function initialize(targetDiv, config) {
+  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen.initialize();
+
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
+
+  GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
+
+  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+    image: GameContext.shipPng,
+    sourceX:0,
+    sourceY:0,
+    sourceWidth:32,
+    sourceHeight:32,
+    width:32,
+    height:32,
+    x:144,
+    y:160
+  });
+
+  GameContext.gfxLayer.addElement(GameContext.shipElement);
+
+  GameContext.aliens = [];
+  var frame1 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix1, duration:200});
+  var frame2 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix2, duration:200});
+  var x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+      frames:[frame1,frame2],
+      x:x,
+      y:32,
+      defaultPalette: C64Style.Color.getDefaultPalette()
+    });
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+
+  var altPalette = [
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.YELLOW,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.RED,
+    C64Style.Color.LIGHTGREEN
+  ];
+
+  x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+      frames:[frame1,frame2],
+      x:x,
+      y:48,
+      defaultPalette: altPalette
+    });
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+
+  GameContext.screen.render();
+}
+ 
+ So now we have some cool retro looking graphics.
+But it isn't a game just yet.  
+
+Let's make our ship move.  C64Style offers a couple of ways to handle moving elements.  In this case, we want to tie the movement of the ship to the arrow keys, 
+left and right, and keep the ship in the bounds of the screen.  To do this, we are going to add a couple of event handlers.  We want to know when the user 
+pushes a key down, and lets a key up; when the key is down, we want to be moving the ship, and when they let the key up, we want to cease moving the ship.
+If the key that was pressed isn't one we are using, we want it to have normal behavior for that key. So we add to our ever growing initialize function:
+
+  document.onkeydown = function(e) {
+    var preventDefault = false;
+    switch (e.key) {
+      case "ArrowLeft":
+        GameContext.shipMovingLeft = true;
+        break;
+      case "ArrowRight":
+        GameContext.shipMovingRight = true;
+        break;
+      default:
+        break;
+    }
+    if (preventDefault) event.preventDefault();
+    return !preventDefault;
+  }
+  document.onkeyup = function(e) {
+    var preventDefault = false;
+    switch (e.key) {
+      case "ArrowLeft":
+        GameContext.shipMovingLeft = false;
+        break;
+      case "ArrowRight":
+        GameContext.shipMovingRight = false;
+        break;
+      default:
+        break;
+    }
+    if (preventDefault) event.preventDefault();
+    return !preventDefault;
+  }
+
+  So, if the left key is pressed, we set a variable shipMovingLeft to true, and likewise for the right key.  If one of those keys is let up we set the ship moving variable to false.
+  
+  That's great, but we still need to move the ship.  Let's create a function to do that, outside of the initialize function..
+  
+GameContext.shipMoveRate = 1/6;
+function updateShip(event) {
+  var ship = GameContext.shipElement;
+  if (GameContext.shipMovingLeft && ship.getX() > 4) {
+    ship.setX(ship.getX() - event.data.diff * GameContext.shipMoveRate);
+  }
+  if (GameContext.shipMovingRight && ship.getX() < 284) {
+    ship.setX(ship.getX() + event.data.diff * GameContext.shipMoveRate);
+  }
+}
+	
+	For shorthand, this function assigns the GameContext.shipElement to a local variable.
+	I also set a variable called shipMoveRate, this will make it easier if we want to change it later.
+	So here you can see, if the ship is moving left, we will subtract the time difference (relative to the previous render cycle, more on this in a minute) multiplied by the shipMoveRate
+	from the current X location; if it is less than some (arbitrary) boundary (4) we keep it at that boundary.  We do something analogous for if the ship is moving right.
+	About the time difference: in general the browser will try to run the canvas at 60 frames per second; so when rendering we will find that the difference between the previous
+	render cycle and the current one is usually 15-16ms.  However, this may change if the last render cycle took to long, or if for some reason the browser thread was kept 
+	suspended longer. So, by factoring in the time difference, we can create smooth movement, even if there are small hiccups in the rate the browser updates the canvas.
+	
+	We get the time diff from an event that is passed into the function.
+	So, In order for this to work, we need to call this function from an event hook, specifically BEFORE_RENDER in the screen.	We can add this in the initialize function after our key event handlers.
+	
+  GameContext.screen.on("BEFORE_RENDER", function(e) {
+    updateShip(e);
+  });
+	
+  This calls the function before each render cycle, and passes a BEFORE_RENDER event.  
+  Now that our ship can move, we need to work on our aliens.  Orchestrating the aliens' movement is a little more complex.
+  In 'invaders' tradition, we want our aliens to move left or right, and to move down a little bit when they hit the edge of the screen.
+  Let's start by creating a function to set our aliens in motion:
+  
+  function setAliensMoving() {
+	  GameContext.aliens.forEach(function(alien) {
+		if (GameContext.alienMoveDirection === "RIGHT") {
+		  alien.setMoveRates(32,0);
+		} else {
+		  alien.setMoveRates(-32,0);
+		}
+	  });
+	}
+
+	This will give each of our aliens a movement rate, depending on the move direction.  We haven't set the move direction anywhere yet, so let's do that, and call our new function.
+	Back in our initialize function, between our keyboard event handling code and our before-render handling code we can add:
+	
+	document.onkeyup = function(e) {
+		// ... omitted for brevity ...
+	}
+
+  GameContext.alienMoveDirection = "RIGHT";
+  setAliensMoving();
+  
+  GameContext.screen.on("BEFORE_RENDER", function(e) {
+    updateShip(e);
+  });
+  
+  Now if we reload our game, we should see the aliens move to the right and shortly disappear of the right side of the screen.
+  We need a way to check if any of our aliens are near the edge of the screen, and if so, make all the aliens move down a little bit.
+  So let's create a function that checks the position of all the aliens and return whether or not any of them are touching a particular boundary:
+  
+  function anyAlienAtX(boundary) {
+	  var result = false;
+	  GameContext.aliens.forEach(function(alien) {
+		if (alien.getX() <= boundary && alien.getX() + alien.getWidth() >= boundary) result = true;
+	  });
+	  return result;
+	}
+	If the boundary argument falls between any alien's x coordinate and the alien's right edge coordinate (x + width), then we return true.
+	Now we need a place to call that, and to handle things when it returns true.  When it is true, we need to move the aliens down.  We'll make another function:
+	
+	function updateAliens(event) {
+	  if (!GameContext.aliensMovingDown &&
+		((anyAlienAtX(4) && GameContext.alienMoveDirection === "LEFT") || (anyAlienAtX(316) && GameContext.alienMoveDirection ==="RIGHT"))) {
+		moveAliensDown();
+	  }
+	}
+	Only a few lines, but there is a lot going on here.  You can see the boundary checks (anyAlienAtX(4) and anyAlienAtX(316)) are coupled with a check of our movement direction, 
+	and with a check whether the aliens are moving down (we haven't defined this yet, but we will soon).
+	The logic here is that we only want this to trigger if we are moving toward the right wall and hit our boundary, or moving toward the left wall and hit our boundary.  
+	We don't want to trigger this if the aliens are moving away from the wall, or if they are moving down.  
+	In the case that these conditions are true, we want to move our aliens down.  Here's a function for that:
+	
+	function moveAliensDown() {
+	  GameContext.aliens.forEach(function(alien) {
+		alien.moveTo(alien.getX(), alien.getY() + 16, 1500);
+		alien.setMoveRates(0,0);
+	  });
+	  GameContext.aliensMovingDown = true;
+	}
+	
+	This does a couple of things.  We give each alien a specific destination: its current x coordinate (no change) and an incremental amount over it's current y coordinate.  
+	This move will run over the course of 1.5 seconds.  
+	On the next line we are setting our movement rates to zero.  This may seem counter intuitive, but it is important to understand that movement rates and moveTo instructions
+	are not mutually exclusive; however, movement as a result of moveTo instructions supercedes movement caused by move rates (basically, if you have both running, you will only see the 
+	movement caused by moveTo, until it completes; then the move rates will take effect again).
+	Once we've set our aliens moving down, we set the flag to indicate that they are moving down.
+	Speaking of which it is probably a good idea to give that flag an initial value before the action starts.  Back in our init code, add this:
+	
+	  GameContext.aliensMovingDown = false;
+	  GameContext.alienMoveDirection = "RIGHT";
+	  setAliensMoving();
+	
+	So now we have the instruction to move aliens down when they are near the edges of the screen.  We need to make this check every render cycle.  We can add to our before-render event handler:
+	
+	  GameContext.screen.on("BEFORE_RENDER", function(e) {
+		updateShip(e);
+		updateAliens(e);
+	  });
+  
+	So that's great.  If you run this now, you will see your aliens move to the right edge of the screen, move down when they hit it, and then... just stop.
+	So we need to send them back the other direction when all the aliens have completed their downward movement.
+	We'll create a function to handle this:
+	
+	function alienStoppedMoving() {
+	  GameContext.alienCounter++;
+	  if (GameContext.alienCounter === GameContext.aliens.length - 1)  {
+		GameContext.aliensMovingDown = false;
+		GameContext.alienCounter = 0;
+		if (GameContext.alienMoveDirection === "RIGHT") {
+		  GameContext.alienMoveDirection = "LEFT";
+		} else {
+		  GameContext.alienMoveDirection = "RIGHT";
+		}
+		setAliensMoving();
+	  }
+	}
+	
+	We'll be calling this each time that an alien stops moving, and we only want to set them moving again after all the aliens have stopped.  So we keep a counter,
+	and when all aliens are accounted for, we take action.  They are no longer moving down, so we can set that flag false.  And we'll need to reset our counter.
+	Then we check the last direction they were moving and switch it: if they were moving right, we send them left, and vice versa.  Once that's done, we call our setAliensMoving()
+	function to get them moving again.
+	
+	Before we forget, we referenced an alienCounter variable that we hadn't yet defined.  Let's do that now, in the same place we initialize the other alien stuff:
+	  GameContext.aliensMovingDown = false;
+	  GameContext.alienMoveDirection = "RIGHT";
+	  GameContext.alienCounter = 0;
+	  setAliensMoving();
+	  
+	Now, we need to find a way to call this when the aliens stop moving.  There is an event handler specifically for this purpose: ELEMENT_STOPPED_MOVING.  We can attach a handler
+	either at the screen level (called anytime any element stops moving) or attach it to individual elements.  We don't really need to distinguish between aliens, so we can just attach it at the screen level.
+	We can put this after our other event handler:
+	
+	  GameContext.screen.on("BEFORE_RENDER", function(e) {
+		updateShip(e);
+		updateAliens(e);
+	  });
+	
+	  GameContext.screen.on("ELEMENT_STOPPED_MOVING", function(e) {
+		alienStoppedMoving(e);
+	  });
+	  
+	  Side note: Due to the way we are moving our ship (directly calculating and setting XY values), movement is not detected, so moving the ship will not trigger
+	  ELEMENT_STARTED_MOVING or ELEMENT_STOPPED_MOVING events.  If we had chosen a different method of moving the ship, either through moveTo or setMoveRates, then 
+	  if we attached our handler to the screen we would have to check if the element had stopped was an alien, or the ship.  Alternatively, we could have attached the handler to
+	  each alien and not to the ship, then we could be sure that any time that function was called it was being called for an alien.
+	  
+	  Now we are really getting somewhere! Our ship moves in response to arrow keys, and our aliens creep steadily forward.  Let's add some bullets for our spaceship.
+	  After we declare GameContext, add this line:
+	  
+	  GameContext.bulletPix = [{"type":"RECTANGLE", "x":0, "y":0, "width":2, "height": 6, "color":C64Style.Color.WHITE}];
+	  
+	  We can create an element for it in our init function, right after we create our ship:
+	  
+	  ...
+	    GameContext.gfxLayer.addElement(GameContext.shipElement);
+
+	  GameContext.bulletElement = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
+		hidden:true,
+		pixPathArray: GameContext.bulletPix,
+		defaultPalette: C64Style.Color.getDefaultPalette()
+	  });
+	  GameContext.gfxLayer.addElement(GameContext.bulletElement);
+	  ...
+	  
+	  Notice that we set it hidden to start with.  We only want to display it when the ship fires it.  To make it fire, let's add an event handler for when the spacebar is pressed.
+	  We can piggy back off our existing onkeydown handler:
+	    document.onkeydown = function(e) {
+    var preventDefault = false;
+    switch (e.key) {
+      case "ArrowLeft":
+        GameContext.shipMovingLeft = true;
+        break;
+      case "ArrowRight":
+        GameContext.shipMovingRight = true;
+        break;
+      case " ":
+        fireBullet();
+        break;
+      default:
+        break;
+    }
+    if (preventDefault) event.preventDefault();
+    return !preventDefault;
+  }
+  
+  And then create the referenced function:
+  
+  function fireBullet() {
+	  GameContext.bulletElement.setX(GameContext.shipElement.getX() + 15);
+	  GameContext.bulletElement.setY(154);
+	  GameContext.bulletElement.show();
+	  GameContext.bulletElement.setMoveRates(0, -90);
+	}
+	
+	We need to remove the bullet if it hits the top edge of the screen.  We can just leave it wherever it is, but hide it and stop it's move rates:
+	function removeBullet() {
+	  GameContext.bulletElement.hide();
+	  GameContext.bulletElement.setMoveRates(0, 0);
+	}
+	
+	To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event:
+	  GameContext.screen.on("ELEMENT_HIT_TOP_EDGE", function(e) {
+		removeBullet();
+	  });
+	  
+	  Since this is the only element that will hit the top of the screen, we can take a shortcut and not check which element hit the top of the screen.
+	  
+	  

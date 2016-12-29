@@ -1,0 +1,274 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style Tutorial - Alien Invasion</title>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/EventType.js"></script>
+  <script type="text/javascript" src="../lib/Event.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
+  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../lib/GfxElement.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixElement.js"></script>
+  <script type="text/javascript" src="../lib/ImageRenderer.js"></script>
+  <script type="text/javascript" src="../lib/ImageElement.js"></script>
+  <script type="text/javascript" src="../lib/Sprite.js"></script>
+  <script type="text/javascript" src="../lib/PixSprite.js"></script>
+  <script type="text/javascript" src="../lib/ImageSprite.js"></script>
+  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="alienPix1.js"></script>
+  <script type="text/javascript" src="alienPix2.js"></script>
+</head>
+<body>
+  <h1>Tutorial - Alien Invasion</h1>
+  <div id="content"></div>
+</body>
+<script>
+var GameContext = GameContext || {};
+GameContext.bulletPix = [{"type":"RECTANGLE", "x":0, "y":0, "width":2, "height": 6, "color":C64Style.Color.WHITE}];
+GameContext.score = 0;
+
+var config = {
+  "rows" : 25,
+  "cols" : 40,
+  "scaleX" : 2,
+  "scaleY" : 2,
+  "backgroundColor" : C64Style.Color.BLACK,
+  "borderColor" : C64Style.Color.DARKGREY
+};
+
+function initialize(targetDiv, config) {
+  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen.initialize();
+
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
+
+  GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
+
+  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+    image: GameContext.shipPng,
+    sourceX:0,
+    sourceY:0,
+    sourceWidth:32,
+    sourceHeight:32,
+    width:32,
+    height:32,
+    x:144,
+    y:160
+  });
+
+  GameContext.gfxLayer.addElement(GameContext.shipElement);
+
+  GameContext.bulletElement = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
+    hidden:true,
+    pixPathArray: GameContext.bulletPix,
+    defaultPalette: C64Style.Color.getDefaultPalette()
+  });
+  GameContext.gfxLayer.addElement(GameContext.bulletElement);
+
+  GameContext.aliens = [];
+  var frame1 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix1, duration:200});
+  var frame2 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix2, duration:200});
+  var x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+      frames:[frame1,frame2],
+      x:x,
+      y:32,
+      defaultPalette: C64Style.Color.getDefaultPalette()
+    });
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+
+  var altPalette = [
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.YELLOW,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.RED,
+    C64Style.Color.LIGHTGREEN
+  ];
+
+  x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+      frames:[frame1,frame2],
+      x:x,
+      y:48,
+      defaultPalette: altPalette
+    });
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+
+  document.onkeydown = function(e) {
+    var preventDefault = false;
+    switch (e.key) {
+      case "ArrowLeft":
+        GameContext.shipMovingLeft = true;
+        break;
+      case "ArrowRight":
+        GameContext.shipMovingRight = true;
+        break;
+      case " ":
+        fireBullet();
+        break;
+      default:
+        break;
+    }
+    if (preventDefault) event.preventDefault();
+    return !preventDefault;
+  }
+  document.onkeyup = function(e) {
+    var preventDefault = false;
+    switch (e.key) {
+      case "ArrowLeft":
+        GameContext.shipMovingLeft = false;
+        break;
+      case "ArrowRight":
+        GameContext.shipMovingRight = false;
+        break;
+      default:
+        break;
+    }
+    if (preventDefault) event.preventDefault();
+    return !preventDefault;
+  }
+
+  GameContext.aliensMovingDown = false;
+  GameContext.alienMoveDirection = "RIGHT";
+  GameContext.alienCounter = 0;
+  setAliensMoving();
+
+  GameContext.screen.on("BEFORE_RENDER", function(e) {
+    updateShip(e);
+    updateAliens(e);
+  });
+
+  GameContext.screen.on("ELEMENT_STOPPED_MOVING", function(e) {
+    alienStoppedMoving(e);
+  });
+
+  GameContext.screen.on("ELEMENT_HIT_TOP_EDGE", function(e) {
+    removeBullet();
+  });
+
+  GameContext.screen.on("ELEMENT_COLLISION", function(e) {
+    if (e.data.element1.getId() === GameContext.bulletElement.getId()) {
+      console.log("killed alien on element2");
+      killAlien(e.data.element2);
+    } else if (e.data.element2.getId() === GameContext.bulletElement.getId()) {
+      console.log("killed alien on element1");
+      killAlien(e.data.element1);
+    }
+  });
+
+  GameContext.screen.render();
+}
+
+GameContext.shipMoveRate = 1/6;
+function updateShip(event) {
+  var ship = GameContext.shipElement;
+  if (GameContext.shipMovingLeft && ship.getX() > 4) {
+    ship.setX(ship.getX() - event.data.diff * GameContext.shipMoveRate);
+  }
+  if (GameContext.shipMovingRight && ship.getX() < 284) {
+    ship.setX(ship.getX() + event.data.diff * GameContext.shipMoveRate);
+  }
+}
+
+function updateAliens(event) {
+  if (!GameContext.aliensMovingDown &&
+    ((anyAlienAtX(4) && GameContext.alienMoveDirection === "LEFT") || (anyAlienAtX(316) && GameContext.alienMoveDirection ==="RIGHT"))) {
+    moveAliensDown();
+  }
+}
+
+function anyAlienAtX(boundary) {
+  var result = false;
+  GameContext.aliens.forEach(function(alien) {
+    if (alien.getX() <= boundary && alien.getX() + alien.getWidth() >= boundary) result = true;
+  });
+  return result;
+}
+
+function moveAliensDown() {
+  GameContext.aliens.forEach(function(alien) {
+    alien.moveTo(alien.getX(), alien.getY() + 16, 1500);
+    alien.setMoveRates(0,0);
+  });
+  GameContext.aliensMovingDown = true;
+}
+
+function alienStoppedMoving() {
+  GameContext.alienCounter++;
+  if (GameContext.alienCounter === GameContext.aliens.length - 1)  {
+    GameContext.aliensMovingDown = false;
+    GameContext.alienCounter = 0;
+    if (GameContext.alienMoveDirection === "RIGHT") {
+      GameContext.alienMoveDirection = "LEFT";
+    } else {
+      GameContext.alienMoveDirection = "RIGHT";
+    }
+    setAliensMoving();
+  }
+}
+
+function setAliensMoving() {
+  GameContext.aliens.forEach(function(alien) {
+    if (GameContext.alienMoveDirection === "RIGHT") {
+      alien.setMoveRates(32,0);
+    } else {
+      alien.setMoveRates(-32,0);
+    }
+  });
+}
+
+function fireBullet() {
+  GameContext.bulletElement.setX(GameContext.shipElement.getX() + 15);
+  GameContext.bulletElement.setY(154);
+  GameContext.bulletElement.show();
+  GameContext.bulletElement.setMoveRates(0, -90);
+}
+
+function removeBullet() {
+  GameContext.bulletElement.setX(0);
+  GameContext.bulletElement.setY(0);
+  GameContext.bulletElement.hide();
+  GameContext.bulletElement.setMoveRates(0, 0);
+}
+
+function killAlien(alien) {
+  GameContext.score += 10;
+  GameContext.gfxLayer.removeElement(alien);
+  var idx = C64Style.linSearch(GameContext.aliens, alien, function(element,value){return element.getId() === value.getId();});
+  GameContext.aliens.splice(idx,1);
+  removeBullet();
+}
+
+GameContext.shipPng = new Image();
+GameContext.shipPng.src = "ship.png";
+GameContext.shipPng.onload = function() {
+	initialize(document.getElementById("content"), config);
+}
+</script>
+</html>
