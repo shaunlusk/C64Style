@@ -370,7 +370,7 @@ If the key that was pressed isn't one we are using, we want it to have normal be
   
   That's great, but we still need to move the ship.  Let's create a function to do that, outside of the initialize function..
   
-GameContext.shipMoveRate = 1/6;
+GameContext.shipMoveRate = 1/8;
 function updateShip(event) {
   var ship = GameContext.shipElement;
   if (GameContext.shipMovingLeft && ship.getX() > 4) {
@@ -404,9 +404,9 @@ function updateShip(event) {
   function setAliensMoving() {
 	  GameContext.aliens.forEach(function(alien) {
 		if (GameContext.alienMoveDirection === "RIGHT") {
-		  alien.setMoveRates(32,0);
+		  alien.setMoveRates(48,0);
 		} else {
-		  alien.setMoveRates(-32,0);
+		  alien.setMoveRates(-48,0);
 		}
 	  });
 	}
@@ -453,14 +453,14 @@ function updateShip(event) {
 	
 	function moveAliensDown() {
 	  GameContext.aliens.forEach(function(alien) {
-		alien.moveTo(alien.getX(), alien.getY() + 16, 1500);
+		alien.moveTo(alien.getX(), alien.getY() + 16, 1100);
 		alien.setMoveRates(0,0);
 	  });
 	  GameContext.aliensMovingDown = true;
 	}
 	
 	This does a couple of things.  We give each alien a specific destination: its current x coordinate (no change) and an incremental amount over it's current y coordinate.  
-	This move will run over the course of 1.5 seconds.  
+	This move will run over the course of 1.1 seconds.  
 	On the next line we are setting our movement rates to zero.  This may seem counter intuitive, but it is important to understand that movement rates and moveTo instructions
 	are not mutually exclusive; however, movement as a result of moveTo instructions supercedes movement caused by move rates (basically, if you have both running, you will only see the 
 	movement caused by moveTo, until it completes; then the move rates will take effect again).
@@ -570,7 +570,7 @@ function updateShip(event) {
 	  GameContext.bulletElement.setX(GameContext.shipElement.getX() + 15);
 	  GameContext.bulletElement.setY(154);
 	  GameContext.bulletElement.show();
-	  GameContext.bulletElement.setMoveRates(0, -90);
+	  GameContext.bulletElement.setMoveRates(0, -120);
 	}
 	
 	We need to remove the bullet if it hits the top edge of the screen.  We can just leave it wherever it is, but hide it and stop it's move rates:
@@ -586,4 +586,29 @@ function updateShip(event) {
 	  
 	  Since this is the only element that will hit the top of the screen, we can take a shortcut and not check which element hit the top of the screen.
 	  
+	  When the bullet hits one of the aliens, both the bullet and the alien need to be removed.  We can use the same function we created earlier for the bullet.
+	  The function for the aliens needs to be a little bit different:
 	  
+	  function killAlien(alien) {
+		  GameContext.gfxLayer.removeElement(alien);
+		  var idx = C64Style.linSearch(GameContext.aliens, alien, function(element,value){return element.getId() === value.getId();});
+		  GameContext.aliens.splice(idx,1);
+		  removeBullet();
+		}
+		
+	We remove the alien from the screen, and also remove it from our list of aliens in the game context.  
+	To call the function, we can add a collision event handler back in the initialization function:
+	
+	 GameContext.screen.on("ELEMENT_COLLISION", function(e) {
+		if (e.data.element1.getId() === GameContext.bulletElement.getId()) {
+		  killAlien(e.data.element2);
+		} else if (e.data.element2.getId() === GameContext.bulletElement.getId()) {
+		  killAlien(e.data.element1);
+		}
+	  });
+	  
+	  The collision event capture the elements involved and puts them in the event data.  We won't know which element was which, we just have to check.
+	  
+	  Now when the bullet hits an alien, it disappears.  Let's add score functionality.  Let's create a variable to hold the score, either before or in our initialization code:
+	  
+	  GameContext.score = 0;

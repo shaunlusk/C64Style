@@ -35,6 +35,7 @@
 <body>
   <h1>Tutorial - Alien Invasion</h1>
   <div id="content"></div>
+    <div id="buttons"><button onclick="GameContext.screen.setPaused(!GameContext.screen.isPaused());">Pause</button></div>
 </body>
 <script>
 var GameContext = GameContext || {};
@@ -174,10 +175,8 @@ function initialize(targetDiv, config) {
 
   GameContext.screen.on("ELEMENT_COLLISION", function(e) {
     if (e.data.element1.getId() === GameContext.bulletElement.getId()) {
-      console.log("killed alien on element2");
       killAlien(e.data.element2);
     } else if (e.data.element2.getId() === GameContext.bulletElement.getId()) {
-      console.log("killed alien on element1");
       killAlien(e.data.element1);
     }
   });
@@ -185,7 +184,7 @@ function initialize(targetDiv, config) {
   GameContext.screen.render();
 }
 
-GameContext.shipMoveRate = 1/6;
+GameContext.shipMoveRate = 1/8;
 function updateShip(event) {
   var ship = GameContext.shipElement;
   if (GameContext.shipMovingLeft && ship.getX() > 4) {
@@ -213,13 +212,14 @@ function anyAlienAtX(boundary) {
 
 function moveAliensDown() {
   GameContext.aliens.forEach(function(alien) {
-    alien.moveTo(alien.getX(), alien.getY() + 16, 1500);
+    alien.moveTo(alien.getX(), alien.getY() + 16, 1100);
     alien.setMoveRates(0,0);
   });
   GameContext.aliensMovingDown = true;
 }
 
-function alienStoppedMoving() {
+function alienStoppedMoving(event) {
+  if (event.data.element.isHidden()) return;
   GameContext.alienCounter++;
   if (GameContext.alienCounter === GameContext.aliens.length - 1)  {
     GameContext.aliensMovingDown = false;
@@ -236,9 +236,9 @@ function alienStoppedMoving() {
 function setAliensMoving() {
   GameContext.aliens.forEach(function(alien) {
     if (GameContext.alienMoveDirection === "RIGHT") {
-      alien.setMoveRates(32,0);
+      alien.setMoveRates(48,0);
     } else {
-      alien.setMoveRates(-32,0);
+      alien.setMoveRates(-48,0);
     }
   });
 }
@@ -247,12 +247,10 @@ function fireBullet() {
   GameContext.bulletElement.setX(GameContext.shipElement.getX() + 15);
   GameContext.bulletElement.setY(154);
   GameContext.bulletElement.show();
-  GameContext.bulletElement.setMoveRates(0, -90);
+  GameContext.bulletElement.setMoveRates(0, -120);
 }
 
 function removeBullet() {
-  GameContext.bulletElement.setX(0);
-  GameContext.bulletElement.setY(0);
   GameContext.bulletElement.hide();
   GameContext.bulletElement.setMoveRates(0, 0);
 }
