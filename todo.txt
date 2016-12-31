@@ -15,6 +15,7 @@ demos
 better docs on events?
 
 documentation
+  event changes in gfxelement, gfxLayer
   PixElement needs info on defaultPalette
   PixPathTypes
   PixRenderer

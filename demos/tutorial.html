@@ -196,8 +196,8 @@ We want a bunch of aliens, so let's make an array for them after the code that a
   GameContext.aliens = [];
 
 Set up our sprite frames:
-  var frame1 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix1, duration:200});
-  var frame2 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix2, duration:200});
+   GameContext.alienFrame1 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix1, duration:200});
+  GameContext.alienFrame2 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix2, duration:200});
   
   These reference the alienPix arrays we imported. duration tells us how long (milliseconds) to display each frame.
   
@@ -206,7 +206,7 @@ Set up our sprite frames:
   var x = 8;
   for (var i = 0; i < 8; i++) {
     var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
-      frames:[frame1,frame2],
+      frames:[GameContext.alienFrame1,GameContext.alienFrame2],
       x:x,
       y:32,
       defaultPalette: C64Style.Color.getDefaultPalette()
@@ -239,22 +239,51 @@ Set up our sprite frames:
     C64Style.Color.LIGHTGREEN
   ];
   
- Now we can just copy and paste the loop code, reset our x variable, bump the y position a little bit, and plugin the new palette:
+  In the PixArray, we only use colors 2, 6, and 7 from the default palette.  With our new palette, we change the colors at those indices, and set the rest to black (no special
+  reason to do this, just to make it more apparent those color indices aren't used.)  
+ We're doing basically the same thing again, but with a different palette.  Let's extract what we did before into a function:
  
-   x = 8;
+ function createAlien(x,y, palette) {
+  var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+    frames:[GameContext.alienFrame1,GameContext.alienFrame2],
+    x:x,
+    y:y,
+    defaultPalette: palette
+  });
+  return newAlien;
+}
+
+Then we can update the code we did before to look like this:
+  var x = 8;
   for (var i = 0; i < 8; i++) {
-    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
-      frames:[frame1,frame2],
-      x:x,
-      y:48,
-      defaultPalette: altPalette
-    });
+    var newAlien = createAlien(x, 32, C64Style.Color.getDefaultPalette());
     GameContext.aliens.push(newAlien);
     GameContext.gfxLayer.addElement(newAlien);
     x += 20;
   }
  
- (Hint for the pros: you could easily refactor this code into a function and avoid the duplication that we did here.)
+ 
+and we can just copy and paste that bit, reset our x variable, bump the y position a little bit, and plugin the new palette:
+ 
+  var altPalette = [
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.YELLOW,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.BLACK,
+    C64Style.Color.RED,
+    C64Style.Color.LIGHTGREEN
+  ];
+
+  x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = createAlien(x, 48, altPalette);
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+ 
  
  Now you should have this:
  
@@ -285,16 +314,11 @@ Set up our sprite frames:
   GameContext.gfxLayer.addElement(GameContext.shipElement);
 
   GameContext.aliens = [];
-  var frame1 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix1, duration:200});
-  var frame2 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix2, duration:200});
+  GameContext.alienFrame1 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix1, duration:200});
+  GameContext.alienFrame2 = new C64Style.PixSpriteFrame({pixArray:GameContext.alienPix2, duration:200});
   var x = 8;
   for (var i = 0; i < 8; i++) {
-    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
-      frames:[frame1,frame2],
-      x:x,
-      y:32,
-      defaultPalette: C64Style.Color.getDefaultPalette()
-    });
+    var newAlien = createAlien(x, 32, C64Style.Color.getDefaultPalette());
     GameContext.aliens.push(newAlien);
     GameContext.gfxLayer.addElement(newAlien);
     x += 20;
@@ -313,12 +337,7 @@ Set up our sprite frames:
 
   x = 8;
   for (var i = 0; i < 8; i++) {
-    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
-      frames:[frame1,frame2],
-      x:x,
-      y:48,
-      defaultPalette: altPalette
-    });
+    var newAlien = createAlien(x, 48, altPalette);
     GameContext.aliens.push(newAlien);
     GameContext.gfxLayer.addElement(newAlien);
     x += 20;
@@ -484,7 +503,7 @@ function updateShip(event) {
 	
 	function alienStoppedMoving() {
 	  GameContext.alienCounter++;
-	  if (GameContext.alienCounter === GameContext.aliens.length - 1)  {
+	  if (GameContext.alienCounter === GameContext.aliens.length)  {
 		GameContext.aliensMovingDown = false;
 		GameContext.alienCounter = 0;
 		if (GameContext.alienMoveDirection === "RIGHT") {
@@ -579,12 +598,11 @@ function updateShip(event) {
 	  GameContext.bulletElement.setMoveRates(0, 0);
 	}
 	
-	To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event:
-	  GameContext.screen.on("ELEMENT_HIT_TOP_EDGE", function(e) {
+	To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
+	  GameContext.bulletElement.on("ELEMENT_HIT_TOP_EDGE", function(e) {
 		removeBullet();
 	  });
 	  
-	  Since this is the only element that will hit the top of the screen, we can take a shortcut and not check which element hit the top of the screen.
 	  
 	  When the bullet hits one of the aliens, both the bullet and the alien need to be removed.  We can use the same function we created earlier for the bullet.
 	  The function for the aliens needs to be a little bit different:
@@ -599,7 +617,7 @@ function updateShip(event) {
 	We remove the alien from the screen, and also remove it from our list of aliens in the game context.  
 	To call the function, we can add a collision event handler back in the initialization function:
 	
-	 GameContext.screen.on("ELEMENT_COLLISION", function(e) {
+	 GGameContext.bulletElement.on("ELEMENT_COLLISION", function(e) {
 		if (e.data.element1.getId() === GameContext.bulletElement.getId()) {
 		  killAlien(e.data.element2);
 		} else if (e.data.element2.getId() === GameContext.bulletElement.getId()) {
@@ -607,8 +625,127 @@ function updateShip(event) {
 		}
 	  });
 	  
-	  The collision event capture the elements involved and puts them in the event data.  We won't know which element was which, we just have to check.
+	  The collision event capture the elements involved and puts them in the event data.  When we attach our handler to the element, element1 in the event data will always be
+	  the element we attached to, and element2 will always be the other element involved in the collision.
 	  
 	  Now when the bullet hits an alien, it disappears.  Let's add score functionality.  Let's create a variable to hold the score, either before or in our initialization code:
 	  
 	  GameContext.score = 0;
+	  
+	  To make things more interesting, let's give a different point value to the different colors of aliens.  We'll make the red ones worth 10 points and the blue ones worth 20.
+	  We can add this directly to the alien elements, in our createAlien() function:
+	  
+	  function createAlien(x,y, palette, scoreValue) {
+		  var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+			frames:[GameContext.alienFrame1,GameContext.alienFrame2],
+			x:x,
+			y:y,
+			defaultPalette: palette
+		  });
+		  newAlien.scoreValue = scoreValue;
+		  return newAlien;
+		}
+	  
+	  And update the initialization code appropriately:
+	  
+  var x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = createAlien(x, 32, C64Style.Color.getDefaultPalette(), 20);
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+...
+  x = 8;
+  for (var i = 0; i < 8; i++) {
+    var newAlien = createAlien(x, 48, altPalette, 10);
+    GameContext.aliens.push(newAlien);
+    GameContext.gfxLayer.addElement(newAlien);
+    x += 20;
+  }
+		 
+		Ideally, it would probably be better to create a new type of graphics element if we intend to store additional information in it, but this keeps things simpler for the tutorial.
+		Now we can add to our score when we kill an alien:
+		function killAlien(alien) {
+		  GameContext.score += alien.scoreValue;
+		  GameContext.gfxLayer.removeElement(alien);
+		  var idx = C64Style.linSearch(GameContext.aliens, alien, function(element,value){return element.getId() === value.getId();});
+		  GameContext.aliens.splice(idx,1);
+		  removeBullet();
+		}
+		
+		We can add the score place holder just after we added our other text:
+		  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+		  GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
+		  GameContext.textLayer.writeText("Score:", 1,24, C64Style.Color.WHITE);
+		  
+		Then create a function to write the score to the screen:
+		
+		function updateScore() {
+		  GameContext.textLayer.writeText(GameContext.score, 8, 24, C64Style.Color.WHITE);
+		}
+		
+		And then call that in our before-render handler:
+		  GameContext.screen.on("BEFORE_RENDER", function(e) {
+			updateShip(e);
+			updateAliens(e);
+			updateScore();
+		  });
+		  
+		We have a sort of playable game now. But let's make it more challenging - we can have the aliens shoot back.
+		Add a new pixArray:
+		GameContext.bulletPix = [{"type":"RECTANGLE", "x":0, "y":0, "width":2, "height": 6, "color":C64Style.Color.WHITE}];
+		GameContext.alienBullet = [{"type":"PIXEL","x":0,"y":0,"color":2},{"type":"PIXEL","x":1,"y":0,"color":2},{"type":"PIXEL","x":0,"y":1,"color":2},{"type":"PIXEL","x":0,"y":2,"color":2},{"type":"PIXEL","x":1,"y":2,"color":2},{"type":"PIXEL","x":1,"y":3,"color":2},{"type":"PIXEL","x":0,"y":4,"color":2},{"type":"PIXEL","x":0,"y":5,"color":2},{"type":"PIXEL","x":1,"y":5,"color":2},{"type":"PIXEL","x":1,"y":6,"color":2}];
+		
+		Create a function to create an alien bullet:
+		function createAlienBullet(x, y) {
+		  var bullet = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
+			pixPathArray: GameContext.alienBulletPix,
+			defaultPalette: C64Style.Color.getDefaultPalette(),
+			x:x,
+			y:y
+		  });
+		  return bullet;
+		}
+		
+		The x and y obviously tell us where to put the bullet.  We need some logic to tell us when and which alien will shoot.  We create:
+		function alienAttack() {
+		  if (GameContext.aliens.length === 0) return;
+		  var roll = Math.floor(Math.random() * 25);
+		  if (roll === 0) {
+			var alien = pickAlien();
+			var bullet = createAlienBullet(alien.getX() + 8, alien.getY() + 16);
+			GameContext.gfxLayer.addElement(bullet);
+			bullet.setMoveRates(0,135);
+		  }
+		}
+		
+		First we check that there aliens remaining.  We pick a random number to determine if some alien should shoot (Here we pick a random number 0-24. a higher range means shoot less often, a lower range means shoot more often); 
+		if our "roll" succeeds, we pick and alien, create our bullet, add it to the gfxLayer, and send it moving.
+		To figure out which alien does the shooting, we use this function:
+
+		function pickAlien() {
+		  var alienIdx = Math.floor(Math.random() * GameContext.aliens.length);
+		  return GameContext.aliens[alienIdx];
+		}
+		
+		Pretty straight forward - we pick a random alien.
+		
+		Now we need to call the alien attack function. We can add this to our before-render handler.  Anywhere should do fine, I added it second to last:
+		
+		  GameContext.screen.on("BEFORE_RENDER", function(e) {
+			updateShip(e);
+			updateAliens(e);
+			alienAttack();
+			updateScore();
+		  });
+		  
+		 The aliens fire bullets randomly now:
+		 <IMG7>
+		 
+		 But there is no danger to the ship yet, we must add that!
+		 
+		 Setup explosion:
+		 code to load
+		 
+		 code to create sprite
