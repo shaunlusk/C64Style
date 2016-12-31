@@ -190,6 +190,9 @@ function initialize(targetDiv, config) {
   });
 
   GameContext.shipElement.on("ELEMENT_COLLISION", function(e) {
+    if (e.data.element2.isAlien) {
+      killAlien(e.data.element2);
+    }
     blowUpShip();
   });
 
