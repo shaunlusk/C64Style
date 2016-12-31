@@ -25,6 +25,7 @@
   <script type="text/javascript" src="../lib/PixElement.js"></script>
   <script type="text/javascript" src="../lib/ImageRenderer.js"></script>
   <script type="text/javascript" src="../lib/ImageElement.js"></script>
+  <script type="text/javascript" src="../lib/TextElement.js"></script>
   <script type="text/javascript" src="../lib/Sprite.js"></script>
   <script type="text/javascript" src="../lib/PixSprite.js"></script>
   <script type="text/javascript" src="../lib/ImageSprite.js"></script>
@@ -43,6 +44,7 @@ GameContext.bulletPix = [{"type":"RECTANGLE", "x":0, "y":0, "width":2, "height":
 GameContext.alienBulletPix = [{"type":"PIXEL","x":0,"y":0,"color":2},{"type":"PIXEL","x":1,"y":0,"color":2},{"type":"PIXEL","x":0,"y":1,"color":2},{"type":"PIXEL","x":0,"y":2,"color":2},{"type":"PIXEL","x":1,"y":2,"color":2},{"type":"PIXEL","x":1,"y":3,"color":2},{"type":"PIXEL","x":0,"y":4,"color":2},{"type":"PIXEL","x":0,"y":5,"color":2},{"type":"PIXEL","x":1,"y":5,"color":2},{"type":"PIXEL","x":1,"y":6,"color":2}];
 GameContext.score = 0;
 GameContext.actionPaused = false;
+GameContext.shipsRemaining = 2;
 
 var config = {
   "rows" : 25,
@@ -60,6 +62,7 @@ function initialize(targetDiv, config) {
   GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
   GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
   GameContext.textLayer.writeText("Score:", 1, 24, C64Style.Color.WHITE);
+  GameContext.textLayer.writeText("Ships Remaining:", 22, 24, C64Style.Color.WHITE);
 
   GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
 
@@ -127,7 +130,7 @@ function initialize(targetDiv, config) {
   }
 
   document.onkeydown = function(e) {
-    if(GameContext.actionPaused) return false;
+    if(GameContext.actionPaused) return true;
     var preventDefault = false;
     switch (e.key) {
       case "ArrowLeft":
@@ -146,7 +149,7 @@ function initialize(targetDiv, config) {
     return !preventDefault;
   }
   document.onkeyup = function(e) {
-    if(GameContext.actionPaused) return false;
+    if(GameContext.actionPaused) return true;
     var preventDefault = false;
     switch (e.key) {
       case "ArrowLeft":
@@ -168,16 +171,14 @@ function initialize(targetDiv, config) {
   setAliensMoving();
 
   GameContext.screen.on("BEFORE_RENDER", function(e) {
-    if (GameContext.actionPaused) return false;
+    if (GameContext.actionPaused) return;
     updateShip(e);
     updateAliens(e);
     alienAttack();
     updateScore();
+    updateShipsRemaining();
+    checkVictoryCondition();
   });
-
-  // GameContext.screen.on("ELEMENT_STOPPED_MOVING", function(e) {
-  //   alienStoppedMoving(e);
-  // });
 
   GameContext.bulletElement.on("ELEMENT_HIT_TOP_EDGE", function(e) {
     removeBullet();
@@ -294,6 +295,11 @@ function updateScore() {
   GameContext.textLayer.writeText(GameContext.score, 8, 24, C64Style.Color.WHITE);
 }
 
+
+function updateShipsRemaining() {
+  GameContext.textLayer.writeText(GameContext.shipsRemaining, 39, 24, C64Style.Color.WHITE);
+}
+
 function alienAttack() {
   if (GameContext.aliens.length === 0) return;
   var roll = Math.floor(Math.random() * 25);
@@ -329,8 +335,13 @@ function blowUpShip() {
   GameContext.explosionElement.setX(GameContext.shipElement.getX());
   GameContext.explosionElement.setY(GameContext.shipElement.getY());
   GameContext.explosionElement.show();
+  GameContext.shipsRemaining--;
   pauseAction();
-  setTimeout(unpauseAction, 1000);
+  if (GameContext.shipsRemaining <  0) {
+    endGame(false);
+  } else {
+    setTimeout(unpauseAction, 1000);
+  }
 }
 
 function pauseAction() {
@@ -347,6 +358,40 @@ function unpauseAction() {
   GameContext.shipElement.show();
   GameContext.explosionElement.hide();
   setAliensMoving();
+}
+
+function checkVictoryCondition() {
+  if (GameContext.aliens.length === 0) {
+    pauseAction();
+    endGame(true);
+  }
+}
+
+function endGame(victory) {
+  var msg, color, bgColor;
+  if (victory) {
+    msg = "VICTORY!";
+    color = C64Style.Color.CYAN;
+    bgColor = C64Style.Color.BLUE;
+  } else {
+    msg = "FAILURE!";
+    GameContext.explosionElement.hide();
+    color = C64Style.Color.ORANGE;
+    bgColor = C64Style.Color.RED;
+  }
+  var scaleX = 3;
+  var scaleY = 3;
+  var x = ((C64Style.CELLWIDTH * config.cols) - (msg.length * C64Style.CELLWIDTH * scaleX)) / 2;
+  var msgElement = new C64Style.TextElement(GameContext.screen, GameContext.gfxLayer, {
+    text:msg,
+    color:color,
+    backgroundColor:bgColor,
+    scaleX:scaleX,
+    scaleY:scaleY,
+    y:50,
+    x:x
+  });
+  GameContext.gfxLayer.addElement(msgElement);
 }
 
 GameContext.shipPng = new Image();
