@@ -170,7 +170,7 @@ function initialize(targetDiv, config) {
   GameContext.alienCounter = 0;
   setAliensMoving();
 
-  GameContext.screen.on("BEFORE_RENDER", function(e) {
+  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
     if (GameContext.actionPaused) return;
     updateShip(e);
     updateAliens(e);
@@ -180,19 +180,22 @@ function initialize(targetDiv, config) {
     checkVictoryCondition();
   });
 
-  GameContext.bulletElement.on("ELEMENT_HIT_TOP_EDGE", function(e) {
+  GameContext.bulletElement.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
     removeBullet();
   });
 
-  GameContext.bulletElement.on("ELEMENT_COLLISION", function(e) {
+  GameContext.bulletElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
     if(e.data.element2.isAlien) {
        killAlien(e.data.element2);
     }
   });
 
-  GameContext.shipElement.on("ELEMENT_COLLISION", function(e) {
+  GameContext.shipElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
     if (e.data.element2.isAlien) {
       killAlien(e.data.element2);
+    } else {
+      // assume it is a bullet. be careful if there are other types of elements that the ship can collide with!
+      removeAlienBullet(e.data.element2);
     }
     blowUpShip();
   });
@@ -247,7 +250,6 @@ function moveAliensDown() {
 }
 
 function alienStoppedMoving(element) {
-  if (element.isHidden()) return;
   GameContext.alienCounter++;
   if (GameContext.alienCounter === GameContext.aliens.length)  {
     GameContext.aliensMovingDown = false;
@@ -295,7 +297,6 @@ function updateScore() {
   GameContext.textLayer.writeText(GameContext.score, 8, 24, C64Style.Color.WHITE);
 }
 
-
 function updateShipsRemaining() {
   GameContext.textLayer.writeText(GameContext.shipsRemaining, 39, 24, C64Style.Color.WHITE);
 }
@@ -308,6 +309,7 @@ function alienAttack() {
     var bullet = createAlienBullet(alien.getX() + 8, alien.getY() + 16);
     GameContext.gfxLayer.addElement(bullet);
     bullet.setMoveRates(0,135);
+    bullet.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));
   }
 }
 

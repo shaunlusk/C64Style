@@ -411,7 +411,7 @@ function updateShip(event) {
 	We get the time diff from an event that is passed into the function.
 	So, In order for this to work, we need to call this function from an event hook, specifically BEFORE_RENDER in the screen.	We can add this in the initialize function after our key event handlers.
 	
-  GameContext.screen.on("BEFORE_RENDER", function(e) {
+  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
 	
@@ -440,7 +440,7 @@ function updateShip(event) {
   GameContext.alienMoveDirection = "RIGHT";
   setAliensMoving();
   
-  GameContext.screen.on("BEFORE_RENDER", function(e) {
+  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
   
@@ -492,7 +492,7 @@ function updateShip(event) {
 	
 	So now we have the instruction to move aliens down when they are near the edges of the screen.  We need to make this check every render cycle.  We can add to our before-render event handler:
 	
-	  GameContext.screen.on("BEFORE_RENDER", function(e) {
+	  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
 		updateShip(e);
 		updateAliens(e);
 	  });
@@ -526,18 +526,14 @@ function updateShip(event) {
 	  GameContext.alienCounter = 0;
 	  setAliensMoving();
 	  
-	Now, we need to find a way to call this when the aliens stop moving.  There is an event handler specifically for this purpose: ELEMENT_STOPPED_MOVING.  We can attach a handler
-	either at the screen level (called anytime any element stops moving) or attach it to individual elements.  We don't really need to distinguish between aliens, so we can just attach it at the screen level.
-	We can put this after our other event handler:
-	
-	  GameContext.screen.on("BEFORE_RENDER", function(e) {
-		updateShip(e);
-		updateAliens(e);
+	Now, we need to find a way to call this when the aliens stop moving.  We can actually add this directly to our moveTo function call:
+	function moveAliensDown() {
+	  GameContext.aliens.forEach(function(alien) {
+		alien.moveTo(alien.getX(), alien.getY() + 16, 1100, alienStoppedMoving);
+		alien.setMoveRates(0,0);
 	  });
-	
-	  GameContext.screen.on("ELEMENT_STOPPED_MOVING", function(e) {
-		alienStoppedMoving(e);
-	  });
+	  GameContext.aliensMovingDown = true;
+	}
 	  
 	  Side note: Due to the way we are moving our ship (directly calculating and setting XY values), movement is not detected, so moving the ship will not trigger
 	  ELEMENT_STARTED_MOVING or ELEMENT_STOPPED_MOVING events.  If we had chosen a different method of moving the ship, either through moveTo or setMoveRates, then 
@@ -599,7 +595,7 @@ function updateShip(event) {
 	}
 	
 	To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
-	  GameContext.bulletElement.on("ELEMENT_HIT_TOP_EDGE", function(e) {
+	  GameContext.bulletElement.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
 		removeBullet();
 	  });
 	  
@@ -617,7 +613,7 @@ function updateShip(event) {
 	We remove the alien from the screen, and also remove it from our list of aliens in the game context.  
 	To call the function, we can add a collision event handler back in the initialization function:
 	
-	 GGameContext.bulletElement.on("ELEMENT_COLLISION", function(e) {
+	 GGameContext.bulletElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
 		if (e.data.element1.getId() === GameContext.bulletElement.getId()) {
 		  killAlien(e.data.element2);
 		} else if (e.data.element2.getId() === GameContext.bulletElement.getId()) {
@@ -686,7 +682,7 @@ function updateShip(event) {
 		}
 		
 		And then call that in our before-render handler:
-		  GameContext.screen.on("BEFORE_RENDER", function(e) {
+		  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
 			updateShip(e);
 			updateAliens(e);
 			updateScore();
@@ -733,43 +729,344 @@ function updateShip(event) {
 		
 		Now we need to call the alien attack function. We can add this to our before-render handler.  Anywhere should do fine, I added it second to last:
 		
-		  GameContext.screen.on("BEFORE_RENDER", function(e) {
+		  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
 			updateShip(e);
 			updateAliens(e);
 			alienAttack();
 			updateScore();
 		  });
 		  
+		  It's probably a good idea to cleanup bullets as they leave the bottom of the screen.
+		  
+		  	First let's get rid of the offending bullet:
+	
+			function removeAlienBullet(bullet) {
+			  GameContext.gfxLayer.removeElement(bullet);
+			}
+				 
+			This function is simple enough.  We pass in a bullet (a gfx element), and then we ask the gfxLayer to remove it.
+		  
+		  Then we can update alienAttack() to incorporate the functionality.
+		  
+		  function alienAttack() {
+		  if (GameContext.aliens.length === 0) return;
+		  var roll = Math.floor(Math.random() * 25);
+		  if (roll === 0) {
+			var alien = pickAlien();
+			var bullet = createAlienBullet(alien.getX() + 8, alien.getY() + 16);
+			GameContext.gfxLayer.addElement(bullet);
+			bullet.setMoveRates(0,135);
+			bullet.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));
+		  }
+		}
+		  
 		 The aliens fire bullets randomly now:
 		 <IMG7>
 		 
 		 But there is no danger to the ship yet, we must add that!
+		 I created an explosion animation for the ship: explosion.png.
 		 
-		 Setup explosion:
-		 code to load
+		 We'll need to load this much like we did the png for the ship.  but we now have two images that must load before we start the game, so we have to keep track
+		 and only initialize our code when all images complete.  So I created a function to handle that:
 		 
-		 code to create sprite
+		 GameContext.shipPng = new Image();
+			GameContext.shipPng.src = "ship.png";
+			GameContext.shipPng.onload = function() {
+			  checkImagesLoaded();
+			}
+
+			GameContext.explosionPng = new Image();
+			GameContext.explosionPng.src = "explosion.png";
+			GameContext.explosionPng.onload = function() {
+			  checkImagesLoaded();
+			}
+
+			var imagesLoadedCount = 0;
+			var imagesToLoad = 2;
+			function checkImagesLoaded() {
+			  imagesLoadedCount++;
+			  if (imagesLoadedCount === imagesToLoad) {
+				initialize(document.getElementById("content"), config);
+			  }
+			}
+			
+		You'll notice that instead of calling initialize directly from the onload method of the image, I now call checkImagesLoaded() instead, and then count to see if all have loaded.
+		If so, then we call initialized. 
+		If you are loading many images, it is probably a good idea to put together a class or package where you can just send in an array of image urls, and have it return an array of images when complete.
+		
+		So, now we've loaded our explosion png, we need to make an animated sprite out of it.  We can add this code after our bullet element creation code:
+		
+		  GameContext.bulletElement = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
+    hidden:true,
+    pixPathArray: GameContext.bulletPix,
+    defaultPalette: C64Style.Color.getDefaultPalette()
+  });
+  GameContext.gfxLayer.addElement(GameContext.bulletElement);
+
+  GameContext.explosionElement = new C64Style.ImageSprite(GameContext.screen, GameContext.gfxLayer, {
+    hidden:true,
+    width:32,
+    height:32,
+    image:GameContext.explosionPng,
+    frames:[
+      new C64Style.ImageSpriteFrame({duration:50, sourceX:0, sourceY:0, sourceWidth:32, sourceHeight:32}),
+      new C64Style.ImageSpriteFrame({duration:50, sourceX:32, sourceY:0, sourceWidth:32, sourceHeight:32})
+    ]
+  });
+  GameContext.gfxLayer.addElement(GameContext.explosionElement);
+  
+  Notice that creating an image sprite is a little different than creating a PixSprite.  We pass our loaded image in as the value of the "image" properties.  We set the desired width
+  and height.  If the image (or image region) we are drawing doesn't fit those dimensions it will be stretched or shrunk appropriately.  We still need
+  frames since it is a sprite, but we construct the frames a little differently.  Instead of specifying different PixArrays, we specify regions of the image.  If you 
+  open the png in an image viewer, you will notice that there are two explosions side by side, with some small differences between them.  By only drawing a portion of the image,
+  and flashing between the two regions, we can create an animation effect.  That is what we are doing here.  The first frame specifies the region for the left most explosion, 
+  the second for the right most explosion.    
+  
+  As before, since we aren't using it right away, we can just hide it.  
 		 
-		 removealien bullet
-		 blowupship
-		 pauseaction
-		 unpauseaction
-		 
-		 element hidden -> return in alienstopped moving?
-		 also now tied to moveTo
-		 
-		 element collision on ship element
-		 
-		 colliding with alien kills alien
-		 
-		 ships remaining
-		 update ships remaining
-		 fix return on key events whil paused
-		 
-		 update blowup ship
-		 
-		 check victory condidion
-		 
-		 endgame
-		 
-		 
+	We've got a little more work to do before we bring this explosion into play.
+	When the ship is hit several things need to happen - we need to remove the alien bullet that collided with the ship, hide the ship, move the explosion to the ships location 
+	and show the explosion.  There's a few more things we need to do to add some polish, but let's take things one step at a time.
+	
+
+	The fun part: let's blow up our ship!
+	
+	function blowUpShip() {
+	  GameContext.shipElement.hide();
+	  GameContext.explosionElement.setX(GameContext.shipElement.getX());
+	  GameContext.explosionElement.setY(GameContext.shipElement.getY());
+	  GameContext.explosionElement.show();
+	}
+	
+	No real surprises here.  We hide the ship, move the explosion sprite to the ships location, and then show the explosion.
+	That could be the end of the game, but that's not much fun.  Most of these type of games give you several chances, "lives", or in our case, ships.
+	We need to display the explosion long enough for the player to realize what happened, then restore the ship and normal gameplay.
+	It would also be nice if we paused the action while we show the explosion - stop the aliens moving or firing, and let any current alien bullets pass.  This
+	will make the player happier.
+	
+	We'll create two functions to handle this, pauseAction and unpauseAction:
+	function pauseAction() {
+	  GameContext.actionPaused = true;
+	  GameContext.shipMovingLeft = false;
+	  GameContext.shipMovingRight = false;
+	  GameContext.aliens.forEach(function(alien) {
+		alien.setMoveRates(0,0);
+	  });
+	}
+
+	function unpauseAction() {
+	  GameContext.actionPaused = false;
+	  GameContext.shipElement.show();
+	  GameContext.explosionElement.hide();
+	  setAliensMoving();
+	}
+	
+	In each of these function we flip a flag called actionPaused.  This doesn't do anything inherently it will be used elswhere.  Before we get to that, let's look at what else is happening here.
+	in pauseAction, we set the ship moving variables to false - to cancel any current movement.  We also set the move rates for all the aliens to zero.  
+	There is the possibility that the aliens will be moving downward (via moveTo) at the time this function is called.  At present, there's not a way to stop or cancel a running
+	moveTo instruction.  However, in this case, I don't think it is a big deal - the amount of movement is relatively small, and it shouldn't hurt anything to let the aliens
+	finish this move even if everything else is paused.
+	
+	In unpauseAction, we restore the ship (show()) and hide the explosion.  Then we set the aliens moving again.
+	
+	Oh, and don't forget to initialize that actionPaused flag somewhere - I do it after score:
+		GameContext.score = 0;
+		GameContext.actionPaused = false;
+		
+	To call these functions, let's revisit our blowUpShip function:
+	
+		function blowUpShip() {
+		  GameContext.shipElement.hide();
+		  GameContext.explosionElement.setX(GameContext.shipElement.getX());
+		  GameContext.explosionElement.setY(GameContext.shipElement.getY());
+		  GameContext.explosionElement.show();
+		    pauseAction();
+			setTimeout(unpauseAction, 1000);
+		}
+	
+		Now when the ship gets blown up, we pause the action, and set a 1 second timer to call unpause.
+		So we've set this up, but right now we still have other events and things that can trigger, even though we have stopped the action, so we need to address those.
+		First, let's stop key down/up events from doing anything
+		
+		  document.onkeydown = function(e) {
+		if(GameContext.actionPaused) return true;
+		var preventDefault = false;
+		switch (e.key) {
+		  case "ArrowLeft":
+			GameContext.shipMovingLeft = true;
+			break;
+		  case "ArrowRight":
+			GameContext.shipMovingRight = true;
+			break;
+		  case " ":
+			fireBullet();
+			break;
+		  default:
+			break;
+		}
+		if (preventDefault) event.preventDefault();
+		return !preventDefault;
+	  }
+	  document.onkeyup = function(e) {
+		if(GameContext.actionPaused) return true;
+		var preventDefault = false;
+		switch (e.key) {
+		  case "ArrowLeft":
+			GameContext.shipMovingLeft = false;
+			break;
+		  case "ArrowRight":
+			GameContext.shipMovingRight = false;
+			break;
+		  default:
+			break;
+		}
+		if (preventDefault) event.preventDefault();
+		return !preventDefault;
+	  }
+	  
+	  So now, the player can't fire bullets, or cause direction movement for the ship.
+	  In before render, we need to stop the normal actions:
+	  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+		if (GameContext.actionPaused) return;
+		updateShip(e);
+		updateAliens(e);
+		alienAttack();
+		updateScore();
+	  });
+	  
+	  And we need to update our alienStoppedMoving handler:
+	  function alienStoppedMoving(element) {
+		  GameContext.alienCounter++;
+		  if (GameContext.alienCounter === GameContext.aliens.length)  {
+			GameContext.aliensMovingDown = false;
+			GameContext.alienCounter = 0;
+			if (GameContext.alienMoveDirection === "RIGHT") {
+			  GameContext.alienMoveDirection = "LEFT";
+			} else {
+			  GameContext.alienMoveDirection = "RIGHT";
+			}
+			if (!GameContext.actionPaused) setAliensMoving();
+		  }
+		}
+		
+		This way, If the were in the middle of the downard moveTo instruction, they won't automatically start moving again - they will have to wait for the unpause function to
+		start them moving again.
+	
+		Now we need to tie this all together.  We need to trigger these functions when something collides with our ship, say an alien bullet, or an alien.  Back in our initialize
+		code we can add another collision handler:
+		  GameContext.shipElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
+			if (e.data.element2.isAlien) {
+			  killAlien(e.data.element2);
+			} else {
+			  // assume it is a bullet. be careful if there are other types of elements that the ship can collide with!
+			  removeAlienBullet(e.data.element2);
+			}
+			blowUpShip();
+		  });
+	
+		First we determine if what hit the ship was an alien or an alien bullet, and handle appropriately.  Then, we blow up the ship.
+		
+		<IMG_EXPLOSION>
+		
+		Now you can play the game, and if your ship gets hit, it blows up, and restores itself a second later.  This is fine, but you have unlimited chances this way.  
+		Let's change that.
+		Let's define a variable that limits how many ships we have remaining:
+		
+		GameContext.score = 0;
+		GameContext.actionPaused = false;
+		GameContext.shipsRemaining = 2;
+		
+		And then let's use it for something:
+		
+		function blowUpShip() {
+		  GameContext.shipElement.hide();
+		  GameContext.explosionElement.setX(GameContext.shipElement.getX());
+		  GameContext.explosionElement.setY(GameContext.shipElement.getY());
+		  GameContext.explosionElement.show();
+		  GameContext.shipsRemaining--;
+		  pauseAction();
+		  if (GameContext.shipsRemaining <  0) {
+			endGame(false);
+		  } else {
+			setTimeout(unpauseAction, 1000);
+		  }
+		}
+		
+		So now, if the ship is blown up, we decrement the number of ships remaining and check if it is less than zero.  If so we "end" the game.  Otherwise, 
+		we continue as before.
+		So what about this end of the game?
+		
+		function endGame(victory) {
+		  var msg, color, bgColor;
+		  if (victory) {
+			msg = "VICTORY!";
+			color = C64Style.Color.CYAN;
+			bgColor = C64Style.Color.BLUE;
+		  } else {
+			msg = "FAILURE!";
+			GameContext.explosionElement.hide();
+			color = C64Style.Color.ORANGE;
+			bgColor = C64Style.Color.RED;
+		  }
+		  var scaleX = 3;
+		  var scaleY = 3;
+		  var x = ((C64Style.CELLWIDTH * config.cols) - (msg.length * C64Style.CELLWIDTH * scaleX)) / 2;
+		  var msgElement = new C64Style.TextElement(GameContext.screen, GameContext.gfxLayer, {
+			text:msg,
+			color:color,
+			backgroundColor:bgColor,
+			scaleX:scaleX,
+			scaleY:scaleY,
+			y:50,
+			x:x
+		  });
+		  GameContext.gfxLayer.addElement(msgElement);
+		}
+		
+		This is a large function, but it really doesn't do that much.  We accept a boolean "victory" variable to tell us if we won or lost.  We'll deal with win conditions a 
+		bit later.  For now, let's worry about what happens when we've lost.
+		We define a message ("msg") and some colors, hide the explosion, and then create a text element with the properties we specified (message, colors).  The purpose
+		of the calculations of the "x" variable are to center the message on the screen.
+		This is really it.
+		
+		That's great, but we also need a way to tell the player how many ships they have left.
+		We'll start by writing some placeholder text to the screen, in the same way we did for the score:
+		  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+		  GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
+		  GameContext.textLayer.writeText("Score:", 1, 24, C64Style.Color.WHITE);
+		  GameContext.textLayer.writeText("Ships Remaining:", 22, 24, C64Style.Color.WHITE);
+		
+		Then we'll add a function to write the remaining number to screen:
+		function updateShipsRemaining() {
+		  GameContext.textLayer.writeText(GameContext.shipsRemaining, 39, 24, C64Style.Color.WHITE);
+		}
+		
+		Simple enough.
+		We can call this method in our before render handler:
+		
+		  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+			if (GameContext.actionPaused) return;
+			updateShip(e);
+			updateAliens(e);
+			alienAttack();
+			updateScore();
+			updateShipsRemaining();
+		  });
+		
+		Now, we can see how many ships are left.
+		
+		To polish things off, let's add a victory condition.  If all the aliens are dead, we win!
+		
+		function checkVictoryCondition() {
+		  if (GameContext.aliens.length === 0) {
+			pauseAction();
+			endGame(true);
+		  }
+		}
+		
+		Note that we pause the action before ending the game.  This will be the same state we were in (action paused) when we check how many ships we have left.
+		Basically, there's nothing left to do when the game is over, so we always arrive at end game from an action-paused state.
+		Here, we send 'true' to our end game function, so we will see the victory message instead.
+		
+
+
