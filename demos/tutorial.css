@@ -1,0 +1,22 @@
+.code {
+  white-space: pre;
+  font-family:monospace;
+  background-color: grey;
+  color:#B0C0C0;
+  padding:8px;
+  border: 1px solid black;
+  font-weight: bold;
+}
+
+.newCode {
+  color:white;
+}
+
+img {
+    padding:8px;
+    border: 1px solid black;
+}
+
+body {
+  font-family:sans-serif;
+}
