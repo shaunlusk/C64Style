@@ -3,6 +3,9 @@
 ## What is it?
 A framework for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.
 
+- Fun for creating retro-style games and animations.
+- Lightweight
+
 ## What isn't it?
 C64Style is not an emulator.
 
@@ -39,3 +42,7 @@ textLayer.writeText("Hello World", 0, 0, C64Style.Color.LIGHTBLUE);
 // Start rendering!
 screen.render();
 ```
+
+### [Documentation](https://shaunlusk.github.io/C64Style/docs/index.html)
+
+### [Tutorial - Alien Invasion](https://shaunlusk.github.io/C64Style/demos/tutorial.html)
