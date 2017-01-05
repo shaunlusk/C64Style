@@ -5,13 +5,34 @@
 ReadMe
   more examples & best practices
   link to demos
+  link to docs
 
 check - need collision check on removed elements in gfxLayer
 
 demos
   more comments
 
+better docs on events?
+
 documentation
+  event changes in gfxelement, gfxLayer
+  PixElement needs info on defaultPalette
+  PixPathTypes
+  PixRenderer
+  PixSprite
+  Screen
+  TextButton
+  TextElement
+  TextLayer
+  TextLink
+  TextPrompt
+  PriorityQueue
+  Queue
+  UniquePriorityQueue
+  Utils
+
+doc done:
+  CharacterMap
   CharacterRenderer
   Color
   ColorPointer
@@ -24,38 +45,16 @@ documentation
   ImageElement
   ImageRenderer
   ImageSprite
+  Sprite
   Layer
   MoveOrder
   PixElement
   PixPathTypes
   PixRenderer
-  PixSprite
-  Screen
-  Sprite
-  TextButton
-  TextElement
-  TextLayer
-  TextLink
-  TextPrompt
-  PriorityQueue
-  Queue
-  UniquePriorityQueue
-  Utils
-generate html files
-
-doc done:
-CharacterMap
-
-clean up move order
-
-MOUSE_OVER_ELEMENT vs MOUSE_MOVE_OVER_ELEMENT
-MOUSE_OUT event? - if put in gfx element, could probably remove mouse handling stuff from textlink
 
 7 & 1 = chalice?
 
 consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
-
-
 
 add additional char maps
   person
@@ -83,9 +82,11 @@ change size for pixmap builder?
 textSprite?
 Bounds checking on text layer?
 Text wrapping on text layer?
+extract "on" function in screen, gfxelement, to its own mixin component
 
 
 ###############################################################################
 ### Known issues
 ###############################################################################
+MoveOrders do not take pause into account and so will tend to cause elements to "jump" to final destination when screen is resumed.
 This is probably ok though: in text layer, strings that are rendered in same frame may be written on top of eachother without clearing (clearing comes before drawing)

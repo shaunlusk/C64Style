@@ -3,8 +3,6 @@ rgb(255, 255, 255)
 #FFFFFF
 white
 
-
-
 ccs64 palette, not used, but might be good.
 Black: 0 0 0
 White: 255 255 255
@@ -22,3 +20,22 @@ Grey: 136 136 136
 LGreen: 160 255 160
 LBlue: 160 160 255
 LGrey: 192 192 192
+
+
+
+/** Emmited by a C64Style.Screen when the mouse moves over it */
+"MOUSE_MOVE" : "MOUSE_MOVE",
+/** Emmited by a C64Style.Screen when a mouse down event occurs on it */
+"MOUSE_DOWN" : "MOUSE_DOWN",
+/** Emmited by a C64Style.Screen when a mouse down event occurs on it */
+"MOUSE_UP" : "MOUSE_UP",
+/** Emmited by */
+
+"MOUSE_ENTER_ELEMENT" : "MOUSE_ENTER_ELEMENT",
+MOUSE_EXIT_ELEMENT:
+
+"MOUSE_MOVE_OVER_ELEMENT" : "MOUSE_MOVE_OVER_ELEMENT",
+
+"MOUSE_DOWN_ON_ELEMENT" : "MOUSE_DOWN_ON_ELEMENT",
+
+"MOUSE_UP_ON_ELEMENT" : "MOUSE_UP_ON_ELEMENT",

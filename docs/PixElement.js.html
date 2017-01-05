@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: PixElement.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: PixElement.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
+
+/** Element that draws pixels to a canvas from a PixArray&lt;br />
+* &lt;b>Extends&lt;/b>: {@link C64Style.GfxElement}
+* @constructor
+* @param {C64Style.Screen} screenContext The target screen.
+* @param {C64Style.GfxLayer} parentLayer The parent layer that will draw this element.
+* @param {Object} props Properties for this GfxElement.  Supports:&lt;br>
+* From {@link C64Style.GfxElement}
+*   &lt;ul>
+*     &lt;li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>hidden - boolean - Whether to hide this element.&lt;/li>
+*     &lt;li>x - number - The X coordinate for this element.&lt;/li>
+*     &lt;li>y - number - The Y coordinate for this element.&lt;/li>
+*     &lt;li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).&lt;/li>
+*   &lt;/ul>
+* For PixElement:
+*  &lt;ul>
+*   &lt;li>pixPathArray - Array - An array of PixPaths that will be drawn.  Format: &lt;br />
+*     {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}&lt;/br>
+*     where:
+*     &lt;ul>
+*       &lt;li>type can be either "PIXEL" or "RECTANGLE" (see {@link C64Style.PixPathTypes})&lt;/li>
+*       &lt;li>x, y are coordinates relative to the element's origin&lt;/li>
+*       &lt;li>width, height are only used by RECTANGLE types to determine the size of the rectangle drawn&lt;/li>
+*       &lt;li>color can be any of: a valid CSS color (hex format "#1234AB", or "rbg(100, 200, 255)"),
+*           a C64Style.ColorPointer,
+*           or an integer value corresponding to an index on this element's color palette.&lt;/li>
+      &lt;/ul>
+      As an example, the PixPath: [{type:"PIXEL", x:2, y:5, color:"#00FF00"}]&lt;br />
+      will paint the pixel at 2,5 (relative to element location) a greenish color.&lt;br/>
+      Another Example:&lt;br />
+          [{type:"RECTANGLE", x:1, y:1, width:2, height:2, color:3},&lt;br />
+          {type:"PIXEL", x:2, y:3, color:6}]&lt;br />
+      This will draw a rectangle from 1,1 to 2,2 using the the 3rd color from the element's palette, and  a pixel at 2,3 using the 6th color from the element's palette.
+*  &lt;/ul>
+*/
+C64Style.PixElement = function(screenContext, parentLayer, props) {
+  props = props || {};
+  C64Style.GfxElement.call(this, screenContext, parentLayer, props);
+  this._width = 0;
+  this._height = 0;
+  this._pixPathArray = props.pixPathArray || [];
+  this._palette = props.defaultPalette || [];
+  this._pixRenderer = props.pixRenderer || new C64Style.PixRenderer(screenContext.getScaleX(), screenContext.getScaleY());
+
+  this._setDimensions();
+};
+
+C64Style.PixElement.prototype = new C64Style.GfxElement();
+C64Style.PixElement.prototype.constructor = C64Style.PixElement;
+
+/** Return the width for this element
+* @override
+* @returns {number}
+*/
+C64Style.PixElement.prototype.getWidth = function() {return this._width;};
+
+/** Return the height for this element
+* @override
+* @returns {number}
+*/
+C64Style.PixElement.prototype.getHeight = function() {return this._height;};
+
+/** Return the palette color for a given palette index.
+* @param {integer} idx
+* @returns {string} Color string
+*/
+C64Style.PixElement.prototype.getPaletteColor = function(idx) {return this._palette[idx];};
+
+/** Set the palette color for a given palette index.
+* @param {integer} idx
+* @param {string} Color string
+*/
+C64Style.PixElement.prototype.setPaletteColor = function(idx, color) {
+  this._palette[idx] = color;
+  this.setDirty(true);
+};
+
+/** Return palette array.
+* @returns {array} Array of color strings
+*/
+C64Style.PixElement.prototype.getPalette = function() {return this._palette;};
+
+/** Sets the palette array.
+* @param {array} palette Array of colors.
+*/
+C64Style.PixElement.prototype.setPalette = function(palette) {
+  this._palette = palette;
+  this.setDirty(true);
+};
+
+/** @private */
+C64Style.PixElement.prototype._setDimensions = function() {
+  var width = 0, height = 0;
+  for (var i = 0; i &lt; this._pixPathArray.length; i++) {
+    var pixPath = this._pixPathArray[i];
+    var tx = pixPath.x;
+    var ty = pixPath.y;
+    switch(pixPath.type) {
+      case C64Style.PixPathTypes.PIXEL:
+      width = tx + 1;
+      height = ty + 1;
+      break;
+      case C64Style.PixPathTypes.RECTANGLE:
+      width = tx + pixPath.width;
+      height = ty + pixPath.height;
+      break;
+    }
+    if (width > this._width) this._width = width;
+    if (height > this._height) this._height = height;
+  }
+};
+
+/** Render all PixPaths for this element.
+* @param {number} time The current time (milliseconds)
+* @param {number} diff The difference between the last time and the current time  (milliseconds)
+*/
+C64Style.PixElement.prototype.render = function(time,diff) {
+  if (!this.isHidden() &amp;&amp; this.isDirty()) {
+    for (var i = 0; i &lt; this._pixPathArray.length; i++) {
+      this._renderPixPath(this._pixPathArray[i]);
+    }
+  }
+  C64Style.GfxElement.prototype.render.call(this, time, diff);
+};
+
+/** @private */
+C64Style.PixElement.prototype._renderPixPath = function(pixPath) {
+  this._pixRenderer.renderPixPath(this.getCanvasContext(), this.getX(), this.getY(), pixPath, this._palette, this.getElementScaleX(), this.getElementScaleY());
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jan 04 2017 20:33:43 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

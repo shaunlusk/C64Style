@@ -81,8 +81,21 @@
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton(screen, gfxLayer, {
-      x:16 * C64Style.CELLWIDTH,
+      x:12 * C64Style.CELLWIDTH,
       y:13 * C64Style.CELLHEIGHT,
+      text:"Documentation",
+      backgroundColor:C64Style.Color.BLUE,
+      buttonColor : C64Style.Color.LIGHTBLUE,
+      textColor : C64Style.Color.LIGHTBLUE,
+      highlightButtonColor : C64Style.Color.LIGHTBLUE,
+      highlightTextColor : C64Style.Color.BLUE,
+      href:"docs/index.html",
+      newWindow : true
+    });
+    gfxLayer.addElement(element);
+    element = new C64Style.TextButton(screen, gfxLayer, {
+      x:16 * C64Style.CELLWIDTH,
+      y:16 * C64Style.CELLHEIGHT,
       text:"Tools",
       backgroundColor:C64Style.Color.BLUE,
       buttonColor : C64Style.Color.LIGHTBLUE,
@@ -94,7 +107,7 @@
     gfxLayer.addElement(element);
     element = new C64Style.TextButton(screen, gfxLayer, {
       x:15 * C64Style.CELLWIDTH + 4,
-      y:16 * C64Style.CELLHEIGHT,
+      y:19 * C64Style.CELLHEIGHT,
       text:"Demos!",
       backgroundColor:C64Style.Color.BLUE,
       buttonColor : C64Style.Color.LIGHTBLUE,
