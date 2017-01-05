@@ -16,10 +16,7 @@ better docs on events?
 
 documentation
   event changes in gfxelement, gfxLayer
-  PixElement needs info on defaultPalette
-  PixPathTypes
-  PixRenderer
-  PixSprite
+  PixSprite - in progress
   Screen
   TextButton
   TextElement

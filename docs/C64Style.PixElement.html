@@ -146,14 +146,7 @@
 
             
 
-            <td class="description last">Properties for this GfxElement.  Supports:<br>From <a href="C64Style.GfxElement.html">C64Style.GfxElement</a>  <ul>    <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>    <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>    <li>hidden - boolean - Whether to hide this element.</li>    <li>x - number - The X coordinate for this element.</li>    <li>y - number - The Y coordinate for this element.</li>    <li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).</li>  </ul>For PixElement: <ul>  <li>pixPathArray - Array - An array of PixPaths that will be drawn.  Format: <br />    {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}</br>    where:    <ul>      <li>type can be either "PIXEL" or "RECTANGLE" (see <a href="C64Style.html#.PixPathTypes">C64Style.PixPathTypes</a>)</li>      <li>x, y are coordinates relative to the element's origin</li>      <li>width, height are only used by RECTANGLE types to determine the size of the rectangle drawn</li>      <li>color can be any of: a valid CSS color (hex format "#1234AB", or "rbg(100, 200, 255)"),          a C64Style.ColorPointer,          or an integer value corresponding to an index on this element's color palette.</li>
-      </ul>
-      As an example, the PixPath: [{type:"PIXEL", x:2, y:5, color:"#00FF00"}]<br />
-      will paint the pixel at 2,5 (relative to element location) a greenish color.<br/>
-      Another Example:<br />
-          [{type:"RECTANGLE", x:1, y:1, width:2, height:2, color:3},<br />
-          {type:"PIXEL", x:2, y:3, color:6}]<br />
-      This will draw a rectangle from 1,1 to 2,2 using the the 3rd color from the element's palette, and  a pixel at 2,3 using the 6th color from the element's palette. </ul></td>
+            <td class="description last">Properties for this GfxElement.  Supports:<br>From <a href="C64Style.GfxElement.html">C64Style.GfxElement</a>  <ul>    <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>    <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>    <li>hidden - boolean - Whether to hide this element.</li>    <li>x - number - The X coordinate for this element.</li>    <li>y - number - The Y coordinate for this element.</li>    <li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).</li>  </ul>For PixElement: <ul>  <li>pixPathArray - Array - An array of PixPaths that will be drawn.  Format: <br />    {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}</br>    where:    <ul>      <li>type can be either "PIXEL" or "RECTANGLE" (see <a href="C64Style.html#.PixPathTypes">C64Style.PixPathTypes</a>)</li>      <li>x, y are coordinates relative to the element's origin</li>      <li>width, height are only used by RECTANGLE types to determine the size of the rectangle drawn</li>      <li>color can be any of: a valid CSS color (hex format "#1234AB", or "rbg(100, 200, 255)"),          a C64Style.ColorPointer,          or an integer value corresponding to an index on this element's color palette.</li>    </ul>    As an example, the PixPath: [{type:"PIXEL", x:2, y:5, color:"#00FF00"}]<br />    will paint the pixel at 2,5 (relative to element location) a greenish color.<br/>    Another Example:<br />        [{type:"RECTANGLE", x:1, y:1, width:2, height:2, color:3},<br />        {type:"PIXEL", x:2, y:3, color:6}]<br />    This will draw a rectangle from 1,1 to 2,2 using the the 3rd color from the element's palette, and  a pixel at 2,3 using the 6th color from the element's palette.</li>         <li>defaultPalette - Array - An array of colors.  When a Pix Array entry references a color index, the corresponding color in this array will be used for the entry.</li>         <li>pixRenderer - <a href="C64Style.PixRenderer.html">C64Style.PixRenderer</a> - Optional.  The PixRenderer that will draw on the canvas.           If not provided, this element will create one.           If using multiple PixElements's or PixSprite's it is good practice to create a single PixRenderer and pass the reference to each element via this property.</li> </ul></td>
         </tr>
 
     
@@ -194,7 +187,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line39">line 39</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -294,7 +287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line64">line 64</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -394,7 +387,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line84">line 84</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -547,7 +540,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line70">line 70</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -651,7 +644,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line58">line 58</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -823,7 +816,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line120">line 120</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line124">line 124</a>
     </li></ul></dd>
     
 
@@ -954,7 +947,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line89">line 89</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -1108,7 +1101,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line76">line 76</a>
+        <a href="PixElement.js.html">PixElement.js</a>, <a href="PixElement.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1150,13 +1143,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jan 04 2017 20:33:43 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jan 04 2017 21:35:17 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

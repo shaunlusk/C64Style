@@ -133,6 +133,17 @@
     });
     gfxLayer.addElement(element);
 
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:18 * C64Style.CELLHEIGHT,
+      text:"Tutorial - Aien Invasion",
+      color:C64Style.Color.LIGHTGREEN,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.GREEN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"invaders.html"
+    });
+    gfxLayer.addElement(element);
+
     if (new Date().getMonth() === 11) {
       element = new C64Style.TextLink(screen, gfxLayer, {
         x:1 * C64Style.CELLWIDTH, y:21 * C64Style.CELLHEIGHT,
