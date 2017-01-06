@@ -28,7 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
-/** For showing Pix Animations&lt;br />
+/** For showing Pix Animations.  Much like PixElement, but uses multiple frames for animations.&lt;br />
 * &lt;b>Extends&lt;/b> {@link C64Style.Sprite} &lt;br />
 * Uses {@link C64Style.PixSpriteFrame} for its frames.
 * @constructor
@@ -63,8 +63,8 @@
 *   &lt;/ul>
 * @see C64Style.GfxElement
 * @see C64Style.AnimationFrame
-* @see C64Style.ImageSprite
 * @see C64Style.PixSprite
+* @see C64Style.ImageSprite
 */
 C64Style.PixSprite = function(screenContext, parentLayer, props) {
   props = props || {};
@@ -82,21 +82,44 @@ C64Style.PixSprite = function(screenContext, parentLayer, props) {
 C64Style.PixSprite.prototype = new C64Style.Sprite();
 C64Style.PixSprite.prototype.constructor = C64Style.PixSprite;
 
+/** Return the width of the PixSprite
+* @returns {integer}
+*/
 C64Style.PixSprite.prototype.getWidth = function() {return this._width;};
+
+/** Return the height of the PixSprite
+* @returns {integer}
+*/
 C64Style.PixSprite.prototype.getHeight = function() {return this._height;};
 
+/** Return the palette color for the specified index
+* @returns {integer}
+*/
 C64Style.PixSprite.prototype.getPaletteColor = function(idx) {return this._palette[idx];};
+
+/** Set the palette color at the specified index
+* @param {integer} idx The index on the color palette
+* @param {string} color The value of the color to set.  Any valid CSS Color value may be used, in addition to values from C64Style.Color
+*/
 C64Style.PixSprite.prototype.setPaletteColor = function(idx, color) {
   this._palette[idx] = color;
   this.setDirty(true);
 };
+
+/** Return the palette
+* @returns {Array} Array of color values.
+*/
 C64Style.PixSprite.prototype.getPalette = function() {return this._palette;};
+
+/** Set the palette
+* @param {Array} palette The palette to set.
+*/
 C64Style.PixSprite.prototype.setPalette = function(palette) {
   this._palette = palette;
   this.setDirty(true);
 };
 
-
+/** @private */
 C64Style.PixSprite.prototype._setDimensions = function() {
   var width = 0, height = 0;
   for (var fidx = 0; fidx &lt; this._frames.length; fidx++) {
@@ -121,7 +144,11 @@ C64Style.PixSprite.prototype._setDimensions = function() {
   }
 };
 
-/** @override
+/** Render the specified PixSpriteFrame.  &lt;br />
+* @abstract
+* @param {number} time The current time (milliseconds).
+* @param {number} diff The difference between the previous render cycle and the current cycle (milliseconds).
+* @param {C64Style.PixSpriteFrame} frame The frame to be rendered.
 */
 C64Style.PixSprite.prototype.renderFrame = function(time, diff, frame) {
   var pixPathArray = frame.getPixArray();
@@ -130,10 +157,33 @@ C64Style.PixSprite.prototype.renderFrame = function(time, diff, frame) {
   }
 };
 
+/** @private */
 C64Style.PixSprite.prototype._renderPixPath = function(pixPath) {
   this._pixRenderer.renderPixPath(this.getCanvasContext(), this.getX(), this.getY(), pixPath, this._palette, this.getElementScaleX(), this.getElementScaleY());
 };
 
+/**
+* PixSprite Implementation of AnimationFrame.
+* @extends {C46Style.AnimationFrame}
+* @constructor
+* @param {Object} props Properties supported:
+* &lt;ul>
+*   &lt;li>duration - number - How long (milliseconds) to display this frame.
+*   &lt;li>pixArray - Array - The Array of Pix entries for this frame. Format: &lt;br />
+*     {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}&lt;/br>
+*     where:
+*     &lt;ul>
+*       &lt;li>type can be either "PIXEL" or "RECTANGLE" (see {@link C64Style.PixPathTypes})&lt;/li>
+*       &lt;li>x, y are coordinates relative to the element's origin&lt;/li>
+*       &lt;li>width, height are only used by RECTANGLE types to determine the size of the rectangle drawn&lt;/li>
+*       &lt;li>color can be any of: a valid CSS color (hex format "#1234AB", or "rbg(100, 200, 255)"),
+*           a C64Style.ColorPointer,
+*           or an integer value corresponding to an index on this element's color palette.&lt;/li>
+*     &lt;/ul>
+*   &lt;/li>
+* &lt;/ul>
+* @see {C64Style.PixElement}
+*/
 C64Style.PixSpriteFrame = function(props) {
   props = props || {};
   C64Style.AnimationFrame.call(this);
@@ -143,8 +193,14 @@ C64Style.PixSpriteFrame = function(props) {
 C64Style.PixSpriteFrame.prototype = new C64Style.AnimationFrame();
 C64Style.PixSpriteFrame.prototype.callback = C64Style.PixSpriteFrame;
 
-/** @override */
+/** Return the duration to display this frame.
+* @returns {number}
+*/
 C64Style.PixSpriteFrame.prototype.getDuration = function() {return this._duration;};
+
+/** Return the PixArray for this frame.
+* @returns {number}
+*/
 C64Style.PixSpriteFrame.prototype.getPixArray = function() {return this._pixArray;};
 </code></pre>
         </article>
@@ -156,13 +212,13 @@ C64Style.PixSpriteFrame.prototype.getPixArray = function() {return this._pixArra
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jan 04 2017 21:35:17 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jan 05 2017 20:50:13 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
