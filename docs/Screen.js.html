@@ -29,6 +29,23 @@
             <pre class="prettyprint source linenums"><code>/** @namespace */
 var C64Style = C64Style || {};
 
+/** The Screen is the overriding container for all C64Style components.
+* The Screen orchestrates updating and rendering its layers, propagates
+* mouse events down to the layers, and notifies event listeners when events occur.
+* @constructor
+* @param {HTMLElement} targetDiv The target HTMLElement into which the screen and its layers will be built.
+* @param {Object} config Supported configuration properties:
+* &lt;ul>
+*   &lt;li>scaleX - integer - the horizontal scale of the screen.  Default: 1&lt;/li>
+*   &lt;li>scaleY - integer - the horizontal scale of the screen.  Default: 1&lt;/li>
+*   &lt;li>cols - integer - The number of columns for the screen.  Width will be sized accordingly: cols * {@link C64Style.CELLWIDTH}.  Default: 40&lt;/li>
+*   &lt;li>rows - integer - The number of rows for the screen.  Height will be sized accordingly: rows * {@link C64Style.CELLHEIGHT}.  Default: 25&lt;/li>
+*   &lt;li>fpsElem - HTMLElement - Element to write Frames-per-second information to. &lt;/li>
+*   &lt;li>backgroundColor - Color - The color to set the screen background to. Default: C64Style.Color.BLUE&lt;/li>
+*   &lt;li>borderColor - Color - The color to set the screen border to. Default: C64Style.Color.LIGHTBLUE&lt;/li>
+*   &lt;li>borderSize - integer - The borderSize of the screen, in pixels. Default: 20&lt;/li>
+* &lt;/ul>
+*/
 C64Style.Screen = function(targetDiv, config) {
   this._targetDiv = targetDiv;
   this._config = config || {};
@@ -39,6 +56,7 @@ C64Style.Screen = function(targetDiv, config) {
   this._width = this._cols * this._scaleX * C64Style.CELLWIDTH;
   this._height = this._rows * this._scaleY * C64Style.CELLHEIGHT;
   this._fpsElem = this._config.fpsElem || null;
+  this._showFps = true;
   this._avgTime = 0;
   this._last = 0;
   this._mouseX = -1;
@@ -53,7 +71,6 @@ C64Style.Screen = function(targetDiv, config) {
   this._borderColor = this._config.borderColor || C64Style.Color.LIGHTBLUE;
   this._borderSize = this._config.borderSize || 20;
 
-  this._showFps = true;
   this._fpsMonitorArray = [];
   this._fpsMonitorIndex = 0;
 
@@ -86,11 +103,14 @@ C64Style.Screen = function(targetDiv, config) {
 
 C64Style.Screen.document = window.document;
 
+/** Setup the screen on the page. Must be called prior to rendering.
+*/
 C64Style.Screen.prototype.initialize = function() {
   this._prepareDiv();
   this._setupEventListeners();
 };
 
+/** @private */
 C64Style.Screen.prototype._prepareDiv = function() {
   this._targetDiv.style.width = this._width;
   this._targetDiv.style.height = this._height;
@@ -98,6 +118,7 @@ C64Style.Screen.prototype._prepareDiv = function() {
   this._targetDiv.style.border = this._borderSize + "px solid " + this._borderColor;
 };
 
+/** @private */
 C64Style.Screen.prototype._setupEventListeners = function() {
   this._targetDiv.addEventListener("mouseup",this.handleMouseEvent.bind(this), true);
   this._targetDiv.addEventListener("mousedown",this.handleMouseEvent.bind(this), true);
@@ -105,6 +126,7 @@ C64Style.Screen.prototype._setupEventListeners = function() {
   C64Style.Screen.document.addEventListener("visibilitychange", this.handleVisibilityChange.bind(this), false);
 };
 
+/** @private */
 C64Style.Screen.prototype.handleVisibilityChange = function() {
   this._tabNotVisible = document.hidden;
   if (!this._tabNotVisible &amp;&amp; !this._paused) {
@@ -113,46 +135,116 @@ C64Style.Screen.prototype.handleVisibilityChange = function() {
   }
 };
 
+/** Add an event listener to the document.
+* @param {string} event The type of event.
+* @param {Function} listener The function to call when the event occurs.
+*/
 C64Style.Screen.prototype.addEventListener = function(event, listener) {
   C64Style.Screen.document.addEventListener(event,listener);
 };
 
+/** Set the background color.
+* @param {string} color Any valid CSS color string, or C64Style.Color value.
+*/
 C64Style.Screen.prototype.setBackgroundColor = function(color) {
   this._backgroundColor = color;
   this._targetDiv.style.backgroundColor = color;
 };
+
+/** Return the current backgroundColor.
+* @returns {string}
+*/
 C64Style.Screen.prototype.getBackgroundColor = function(color) {
   return this._backgroundColor;
 };
 
+/** Set the border color.
+* @param {string} color Any valid CSS color string, or C64Style.Color value.
+*/
 C64Style.Screen.prototype.setBorderColor = function(color) {
   this._borderColor = color;
   this._targetDiv.style.border = this._borderSize + "px solid " + color;
 };
+
+/** Return the current border color.
+* @returns {string}
+*/
 C64Style.Screen.prototype.getBorderColor = function() {
   return this._borderColor;
 };
 
+/** Set the border size.
+* @param {integer} size The size for the border; will be interpretted as pixels.
+*/
 C64Style.Screen.prototype.setBorderSize = function(size) {
   this._borderSize = size;
   this._targetDiv.style.border = size + "px solid " + this._borderColor;
 };
+
+/** Return the current border size, in pixels.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getBorderSize = function() {
   return this._borderSize;
 };
 
-
+/** Return the width.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getWidth = function() {return this._width;};
+
+/** Return the height.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getHeight = function() {return this._height;};
+
+/** Return the number of roww.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getRows = function() {return this._rows;};
+
+/** Return the number of columns.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getCols = function() {return this._cols;};
+
+/** Return the x-scale.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getScaleX = function() {return this._scaleX;};
+
+/** Return the y-scale.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getScaleY = function() {return this._scaleY;};
+
+/** Return the current x coordinate of the mouse.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getMouseX = function() {return this._mouseX;};
+
+/** Return the current y coordinate of the mouse.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getMouseY = function() {return this._mouseY;};
+
+/** Return the current row coordinate of the mouse.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getMouseRow = function() {return this._mouseRow;};
+
+/** Return the current column coordinate of the mouse.
+* @returns {integer}
+*/
 C64Style.Screen.prototype.getMouseCol = function() {return this._mouseCol;};
 
+/** Create a new {@link C64Style.Layer} and add it to this screen.  Layers will be rendered in FIFO order,
+* so layers added later will be drawn on top of layers added earlier.
+* @param {string} type The type of layer to add - either "TextLayer" or "GfxLayer"
+* @see C64Style.Layer
+* @see C64Style.TextLayer
+* @see C64Style.GfxLayer
+*/
 C64Style.Screen.prototype.createLayer = function(type) {
   var canvas = document.createElement("CANVAS");
   this._targetDiv.appendChild(canvas);
@@ -180,14 +272,29 @@ C64Style.Screen.prototype.createLayer = function(type) {
   return layer;
 };
 
+/** Add a new  {@link C64Style.Layer} to this screen.  The preferred method of adding layers
+* is via the createLayer() method, but this will also work.
+* Layers will be rendered in FIFO order,
+* so layers added later will be drawn on top of layers added earlier.
+* @param {C64Style.Layer} layer The layer to add to the screen.
+* @see C64Style.Layer
+* @see C64Style.TextLayer
+* @see C64Style.GfxLayer
+*/
 C64Style.Screen.prototype.addLayer = function(layer) {
   this._layers.push(layer);
 };
 
+/** Return the array of layers.
+* @returns {Array}
+*/
 C64Style.Screen.prototype.getLayers = function() {
   return this._layers;
 };
 
+/** Pause or unpause the screen.
+* @param {boolean} boolean true = pause the screen; false = unpause the screen.
+*/
 C64Style.Screen.prototype.setPaused = function(boolean) {
   if (this._paused &amp;&amp; !boolean) this._unpaused = true;
   this._paused = boolean;
@@ -198,8 +305,16 @@ C64Style.Screen.prototype.setPaused = function(boolean) {
   );
   if (!this._paused) requestAnimationFrame(this.render.bind(this));
 };
+
+/** Return whether the screen is paused
+* @returns {boolean}
+*/
 C64Style.Screen.prototype.isPaused = function() {return this._paused;};
 
+/** Add an event handler to the screen.
+* @param {C64Style.EventType} eventType The type of the event.
+* @param {Function} callback The handler to call when the specified event type occurs
+*/
 C64Style.Screen.prototype.on = function(eventType, callback) {
   if (!this._eventListeners[eventType]) {
     this._eventListeners[eventType] = [];
@@ -207,13 +322,19 @@ C64Style.Screen.prototype.on = function(eventType, callback) {
   this._eventListeners[eventType].push(callback);
 };
 
-C64Style.Screen.prototype.clearEventHandlers = function(event) {
-  if (!this._eventListeners[event]) {
-    throw new Error("Unknown event type:" + event);
+/** Clear all event handlers for a given event type.
+* @param {C64Style.EventType} eventType The type of the event.
+*/
+C64Style.Screen.prototype.clearEventHandlers = function(eventType) {
+  if (!this._eventListeners[eventType]) {
+    throw new Error("Unknown event type:" + eventType);
   }
-  this._eventListeners[event] = [];
+  this._eventListeners[eventType] = [];
 };
 
+/** Notify event handlers when an event has occured.
+* @param {C64Style.Event} event The event that occured
+*/
 C64Style.Screen.prototype.notify = function(event) {
   if (!this._eventListeners[event.type]) {
     throw new Error("Unknown event type:" + event.type);
@@ -223,6 +344,9 @@ C64Style.Screen.prototype.notify = function(event) {
   }
 };
 
+/** Render the screen and all layers.
+* @param {number} time The current time in milliseconds.
+*/
 C64Style.Screen.prototype.render = function(time) {
   time = time || 1;
   if (this._paused || this._tabNotVisible) return;
@@ -259,6 +383,7 @@ C64Style.Screen.prototype.render = function(time) {
   requestAnimationFrame(this.render.bind(this));
 };
 
+/** @private */
 C64Style.Screen.prototype._handleMouseMoveEvent = function(time) {
   var event = new C64Style.Event(
     C64Style.EventType.MOUSE_MOVE,
@@ -275,6 +400,7 @@ C64Style.Screen.prototype._handleMouseMoveEvent = function(time) {
   this._mouseMoved = false;
 };
 
+/** @private */
 C64Style.Screen.prototype._updateFps = function(diff) {
   if (this._showFps) {
     var fps = Math.floor(1000 / diff);
@@ -295,17 +421,25 @@ C64Style.Screen.prototype._updateFps = function(diff) {
   }
 };
 
+/** @private */
 C64Style.Screen.prototype._update = function (time,diff) {
   for (var i = 0; i &lt; this._layers.length; i++) {
     this._layers[i].update(time,diff);
   }
 };
+
+/** @private */
 C64Style.Screen.prototype._render = function(time,diff) {
   for (var i = 0; i &lt; this._layers.length; i++) {
     this._layers[i].render(time,diff);
   }
 };
 
+/** Handle a mouse move event.  This does not directly propagate the event to
+* layers and elements; rather it will flag that a mouse movement has occured, and records its current location.
+* The event will be propagated during the next render cycle.
+* @param {Event} e The mouse event
+*/
 C64Style.Screen.prototype.handleMouseMoveEvent = function(e) {
   if (this._paused) return false;
   this._mouseMoved = true;
@@ -327,6 +461,9 @@ C64Style.Screen.prototype.handleMouseMoveEvent = function(e) {
   this._mouseCol = col;
 };
 
+/** Handles mouse up and mouse down events; notifies any local handlers and propagates the event to all layers.
+* @param {Event} e The mouse event
+*/
 C64Style.Screen.prototype.handleMouseEvent = function(e) {
   if (this._paused) return false;
   var x = this.getXFromMouseEvent(e);
@@ -356,22 +493,37 @@ C64Style.Screen.prototype.handleMouseEvent = function(e) {
   if (e.button === 1) return false;
 };
 
+/** @private */
 C64Style.Screen.prototype.propagateMouseEventThroughLayers = function(event) {
   for (var i = 0; i &lt; this._layers.length; i++) {
     this._layers[i].handleMouseEvent(event);
   }
 };
 
+/** Return the x coordinate from a mouse event.  Accounts for screen position.
+* @param {Event} e Mouse Event
+*/
 C64Style.Screen.prototype.getXFromMouseEvent = function(e) {
   return (e.pageX - (this._targetDiv.offsetLeft + this._borderSize));
 };
+
+/** Return the y coordinate from a mouse event.  Accounts for screen position.
+* @param {Event} e Mouse Event
+*/
 C64Style.Screen.prototype.getYFromMouseEvent = function(e) {
   return (e.pageY - (this._targetDiv.offsetTop + this._borderSize));
 };
 
+/** Return the column coordinate from a mouse event.  Accounts for screen position.
+* @param {Event} e Mouse Event
+*/
 C64Style.Screen.prototype.getColFromMouseEvent = function(e) {
   return Math.floor(this.getXFromMouseEvent(e) / (C64Style.CELLWIDTH * this._scaleX));
 };
+
+/** Return the row coordinate from a mouse event.  Accounts for screen position.
+* @param {Event} e Mouse Event
+*/
 C64Style.Screen.prototype.getRowFromMouseEvent = function(e) {
   return Math.floor(this.getYFromMouseEvent(e) / (C64Style.CELLHEIGHT * this._scaleY));
 };
@@ -385,13 +537,13 @@ C64Style.Screen.prototype.getRowFromMouseEvent = function(e) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jan 05 2017 20:50:13 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jan 06 2017 22:16:40 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

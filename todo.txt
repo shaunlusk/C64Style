@@ -16,7 +16,6 @@ better docs on events?
 
 documentation
   event changes in gfxelement, gfxLayer
-  Screen - in progress
   TextButton
   TextElement
   TextLayer
@@ -48,6 +47,7 @@ doc done:
   PixPathTypes
   PixRenderer
   PixSprite
+  Screen
 
 7 & 1 = chalice?
 
