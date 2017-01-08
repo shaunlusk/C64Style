@@ -28,6 +28,32 @@
         <article>
             <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
+/** Element that draws a text string or a text symbol to a canvas.&lt;br />
+* &lt;b>Extends&lt;/b>: {@link C64Style.GfxElement}
+* @constructor
+* @param {C64Style.Screen} screenContext The target screen.
+* @param {C64Style.GfxLayer} parentLayer The parent layer that will draw this element.
+* @param {Object} props Properties for this TextElement.  Supports:
+* From {@link C64Style.GfxElement}
+*   &lt;ul>
+*     &lt;li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.&lt;/li>
+*     &lt;li>hidden - boolean - Whether to hide this element.&lt;/li>
+*     &lt;li>x - number - The X coordinate for this element.&lt;/li>
+*     &lt;li>y - number - The Y coordinate for this element.&lt;/li>
+*     &lt;li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).&lt;/li>
+*   &lt;/ul>
+* For TextElement:
+* &lt;ul>
+*   &lt;li>text - string - The text for this element. A text string or a symbol name is required for TextElement.&lt;/li>
+*   &lt;li>symbolName - string - The symbolName for this element.  A text string or a symbol name is required for TextElement.  Refer to symbol names in {@link C64Style.CharacterMap}.&lt;/li>
+*   &lt;li>color - Color - The color for the text. Default: C64Style.Color.LIGHTBLUE&lt;/li>
+*   &lt;li>backgroundColor - Color - The backgroundColor for the text. Default: no background color&lt;/li>
+*   &lt;li>characterRenderer - CharacterRenderer - The renderer to use to draw text.
+*     This can be shared with a renderer for drawing text elements.  If a renderer is not provided,
+*     This TextLayer will create a {@link C64Style.CharacterRenderer}.&lt;/li>
+* &lt;/ul>
+*/
 C64Style.TextElement = function(screenContext, parentLayer, props) {
   props = props || {};
   C64Style.GfxElement.call(this, screenContext, parentLayer, props);
@@ -45,18 +71,56 @@ C64Style.TextElement = function(screenContext, parentLayer, props) {
 C64Style.TextElement.prototype = new C64Style.GfxElement();
 C64Style.TextElement.prototype.constructor = C64Style.TextElement;
 
+/** Returns the CharacterRenderer for this element.
+* @returns {C64Style.CharacterRenderer}
+*/
 C64Style.TextElement.prototype.getCharacterRenderer = function() {return this._characterRenderer;};
+
+/**
+* Return this element's width.
+* @return {number}
+*/
 C64Style.TextElement.prototype.getWidth = function() {return this._width;};
+
+/**
+* Return this element's width during the previous render cycle.
+* @return {number}
+*/
 C64Style.TextElement.prototype.getLastWidth = function() {return this._lastWidth || this._width;};
+
+/**
+* Return this element's height.
+* @return {number}
+*/
 C64Style.TextElement.prototype.getHeight = function() {return this._height;};
+
+/**
+* Return this element's text.
+* @return {string}
+*/
 C64Style.TextElement.prototype.getText = function() {return this._text;};
+
+/**
+* Set this element's text.
+* @param {string} text
+*/
 C64Style.TextElement.prototype.setText = function(text) {
   this._text = text;
   this._symbolName = null;
   this._setWidth();
   this.setDirty(true);
 };
+
+/**
+* Return this element's symbolName.
+* @return {string}
+*/
 C64Style.TextElement.prototype.getSymbolName = function() {return this._symbolName;};
+
+/**
+* Set this element's symbolName.
+* @param {string} symbolName
+*/
 C64Style.TextElement.prototype.setSymbolName = function(symbolName) {
   this._symbolName = symbolName;
   this._text = null;
@@ -64,25 +128,46 @@ C64Style.TextElement.prototype.setSymbolName = function(symbolName) {
   this.setDirty(true);
 };
 
+/**
+* Return this element's color.
+* @return {Color}
+*/
 C64Style.TextElement.prototype.getColor = function() {return this._color;};
+
+/**
+* Set this element's color.
+* @param {Color}
+*/
 C64Style.TextElement.prototype.setColor = function(color) {
   this._color = color;
   this.setDirty(true);
 };
 
+/**
+* Return this element's backgroundColor.
+* @return {Color}
+*/
 C64Style.TextElement.prototype.getBackgroundColor = function() {return this._backgroundColor;};
+
 C64Style.TextElement.prototype.setBackgroundColor = function(color) {
   this._backgroundColor = color;
   this.setDirty(true);
 };
 
+/**
+* Set this element's backgroundColor.
+* @param {Color}
+*/
 C64Style.TextElement.prototype._setWidth = function() {
   this._lastWidth = this._width;
   this._width = C64Style.CELLWIDTH * (this._text ? this._text.length : 1);
 };
 
-/** @override
+/** Clear this element.
 * In case the width of the text changed, clear based on last width
+* @param {number} time The current time, in milliseconds.
+* @param {number} diff The difference between the previous time and the current time, in milliseconds.
+* @override
 */
 C64Style.TextElement.prototype.clear = function(time, diff) {
   this.getCanvasContext().clearRect(
@@ -93,6 +178,11 @@ C64Style.TextElement.prototype.clear = function(time, diff) {
   this._lastWidth = null;
 };
 
+/** Render this element.
+* @param {number} time The current time, in milliseconds.
+* @param {number} diff The difference between the previous time and the current time, in milliseconds.
+* @override
+*/
 C64Style.TextElement.prototype.render = function(time,diff) {
   if (this.isHidden() || !this.isDirty()) return;
 
@@ -128,13 +218,13 @@ C64Style.TextElement.prototype.render = function(time,diff) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 17:38:05 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 21:48:31 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Interface: AnimationFrame</title>
+    <title>JSDoc: Source: Common/Utils.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,106 +17,51 @@
 
 <div id="main">
 
-    <h1 class="page-title">Interface: AnimationFrame</h1>
+    <h1 class="page-title">Source: Common/Utils.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>AnimationFrame</h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Animation frame interface used by sprites.These are intended to be lightweight, and purpose built for the type of Sprite.</div>
-        
+/** Check whether the argument is a function.
+* @memberof C64Style
+* @param {Object} callback The object to check.
+* @returns {boolean} true if it is a function, false otherwise.
+*/
+C64Style.isFunction = function(callback) {return typeof callback === "function";};
 
-        
+/** Write a message to the log.
+* @param {string} msg The message to write.
+*/
+C64Style.log = function(msg) {
+  console.log(msg);
+};
 
+/** Search an array for a given value, using an equality function; returns the index
+* of the first occurence in the array, or -1 if not found.
+* This can be used to search for objects with a given property value.
+* @param {Array} array The array to search
+* @param {Object} value The target value to search for
+* @param {Function} equalityFunction The function to use to compare array elements to the target value.
+*   Should retruen true when elements are equal, false otherwise.
+* @returns {integer} The index of the located value, or -1 if not found
+*/
+C64Style.linSearch = function(array, value, equalityFunction) {
+  for (var i = 0; i &lt; array.length; i++) {
+    if (equalityFunction(array[i], value)) return i;
+  }
+  return -1;
+};
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sprite.js.html">Sprite.js</a>, <a href="Sprite.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a></li>
-        
-            <li><a href="C64Style.PixSprite.html">C64Style.PixSprite</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+function noop() {}
+</code></pre>
+        </article>
+    </section>
 
 
 

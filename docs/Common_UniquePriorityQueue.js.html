@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Interface: AnimationFrame</title>
+    <title>JSDoc: Source: Common/UniquePriorityQueue.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,106 +17,82 @@
 
 <div id="main">
 
-    <h1 class="page-title">Interface: AnimationFrame</h1>
+    <h1 class="page-title">Source: Common/UniquePriorityQueue.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>AnimationFrame</h2>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @class
+* Enforces uniqueness of enqueued elements;
+* attempts made to enqueue an element that is
+* already in the queue will be ignored.
+*
+* Elements must implement getKey() method
+*/
+function UniquePriorityQueue() {
+  PriorityQueue.call(this);
+  this._entryKeys = {};
+}
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Animation frame interface used by sprites.These are intended to be lightweight, and purpose built for the type of Sprite.</div>
-        
+UniquePriorityQueue.prototype = new PriorityQueue();
+UniquePriorityQueue.prototype.constructor = UniquePriorityQueue;
 
-        
+/** @override
+*/
+UniquePriorityQueue.prototype.insert = function(element) {
+  if (this._entryKeys[element.getKey()]) return;
+  this._entryKeys[element.getKey()] = true;
+  PriorityQueue.prototype.insert.call(this, element);
+};
 
+UniquePriorityQueue.prototype.clear = function() {
+  this._entryKeys = {};
+  PriorityQueue.prototype.clear.call(this);
+};
 
-<dl class="details">
+UniquePriorityQueue.prototype.extractMax = function() {
+  var element = PriorityQueue.prototype.extractMax.call(this);
+  if (element &amp;&amp; C64Style.isFunction(element.getKey) &amp;&amp; this._entryKeys[element.getKey()]) delete this._entryKeys[element.getKey()];
+  return element;
+};
 
-    
+/** Returns whether the item exists in the queue.
+* @param element {IComparable} The element to search for.
+* @return {boolean} True if the element is in the queue; false otherwise.
+*/
+UniquePriorityQueue.prototype.contains = function(element) {
+  return this._entryKeys[element.getKey()] === true;
+};
 
-    
+UniquePriorityQueue.prototype.remove = function(element) {
+  PriorityQueue.prototype.remove.call(this, element);
+  if (this._entryKeys[element.getKey()]) delete this._entryKeys[element.getKey()];
+};
 
-    
+/** Removes and returns the item at the front of the queue
+* @method
+* @return {Object} The item at the front of the queue.
+*/
+UniquePriorityQueue.prototype.pop = UniquePriorityQueue.prototype.extractMax;
 
-    
+/** Removes and returns the item at the front of the queue
+* @method
+* @return {Object} The item at the front of the queue.
+*/
+UniquePriorityQueue.prototype.poll = UniquePriorityQueue.prototype.extractMax;
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sprite.js.html">Sprite.js</a>, <a href="Sprite.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a></li>
-        
-            <li><a href="C64Style.PixSprite.html">C64Style.PixSprite</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+/** Adds a new item to the queue.
+* @method
+* @param element {IComparable} The item to be added to the queue.  Must implement Comparable.
+*/
+UniquePriorityQueue.prototype.push = UniquePriorityQueue.prototype.insert;
+</code></pre>
+        </article>
+    </section>
 
 
 

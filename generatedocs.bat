@@ -1,1 +1,1 @@
-node node_modules/jsdoc/jsdoc.js -R README.MD -d docs lib
+node node_modules/jsdoc/jsdoc.js -r -R README.MD -d docs lib
