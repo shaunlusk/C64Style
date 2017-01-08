@@ -36,7 +36,7 @@
   <script type="text/javascript">
 
   var config = {
-      "rows" : 25,
+      "rows" : 28,
       "cols" : 40,
       "scaleX" : 2,
       "scaleY" : 2,
@@ -121,14 +121,30 @@
     });
     gfxLayer.addElement(element);
 
+    element = new C64Style.TextButton(screen, gfxLayer, {
+      x:14 * C64Style.CELLWIDTH + 4,
+      y:22 * C64Style.CELLHEIGHT,
+      text:"Tutorial",
+      backgroundColor:C64Style.Color.BLUE,
+      buttonColor : C64Style.Color.LIGHTBLUE,
+      textColor : C64Style.Color.LIGHTBLUE,
+      highlightButtonColor : C64Style.Color.LIGHTBLUE,
+      highlightTextColor : C64Style.Color.BLUE,
+      href:"demos/tutorial.html",
+      onClick: function(e) {
+        console.log(e);
+      }
+    });
+    gfxLayer.addElement(element);
+
     textLayer.writeText("C64Style", 16, 1, C64Style.Color.WHITE, C64Style.Color.LIGHTBLUE);
     textLayer.writeText("A framework for rendering Commodore 64", 1, 3, C64Style.Color.LIGHTBLUE);
     textLayer.writeText("style graphics with JavaScript and ", 2, 4, C64Style.Color.LIGHTBLUE);
     textLayer.writeText("HTML5 Canvas.", 13, 5, C64Style.Color.LIGHTBLUE);
 
-    textLayer.writeText("C64Style is maintained by", 0, 23, C64Style.Color.LIGHTBLUE);
+    textLayer.writeText("C64Style is maintained by", 1, 26, C64Style.Color.LIGHTBLUE);
     element = new C64Style.TextLink(screen, gfxLayer, {
-      x:26 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+      x:27 * C64Style.CELLWIDTH, y:26 * C64Style.CELLHEIGHT,
       text:"shaunlusk",
       color:C64Style.Color.LIGHTBLUE,
       backgroundColor:C64Style.Color.BLUE,
@@ -138,7 +154,7 @@
       newWindow : true
     });
     gfxLayer.addElement(element);
-    for (var i = 0; i < "shaunlusk".length; i++) textLayer.drawSymbol("BAR_99", 26 + i, 24, C64Style.Color.LIGHTBLUE);
+    for (var i = 0; i < "shaunlusk".length; i++) textLayer.drawSymbol("BAR_99", 27 + i, 27, C64Style.Color.LIGHTBLUE);
   }
 
   initialize(document.getElementById("content"), config);

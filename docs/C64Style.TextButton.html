@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: TextButton</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: TextButton</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="C64Style.html">C64Style</a>.</span>TextButton</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="TextButton"><span class="type-signature"></span>new TextButton<span class="signature">(screenContext, parentLayer, props)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Provides a clickable button link.<br /><b>Extends</b>: <a href="C64Style.TextLink.html">C64Style.TextLink</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>screenContext</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="C64Style.Screen.html">C64Style.Screen</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The target screen.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parentLayer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="C64Style.GfxLayer.html">C64Style.GfxLayer</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The parent layer that will draw this element.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>props</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Properties for this TextLink.  Supports:From <a href="C64Style.GfxElement.html">C64Style.GfxElement</a>  <ul>    <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>    <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>    <li>hidden - boolean - Whether to hide this element.</li>    <li>x - number - The X coordinate for this element.</li>    <li>y - number - The Y coordinate for this element.</li>    <li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).</li>  </ul>From TextElement:<ul>  <li>text - string - The text for this element. A text string or a symbol name is required for TextElement.</li>  <li>symbolName - string - The symbolName for this element.  A text string or a symbol name is required for TextElement.  Refer to symbol names in <a href="C64Style.html#.CharacterMap">C64Style.CharacterMap</a>.</li>  <li>color - Color - The color for the text. Default: C64Style.Color.LIGHTBLUE</li>  <li>backgroundColor - Color - The backgroundColor for the text. Default: no background color</li>  <li>characterRenderer - CharacterRenderer - The renderer to use to draw text.    This can be shared with a renderer for drawing text elements.  If a renderer is not provided,    This TextLayer will create a <a href="C64Style.CharacterRenderer.html">C64Style.CharacterRenderer</a>.</li></ul>From TextLink:<ul>  <li>mouseOverColor - Color - IGNORED FOR TEXTBUTTON</li>  <li>mouseOverBackgroundColor - Color - IGNORED FOR TEXTBUTTON</li>  <li>onClick - function - An optional function to call when the link is clicked.</li>  <li>href - string - The location to navigate to when the link is clicked.</li>  <li>newWindow - boolean - Whether to open the new location in a new window or not.</li></ul>For TextButton:<ul>  <li>highlightButtonColor - Color - The color to draw the button border and to highlight the button with when the mouse is over.</li>  <li>highlightTextColor - Color - The color to draw the button text.</li></ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="TextButton.js.html">TextButton.js</a>, <a href="TextButton.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">(time, diff)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Render this element.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The current time, in milliseconds.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>diff</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The difference between the previous time and the current time, in milliseconds.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="TextButton.js.html">TextButton.js</a>, <a href="TextButton.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

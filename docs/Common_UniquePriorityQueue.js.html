@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Common/UniquePriorityQueue.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Common/UniquePriorityQueue.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** Extension of PriorityQueue.
+* Enforces uniqueness of enqueued elements;
+* attempts made to enqueue an element that is
+* already in the queue will be ignored.
+*
+* Elements must implement getKey() method
+* @constructor
+*/
+function UniquePriorityQueue() {
+  PriorityQueue.call(this);
+  this._entryKeys = {};
+}
+
+UniquePriorityQueue.prototype = new PriorityQueue();
+UniquePriorityQueue.prototype.constructor = UniquePriorityQueue;
+
+/** Adds a new item to the queue.
+* @param element {Object} The item to be added to the queue.  Must implement getKey() method.
+* @override
+*/
+UniquePriorityQueue.prototype.insert = function(element) {
+  if (this._entryKeys[element.getKey()]) return;
+  this._entryKeys[element.getKey()] = true;
+  PriorityQueue.prototype.insert.call(this, element);
+};
+
+/** Clear the queue. */
+UniquePriorityQueue.prototype.clear = function() {
+  this._entryKeys = {};
+  PriorityQueue.prototype.clear.call(this);
+};
+
+/** Removes and returns the item at the front of the queue
+* @return {Object} The item at the front of the queue.
+*/
+UniquePriorityQueue.prototype.extractMax = function() {
+  var element = PriorityQueue.prototype.extractMax.call(this);
+  if (element &amp;&amp; C64Style.isFunction(element.getKey) &amp;&amp; this._entryKeys[element.getKey()]) delete this._entryKeys[element.getKey()];
+  return element;
+};
+
+/** Returns whether the item exists in the queue.
+* @param element {IComparable} The element to search for.
+* @return {boolean} True if the element is in the queue; false otherwise.
+*/
+UniquePriorityQueue.prototype.contains = function(element) {
+  return this._entryKeys[element.getKey()] === true;
+};
+
+/** Remove the specified element from the queue.
+* @param {Object} element
+*/
+UniquePriorityQueue.prototype.remove = function(element) {
+  PriorityQueue.prototype.remove.call(this, element);
+  if (this._entryKeys[element.getKey()]) delete this._entryKeys[element.getKey()];
+};
+
+/** Removes and returns the item at the front of the queue
+* @method
+* @return {Object} The item at the front of the queue.
+*/
+UniquePriorityQueue.prototype.pop = UniquePriorityQueue.prototype.extractMax;
+
+/** Removes and returns the item at the front of the queue
+* @method
+* @return {Object} The item at the front of the queue.
+*/
+UniquePriorityQueue.prototype.poll = UniquePriorityQueue.prototype.extractMax;
+
+/** Adds a new item to the queue.
+* @method
+* @param element {IComparable} The item to be added to the queue.  Must implement Comparable.
+*/
+UniquePriorityQueue.prototype.push = UniquePriorityQueue.prototype.insert;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

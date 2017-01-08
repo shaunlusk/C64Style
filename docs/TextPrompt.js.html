@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: TextPrompt.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: TextPrompt.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
+
+/** Displays a text prompt on the screen and waits for user input.
+* The enter key confirms the input.
+* Used by {@link C64Style.TextLayer}
+* @constructor
+* @param {C64Style.Screen} screenContext The target screen.
+* @param {C64Style.GfxLayer} parentLayer The parent layer will receive text prompts.
+* @param {Object} props Properties for this TextPrompt.  No properties supported at this time.
+*/
+C64Style.TextPrompt = function(screenContext, parentLayer, props) {
+  props = props || {};
+  this._screenContext = screenContext;
+  this._parentLayer = parentLayer;
+  this._prompt = "";
+  this._x = 0;
+  this._y = 0;
+  this._color = C64Style.Color.LIGHTBLUE;
+  this._maxLength = -1;
+  this._input = [];
+  this._hidden = true;
+  this._flashInterval = 500;
+  this._cursorOn = false;
+  this._callback = null;
+  this._elapsed = 0;
+  this._on = false;
+  screenContext.addEventListener("keydown", this.handleKeyboardEvent.bind(this));
+};
+
+/** Reset the text prompt.  This will prepare things for the next prompt.
+* This is automativally called when prompt() is called.
+*/
+C64Style.TextPrompt.prototype.reset = function() {
+  this.clearPrompt();
+  this._prompt = "";
+  this._x = 0;
+  this._y = 0;
+  this._color = C64Style.Color.LIGHTBLUE;
+  this._maxLength = -1;
+  this._input = [];
+  this._on = false;
+  this._cursorOn = false;
+  this._callback = null;
+  this._elapsed = 0;
+};
+
+/** Present a text prompt on the parent layer.
+* @param {string} prompt The text to prompt the user with, e.g. "Enter your name:"
+* @param {integer} x The column to start rendering the text prompt to.
+* @param {integer} y The row to start rendering the text prompt to.
+* @param {Color} color The color for the text prompt.
+* @param {integer} maxLength The maximum allowed length for the input.
+* @param {function} callback The function to call when the user has hit the Enter key.
+*   The argument to the callback is the text the user entered.
+*/
+C64Style.TextPrompt.prototype.prompt = function(prompt, x, y, color, maxLength, callback) {
+  this.reset();
+  this._input = [];
+  this._prompt = prompt || "";
+  this._x = x || 0;
+  this._y = y || 0;
+  this._cursorXOrigin = this._x + prompt.length;
+  this._cursorX = this._x + prompt.length;
+  this._color = color || C64Style.Color.LIGHTBLUE;
+  this._maxLength = maxLength || -1;
+  this._on = true;
+  this._callback = callback;
+  this._cursorOn = true;
+  this._elapsed = 0;
+  this._parentLayer.writeText(this._prompt, this._x, this._y, this._color);
+  this.render();
+  return this;
+};
+
+/** Update this text prompt.
+* @param {number} time The current time, in milliseconds.
+* @param {number} diff The difference between the previous time and the current time, in milliseconds.
+*/
+C64Style.TextPrompt.prototype.update = function(time,diff) {
+  if (!this._on) return;
+  this._elapsed += diff;
+  if (this._elapsed >= this._flashInterval) {
+    while (this._elapsed >= this._flashInterval) {
+      this._elapsed -= this._flashInterval;
+    }
+    this._cursorOn = !this._cursorOn;
+  }
+};
+
+/** Render this text prompt to the parent layer.
+*/
+C64Style.TextPrompt.prototype.render = function() {
+  if (!this._on) return;
+  if (this._cursorOn) {
+    this.drawCursor();
+  } else {
+    this.clearCursor();
+  }
+};
+
+/** @private */
+C64Style.TextPrompt.prototype._handleEnterKey = function(event) {
+  if (event.key === "Enter") {
+    this.clearCursor();
+    this._on = false;
+    if (C64Style.isFunction(this._callback)) this._callback(this.getInput());
+    return true;
+  }
+  return false;
+};
+
+/** @private */
+C64Style.TextPrompt.prototype._handleBackspaceKey = function(event) {
+  if (event.key === "Backspace") {
+    this._input.splice(this._input.length - 1, 1);
+    this._parentLayer.clearLength(this._cursorX, this._y, 1);
+    this._cursorX--;
+    return true;
+  }
+  return false;
+};
+
+/** @private */
+C64Style.TextPrompt.prototype._handleSpaceKey = function(event) {
+  if (event.key === " ") {
+    this._input.push(" ");
+    this._parentLayer.drawSymbol("SPACE", this._cursorX, this._y, this._color);
+    this._cursorX++;
+    return true;
+  }
+  return false;
+};
+
+/** Handles keyboard events.
+* @param {Event} event Keyboard event
+*/
+C64Style.TextPrompt.prototype.handleKeyboardEvent = function(event) {
+  if (!this._on) return;
+
+  // if enter, callback with input
+  if  (this._handleEnterKey(event)) return;
+
+  // if backspace, x-1, remove last char
+  if  (this._handleBackspaceKey(event)) return;
+
+  if (this._input.length >= this._maxLength &amp;&amp; this._maxLength > 0) {
+    return;
+  }
+
+  if  (this._handleSpaceKey(event)) return;
+
+  // if key not found in map, return;
+  if (!C64Style.CharacterMap[event.key]) {
+    return;
+  }
+
+  this._input.push(event.key);
+  this._parentLayer.writeText(event.key, this._cursorX, this._y, this._color);
+  this._cursorX++;
+};
+
+/** Return the current input.
+* @returns {string} The current text input.
+*/
+C64Style.TextPrompt.prototype.getInput = function() {return this._input.join("");};
+
+/** Clear the current input.
+*/
+C64Style.TextPrompt.prototype.clearInput = function() {
+  this._parentLayer.clearLength(this._cursorXOrigin, this._y, this._input.length + 1);
+  this._input = [];
+};
+
+/** Clear the text prompt and any input on the screen.
+*/
+C64Style.TextPrompt.prototype.clearPrompt = function() {
+  this._parentLayer.clearLength(this._x, this._y, this._prompt.length);
+  this._parentLayer.clearLength(this._cursorXOrigin, this._y, this._input.length + 1);
+};
+
+/** Clear the cursor */
+C64Style.TextPrompt.prototype.clearCursor = function() {
+  this._parentLayer.clearLength(this._cursorX, this._y, 1);
+};
+
+/** Draw the cursor */
+C64Style.TextPrompt.prototype.drawCursor = function() {
+  this._parentLayer.drawSymbol("BLOCK", this._cursorX, this._y, this._color);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

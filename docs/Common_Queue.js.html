@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Common/Queue.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Common/Queue.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
+
+/** Simple Queue class
+* @constructor
+*/
+C64Style.Queue = function() {
+  this.head = null;
+  this.tail = null;
+  this._size = 0;
+};
+
+/** Adds a new item to the queue.
+* @param {Object} elem The item to be added to the queue.
+*/
+C64Style.Queue.prototype.push = function(elem) {
+  var qelem = new C64Style.QueueElement(elem,null);
+  if (this._size === 0) {
+    this.head = qelem;
+  } else {
+    this.tail.next = qelem;
+  }
+  this.tail = qelem;
+  this._size++;
+};
+
+/** Removes and returns the item at the front of the queue
+* @return {Object} The item at the front of the queue. Null if queue is empty.
+*/
+C64Style.Queue.prototype.pop = function() {
+  var temp = this.head;
+  if (this.head !== null) {
+    this.head = this.head.next;
+    this._size--;
+  }
+
+  return temp === null ? null : temp.elem;
+};
+
+/** Clear the queue. */
+C64Style.Queue.prototype.clear = function() {
+  this.head = null;
+  this.tail = null;
+  this._size = 0;
+};
+
+/** Retrieve an iterator for this queue.
+* @returns {C64Style.QueueIterator}
+*/
+C64Style.Queue.prototype.newIterator = function() {
+  return new C64Style.QueueIterator(this.head);
+};
+
+/** Returns whether this queue contains the target object.
+* @returns {boolean}
+*/
+C64Style.Queue.prototype.contains = function(target) {
+  var it = this.newIterator();
+  var element = null;
+  while ((element = it.getCurrent()) !== null ) {
+    if (element === target || (C64Style.isFunction(element.equals) &amp;&amp; element.equals(target))) return true;
+    it.next();
+  }
+  return false;
+};
+
+/** Check if the specified object exists in the queue; if so return the element, else return null.
+* @returns {Object}
+*/
+C64Style.Queue.prototype.getByEquality = function(target) {
+  var it = this.newIterator();
+  var element = null;
+  while ((element = it.getCurrent()) !== null ) {
+    if (element === target || (C64Style.isFunction(element.equals) &amp;&amp; element.equals(target))) return element;
+    it.next();
+  }
+  return null;
+};
+
+/** Returns the size of the queue
+* @return {int} The size of the queue.
+*/
+C64Style.Queue.prototype.size = function() {
+  return this._size;
+};
+
+/** The node class for the Queue.
+* @constructor
+* @param {Object} elem The object for this node.
+* @param {Object} next The next element in the queue.
+*/
+C64Style.QueueElement = function(elem,next) {
+  this.elem = elem;
+  this.next = next;
+};
+
+/** An iterator for a Queue.
+* @constructor
+* @param {C64Style.QueueElement} head The head element of the Queue.
+*/
+C64Style.QueueIterator = function(head) {
+  this._ptr = head;
+};
+
+/** Return the object for the current position in the queue.
+*/
+C64Style.QueueIterator.prototype.getCurrent = function() {
+  return this._ptr === null ? null : this._ptr.elem;
+};
+
+/** Move the iterator to the next position in the queue. */
+C64Style.QueueIterator.prototype.next = function() {
+  this._ptr = this._ptr === null ? null : this._ptr.next;
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -136,7 +136,40 @@
             <dt><a href="C64Style.PixRenderer.html">PixRenderer</a></dt>
             <dd></dd>
         
+            <dt><a href="C64Style.PixSprite.html">PixSprite</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.Queue.html">Queue</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.QueueElement.html">QueueElement</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.QueueIterator.html">QueueIterator</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.Screen.html">Screen</a></dt>
+            <dd></dd>
+        
             <dt><a href="C64Style.Sprite.html">Sprite</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.TextButton.html">TextButton</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.TextElement.html">TextElement</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.TextLayer.html">TextLayer</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.TextLink.html">TextLink</a></dt>
+            <dd></dd>
+        
+            <dt><a href="C64Style.TextPrompt.html">TextPrompt</a></dt>
             <dd></dd>
         </dl>
     
@@ -4616,7 +4649,7 @@
 
         
             
-<h4 class="name" id=".EventType"><span class="type-signature">(static) </span>EventType<span class="type-signature"> :string</span></h4>
+<h4 class="name" id=".EventType"><span class="type-signature">(static) </span>EventType<span class="type-signature"></span></h4>
 
 
 
@@ -4627,16 +4660,413 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<span class="param-type">string</span>
+                <td class="name"><code>ELEMENT_MOVED</code></td>
+            
 
+            <td class="type">
+            
+            </td>
 
-        </li>
-    </ul>
+            
 
+            
+
+            <td class="description last">Emitted by an C64Style.GfxElement when it moves</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>BEFORE_RENDER</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by a C64Style.Screen before a render cycle</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>AFTER_RENDER</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by a C64Style.Screen after a render cycle</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ELEMENT_STARTED_MOVING</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted when an C64Style.GfxElement starts moving</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ELEMENT_STOPPED_MOVING</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by a moving C64Style.GfxElement when it stops moving</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ELEMENT_COLLISION</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by an C64Style.GfxElement when two elements collide</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ELEMENT_HIT_LEFT_EDGE</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its left edge</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ELEMENT_HIT_RIGHT_EDGE</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its right edge</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ELEMENT_HIT_TOP_EDGE</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its top edge</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ELEMENT_HIT_BOTTOM_EDGE</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emitted by a C64Style.GfxLayer when an element hits its bottom edge</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>SCREEN_PAUSED</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.Screen when it is paused</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>SCREEN_RESUMED</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.Screen when it is unpaused</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_MOVE</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.Screen when the mouse moves somewhere inside its boundaries</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_DOWN</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.Screen when a mouse down event occurs on it</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_UP</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.Screen when a mouse down event occurs on it</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_ENTER_ELEMENT</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.GfxElement when the mouse enters its bounding box</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_EXIT_ELEMENT</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.GfxElement when the mouse leaves its bounding box</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_MOVE_OVER_ELEMENT</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.GfxElement when the mouse moves inside its bounding box</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_DOWN_ON_ELEMENT</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.GfxElement when a mouse down event occurs on it</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>MOUSE_UP_ON_ELEMENT</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.GfxElement when a mouse up event occurs on it</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>SPRITE_ANIMATION_DONE</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Emmited by a C64Style.Sprite when its animation cycle completes (only for non-looping sprites)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -4670,7 +5100,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="EventType.js.html">EventType.js</a>, <a href="EventType.js.html#line7">line 7</a>
+        <a href="EventType.js.html">EventType.js</a>, <a href="EventType.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -4740,7 +5170,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">A single pixel</td>
         </tr>
 
     
@@ -4758,7 +5188,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">A rectangular range of pixels</td>
         </tr>
 
     
@@ -4817,6 +5247,493 @@
     
 
     
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".isFunction"><span class="type-signature">(static) </span>isFunction<span class="signature">(callback)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Check whether the argument is a function.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The object to check.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Common_Utils.js.html">Common/Utils.js</a>, <a href="Common_Utils.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    true if it is a function, false otherwise.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".linSearch"><span class="type-signature">(static) </span>linSearch<span class="signature">(array, value, equalityFunction)</span><span class="type-signature"> &rarr; {integer}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Search an array for a given value, using an equality function; returns the indexof the first occurence in the array, or -1 if not found.This can be used to search for objects with a given property value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>array</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The array to search</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The target value to search for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>equalityFunction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The function to use to compare array elements to the target value.  Should retruen true when elements are equal, false otherwise.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Common_Utils.js.html">Common/Utils.js</a>, <a href="Common_Utils.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The index of the located value, or -1 if not found
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">integer</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".log"><span class="type-signature">(static) </span>log<span class="signature">(msg)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Write a message to the log.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message to write.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Common_Utils.js.html">Common/Utils.js</a>, <a href="Common_Utils.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
 
     
 
@@ -4831,13 +5748,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jan 04 2017 20:33:43 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

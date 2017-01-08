@@ -19,4 +19,6 @@ img {
 
 body {
   font-family:sans-serif;
+  margin : auto;
+  width:1024px
 }
