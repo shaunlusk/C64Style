@@ -48,7 +48,7 @@
 
 
 <div class="description">
-    <p>Graphics element base class.</p><p>* Current Implementations:<ul>  <li><a href="C64Style.PixElement.html">C64Style.PixElement</a></li>  <li><a href="C64Style.TextElement.html">C64Style.TextElement</a></li>  <li><a href="C64Style.ImageElement.html">C64Style.ImageElement</a></li>  <li><a href="C64Style.Sprite.html">C64Style.Sprite</a>    <ul>      <li><a href="C64Style.PixSprite.html">C64Style.PixSprite</a></li>      <li><a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a></li>    </ul>  </li></ul><p>GfxElements support two types of movement: moveTo() instructions and movementRates.The former, moveTo() will send an element toward a specified set of coordinates, scheduled to arrive after aspecified duration.  The latter, movementRates, will start an element moving at a given rate and continue until stopped.See moveTo() and setMoveRates() for more details.</p><p>GfxElements emit a number of events:<ul>  <li>ELEMENT_MOVED : Any time the element moves.</li>  <li>ELEMENT_STARTED_MOVING : When the element starts moving.</li>  <li>ELEMENT_STOPPED_MOVING : When the element stops moving.</li>  <li>ELEMENT_COLLISION : When the element collides with another.</li>  <li>MOUSE_ENTER_ELEMENT : When the mouse enters the element's bounding box.</li>  <li>MOUSE_EXIT_ELEMENT : When the mouse leaves the element's bouding box.</li>  <li>MOUSE_MOVE_OVER_ELEMENT : When the mouse moves and is over the element.</li>  <li>MOUSE_DOWN_ON_ELEMENT : When there is a mouse down event on the element.</li>  <li>MOUSE_UP_ON_ELEMENT : When there is a mouse up event on the element.</li></ul>In most cases, the event data will include an 'element' property that refers to the element.  The only exception is ELEMENT_COLLISION;this will have element1 and element2 properties, where element1 is the element on which collidesWith() was called, and element2 was the element passed to the method.</p><p>In addition to the element property, the mouse events will also include x,y, and row, column properties in the data, corresponding to the coordinates of the event. </p><p>Event listeners can be attached to individual elements, or at the screen level.  Refer to documentation on the "on" and "notify" methods.</p>
+    <p>Graphics element base class.</p><p>* Current Implementations:<ul>  <li><a href="C64Style.PixElement.html">C64Style.PixElement</a></li>  <li><a href="C64Style.TextElement.html">C64Style.TextElement</a></li>  <li><a href="C64Style.ImageElement.html">C64Style.ImageElement</a></li>  <li><a href="C64Style.Sprite.html">C64Style.Sprite</a>    <ul>      <li><a href="C64Style.PixSprite.html">C64Style.PixSprite</a></li>      <li><a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a></li>    </ul>  </li></ul><p>GfxElements support two types of movement: moveTo() instructions and movementRates.The former, moveTo() will send an element toward a specified set of coordinates, scheduled to arrive after aspecified duration.  The latter, movementRates, will start an element moving at a given rate and continue until stopped.See moveTo() and setMoveRates() for more details.</p><p>GfxElements emit a number of events:<ul>  <li>ELEMENT_MOVED : Any time the element moves.</li>  <li>ELEMENT_STARTED_MOVING : When the element starts moving.</li>  <li>ELEMENT_STOPPED_MOVING : When the element stops moving.</li>  <li>ELEMENT_COLLISION : When the element collides with another.</li>  <li>MOUSE_ENTER_ELEMENT : When the mouse enters the element's bounding box.</li>  <li>MOUSE_EXIT_ELEMENT : When the mouse leaves the element's bouding box.</li>  <li>MOUSE_MOVE_OVER_ELEMENT : When the mouse moves and is over the element.</li>  <li>MOUSE_DOWN_ON_ELEMENT : When there is a mouse down event on the element.</li>  <li>MOUSE_UP_ON_ELEMENT : When there is a mouse up event on the element.</li>  <li>ELEMENT_HIT_LEFT_EDGE : When the element hits the left edge of its layer.</li>  <li>ELEMENT_HIT_RIGHT_EDGE : When the element hits the right edge of its layer.</li>  <li>ELEMENT_HIT_TOP_EDGE : When the element hits the top edge of its layer.</li>  <li>ELEMENT_HIT_BOTTOM_EDGE : When the element hits the bottom edge of its layer.</li></ul>In most cases, the event data will include an 'element' property that refers to the element.  The only exception is ELEMENT_COLLISION;this will have element1 and element2 properties, where element1 is the element on which collidesWith() was called, and element2 was the element passed to the method.</p><p>In addition to the element property, the mouse events will also include x,y, and row, column properties in the data, corresponding to the coordinates of the event. </p><p>Event listeners can be attached to individual elements, or at the screen level.  Refer to documentation on the "on" and "notify" methods.</p>
 </div>
 
 
@@ -187,7 +187,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line51">line 51</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -359,7 +359,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line485">line 485</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line489">line 489</a>
     </li></ul></dd>
     
 
@@ -490,7 +490,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line704">line 704</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line708">line 708</a>
     </li></ul></dd>
     
 
@@ -572,7 +572,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line382">line 382</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line386">line 386</a>
     </li></ul></dd>
     
 
@@ -703,7 +703,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line513">line 513</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line517">line 517</a>
     </li></ul></dd>
     
 
@@ -875,7 +875,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line552">line 552</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line556">line 556</a>
     </li></ul></dd>
     
 
@@ -1024,7 +1024,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line564">line 564</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line568">line 568</a>
     </li></ul></dd>
     
 
@@ -1173,7 +1173,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line574">line 574</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line578">line 578</a>
     </li></ul></dd>
     
 
@@ -1273,7 +1273,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line169">line 169</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line173">line 173</a>
     </li></ul></dd>
     
 
@@ -1373,7 +1373,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line598">line 598</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line602">line 602</a>
     </li></ul></dd>
     
 
@@ -1473,7 +1473,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line593">line 593</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line597">line 597</a>
     </li></ul></dd>
     
 
@@ -1573,7 +1573,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line583">line 583</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line587">line 587</a>
     </li></ul></dd>
     
 
@@ -1673,7 +1673,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line588">line 588</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line592">line 592</a>
     </li></ul></dd>
     
 
@@ -1773,7 +1773,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line205">line 205</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -1873,7 +1873,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line211">line 211</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line215">line 215</a>
     </li></ul></dd>
     
 
@@ -1973,7 +1973,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line292">line 292</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line296">line 296</a>
     </li></ul></dd>
     
 
@@ -2073,7 +2073,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line99">line 99</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -2177,7 +2177,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line261">line 261</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -2277,7 +2277,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line267">line 267</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line271">line 271</a>
     </li></ul></dd>
     
 
@@ -2377,7 +2377,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line323">line 323</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line327">line 327</a>
     </li></ul></dd>
     
 
@@ -2477,7 +2477,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line329">line 329</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line333">line 333</a>
     </li></ul></dd>
     
 
@@ -2577,7 +2577,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line163">line 163</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line167">line 167</a>
     </li></ul></dd>
     
 
@@ -2677,7 +2677,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line175">line 175</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line179">line 179</a>
     </li></ul></dd>
     
 
@@ -2777,7 +2777,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line181">line 181</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -2877,7 +2877,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line187">line 187</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line191">line 191</a>
     </li></ul></dd>
     
 
@@ -2977,7 +2977,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line193">line 193</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -3077,7 +3077,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line199">line 199</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line203">line 203</a>
     </li></ul></dd>
     
 
@@ -3177,7 +3177,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line285">line 285</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line289">line 289</a>
     </li></ul></dd>
     
 
@@ -3277,7 +3277,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line231">line 231</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
@@ -3377,7 +3377,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line237">line 237</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line241">line 241</a>
     </li></ul></dd>
     
 
@@ -3477,7 +3477,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line140">line 140</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line144">line 144</a>
     </li></ul></dd>
     
 
@@ -3577,7 +3577,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line155">line 155</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -3726,7 +3726,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line619">line 619</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line623">line 623</a>
     </li></ul></dd>
     
 
@@ -3808,7 +3808,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line128">line 128</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -3908,7 +3908,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line407">line 407</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line411">line 411</a>
     </li></ul></dd>
     
 
@@ -3990,7 +3990,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line104">line 104</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -4090,7 +4090,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line117">line 117</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -4190,7 +4190,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line278">line 278</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line282">line 282</a>
     </li></ul></dd>
     
 
@@ -4408,7 +4408,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line340">line 340</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line344">line 344</a>
     </li></ul></dd>
     
 
@@ -4539,7 +4539,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line715">line 715</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line719">line 719</a>
     </li></ul></dd>
     
 
@@ -4693,7 +4693,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line694">line 694</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line698">line 698</a>
     </li></ul></dd>
     
 
@@ -4847,7 +4847,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line500">line 500</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line504">line 504</a>
     </li></ul></dd>
     
 
@@ -4978,7 +4978,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line112">line 112</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -5109,7 +5109,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line217">line 217</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line221">line 221</a>
     </li></ul></dd>
     
 
@@ -5240,7 +5240,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line225">line 225</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line229">line 229</a>
     </li></ul></dd>
     
 
@@ -5371,7 +5371,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line134">line 134</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line138">line 138</a>
     </li></ul></dd>
     
 
@@ -5502,7 +5502,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line123">line 123</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -5656,7 +5656,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line304">line 304</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line308">line 308</a>
     </li></ul></dd>
     
 
@@ -5787,7 +5787,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line243">line 243</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line247">line 247</a>
     </li></ul></dd>
     
 
@@ -5918,7 +5918,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line252">line 252</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line256">line 256</a>
     </li></ul></dd>
     
 
@@ -6049,7 +6049,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line146">line 146</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line150">line 150</a>
     </li></ul></dd>
     
 
@@ -6131,7 +6131,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line401">line 401</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line405">line 405</a>
     </li></ul></dd>
     
 
@@ -6213,7 +6213,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line390">line 390</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line394">line 394</a>
     </li></ul></dd>
     
 
@@ -6367,7 +6367,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line417">line 417</a>
+        <a href="GfxElement.js.html">GfxElement.js</a>, <a href="GfxElement.js.html#line421">line 421</a>
     </li></ul></dd>
     
 
@@ -6431,13 +6431,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 21:48:31 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

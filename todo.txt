@@ -4,9 +4,6 @@
 
 better docs on events?
 
-documentation
-  event changes in gfxelement, gfxLayer
-
 add additional char maps
   caret
   tilda

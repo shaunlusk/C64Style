@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Layer.js</title>
+    <title>JSDoc: Source: Common/Queue.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Layer.js</h1>
+    <h1 class="page-title">Source: Common/Queue.js</h1>
 
     
 
@@ -28,79 +28,116 @@
         <article>
             <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
 
-/**
-* Abstract class for graphical layers on a C64Style.Screen.&lt;br />
-* Existing implementations: {@link C64Style.TextLayer}, {@link C64Style.GfxLayer}
+/** Simple Queue class
 * @constructor
-* @param {C64Style.Screen} screenContext The parent screen
-* @param {CanvasContext} canvas The canvas context that this layer will draw to.
-* @param {Object} props The properties for this layer:
-* &lt;ul>
-*   &lt;li>width - number - The width of the layer.  Should match Screen.&lt;/li>
-*   &lt;li>height - number - The height of the layer.  Should match Screen.&lt;/li>
-* &lt;/ul>
-* @see C64Style.TextLayer
-* @see C64Style.GfxLayer
 */
-C64Style.Layer = function(screenContext, canvas, props) {
-  props = props || {};
-  this._width = props.width || 320;
-  this._height = props.height || 200;
-  this._screenContext = screenContext;
-  this._canvas = canvas;
-  this._canvasContext = canvas ? canvas.getContext("2d") : null;
+C64Style.Queue = function() {
+  this.head = null;
+  this.tail = null;
+  this._size = 0;
 };
 
-/** Returns the width of the Layer
-* @returns {number}
+/** Adds a new item to the queue.
+* @param {Object} elem The item to be added to the queue.
 */
-C64Style.Layer.prototype.getWidth = function() {return this._width;};
+C64Style.Queue.prototype.push = function(elem) {
+  var qelem = new C64Style.QueueElement(elem,null);
+  if (this._size === 0) {
+    this.head = qelem;
+  } else {
+    this.tail.next = qelem;
+  }
+  this.tail = qelem;
+  this._size++;
+};
 
-/** Returns the height of the Layer
-* @returns {number}
+/** Removes and returns the item at the front of the queue
+* @return {Object} The item at the front of the queue. Null if queue is empty.
 */
-C64Style.Layer.prototype.getHeight = function() {return this._height;};
+C64Style.Queue.prototype.pop = function() {
+  var temp = this.head;
+  if (this.head !== null) {
+    this.head = this.head.next;
+    this._size--;
+  }
 
-/** Returns the parent C64Style.Screen
-* @returns {C64Style.Screen}
-*/
-C64Style.Layer.prototype.getScreenContext = function() {return this._screenContext;};
+  return temp === null ? null : temp.elem;
+};
 
-/** Returns the Canvas for this layer.
-* &lt;b>Note&lt;/b>: this does not return the drawable CanvasContext, rather it returns the reference to the DOM element.
-* @returns {HTMLElement}
-*/
-C64Style.Layer.prototype.getCanvas = function() {return this._canvas;};
+/** Clear the queue. */
+C64Style.Queue.prototype.clear = function() {
+  this.head = null;
+  this.tail = null;
+  this._size = 0;
+};
 
-/** Returns the CanvasContext for this layer.
-* @returns {CanvasContext}
+/** Retrieve an iterator for this queue.
+* @returns {C64Style.QueueIterator}
 */
-C64Style.Layer.prototype.getCanvasContext = function() {return this._canvasContext;};
+C64Style.Queue.prototype.newIterator = function() {
+  return new C64Style.QueueIterator(this.head);
+};
 
-/** Update this Layer. &lt;b>Sub-classes MUST implement this method&lt;/b>
-* @abstract
-* @param {number} time The current time (milliseconds)
-* @param {number} diff The difference between the last time and the current time  (milliseconds)
+/** Returns whether this queue contains the target object.
+* @returns {boolean}
 */
-C64Style.Layer.prototype.update = function(time,diff) {};
+C64Style.Queue.prototype.contains = function(target) {
+  var it = this.newIterator();
+  var element = null;
+  while ((element = it.getCurrent()) !== null ) {
+    if (element === target || (C64Style.isFunction(element.equals) &amp;&amp; element.equals(target))) return true;
+    it.next();
+  }
+  return false;
+};
 
-/** Render this Layer. &lt;b>Sub-classes MUST implement this method&lt;/b>
-* @abstract
-* @param {number} time The current time (milliseconds)
-* @param {number} diff The difference between the last time and the current time  (milliseconds)
+/** Check if the specified object exists in the queue; if so return the element, else return null.
+* @returns {Object}
 */
-C64Style.Layer.prototype.render = function(time,diff) {};
+C64Style.Queue.prototype.getByEquality = function(target) {
+  var it = this.newIterator();
+  var element = null;
+  while ((element = it.getCurrent()) !== null ) {
+    if (element === target || (C64Style.isFunction(element.equals) &amp;&amp; element.equals(target))) return element;
+    it.next();
+  }
+  return null;
+};
 
-/** Propagate a mouse event to this Layer. &lt;b>Sub-classes MUST implement this method&lt;/b>
-* @abstract
-* @param {C64Style.Event} event The mouse event
+/** Returns the size of the queue
+* @return {int} The size of the queue.
 */
-C64Style.Layer.prototype.handleMouseEvent = function(event) {};
+C64Style.Queue.prototype.size = function() {
+  return this._size;
+};
 
-/** Clears all contents of this Layer.
+/** The node class for the Queue.
+* @constructor
+* @param {Object} elem The object for this node.
+* @param {Object} next The next element in the queue.
 */
-C64Style.Layer.prototype.clearLayer = function() {
-  this._canvasContext.clearRect(0, 0, this.getWidth(), this.getHeight());
+C64Style.QueueElement = function(elem,next) {
+  this.elem = elem;
+  this.next = next;
+};
+
+/** An iterator for a Queue.
+* @constructor
+* @param {C64Style.QueueElement} head The head element of the Queue.
+*/
+C64Style.QueueIterator = function(head) {
+  this._ptr = head;
+};
+
+/** Return the object for the current position in the queue.
+*/
+C64Style.QueueIterator.prototype.getCurrent = function() {
+  return this._ptr === null ? null : this._ptr.elem;
+};
+
+/** Move the iterator to the next position in the queue. */
+C64Style.QueueIterator.prototype.next = function() {
+  this._ptr = this._ptr === null ? null : this._ptr.next;
 };
 </code></pre>
         </article>
