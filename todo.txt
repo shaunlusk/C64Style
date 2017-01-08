@@ -16,7 +16,6 @@ better docs on events?
 
 documentation
   event changes in gfxelement, gfxLayer
-  TextElement
   TextLink
   TextButton
   PriorityQueue
@@ -48,6 +47,7 @@ doc done:
   Utils
   TextLayer
   TextPrompt
+  TextElement
 
 7 & 1 = chalice?
 
