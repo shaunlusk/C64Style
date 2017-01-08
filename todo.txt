@@ -16,8 +16,6 @@ better docs on events?
 
 documentation
   event changes in gfxelement, gfxLayer
-  TextLayer
-  TextPrompt
   TextElement
   TextLink
   TextButton
@@ -48,6 +46,8 @@ doc done:
   PixSprite
   Screen
   Utils
+  TextLayer
+  TextPrompt
 
 7 & 1 = chalice?
 
