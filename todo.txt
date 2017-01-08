@@ -2,60 +2,12 @@
 ### TODO
 ###############################################################################
 
-ReadMe
-  more examples & best practices
-  link to demos
-  link to docs
-
-check - need collision check on removed elements in gfxLayer
-
-demos
-  more comments
-
 better docs on events?
 
 documentation
   event changes in gfxelement, gfxLayer
-  PriorityQueue
-  Queue
-  UniquePriorityQueue
-
-doc done:
-  CharacterMap
-  CharacterRenderer
-  Color
-  ColorPointer
-  Constants
-  Event
-  EventType
-  GfxElement
-  GfxElementZIndexComparable
-  GfxLayer
-  ImageElement
-  ImageRenderer
-  ImageSprite
-  Sprite
-  Layer
-  MoveOrder
-  PixElement
-  PixPathTypes
-  PixRenderer
-  PixSprite
-  Screen
-  Utils
-  TextLayer
-  TextPrompt
-  TextElement
-  TextLink
-  TextButton
-
-7 & 1 = chalice?
-
-consistency: textLayer.render - no time& diff, but this is a pattern elsewhere?
 
 add additional char maps
-  person
-  PERSON = [{"type":"PIXEL","x":2,"y":0,"color":"#000000"},{"type":"PIXEL","x":3,"y":0,"color":"#000000"},{"type":"PIXEL","x":4,"y":0,"color":"#000000"},{"type":"PIXEL","x":5,"y":0,"color":"#000000"},{"type":"PIXEL","x":2,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":1,"color":"#000000"},{"type":"PIXEL","x":4,"y":1,"color":"#000000"},{"type":"PIXEL","x":5,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":2,"color":"#000000"},{"type":"PIXEL","x":4,"y":2,"color":"#000000"},{"type":"PIXEL","x":0,"y":3,"color":"#000000"},{"type":"PIXEL","x":1,"y":3,"color":"#000000"},{"type":"PIXEL","x":2,"y":3,"color":"#000000"},{"type":"PIXEL","x":3,"y":3,"color":"#000000"},{"type":"PIXEL","x":4,"y":3,"color":"#000000"},{"type":"PIXEL","x":5,"y":3,"color":"#000000"},{"type":"PIXEL","x":6,"y":3,"color":"#000000"},{"type":"PIXEL","x":7,"y":3,"color":"#000000"},{"type":"PIXEL","x":0,"y":4,"color":"#000000"},{"type":"PIXEL","x":1,"y":4,"color":"#000000"},{"type":"PIXEL","x":3,"y":4,"color":"#000000"},{"type":"PIXEL","x":4,"y":4,"color":"#000000"},{"type":"PIXEL","x":6,"y":4,"color":"#000000"},{"type":"PIXEL","x":7,"y":4,"color":"#000000"},{"type":"PIXEL","x":2,"y":5,"color":"#000000"},{"type":"PIXEL","x":3,"y":5,"color":"#000000"},{"type":"PIXEL","x":4,"y":5,"color":"#000000"},{"type":"PIXEL","x":5,"y":5,"color":"#000000"},{"type":"PIXEL","x":1,"y":6,"color":"#000000"},{"type":"PIXEL","x":2,"y":6,"color":"#000000"},{"type":"PIXEL","x":5,"y":6,"color":"#000000"},{"type":"PIXEL","x":6,"y":6,"color":"#000000"},{"type":"PIXEL","x":0,"y":7,"color":"#000000"},{"type":"PIXEL","x":1,"y":7,"color":"#000000"},{"type":"PIXEL","x":6,"y":7,"color":"#000000"},{"type":"PIXEL","x":7,"y":7,"color":"#000000"}]
   caret
   tilda
   curly braces
@@ -63,6 +15,9 @@ add additional char maps
 ###############################################################################
 ### Future work
 ###############################################################################
+Additional Character Maps
+  PERSON = [{"type":"PIXEL","x":2,"y":0,"color":"#000000"},{"type":"PIXEL","x":3,"y":0,"color":"#000000"},{"type":"PIXEL","x":4,"y":0,"color":"#000000"},{"type":"PIXEL","x":5,"y":0,"color":"#000000"},{"type":"PIXEL","x":2,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":1,"color":"#000000"},{"type":"PIXEL","x":4,"y":1,"color":"#000000"},{"type":"PIXEL","x":5,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":2,"color":"#000000"},{"type":"PIXEL","x":4,"y":2,"color":"#000000"},{"type":"PIXEL","x":0,"y":3,"color":"#000000"},{"type":"PIXEL","x":1,"y":3,"color":"#000000"},{"type":"PIXEL","x":2,"y":3,"color":"#000000"},{"type":"PIXEL","x":3,"y":3,"color":"#000000"},{"type":"PIXEL","x":4,"y":3,"color":"#000000"},{"type":"PIXEL","x":5,"y":3,"color":"#000000"},{"type":"PIXEL","x":6,"y":3,"color":"#000000"},{"type":"PIXEL","x":7,"y":3,"color":"#000000"},{"type":"PIXEL","x":0,"y":4,"color":"#000000"},{"type":"PIXEL","x":1,"y":4,"color":"#000000"},{"type":"PIXEL","x":3,"y":4,"color":"#000000"},{"type":"PIXEL","x":4,"y":4,"color":"#000000"},{"type":"PIXEL","x":6,"y":4,"color":"#000000"},{"type":"PIXEL","x":7,"y":4,"color":"#000000"},{"type":"PIXEL","x":2,"y":5,"color":"#000000"},{"type":"PIXEL","x":3,"y":5,"color":"#000000"},{"type":"PIXEL","x":4,"y":5,"color":"#000000"},{"type":"PIXEL","x":5,"y":5,"color":"#000000"},{"type":"PIXEL","x":1,"y":6,"color":"#000000"},{"type":"PIXEL","x":2,"y":6,"color":"#000000"},{"type":"PIXEL","x":5,"y":6,"color":"#000000"},{"type":"PIXEL","x":6,"y":6,"color":"#000000"},{"type":"PIXEL","x":0,"y":7,"color":"#000000"},{"type":"PIXEL","x":1,"y":7,"color":"#000000"},{"type":"PIXEL","x":6,"y":7,"color":"#000000"},{"type":"PIXEL","x":7,"y":7,"color":"#000000"}]
+  7 & 1 = chalice?
 tools
   C64PixMapExtractor - linux shell script
 Change variable names from "screen" to a something else (screen exists in browser)
