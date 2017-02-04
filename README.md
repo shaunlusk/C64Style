@@ -12,6 +12,9 @@ C64Style is not an emulator.
 ## How do I use it?
 
 ### Basic Usage
+Install it:
+
+    bower install shaunlusk/C64Style
 
 Create a div to hold the screen and its components:
 
