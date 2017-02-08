@@ -23,6 +23,7 @@ describe("TextLink", function() {
         type: C64Style.EventType.MOUSE_MOVE,
         data : {
           x : 1, y: 1,
+          scaledX : 1, scaledY: 1,
           row: 0, col: 0,
           time: 1
         }
@@ -40,6 +41,7 @@ describe("TextLink", function() {
         type: C64Style.EventType.MOUSE_MOVE,
         data : {
           x : 1, y: 1,
+          scaledX : 1, scaledY: 1,
           row: 0, col: 0,
           time: 1
         }
@@ -57,6 +59,7 @@ describe("TextLink", function() {
         type: C64Style.EventType.MOUSE_MOVE,
         data : {
           x : 1, y: 1,
+          scaledX : 1, scaledY: 1,
           row: 0, col: 0,
           time: 1
         }
@@ -74,6 +77,7 @@ describe("TextLink", function() {
         type: C64Style.EventType.MOUSE_DOWN,
         data : {
           x : 1, y: 1,
+          scaledX : 1, scaledY: 1,
           row: 0, col: 0,
           time: 1
         }
@@ -91,6 +95,7 @@ describe("TextLink", function() {
         type: C64Style.EventType.MOUSE_UP,
         data : {
           x : 1, y: 1,
+          scaledX : 1, scaledY: 1,
           row: 0, col: 0,
           time: 1
         }
@@ -110,6 +115,7 @@ describe("TextLink", function() {
         type: C64Style.EventType.MOUSE_UP,
         data : {
           x : 200, y: 200,
+          scaledX : 200, scaledY: 200,
           row: 0, col: 0,
           time: 1
         }

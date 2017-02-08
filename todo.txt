@@ -1,3 +1,6 @@
+screen
+  mousemove tracking doesn't need to calculate row/col til event is actually issued
+
 ###############################################################################
 ### Future work
 ###############################################################################
