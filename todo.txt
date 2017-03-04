@@ -1,9 +1,42 @@
+on screen - get unscaled x & y - or have scaled x & y
+
+implement get renderer
+gfxlayer  - remove all elements
+screen.getWidth incorporates total scale, but should what about unscaled values?
+
+move element from one layer to another
+  parentLayer
+  canvasContext
+
+careful with classes - ensur ethey can be easily overridden;
+  TextLayer - blows up w/o characterRenderer
+
 screen
   mousemove tracking doesn't need to calculate row/col til event is actually issued
 
 ###############################################################################
 ### Future work
 ###############################################################################
+
+drawborder:
+RuneTx.BackgroundLayer.prototype.drawBorder = function(x, y, width, height, color) {
+  var xm = x + width;
+  var ym = y + height;
+  this.drawSymbol("ROUNDED_CORNER_TOP_LEFT", x, y, color);
+  this.drawSymbol("ROUNDED_CORNER_TOP_RIGHT", xm, y, color);
+  this.drawSymbol("ROUNDED_CORNER_BOTTOM_LEFT", x, ym, color);
+  this.drawSymbol("ROUNDED_CORNER_BOTTOM_RIGHT", xm, ym, color);
+
+  for (var xi = x + 1; xi < xm; xi++) {
+    this.drawSymbol("BAR_67", xi, y, color);
+    this.drawSymbol("BAR_67", xi, ym, color);
+  }
+  for (yi = y + 1; yi < ym; yi++) {
+    this.drawSymbol("|", x, yi, color);
+    this.drawSymbol("|", xm, yi, color);
+  }
+};
+
 Additional Character Maps
   PERSON = [{"type":"PIXEL","x":2,"y":0,"color":"#000000"},{"type":"PIXEL","x":3,"y":0,"color":"#000000"},{"type":"PIXEL","x":4,"y":0,"color":"#000000"},{"type":"PIXEL","x":5,"y":0,"color":"#000000"},{"type":"PIXEL","x":2,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":1,"color":"#000000"},{"type":"PIXEL","x":4,"y":1,"color":"#000000"},{"type":"PIXEL","x":5,"y":1,"color":"#000000"},{"type":"PIXEL","x":3,"y":2,"color":"#000000"},{"type":"PIXEL","x":4,"y":2,"color":"#000000"},{"type":"PIXEL","x":0,"y":3,"color":"#000000"},{"type":"PIXEL","x":1,"y":3,"color":"#000000"},{"type":"PIXEL","x":2,"y":3,"color":"#000000"},{"type":"PIXEL","x":3,"y":3,"color":"#000000"},{"type":"PIXEL","x":4,"y":3,"color":"#000000"},{"type":"PIXEL","x":5,"y":3,"color":"#000000"},{"type":"PIXEL","x":6,"y":3,"color":"#000000"},{"type":"PIXEL","x":7,"y":3,"color":"#000000"},{"type":"PIXEL","x":0,"y":4,"color":"#000000"},{"type":"PIXEL","x":1,"y":4,"color":"#000000"},{"type":"PIXEL","x":3,"y":4,"color":"#000000"},{"type":"PIXEL","x":4,"y":4,"color":"#000000"},{"type":"PIXEL","x":6,"y":4,"color":"#000000"},{"type":"PIXEL","x":7,"y":4,"color":"#000000"},{"type":"PIXEL","x":2,"y":5,"color":"#000000"},{"type":"PIXEL","x":3,"y":5,"color":"#000000"},{"type":"PIXEL","x":4,"y":5,"color":"#000000"},{"type":"PIXEL","x":5,"y":5,"color":"#000000"},{"type":"PIXEL","x":1,"y":6,"color":"#000000"},{"type":"PIXEL","x":2,"y":6,"color":"#000000"},{"type":"PIXEL","x":5,"y":6,"color":"#000000"},{"type":"PIXEL","x":6,"y":6,"color":"#000000"},{"type":"PIXEL","x":0,"y":7,"color":"#000000"},{"type":"PIXEL","x":1,"y":7,"color":"#000000"},{"type":"PIXEL","x":6,"y":7,"color":"#000000"},{"type":"PIXEL","x":7,"y":7,"color":"#000000"}]
   7 & 1 = chalice?
