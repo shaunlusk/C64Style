@@ -1,4 +1,9 @@
 on screen - get unscaled x & y - or have scaled x & y
+update copyright in license file
+add aliases to some functions, e.g. getColumns to getCols
+
+down & right arrow character Maps
+raw pix array draw to text layer
 
 implement get renderer
 gfxlayer  - remove all elements
