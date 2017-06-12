@@ -300,7 +300,7 @@ C64Style.Screen.prototype.setPaused = function(boolean) {
   this._paused = boolean;
   this.notify(
     new C64Style.Event(
-      this._paused ? C64Style.EventType.SCREEN_PAUSED : C64Style.EventType.SCREEN_RESUMED
+      this._paused ? SL.EventType.SCREEN_PAUSED : SL.EventType.SCREEN_RESUMED
     )
   );
   if (!this._paused) requestAnimationFrame(this.render.bind(this));
@@ -312,7 +312,7 @@ C64Style.Screen.prototype.setPaused = function(boolean) {
 C64Style.Screen.prototype.isPaused = function() {return this._paused;};
 
 /** Add an event handler to the screen.
-* @param {C64Style.EventType} eventType The type of the event.
+* @param {SL.EventType} eventType The type of the event.
 * @param {Function} callback The handler to call when the specified event type occurs
 */
 C64Style.Screen.prototype.on = function(eventType, callback) {
@@ -323,7 +323,7 @@ C64Style.Screen.prototype.on = function(eventType, callback) {
 };
 
 /** Clear all event handlers for a given event type.
-* @param {C64Style.EventType} eventType The type of the event.
+* @param {SL.EventType} eventType The type of the event.
 */
 C64Style.Screen.prototype.clearEventHandlers = function(eventType) {
   if (!this._eventListeners[eventType]) {
@@ -364,7 +364,7 @@ C64Style.Screen.prototype.render = function(time) {
   }
 
   this.notify(
-    new C64Style.Event(C64Style.EventType.BEFORE_RENDER, {diff:diff}, time)
+    new C64Style.Event(SL.EventType.BEFORE_RENDER, {diff:diff}, time)
   );
 
   this._updateFps(diff);
@@ -373,7 +373,7 @@ C64Style.Screen.prototype.render = function(time) {
   this._render(time,diff);
 
   this.notify(
-    new C64Style.Event(C64Style.EventType.AFTER_RENDER,  {diff:diff}, time)
+    new C64Style.Event(SL.EventType.AFTER_RENDER,  {diff:diff}, time)
   );
 
   elapsed = Date.now() - elapsed;
@@ -386,7 +386,7 @@ C64Style.Screen.prototype.render = function(time) {
 /** @private */
 C64Style.Screen.prototype._handleMouseMoveEvent = function(time) {
   var event = new C64Style.Event(
-    C64Style.EventType.MOUSE_MOVE,
+    SL.EventType.MOUSE_MOVE,
     {
       x : this._mouseX,
       y : this._mouseY,
@@ -475,7 +475,7 @@ C64Style.Screen.prototype.handleMouseEvent = function(e) {
   var row = this.getRowFromMouseEvent(e);
   var col = this.getColFromMouseEvent(e);
 
-  var type = e.type === "mouseup" ? C64Style.EventType.MOUSE_UP : C64Style.EventType.MOUSE_DOWN;
+  var type = e.type === "mouseup" ? SL.EventType.MOUSE_UP : SL.EventType.MOUSE_DOWN;
   var event = new C64Style.Event(
     type,
     {

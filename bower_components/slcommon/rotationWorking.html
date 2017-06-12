@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script src="./Utils.js"></script>
+<script src="./Graphics/Utils.js"></script>
+<script src="./Graphics/ImageRenderer.js"></script>
+</head>
+<body>
+
+<p>Image to use:</p>
+<img id="imageElement" src="spriteTest.png">
+
+<p>Canvas to fill:</p>
+<canvas id="myCanvas" width="250" height="300"
+style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<p><button onclick="myCanvas()">Try it</button></p>
+
+<script>
+var c, context, img, renderer;
+renderer = new SL.ImageRenderer(1,1);
+
+c = document.getElementById("myCanvas");
+context = c.getContext("2d");
+img = document.getElementById("imageElement");
+
+function myCanvas() {
+    var width = 32;
+    var height = 32;
+    var x = 0;
+    var y = 3;
+    var xoffset = 0;
+    var yoffset = 0;
+    var rads = coordinatesToDirectionInRadians({x:0,y:0},{x:1,y:1});
+	//rads = 0;
+
+	var pixRenderer = new C64Style.PixRenderer(1,1);
+	var pixPath = {
+		color:"grey",
+		type:"RECTANGLE",
+		x:1,
+		y:1,
+		width:32,
+		height:32
+	};
+	pixRenderer.renderPixPath(context, x, y, pixPath, null, 1, 1, rads);
+
+
+
+    //     context.save();
+    // context.translate(
+    // 	x + Math.floor(width/2) + xoffset,
+    //     y + Math.floor(height/2) + yoffset);
+    //
+    // context.rotate(rads);
+    //
+    // context.drawImage(img,
+    //       0,
+    //   0,
+    //   width,
+    //   height,
+    //   0 - Math.floor(width/2),
+    //   0 - Math.floor(height/2),
+    //   width,
+    //   height
+    // );
+    // context.restore();
+}
+
+var coordinatesToDirectionInRadians = function(srcCoords, tgtCoords) {
+	var dx = tgtCoords.x - srcCoords.x;
+	var dy = tgtCoords.y - srcCoords.y;
+  var rads = Math.atan2(dy, dx);
+
+	return rads;
+};
+
+var C64Style = C64Style || {};
+C64Style.PixRenderer = C64Style.PixRenderer || function() {};
+C64Style.PixRenderer.prototype.renderPixPath = function(context, x, y, pixPath, palette, pixPathScaleX, pixPathScaleY, rotation) {
+	function getCoordForTranslation(coord, dimension, offset, thisContext) {
+		return coord + Math.floor(dimension/2) + offset;
+	}
+
+	function getTargetCoordForRotation(dimension) {
+		return 0 - Math.floor(dimension/2);
+	}
+
+  if  (typeof pixPath.color === "number") {
+    if (palette.length === 0 || pixPath.color >= palette.length) throw new Error("Color not specified in palette. (" + pixPath.color + ")");
+    context.fillStyle = palette[pixPath.color];
+  } else if (pixPath.color instanceof C64Style.ColorPointer) {
+    context.fillStyle = pixPath.color.getColor();
+  } else {
+    context.fillStyle = pixPath.color;
+  }
+  var tx = (pixPath.x * this.getTotalScaleX(pixPathScaleX)) + x * this.getScreenScaleX();
+  var ty = (pixPath.y * this.getTotalScaleY(pixPathScaleY)) + y * this.getScreenScaleY();
+
+  var width = 0;
+  var height = 0;
+
+	switch (pixPath.type) {
+	case C64Style.PixPathTypes.PIXEL :
+	  width = this.getTotalScaleX(pixPathScaleX);
+	  height = this.getTotalScaleY(pixPathScaleY);
+	  break;
+	case C64Style.PixPathTypes.RECTANGLE :
+	  width = pixPath.width * this.getTotalScaleX(pixPathScaleX);
+	  height = pixPath.height * this.getTotalScaleY(pixPathScaleY);
+	  break;
+	default:
+	  throw new Error("Unknown Pix Path Type");
+	}
+
+	if (rotation) {
+		context.save();
+		context.translate(getCoordForTranslation(tx, pixPath.width, 0), getCoordForTranslation(ty, pixPath.height, 0));
+		context.rotate(rotation);
+		tx = getTargetCoordForRotation(width);
+		ty = getTargetCoordForRotation(height);
+	}
+
+	context.fillRect(tx, ty, width, height);
+
+	if (rotation) {
+	  context.restore();
+	}
+};
+
+/*
+    context.drawImage(
+      this._image,
+      frame.sx,
+      frame.sy,
+      frame.width,
+      frame.height,
+      0 - Math.floor(this.dw/2),
+      0 - Math.floor(this.dh/2),
+      this.dw,
+      this.dh);
+    context.restore();
+*/
+</script>
+
+</body>
+</html>

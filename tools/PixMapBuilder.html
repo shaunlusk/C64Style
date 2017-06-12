@@ -9,13 +9,13 @@
   <script type="text/javascript" src="../lib/Color.js"></script>
   <script type="text/javascript" src="../lib/ColorPointer.js"></script>
   <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/EventType.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Event.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Screen.js"></script>
   <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
   <script type="text/javascript" src="../lib/CharacterMap.js"></script>
   <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Layer.js"></script>
   <script type="text/javascript" src="../lib/TextPrompt.js"></script>
   <script type="text/javascript" src="../lib/TextLayer.js"></script>
   <script type="text/javascript" src="../lib/MoveOrder.js"></script>
@@ -105,7 +105,7 @@
 
     reset();
 
-    screen.on(C64Style.EventType.MOUSE_DOWN, function(event) {
+    screen.on(SL.EventType.MOUSE_DOWN, function(event) {
       drawOn = true;
       if (event.data.row === 16) {
         color = C64Style.Color.getByIndex(event.data.col);
@@ -117,7 +117,7 @@
       updateJson();
     });
 
-    screen.on(C64Style.EventType.MOUSE_MOVE, function(event) {
+    screen.on(SL.EventType.MOUSE_MOVE, function(event) {
       if (!drawOn) return true;
       if (event.data.row !== 16) {
         draw(event);
@@ -125,7 +125,7 @@
       updateJson();
     });
 
-    screen.on(C64Style.EventType.MOUSE_UP, function(event) {
+    screen.on(SL.EventType.MOUSE_UP, function(event) {
       drawOn = false;
     });
 

@@ -1,16 +1,13 @@
-var C64Style = C64Style || {};
+var SL = SL || {};
 
 /**
 * <p>Graphics element base class.</p>
 * <p>* Current Implementations:
 * <ul>
-*   <li>{@link C64Style.PixElement}</li>
-*   <li>{@link C64Style.TextElement}</li>
-*   <li>{@link C64Style.ImageElement}</li>
-*   <li>{@link C64Style.Sprite}
+*   <li>{@link SL.ImageElement}</li>
+*   <li>{@link SL.Sprite}
 *     <ul>
-*       <li>{@link C64Style.PixSprite}</li>
-*       <li>{@link C64Style.ImageSprite}</li>
+*       <li>{@link SL.ImageSprite}</li>
 *     </ul>
 *   </li>
 * </ul>
@@ -40,8 +37,8 @@ var C64Style = C64Style || {};
 *
 * <p>Event listeners can be attached to individual elements, or at the screen level.  Refer to documentation on the "on" and "notify" methods.</p>
 * @constructor
-* @param {C64Style.Screen} screenContext The target screen.
-* @param {C64Style.GfxLayer} parentLayer The parent layer that will draw this element.
+* @param {SL.Screen} screenContext The target screen.
+* @param {SL.GfxLayer} parentLayer The parent layer that will draw this element.
 * @param {Object} props Properties for this GfxElement.  Supports:
 *   <ul>
 *     <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>
@@ -52,16 +49,16 @@ var C64Style = C64Style || {};
 *     <li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).</li>
 *   </ul>
 */
-C64Style.GfxElement = function(screenContext, parentLayer, props) {
+SL.GfxElement = function(screenContext, parentLayer, props) {
   props = props || {};
-  this._id = C64Style.GfxElement.id++;
+  this._id = SL.GfxElement.id++;
   this._screenContext = screenContext;
   this._parentLayer = parentLayer;
   this._canvasContext = parentLayer ? parentLayer.getCanvasContext() : null;
   this._scaleX = props.scaleX || 1;
   this._scaleY = props.scaleY || 1;
   this._currentMove = null;
-  this._moveQueue = new C64Style.Queue();
+  this._moveQueue = new SL.Queue();
   this._xMoveRate = 0;
   this._xMoveFractionalAccumulator = 0;
   this._yMoveRate = 0;
@@ -76,36 +73,58 @@ C64Style.GfxElement = function(screenContext, parentLayer, props) {
   this._lastY = 0;
   this._mouseIsOver = false;
   this._zIndex = props.zIndex || -1;
-  this._zIndexComparable = new C64Style.GfxElementZIndexComparable(this);
+  this._zIndexComparable = new SL.GfxElementZIndexComparable(this);
 
-  this._eventListeners = {
-    "ELEMENT_MOVED" : [],
-    "ELEMENT_STARTED_MOVING" : [],
-    "ELEMENT_STOPPED_MOVING" : [],
-    "ELEMENT_COLLISION" : [],
-    "MOUSE_ENTER_ELEMENT" : [],
-    "MOUSE_EXIT_ELEMENT" : [],
-    "MOUSE_MOVE_OVER_ELEMENT" : [],
-    "MOUSE_DOWN_ON_ELEMENT" : [],
-    "MOUSE_UP_ON_ELEMENT" : [],
-    "ELEMENT_HIT_LEFT_EDGE" : [],
-    "ELEMENT_HIT_RIGHT_EDGE" : [],
-    "ELEMENT_HIT_TOP_EDGE" : [],
-    "ELEMENT_HIT_BOTTOM_EDGE" : [],
-  };
+  this._rotation = null;
+  this._baseRotation = props.baseRotation || null;
+  this._wasRotated = false;
+
+  this._diagonalSize = 0; // only needed for determining collision box when rotated
+  this._rotatedX = 0;
+  this._rotatedY = 0;
+  this._rotatedLastX = 0;
+  this._rotatedLastY = 0;
+  this._lastDiagonalSize = 0;
+
+  this.EventNotifierMixinInitializer({
+    eventListeners:[
+      SL.EventType.ELEMENT_MOVED,
+      SL.EventType.ELEMENT_STARTED_MOVING,
+      SL.EventType.ELEMENT_STOPPED_MOVING,
+      SL.EventType.ELEMENT_COLLISION,
+      SL.EventType.MOUSE_ENTER_ELEMENT,
+      SL.EventType.MOUSE_EXIT_ELEMENT,
+      SL.EventType.MOUSE_MOVE_OVER_ELEMENT,
+      SL.EventType.MOUSE_DOWN_ON_ELEMENT,
+      SL.EventType.MOUSE_UP_ON_ELEMENT,
+      SL.EventType.ELEMENT_HIT_LEFT_EDGE,
+      SL.EventType.ELEMENT_HIT_RIGHT_EDGE,
+      SL.EventType.ELEMENT_HIT_TOP_EDGE,
+      SL.EventType.ELEMENT_HIT_BOTTOM_EDGE
+    ]
+  });
 };
+
+SL.EventNotifierMixin.call(SL.GfxElement.prototype);
+SL.GfxElement.prototype._baseNotify = SL.GfxElement.prototype.notify;
+
+SL.GfxElement.prototype.notify = function(event) {
+  this._baseNotify(event);
+  this.getScreenContext().notify(event);
+};
+
 /** @private */
-C64Style.GfxElement.id = 0;
+SL.GfxElement.id = 0;
 
 /** Return the unique id of this element.
 * @return {integer} This element's unique id.
 */
-C64Style.GfxElement.prototype.getId = function() {return this._id;};
+SL.GfxElement.prototype.getId = function() {return this._id;};
 
 /** Return whether this element is dirty.
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.isDirty = function() {
+SL.GfxElement.prototype.isDirty = function() {
   return this._dirty || this._hasCollision || this._hadCollisionPreviousFrame;
 };
 
@@ -113,112 +132,112 @@ C64Style.GfxElement.prototype.isDirty = function() {
 * Set whether element is dirty.  If dirty, the element will be cleared and redrawn during the next render phase.
 * @param {boolean} dirty
 */
-C64Style.GfxElement.prototype.setDirty = function(dirty) {this._dirty = dirty;};
+SL.GfxElement.prototype.setDirty = function(dirty) {this._dirty = dirty;};
 
 /** Return whether this element is hidden.
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.isHidden = function() {return this._hidden;};
+SL.GfxElement.prototype.isHidden = function() {return this._hidden;};
 
 /**
 * Set whether element is hidden.
 * @param {boolean} hidden
 */
-C64Style.GfxElement.prototype.setHidden = function(hidden) {this._hidden = hidden;};
+SL.GfxElement.prototype.setHidden = function(hidden) {this._hidden = hidden;};
 
 /** Return whether this element had a collision during the most recent update phase.
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.hasCollision = function() {return this._hasCollision;};
+SL.GfxElement.prototype.hasCollision = function() {return this._hasCollision;};
 
 /**
 * Set whether the element has a collision. If a collision has occurred the element will be cleared and redrawn during the next render phase.
 * @param {boolean} hidden
 */
-C64Style.GfxElement.prototype.setHasCollision = function(hasCollision) {this._hasCollision = hasCollision;};
+SL.GfxElement.prototype.setHasCollision = function(hasCollision) {this._hasCollision = hasCollision;};
 
 /**
 * Return this element's zIndex.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getZIndex = function() {return this._zIndex;};
+SL.GfxElement.prototype.getZIndex = function() {return this._zIndex;};
 
 /**
 * Set this element's zIndex. Elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).
 * @param {number} zIndex
 */
-C64Style.GfxElement.prototype.setZIndex = function(zIndex) {
+SL.GfxElement.prototype.setZIndex = function(zIndex) {
   this._zIndex = zIndex;
   this.setDirty(true);
 };
 
 /** Return this element's zindeComparable.
 * Used by parent layer to determine rendering order.
-* @return {C64Style.GfxElementZIndexComparable}
+* @return {SL.GfxElementZIndexComparable}
 */
-C64Style.GfxElement.prototype.getZIndexComparable = function() {
+SL.GfxElement.prototype.getZIndexComparable = function() {
   return this._zIndexComparable;
 };
 
 /**
 * Return this element's parent layer.
-* @return {C64Style.GfxLayer}
+* @return {SL.GfxLayer}
 */
-C64Style.GfxElement.prototype.getParentLayer = function() {return this._parentLayer;};
+SL.GfxElement.prototype.getParentLayer = function() {return this._parentLayer;};
 
 /**
 * Return the canvas context for this element's parent layer.
 * @return {CanvasContext}
 */
-C64Style.GfxElement.prototype.getCanvasContext = function() {return this._canvasContext;};
+SL.GfxElement.prototype.getCanvasContext = function() {return this._canvasContext;};
 
 /**
 * Return the parent Screen for this element.
-* @return {C64Style.Screen}
+* @return {SL.Screen}
 */
-C64Style.GfxElement.prototype.getScreenContext = function() {return this._screenContext;};
+SL.GfxElement.prototype.getScreenContext = function() {return this._screenContext;};
 
 /**
 * Return the horizontal scale of this element's parent screen.
 * @return {integer}
 */
-C64Style.GfxElement.prototype.getScreenScaleX = function() {return this.getScreenContext().getScaleX();};
+SL.GfxElement.prototype.getScreenScaleX = function() {return this.getScreenContext().getScaleX();};
 
 /**
 * Return the vertical scale of this element's parent screen.
 * @return {integer}
 */
-C64Style.GfxElement.prototype.getScreenScaleY = function() {return this.getScreenContext().getScaleY();};
+SL.GfxElement.prototype.getScreenScaleY = function() {return this.getScreenContext().getScaleY();};
 
 /**
 * Return the total horizontal scale for this element (screen scale * element scale).
 * @return {integer}
 */
-C64Style.GfxElement.prototype.getTotalScaleX = function() {return this.getElementScaleX() * this.getScreenContext().getScaleX();};
+SL.GfxElement.prototype.getTotalScaleX = function() {return this.getElementScaleX() * this.getScreenContext().getScaleX();};
 
 /**
 * Return the total vertical scale for this element (screen scale * element scale).
 * @return {integer}
 */
-C64Style.GfxElement.prototype.getTotalScaleY = function() {return this.getElementScaleY() * this.getScreenContext().getScaleY();};
+SL.GfxElement.prototype.getTotalScaleY = function() {return this.getElementScaleY() * this.getScreenContext().getScaleY();};
 
 /**
 * Return the horizontal scale of this element.
 * @return {integer}
 */
-C64Style.GfxElement.prototype.getElementScaleX = function() {return this._scaleX;};
+SL.GfxElement.prototype.getElementScaleX = function() {return this._scaleX;};
 
 /**
 * Return the vertical scale of this element.
 * @return {integer}
 */
-C64Style.GfxElement.prototype.getElementScaleY = function() {return this._scaleY;};
+SL.GfxElement.prototype.getElementScaleY = function() {return this._scaleY;};
 
 /**
 * Set the horizontal scale of this element.
 * @param {integer} scaleX
 */
-C64Style.GfxElement.prototype.setElementScaleX = function(scaleX) {
+SL.GfxElement.prototype.setElementScaleX = function(scaleX) {
   this._scaleX = scaleX;
 };
 
@@ -226,25 +245,41 @@ C64Style.GfxElement.prototype.setElementScaleX = function(scaleX) {
 * Set the vertical scale of this element.
 * @param {integer} scaleY
 */
-C64Style.GfxElement.prototype.setElementScaleY = function(scaleY) {this._scaleY = scaleY;};
+SL.GfxElement.prototype.setElementScaleY = function(scaleY) {this._scaleY = scaleY;};
 
 /**
 * Get the x coordinate of this element.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getX = function() {return this._x;};
+SL.GfxElement.prototype.getX = function() {return this._x;};
+
+/**
+* Get the screen x coordinate of this element.
+* @return {number}
+*/
+SL.GfxElement.prototype.getScaledX = function() {
+  return this.getX() * this.getScreenScaleX();
+};
 
 /**
 * Get the y coordinate of this element.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getY = function() {return this._y;};
+SL.GfxElement.prototype.getY = function() {return this._y;};
+
+/**
+* Get the screen x coordinate of this element.
+* @return {number}
+*/
+SL.GfxElement.prototype.getScaledY = function() {
+  return this.getY() * this.getScreenScaleY();
+};
 
 /**
 * Set the x coordinate of this element.
 * @param {number} x
 */
-C64Style.GfxElement.prototype.setX = function(x) {
+SL.GfxElement.prototype.setX = function(x) {
   if (x !== this._x) this.setDirty(true);
   this._x = x;
 };
@@ -253,7 +288,7 @@ C64Style.GfxElement.prototype.setX = function(x) {
 * Set the y coordinate of this element.
 * @param {number} y
 */
-C64Style.GfxElement.prototype.setY = function(y) {
+SL.GfxElement.prototype.setY = function(y) {
   if (y !== this._y) this.setDirty(true);
   this._y = y;
 };
@@ -262,38 +297,123 @@ C64Style.GfxElement.prototype.setY = function(y) {
 * Get the x coordinate of this element for the previous frame.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getLastX = function() {return this._lastX;};
+SL.GfxElement.prototype.getLastX = function() {return this._lastX;};
 
 /**
 * Get the y coordinate of this element for the previous frame.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getLastY = function() {return this._lastY;};
+SL.GfxElement.prototype.getLastY = function() {return this._lastY;};
+
+/** Override if dimensions can change */
+SL.GfxElement.prototype.getLastWidth = function() {return this.getWidth();};
+
+/** Override if dimensions can change */
+SL.GfxElement.prototype.getLastHeight = function() {return this.getHeight();};
 
 /** @private */
-C64Style.GfxElement.prototype.setLastX = function(x) {this._lastX = x;};
+SL.GfxElement.prototype.setLastX = function(x) {this._lastX = x;};
 /** @private */
-C64Style.GfxElement.prototype.setLastY = function(y) {this._lastY = y;};
+SL.GfxElement.prototype.setLastY = function(y) {this._lastY = y;};
 
 /**
 * Return whether the mouse is over this element.
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.isMouseOver = function() {return this._mouseIsOver;};
+SL.GfxElement.prototype.isMouseOver = function() {return this._mouseIsOver;};
 
 /**
 * Return this element's width. <b>Sub-classes must implement this method!</b>
 * @abstract
 * @return {number}
 */
-C64Style.GfxElement.prototype.getWidth = function() {throw new Error("getWidth needs to be implemented on this element.");};
+SL.GfxElement.prototype.getWidth = function() {throw new Error("getWidth needs to be implemented on this element.");};
+
+/**
+* Return this element's width, incorporating screen and element-local scaling.
+* @return {number}
+*/
+SL.GfxElement.prototype.getScaledWidth = function() {return this.getWidth() * this.getTotalScaleX();};
 
 /**
 * Return this elements height. <b>Sub-classes must implement this method!</b>
 * @abstract
 * @return {number}
 */
-C64Style.GfxElement.prototype.getHeight = function() {throw new Error("getHeight needs to be implemented on this element.");};
+SL.GfxElement.prototype.getHeight = function() {throw new Error("getHeight needs to be implemented on this element.");};
+
+/**
+* Return this element's height, incorporating screen and element-local scaling.
+* @return {number}
+*/
+SL.GfxElement.prototype.getScaledHeight = function() {return this.getHeight() * this.getTotalScaleY();};
+
+SL.GfxElement.prototype.getUnAdjustedRotation = function() { return this._rotation; };
+SL.GfxElement.prototype.getBaseRotation = function() { return this._baseRotation; };
+SL.GfxElement.prototype.getRotation = function() {
+  if (this._rotation || this._baseRotation)
+  return (this._rotation || 0) + (this._baseRotation || 0);
+  return null;
+};
+SL.GfxElement.prototype.getDiagonalSize = function() { return this._diagonalSize; };
+
+SL.GfxElement.prototype.setRotation = function(rotation) {
+  this._rotation = rotation;
+  if (this._rotation === null) {
+    if (this.wasRotated()) this.setDirty(true);
+    return;
+  }
+  this._recalculateDiagonalSize();
+  this._recalculateRotatedCollisionBox();
+  this.setDirty(true);
+};
+SL.GfxElement.prototype.setBaseRotation = function(rotation) {
+  this._baseRotation = rotation;
+  if (this._baseRotation === null) {
+    if (this.wasRotated()) this.setDirty(true);
+    return;
+  }
+  this._recalculateDiagonalSize();
+  this._recalculateRotatedCollisionBox();
+  this.setDirty(true);
+};
+
+SL.GfxElement.prototype.wasRotated = function() {return this._wasRotated;};
+SL.GfxElement.prototype.setWasRotated = function(wasRotated) {
+  this._wasRotated = wasRotated;
+};
+SL.GfxElement.prototype.hasRotation = function() {return !(SL.isNullOrUndefined(this._rotation) || this._rotation === 0);};
+
+SL.GfxElement.prototype.getRotatedX = function() {return this._rotatedX;};
+SL.GfxElement.prototype.getRotatedY = function() {return this._rotatedY;};
+SL.GfxElement.prototype.getRotatedLastX = function() {return this._rotatedLastX;};
+SL.GfxElement.prototype.getRotatedLastY = function() {return this._rotatedLastY;};
+SL.GfxElement.prototype.getLastDiagonalSize = function() {return this._lastDiagonalSize;};
+SL.GfxElement.prototype.getRotatedScaledX = function() {return this.getRotatedX() * this.getScreenScaleX();};
+SL.GfxElement.prototype.getRotatedScaledY = function() {return this.getRotatedY() * this.getScreenScaleY();};
+SL.GfxElement.prototype.getScaledDiagonalSize = function() {
+  return this.getDiagonalSize() * (this.getTotalScaleX() + this.getTotalScaleY()) / 2;
+};
+
+/** @private */
+SL.GfxElement.prototype.setRotatedLastX = function(x) {this._rotatedLastX = x;};
+/** @private */
+SL.GfxElement.prototype.setRotatedLastY = function(y) {this._rotatedLastY = y;};
+/** @private */
+SL.GfxElement.prototype.setLastDiagonalSize = function(size) {this._lastDiagonalSize = size;};
+
+SL.GfxElement.prototype._recalculateDiagonalSize = function() {
+  if (this.getRotation() === null) return;
+  // calculate diagonal
+  // Note that for any amount of rotation, an expanded bounding box is used
+  this._diagonalSize = Math.ceil(Math.sqrt( Math.pow(this.getWidth(), 2) + Math.pow(this.getHeight(), 2)));
+};
+
+SL.GfxElement.prototype._recalculateRotatedCollisionBox = function() {
+  if (this.getRotation() === null) return;
+  this._rotatedX = Math.floor(this.getX() - (this.getDiagonalSize() - this.getWidth()) / 2);
+  this._rotatedY = Math.floor(this.getY() - (this.getDiagonalSize() - this.getHeight()) / 2);
+};
 
 /**
 * Set the horizontal and vertical movement rates for this element.
@@ -305,14 +425,14 @@ C64Style.GfxElement.prototype.getHeight = function() {throw new Error("getHeight
 * @param {number} xMoveRate Horizontal movement rate
 * @param {number} yMoveRate Vertical movement rate
 */
-C64Style.GfxElement.prototype.setMoveRates = function(xMoveRate, yMoveRate) {
+SL.GfxElement.prototype.setMoveRates = function(xMoveRate, yMoveRate) {
   if (xMoveRate === 0 && yMoveRate === 0 && this._currentMove === null && (this._xMoveRate !== 0 || this._yMoveRate !== 0)) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_STOPPED_MOVING, {element:this})
+      new SL.Event(SL.EventType.ELEMENT_STOPPED_MOVING, {element:this})
     );
   } else if ((xMoveRate !== 0 || yMoveRate !== 0) && this._currentMove === null && this._xMoveRate === 0 && this._yMoveRate === 0) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_STARTED_MOVING, {element:this})
+      new SL.Event(SL.EventType.ELEMENT_STARTED_MOVING, {element:this})
     );
   }
 
@@ -324,13 +444,13 @@ C64Style.GfxElement.prototype.setMoveRates = function(xMoveRate, yMoveRate) {
 * Return the current x movement rate.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getMoveRateX = function() {return this._xMoveRate;};
+SL.GfxElement.prototype.getMoveRateX = function() {return this._xMoveRate;};
 
 /**
 * Return the current y movement rate.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getMoveRateY = function() {return this._yMoveRate;};
+SL.GfxElement.prototype.getMoveRateY = function() {return this._yMoveRate;};
 
 /**
 * Move the element to the specified coordinate over the course of specified duration.
@@ -341,23 +461,23 @@ C64Style.GfxElement.prototype.getMoveRateY = function() {return this._yMoveRate;
 * @param {number} duration Optional. How long it should take the element to move from its current position to the target position, in milliseconds. Defaults to 16ms.
 * @param {function} callback Optional.  The function to call when the move is complete.
 */
-C64Style.GfxElement.prototype.moveTo = function(x,y,duration, callback) {
+SL.GfxElement.prototype.moveTo = function(x,y,duration, callback) {
   duration = duration || 16;
-  var moveOrder = new C64Style.MoveOrder(this, x, y, duration, this.moveOrderCallback.bind(this), callback);
+  var moveOrder = new SL.MoveOrder(this, x, y, duration, this.moveOrderCallback.bind(this), callback);
   this._moveQueue.push(moveOrder);
   if (this._currentMove === null) {
     this._runMove();
     // If not already moving, fire start move event
     if (this.getMoveRateX() === 0 && this.getMoveRateY() === 0) {
       this.notify(
-        new C64Style.Event(C64Style.EventType.ELEMENT_STARTED_MOVING, {element:this})
+        new SL.Event(SL.EventType.ELEMENT_STARTED_MOVING, {element:this})
       );
     }
   }
 };
 
 /** @private */
-C64Style.GfxElement.prototype._runMove = function() {
+SL.GfxElement.prototype._runMove = function() {
   if (this._moveQueue.size() > 0) {
     this._currentMove = this._moveQueue.pop();
     this._currentMove.start();
@@ -366,7 +486,7 @@ C64Style.GfxElement.prototype._runMove = function() {
   // If no additional movement, fire end move event
   if (this.getMoveRateX() === 0 && this.getMoveRateY() === 0) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_STOPPED_MOVING, {element:this})
+      new SL.Event(SL.EventType.ELEMENT_STOPPED_MOVING, {element:this})
     );
   }
   this._currentMove = null;
@@ -374,7 +494,7 @@ C64Style.GfxElement.prototype._runMove = function() {
 };
 
 /** @private */
-C64Style.GfxElement.prototype.moveOrderCallback = function() {
+SL.GfxElement.prototype.moveOrderCallback = function() {
   this._currentMove = null;
   this._runMove();
 };
@@ -383,7 +503,7 @@ C64Style.GfxElement.prototype.moveOrderCallback = function() {
 * Clear any queued moveTo instructions.
 * Does not effect a currently running moveTo, or any movement rates.
 */
-C64Style.GfxElement.prototype.clearMoveQueue = function() {
+SL.GfxElement.prototype.clearMoveQueue = function() {
   this._moveQueue.clear();
 };
 
@@ -391,7 +511,7 @@ C64Style.GfxElement.prototype.clearMoveQueue = function() {
 * Turn the element "off".
 * All movement will cease and element will be hidden.
 */
-C64Style.GfxElement.prototype.turnOff = function() {
+SL.GfxElement.prototype.turnOff = function() {
   this._moveQueue.clear();
   this._currentMove = null;
   this._xMoveRate = 0;
@@ -402,13 +522,13 @@ C64Style.GfxElement.prototype.turnOff = function() {
 };
 
 /** Show the element. */
-C64Style.GfxElement.prototype.show = function() {
+SL.GfxElement.prototype.show = function() {
   this._hidden = false;
   this.setDirty(true);
 };
 
 /** Hide the element */
-C64Style.GfxElement.prototype.hide = function() {
+SL.GfxElement.prototype.hide = function() {
   this._hidden = true;
   this.setDirty(true);
 };
@@ -416,9 +536,9 @@ C64Style.GfxElement.prototype.hide = function() {
 /** Update the element.  Will update location based on current time/diff.
 * @param {number} time The current time.  Not specifically used, but provided for extension.
 * @param {number} diff The difference between the previous time and the current time. Use to calculate element's position if it is moving.
-* @return {C64Style.GfxElement} Returns this element if it needs to be redrawn, null otherwise.
+* @return {SL.GfxElement} Returns this element if it needs to be redrawn, null otherwise.
 */
-C64Style.GfxElement.prototype.update = function(time,diff) {
+SL.GfxElement.prototype.update = function(time,diff) {
   this._updateLocationFromMoveRates(time,diff);
   // Will take precedence over move rate
   this._updateMoveOrder(time,diff);
@@ -426,8 +546,8 @@ C64Style.GfxElement.prototype.update = function(time,diff) {
   if (this.getX() !== this.getLastX() || this.getY() !== this.getLastY()) {
     this.setDirty(true);
     this.notify(
-      new C64Style.Event(
-        C64Style.EventType.ELEMENT_MOVED,
+      new SL.Event(
+        SL.EventType.ELEMENT_MOVED,
         {element:this},
         time
       )
@@ -435,6 +555,7 @@ C64Style.GfxElement.prototype.update = function(time,diff) {
   }
 
   if (this.isDirty()) {
+    this._recalculateRotatedCollisionBox();
     return this;
   }
   return null;
@@ -445,7 +566,7 @@ C64Style.GfxElement.prototype.update = function(time,diff) {
 * @param {number} time
 * @param {number} diff
 */
-C64Style.GfxElement.prototype._updateLocationFromMoveRates = function(time, diff) {
+SL.GfxElement.prototype._updateLocationFromMoveRates = function(time, diff) {
   var amount,sign,intAmount;
 
   if (this._xMoveRate !== 0) {
@@ -475,7 +596,7 @@ C64Style.GfxElement.prototype._updateLocationFromMoveRates = function(time, diff
 * @param {number} time
 * @param {number} diff
 */
-C64Style.GfxElement.prototype._updateMoveOrder = function(time,diff) {
+SL.GfxElement.prototype._updateMoveOrder = function(time,diff) {
   if (this._currentMove !== null) {
     this._currentMove.update(time,diff);
     this.setDirty(true);
@@ -486,24 +607,79 @@ C64Style.GfxElement.prototype._updateMoveOrder = function(time,diff) {
 * @param {number} time
 * @param {number} diff
 */
-C64Style.GfxElement.prototype.clear = function(time, diff) {
-  this.getCanvasContext().clearRect(
-    this.getLastX() * this.getScreenScaleX() - 1,
-    this.getLastY() * this.getScreenScaleY() - 1,
-    this.getWidth() * this.getTotalScaleX() + 2,
-    this.getHeight() * this.getTotalScaleY() + 2 );
+SL.GfxElement.prototype.clear = function(time, diff) {
+  if (this.wasRotated()) {
+    this.getCanvasContext().clearRect(
+      this.getRotatedLastX() * this.getScreenScaleX() - 1,
+      this.getRotatedLastY() * this.getScreenScaleY() - 1,
+      this.getLastDiagonalSize() * this.getTotalScaleX() + 2,
+      this.getLastDiagonalSize() * this.getTotalScaleY() + 2 );
+  } else {
+    this.getCanvasContext().clearRect(
+      this.getLastX() * this.getScreenScaleX() - 1,
+      this.getLastY() * this.getScreenScaleY() - 1,
+      this.getLastWidth() * this.getTotalScaleX() + 2,
+      this.getLastHeight() * this.getTotalScaleY() + 2 );
+  }
+};
+
+
+// UiElement.prototype.clear = function(context) {
+//   if (!this.dirty) return;
+//   if (this._rotation) {
+//     // clear area that matches the collision bounding box that was checked
+//     context.clearRect(this._rotatedLastX - 1, this._rotatedLastY - 1, this._diagonalSize + 2, this._diagonalSize + 2);
+//   } else {
+//     context.clearRect(this.lastX - 1,this.lastY - 1, this.dw + 2, this.dh + 2);
+//   }
+//   if (this.hidden) {
+//     this.setDirty(false);
+//     this._hiddenRecently = false;
+//   }
+//   this.lastX = this.x;
+//   this.lastY = this.y;
+//   this._lastDw = this.dw;
+//   this._lastDh = this.dh;
+//   if (this.getRotation()) {
+//     this._rotatedLastX = this._rotatedX;
+//     this._rotatedLastY = this._rotatedY;
+//     this._lastDiagonalSize = this._diagonalSize;
+//   }
+// };
+
+/** Perform any preRendering steps.
+*/
+SL.GfxElement.prototype.preRender = function(time, diff) {
+
 };
 
 /**
-* GfxElement does not actually render anything, it only provides post-render clean up.
-* The render method should be implemented in subclasses, which should call this base method when done.
+* The render method should be implemented in subclasses.
+* Time parameters provided for extension.
+*/
+SL.GfxElement.prototype.render = function(time, diff) {
+  throw new Error("Not Implemented.");
+};
+
+
+/**
+* Provides post-render clean up.
 * Time parameters provided for extension.
 * @param {number} time
 * @param {number} diff
 */
-C64Style.GfxElement.prototype.render = function(time, diff) {
+SL.GfxElement.prototype.postRender = function(time, diff) {
   this.setLastX( this.getX() );
   this.setLastY( this.getY() );
+
+  if (this.hasRotation()) {
+    this.setWasRotated(true);
+    this.setRotatedLastX( this.getRotatedX() );
+    this.setRotatedLastY( this.getRotatedY() );
+    this.setLastDiagonalSize( this.getDiagonalSize() );
+  }
+  else this.setWasRotated(false);
+
   this.setDirty(false);
   this._hadCollisionPreviousFrame = this.hasCollision();
   this.setHasCollision(false);
@@ -511,10 +687,10 @@ C64Style.GfxElement.prototype.render = function(time, diff) {
 
 /** Check whether this element collidesWith another element.
 * Compares the boundaries of this element and the other to check for overlap; if so return true, else return false.
-* @param {C64Style.GfxElement} element
+* @param {SL.GfxElement} element
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.collidesWith = function(element) {
+SL.GfxElement.prototype.collidesWith = function(element) {
   var thisX = this.getCollisionBoxX();
   var thatX = element.getCollisionBoxX();
   var thisWidth = this.getCollisionBoxWidth();
@@ -532,14 +708,14 @@ C64Style.GfxElement.prototype.collidesWith = function(element) {
   */
   if (result && !this.isHidden() && !element.isHidden()) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_COLLISION, {
+      new SL.Event(SL.EventType.ELEMENT_COLLISION, {
         element1 : this,
         element2 : element
       })
     );
     // notify the other element of the collision
     element.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_COLLISION, {
+      new SL.Event(SL.EventType.ELEMENT_COLLISION, {
         element1 : element,
         element2 : this
       })
@@ -553,7 +729,7 @@ C64Style.GfxElement.prototype.collidesWith = function(element) {
 * @param {number} y
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.collidesWithCoordinates = function(x, y) {
+SL.GfxElement.prototype.collidesWithCoordinates = function(x, y) {
   var result = x >= this.getCollisionBoxX() &&
     x <= this.getCollisionBoxX() + this.getCollisionBoxWidth() &&
     y >= this.getCollisionBoxY() &&
@@ -565,7 +741,7 @@ C64Style.GfxElement.prototype.collidesWithCoordinates = function(x, y) {
 * @param {number} x
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.collidesWithX = function(x) {
+SL.GfxElement.prototype.collidesWithX = function(x) {
   var result = x >= this.getCollisionBoxX() &&
     x <= this.getCollisionBoxX() + this.getCollisionBoxWidth();
   return result;
@@ -575,7 +751,7 @@ C64Style.GfxElement.prototype.collidesWithX = function(x) {
 * @param {number} x
 * @return {boolean}
 */
-C64Style.GfxElement.prototype.collidesWithY = function(y) {
+SL.GfxElement.prototype.collidesWithY = function(y) {
   var result = y >= this.getCollisionBoxY() &&
       y <= this.getCollisionBoxY() + this.getCollisionBoxHeight();
   return result;
@@ -584,31 +760,43 @@ C64Style.GfxElement.prototype.collidesWithY = function(y) {
 /** Returns the x value of the collision box.  Incorporates screen scale.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getCollisionBoxX = function() {return this.getX() * this.getScreenScaleX() - 1;};
+SL.GfxElement.prototype.getCollisionBoxX = function() {
+  if (this.hasRotation()) return this.getRotatedScaledX() - 1;
+  return this.getScaledX() - 1;
+};
 
 /** Returns the y value of the collision box.  Incorporates screen scale.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getCollisionBoxY = function() {return this.getY() * this.getScreenScaleY() - 1;};
+SL.GfxElement.prototype.getCollisionBoxY = function() {
+  if (this.hasRotation()) return this.getRotatedScaledY() - 1;
+  return this.getScaledY() - 1;
+};
 
 /** Returns the width value of the collision box.  Incorporates total scale.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getCollisionBoxWidth = function() {return this.getWidth() * this.getTotalScaleX() + 2;};
+SL.GfxElement.prototype.getCollisionBoxWidth = function() {
+  if (this.hasRotation()) return this.getScaledDiagonalSize() + 2;
+  return this.getScaledWidth() + 2;
+};
 
 /** Returns the height value of the collision box.  Incorporates total scale.
 * @return {number}
 */
-C64Style.GfxElement.prototype.getCollisionBoxHeight = function() {return this.getHeight() * this.getTotalScaleY() + 2;};
+SL.GfxElement.prototype.getCollisionBoxHeight = function() {
+  if (this.hasRotation()) return this.getScaledDiagonalSize() + 2;
+  return this.getScaledHeight() + 2;
+};
 
 /** Fires events if the mouse event is on this element.<br />
 * Events emitted:
 * <ul>
-*   <li>{@link C64Style.EventType.MOUSE_ENTER_ELEMENT}</li>
-*   <li>{@link C64Style.EventType.MOUSE_EXIT_ELEMENT}</li>
-*   <li>{@link C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT}</li>
-*   <li>{@link C64Style.EventType.MOUSE_DOWN_ON_ELEMENT}</li>
-*   <li>{@link C64Style.EventType.MOUSE_UP_ON_ELEMENT}</li>
+*   <li>{@link SL.EventType.MOUSE_ENTER_ELEMENT}</li>
+*   <li>{@link SL.EventType.MOUSE_EXIT_ELEMENT}</li>
+*   <li>{@link SL.EventType.MOUSE_MOVE_OVER_ELEMENT}</li>
+*   <li>{@link SL.EventType.MOUSE_DOWN_ON_ELEMENT}</li>
+*   <li>{@link SL.EventType.MOUSE_UP_ON_ELEMENT}</li>
 * </ul>
 * For these events, data is as follows:
 *   <ul>
@@ -618,9 +806,9 @@ C64Style.GfxElement.prototype.getCollisionBoxHeight = function() {return this.ge
 *     <li>col : mouse event col value</li>
 *     <li>element : this element</li>
 *   </ul>
-* @param {C64Style.Event}
+* @param {SL.Event}
 */
-C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
+SL.GfxElement.prototype.handleMouseEvent = function(event) {
   var eventData = {
       x : event.data.x,
       y : event.data.y,
@@ -632,8 +820,8 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
   };
   if (this.collidesWithCoordinates(event.data.scaledX, event.data.scaledY)) {
     if (!this.isMouseOver()) {
-      this.notify(new C64Style.Event(
-        C64Style.EventType.MOUSE_ENTER_ELEMENT,
+      this.notify(new SL.Event(
+        SL.EventType.MOUSE_ENTER_ELEMENT,
         eventData,
         event.data.time
       ));
@@ -642,17 +830,17 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
     this._mouseIsOver = true;
     var type = null;
     switch(event.type) {
-      case C64Style.EventType.MOUSE_MOVE:
-        type = C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT;
+      case SL.EventType.MOUSE_MOVE:
+        type = SL.EventType.MOUSE_MOVE_OVER_ELEMENT;
         break;
-      case C64Style.EventType.MOUSE_DOWN:
-        type = C64Style.EventType.MOUSE_DOWN_ON_ELEMENT;
+      case SL.EventType.MOUSE_DOWN:
+        type = SL.EventType.MOUSE_DOWN_ON_ELEMENT;
         break;
-      case C64Style.EventType.MOUSE_UP:
-        type = C64Style.EventType.MOUSE_UP_ON_ELEMENT;
+      case SL.EventType.MOUSE_UP:
+        type = SL.EventType.MOUSE_UP_ON_ELEMENT;
         break;
     }
-    var thisevent = new C64Style.Event(
+    var thisevent = new SL.Event(
       type,
       eventData,
       event.data.time
@@ -660,59 +848,12 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
     this.notify(thisevent);
   } else {
     if (this.isMouseOver()) {
-      this.notify(new C64Style.Event(
-        C64Style.EventType.MOUSE_EXIT_ELEMENT,
+      this.notify(new SL.Event(
+        SL.EventType.MOUSE_EXIT_ELEMENT,
         eventData,
         event.data.time
       ));
       this._mouseIsOver = false;
     }
   }
-};
-
-/** Add an event handler to this element.
-* Supported events:
-* <ul>
-*	<li>{@link C64Style.EventType.ELEMENT_MOVED}</li>
-*	<li>{@link C64Style.EventType.ELEMENT_STARTED_MOVING}</li>
-*	<li>{@link C64Style.EventType.ELEMENT_STOPPED_MOVING}</li>
-*	<li>{@link C64Style.EventType.ELEMENT_COLLISION}</li>
-*	<li>{@link C64Style.EventType.MOUSE_ENTER_ELEMENT}</li>
-*	<li>{@link C64Style.EventType.MOUSE_EXIT_ELEMENT}</li>
-*	<li>{@link C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT}</li>
-*	<li>{@link C64Style.EventType.MOUSE_DOWN_ON_ELEMENT}</li>
-*	<li{@link C64Style.EventType.MOUSE_UP_ON_ELEMENT}</li>
-* </ul>
-* @param {C64Style.EventType} eventType
-* @param {function} callback Function to call when the event occurs.  The C64Style.Event will be passed in.
-*/
-C64Style.GfxElement.prototype.on = function(eventType, callback) {
-  if (!this._eventListeners[eventType]) {
-    this._eventListeners[eventType] = [];
-  }
-  this._eventListeners[eventType].push(callback);
-};
-
-/** Clear the list of event handlers for a given eventType
-* @param {C64Style.EventType} eventType
-*/
-C64Style.GfxElement.prototype.clearEventHandlers = function(eventType) {
-  if (!this._eventListeners[eventType]) {
-    throw new Error("Unknown event type:" + eventType);
-  }
-  this._eventListeners[eventType] = [];
-};
-
-/** Notify this element that an event has occurred.
-* This will call any attached event handlers for this event type, and will notify the parent Screen as well.
-* @param {C64Style.Event} event
-*/
-C64Style.GfxElement.prototype.notify = function(event) {
-  if (!this._eventListeners[event.type]) {
-    throw new Error("Unknown event type:" + event.type);
-  }
-  for (var i = 0; i < this._eventListeners[event.type].length; i++) {
-    if (C64Style.isFunction(this._eventListeners[event.type][i])) this._eventListeners[event.type][i](event);
-  }
-  this.getScreenContext().notify(event);
 };

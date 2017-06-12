@@ -127,17 +127,5 @@ describe("PixElement", function() {
       assert(calledRenderPixPath === true, "should have called renderImage");
       done();
     });
-    it("should call base class render", function(done) {
-      var calledBaseRender = false;
-      var savedFn = C64Style.GfxElement.prototype.render;
-      C64Style.GfxElement.prototype.render = function() {
-        calledBaseRender = true;
-      };
-      pixImage.render(1, 1);
-
-      assert(calledBaseRender === true, "should have called base render");
-      C64Style.GfxElement.prototype.render = savedFn;
-      done();
-    });
   });
 });

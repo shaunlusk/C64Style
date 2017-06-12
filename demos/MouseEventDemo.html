@@ -9,13 +9,13 @@
   <script type="text/javascript" src="../lib/Color.js"></script>
   <script type="text/javascript" src="../lib/ColorPointer.js"></script>
   <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/EventType.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Event.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Screen.js"></script>
   <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
   <script type="text/javascript" src="../lib/CharacterMap.js"></script>
   <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Layer.js"></script>
   <script type="text/javascript" src="../lib/TextPrompt.js"></script>
   <script type="text/javascript" src="../lib/TextLayer.js"></script>
   <script type="text/javascript" src="../lib/MoveOrder.js"></script>
@@ -96,22 +96,22 @@
     gfxLayer.addElement(sprite1);
     gfxLayer.addElement(sprite2);
 
-    screen.on(C64Style.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
+    screen.on(SL.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
       dragOn = true;
       xOffset = event.data.x - sprite1.getX();
       yOffset = event.data.y - sprite1.getY();
       sprite1.hide();
       sprite2.show();
     });
-    screen.on(C64Style.EventType.MOUSE_UP, function(event) {
+    screen.on(SL.EventType.MOUSE_UP, function(event) {
       dragOn = false;
     });
-    screen.on(C64Style.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
+    screen.on(SL.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
       dragOn = false;
       sprite2.hide();
       sprite1.show();
     });
-    screen.on(C64Style.EventType.MOUSE_MOVE, function(event) {
+    screen.on(SL.EventType.MOUSE_MOVE, function(event) {
       updateMouseStats(event);
       if (dragOn) {
         sprite2.setX(event.data.x - xOffset);

@@ -336,11 +336,11 @@ C64Style.GfxElement.prototype.getHeight = function() {throw new Error("getHeight
 C64Style.GfxElement.prototype.setMoveRates = function(xMoveRate, yMoveRate) {
   if (xMoveRate === 0 &amp;&amp; yMoveRate === 0 &amp;&amp; this._currentMove === null &amp;&amp; (this._xMoveRate !== 0 || this._yMoveRate !== 0)) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_STOPPED_MOVING, {element:this})
+      new C64Style.Event(SL.EventType.ELEMENT_STOPPED_MOVING, {element:this})
     );
   } else if ((xMoveRate !== 0 || yMoveRate !== 0) &amp;&amp; this._currentMove === null &amp;&amp; this._xMoveRate === 0 &amp;&amp; this._yMoveRate === 0) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_STARTED_MOVING, {element:this})
+      new C64Style.Event(SL.EventType.ELEMENT_STARTED_MOVING, {element:this})
     );
   }
 
@@ -378,7 +378,7 @@ C64Style.GfxElement.prototype.moveTo = function(x,y,duration, callback) {
     // If not already moving, fire start move event
     if (this.getMoveRateX() === 0 &amp;&amp; this.getMoveRateY() === 0) {
       this.notify(
-        new C64Style.Event(C64Style.EventType.ELEMENT_STARTED_MOVING, {element:this})
+        new C64Style.Event(SL.EventType.ELEMENT_STARTED_MOVING, {element:this})
       );
     }
   }
@@ -394,7 +394,7 @@ C64Style.GfxElement.prototype._runMove = function() {
   // If no additional movement, fire end move event
   if (this.getMoveRateX() === 0 &amp;&amp; this.getMoveRateY() === 0) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_STOPPED_MOVING, {element:this})
+      new C64Style.Event(SL.EventType.ELEMENT_STOPPED_MOVING, {element:this})
     );
   }
   this._currentMove = null;
@@ -455,7 +455,7 @@ C64Style.GfxElement.prototype.update = function(time,diff) {
     this.setDirty(true);
     this.notify(
       new C64Style.Event(
-        C64Style.EventType.ELEMENT_MOVED,
+        SL.EventType.ELEMENT_MOVED,
         {element:this},
         time
       )
@@ -560,14 +560,14 @@ C64Style.GfxElement.prototype.collidesWith = function(element) {
   */
   if (result &amp;&amp; !this.isHidden() &amp;&amp; !element.isHidden()) {
     this.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_COLLISION, {
+      new C64Style.Event(SL.EventType.ELEMENT_COLLISION, {
         element1 : this,
         element2 : element
       })
     );
     // notify the other element of the collision
     element.notify(
-      new C64Style.Event(C64Style.EventType.ELEMENT_COLLISION, {
+      new C64Style.Event(SL.EventType.ELEMENT_COLLISION, {
         element1 : element,
         element2 : this
       })
@@ -632,11 +632,11 @@ C64Style.GfxElement.prototype.getCollisionBoxHeight = function() {return this.ge
 /** Fires events if the mouse event is on this element.&lt;br />
 * Events emitted:
 * &lt;ul>
-*   &lt;li>{@link C64Style.EventType.MOUSE_ENTER_ELEMENT}&lt;/li>
-*   &lt;li>{@link C64Style.EventType.MOUSE_EXIT_ELEMENT}&lt;/li>
-*   &lt;li>{@link C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT}&lt;/li>
-*   &lt;li>{@link C64Style.EventType.MOUSE_DOWN_ON_ELEMENT}&lt;/li>
-*   &lt;li>{@link C64Style.EventType.MOUSE_UP_ON_ELEMENT}&lt;/li>
+*   &lt;li>{@link SL.EventType.MOUSE_ENTER_ELEMENT}&lt;/li>
+*   &lt;li>{@link SL.EventType.MOUSE_EXIT_ELEMENT}&lt;/li>
+*   &lt;li>{@link SL.EventType.MOUSE_MOVE_OVER_ELEMENT}&lt;/li>
+*   &lt;li>{@link SL.EventType.MOUSE_DOWN_ON_ELEMENT}&lt;/li>
+*   &lt;li>{@link SL.EventType.MOUSE_UP_ON_ELEMENT}&lt;/li>
 * &lt;/ul>
 * For these events, data is as follows:
 *   &lt;ul>
@@ -652,7 +652,7 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
   if (this.collidesWithCoordinates(event.data.x, event.data.y)) {
     if (!this.isMouseOver()) {
       this.notify(new C64Style.Event(
-        C64Style.EventType.MOUSE_ENTER_ELEMENT,
+        SL.EventType.MOUSE_ENTER_ELEMENT,
         {
           x : event.data.x,
           y : event.data.y,
@@ -667,14 +667,14 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
     this._mouseIsOver = true;
     var type = null;
     switch(event.type) {
-      case C64Style.EventType.MOUSE_MOVE:
-        type = C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT;
+      case SL.EventType.MOUSE_MOVE:
+        type = SL.EventType.MOUSE_MOVE_OVER_ELEMENT;
         break;
-      case C64Style.EventType.MOUSE_DOWN:
-        type = C64Style.EventType.MOUSE_DOWN_ON_ELEMENT;
+      case SL.EventType.MOUSE_DOWN:
+        type = SL.EventType.MOUSE_DOWN_ON_ELEMENT;
         break;
-      case C64Style.EventType.MOUSE_UP:
-        type = C64Style.EventType.MOUSE_UP_ON_ELEMENT;
+      case SL.EventType.MOUSE_UP:
+        type = SL.EventType.MOUSE_UP_ON_ELEMENT;
         break;
     }
     var thisevent = new C64Style.Event(
@@ -692,7 +692,7 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
   } else {
     if (this.isMouseOver()) {
       this.notify(new C64Style.Event(
-        C64Style.EventType.MOUSE_EXIT_ELEMENT,
+        SL.EventType.MOUSE_EXIT_ELEMENT,
         {
           x : event.data.x,
           y : event.data.y,
@@ -710,17 +710,17 @@ C64Style.GfxElement.prototype.handleMouseEvent = function(event) {
 /** Add an event handler to this element.
 * Supported events:
 * &lt;ul>
-*	&lt;li>{@link C64Style.EventType.ELEMENT_MOVED}&lt;/li>
-*	&lt;li>{@link C64Style.EventType.ELEMENT_STARTED_MOVING}&lt;/li>
-*	&lt;li>{@link C64Style.EventType.ELEMENT_STOPPED_MOVING}&lt;/li>
-*	&lt;li>{@link C64Style.EventType.ELEMENT_COLLISION}&lt;/li>
-*	&lt;li>{@link C64Style.EventType.MOUSE_ENTER_ELEMENT}&lt;/li>
-*	&lt;li>{@link C64Style.EventType.MOUSE_EXIT_ELEMENT}&lt;/li>
-*	&lt;li>{@link C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT}&lt;/li>
-*	&lt;li>{@link C64Style.EventType.MOUSE_DOWN_ON_ELEMENT}&lt;/li>
-*	&lt;li{@link C64Style.EventType.MOUSE_UP_ON_ELEMENT}&lt;/li>
+*	&lt;li>{@link SL.EventType.ELEMENT_MOVED}&lt;/li>
+*	&lt;li>{@link SL.EventType.ELEMENT_STARTED_MOVING}&lt;/li>
+*	&lt;li>{@link SL.EventType.ELEMENT_STOPPED_MOVING}&lt;/li>
+*	&lt;li>{@link SL.EventType.ELEMENT_COLLISION}&lt;/li>
+*	&lt;li>{@link SL.EventType.MOUSE_ENTER_ELEMENT}&lt;/li>
+*	&lt;li>{@link SL.EventType.MOUSE_EXIT_ELEMENT}&lt;/li>
+*	&lt;li>{@link SL.EventType.MOUSE_MOVE_OVER_ELEMENT}&lt;/li>
+*	&lt;li>{@link SL.EventType.MOUSE_DOWN_ON_ELEMENT}&lt;/li>
+*	&lt;li{@link SL.EventType.MOUSE_UP_ON_ELEMENT}&lt;/li>
 * &lt;/ul>
-* @param {C64Style.EventType} eventType
+* @param {SL.EventType} eventType
 * @param {function} callback Function to call when the event occurs.  The C64Style.Event will be passed in.
 */
 C64Style.GfxElement.prototype.on = function(eventType, callback) {
@@ -731,7 +731,7 @@ C64Style.GfxElement.prototype.on = function(eventType, callback) {
 };
 
 /** Clear the list of event handlers for a given eventType
-* @param {C64Style.EventType} eventType
+* @param {SL.EventType} eventType
 */
 C64Style.GfxElement.prototype.clearEventHandlers = function(eventType) {
   if (!this._eventListeners[eventType]) {

@@ -1,0 +1,33 @@
+{
+  "name": "slcommon",
+  "homepage": "https://github.com/shaunlusk/slcommon",
+  "authors": [
+    "shaun.lusk@gmail.com"
+  ],
+  "description": "Common functionality for Shaun's projects.",
+  "main": "",
+  "keywords": [
+    "shaun",
+    "lusk",
+    "common",
+    "library"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "09b20528ad",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "09b20528ad9e7e6a390db47ecf41ea26ac58ad73"
+  },
+  "_source": "https://github.com/shaunlusk/slcommon.git",
+  "_target": "*",
+  "_originalSource": "shaunlusk/slcommon",
+  "_direct": true
+}

@@ -9,13 +9,13 @@
   <script type="text/javascript" src="../lib/Color.js"></script>
   <script type="text/javascript" src="../lib/ColorPointer.js"></script>
   <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/EventType.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Event.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Screen.js"></script>
   <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
   <script type="text/javascript" src="../lib/CharacterMap.js"></script>
   <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Layer.js"></script>
   <script type="text/javascript" src="../lib/TextPrompt.js"></script>
   <script type="text/javascript" src="../lib/TextLayer.js"></script>
   <script type="text/javascript" src="../lib/MoveOrder.js"></script>
@@ -120,22 +120,22 @@
       gfxLayer.addElement(element);
     }
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
     });
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
     });
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
     });
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
     });

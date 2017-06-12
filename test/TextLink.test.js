@@ -20,7 +20,7 @@ describe("TextLink", function() {
       var calledIt = false;
       link._setActive = function() {calledIt = true;};
       var event = {
-        type: C64Style.EventType.MOUSE_MOVE,
+        type: SL.EventType.MOUSE_MOVE,
         data : {
           x : 1, y: 1,
           scaledX : 1, scaledY: 1,
@@ -38,7 +38,7 @@ describe("TextLink", function() {
       var eventType = null;
       link.notify = function(event) {eventType = eventType || event.type;};
       var event = {
-        type: C64Style.EventType.MOUSE_MOVE,
+        type: SL.EventType.MOUSE_MOVE,
         data : {
           x : 1, y: 1,
           scaledX : 1, scaledY: 1,
@@ -49,14 +49,14 @@ describe("TextLink", function() {
 
       link.handleMouseEvent(event);
 
-      assert(eventType === C64Style.EventType.MOUSE_ENTER_ELEMENT, "should have called notify");
+      assert(eventType === SL.EventType.MOUSE_ENTER_ELEMENT, "should have called notify");
       done();
     });
     it("should notify mouse move over element", function(done) {
       var eventType = null;
       link.notify = function(event) {eventType = event.type;};
       var event = {
-        type: C64Style.EventType.MOUSE_MOVE,
+        type: SL.EventType.MOUSE_MOVE,
         data : {
           x : 1, y: 1,
           scaledX : 1, scaledY: 1,
@@ -67,14 +67,14 @@ describe("TextLink", function() {
 
       link.handleMouseEvent(event);
 
-      assert(eventType === C64Style.EventType.MOUSE_MOVE_OVER_ELEMENT, "should have called notify");
+      assert(eventType === SL.EventType.MOUSE_MOVE_OVER_ELEMENT, "should have called notify");
       done();
     });
     it("should notify mouse down on element", function(done) {
       var eventType = null;
       link.notify = function(event) {eventType = event.type;};
       var event = {
-        type: C64Style.EventType.MOUSE_DOWN,
+        type: SL.EventType.MOUSE_DOWN,
         data : {
           x : 1, y: 1,
           scaledX : 1, scaledY: 1,
@@ -85,14 +85,14 @@ describe("TextLink", function() {
 
       link.handleMouseEvent(event);
 
-      assert(eventType === C64Style.EventType.MOUSE_DOWN_ON_ELEMENT, "should have called notify");
+      assert(eventType === SL.EventType.MOUSE_DOWN_ON_ELEMENT, "should have called notify");
       done();
     });
     it("should notify mouse up on element", function(done) {
       var eventType = null;
       link.notify = function(event) {eventType = event.type;};
       var event = {
-        type: C64Style.EventType.MOUSE_UP,
+        type: SL.EventType.MOUSE_UP,
         data : {
           x : 1, y: 1,
           scaledX : 1, scaledY: 1,
@@ -103,7 +103,7 @@ describe("TextLink", function() {
 
       link.handleMouseEvent(event);
 
-      assert(eventType === C64Style.EventType.MOUSE_UP_ON_ELEMENT, "should have called notify");
+      assert(eventType === SL.EventType.MOUSE_UP_ON_ELEMENT, "should have called notify");
       done();
     });
     it("should set inactive when mouse moves away", function(done) {
@@ -112,7 +112,7 @@ describe("TextLink", function() {
       link.collidesWithCoordinates = function() {return false;};
       link._mouseIsOver = true;
       var event = {
-        type: C64Style.EventType.MOUSE_UP,
+        type: SL.EventType.MOUSE_UP,
         data : {
           x : 200, y: 200,
           scaledX : 200, scaledY: 200,

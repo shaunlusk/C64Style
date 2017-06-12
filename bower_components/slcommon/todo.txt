@@ -1,0 +1,198 @@
+pix element
+
+support for turning mouse tracking off
+
+refactor image loader
+
+screen.onNextFrameBegin
+screen.onNextFrameEnd
+
+remove all elements
+
+How rotate on draw
+
+this._rotation = null;
+this._baseRotation = props.baseRotation || null;
+
+this._diagonalSize = 0; // only needed for determining collision box when rotated
+this._rotatedX = 0;
+this._rotatedY = 0;
+this._rotatedLastX = 0;
+this._rotatedLastY = 0;
+this._wasRotated = false; // was it in a rotated stat during the last frame
+this._lastDiagonalSize = 0;
+
+
+UiElement.prototype.setScaleX = function(scaleX) {
+this.scaleX = scaleX;
+this.dw = this.width * this.scaleX;
+this._recalculateDiagonalSize();
+this._recalculateRotatedCollisionBox();
+this.dirty = true;
+};
+
+UiElement.prototype.setScaleY = function(scaleY) {
+this.scaleY = scaleY;
+this.dh = this.height * this.scaleY;
+this._recalculateDiagonalSize();
+this._recalculateRotatedCollisionBox();
+this.dirty = true;
+};
+
+UiElement.prototype.setScale = function(scaleX, scaleY) {
+this.scaleX = scaleX;
+this.scaleY = scaleY;
+this.dw = this.width * this.scaleX;
+this.dh = this.height * this.scaleY;
+this._recalculateDiagonalSize();
+this._recalculateRotatedCollisionBox();
+this.dirty = true;
+};
+
+UiElement.prototype.getUnAdjustedRotation = function() { return this._rotation; };
+UiElement.prototype.getBaseRotation = function() { return this._baseRotation; };
+UiElement.prototype.getRotation = function() {
+if (this._rotation || this._baseRotation)
+return (this._rotation || 0) + (this._baseRotation || 0);
+return null;
+};
+
+UiElement.prototype.setRotation = function(rotation) {
+this._rotation = rotation;
+if (this._rotation === null) {
+  if (this._wasRotated) this.dirty = true;
+  return;
+}
+this._recalculateDiagonalSize();
+this._recalculateRotatedCollisionBox();
+this.dirty = true;
+};
+UiElement.prototype.setBaseRotation = function(rotation) {
+this._baseRotation = rotation;
+if (this._baseRotation === null) {
+  if (this._wasRotated) this.dirty = true;
+  return;
+}
+this._recalculateDiagonalSize();
+this._recalculateRotatedCollisionBox();
+this.dirty = true;
+};
+
+UiElement.prototype._recalculateDiagonalSize = function() {
+if (this.getRotation() === null) return;
+// calculate diagonal
+// Note that for any amount of rotation, an expanded bounding box is used
+this._diagonalSize = Math.ceil(Math.sqrt( Math.pow(this.dw, 2) + Math.pow(this.dh, 2)));
+};
+
+UiElement.prototype._recalculateRotatedCollisionBox = function() {
+if (this.getRotation() === null) return;
+this._rotatedX = Math.floor(this.x - (this._diagonalSize - this.dw) / 2);
+this._rotatedY = Math.floor(this.y - (this._diagonalSize - this.dh) / 2);
+};
+
+UiElement.prototype.clear = function(context) {
+if (!this.dirty) return;
+if (this._rotation) {
+  // clear area that matches the collision bounding box that was checked
+  context.clearRect(this._rotatedLastX - 1, this._rotatedLastY - 1, this._diagonalSize + 2, this._diagonalSize + 2);
+} else {
+  context.clearRect(this.lastX - 1,this.lastY - 1, this.dw + 2, this.dh + 2);
+}
+if (this.hidden) {
+  this.setDirty(false);
+  this._hiddenRecently = false;
+}
+this.lastX = this.x;
+this.lastY = this.y;
+this._lastDw = this.dw;
+this._lastDh = this.dh;
+if (this.getRotation()) {
+  this._rotatedLastX = this._rotatedX;
+  this._rotatedLastY = this._rotatedY;
+  this._lastDiagonalSize = this._diagonalSize;
+}
+};
+
+UiElement.prototype.update = function(time,diff) {
+var amount,sign,intAmount;
+
+if (this._xMoveRate !== 0) {
+  amount = this._xMoveFractionalAccumulator + diff * this._xMoveRate / 1000;
+  sign = Math.sign(amount);
+  intAmount = Math.trunc(amount);
+  this._xMoveFractionalAccumulator = sign * (Math.abs(amount) - Math.abs(intAmount));
+  this.x += intAmount;
+  if (this.x !== this.lastX) this.setDirty(true);
+} else {
+  this._xMoveFractionalAccumulator = 0;
+}
+if (this._yMoveRate !== 0) {
+  amount = this._yMoveFractionalAccumulator + diff * this._yMoveRate / 1000;
+  sign = Math.sign(amount);
+  intAmount = Math.trunc(amount);
+  this._yMoveFractionalAccumulator = sign * (Math.abs(amount) - Math.abs(intAmount));
+  this.y += intAmount;
+  if (this.y !== this.lastY) this.setDirty(true);
+} else {
+  this._yMoveFractionalAccumulator = 0;
+}
+
+// Will take precedence over move rate
+this._updateMoveOrder(time,diff);
+
+if (this.dirty) {
+  this._recalculateRotatedCollisionBox();
+  return this;
+}
+return null;
+};
+
+UiElement.prototype.render = function(context) {
+if (!this.dirty || this.hidden) return;
+if (this._rotation) this._wasRotated = true;
+else this._wasRotated = false;
+this.setDirty(false);
+};
+
+UiElement.prototype.getCollisionBoxX = function() {
+if (this.getRotation()) return this._rotatedX;
+return this.x;
+};
+UiElement.prototype.getCollisionBoxY = function() {
+if (this.getRotation()) return this._rotatedY;
+return this.y;
+};
+UiElement.prototype.getCollisionBoxLastX = function() {
+if (this._wasRotated) return this._rotatedLastX;
+return this.lastX;
+};
+UiElement.prototype.getCollisionBoxLastY = function() {
+if (this._wasRotated) return this._rotatedLastY;
+return this.lastY;
+};
+UiElement.prototype.getCollisionBoxWidth = function() {
+if (this.getRotation()) return this._diagonalSize;
+return this.dw;
+};
+UiElement.prototype.getCollisionBoxHeight = function() {
+if (this.getRotation()) return this._diagonalSize;
+return this.dh;
+};
+UiElement.prototype.getCollisionBoxLastWidth = function() {
+if (this._wasRotated) return this._lastDiagonalSize;
+return this._lastDw;
+};
+UiElement.prototype.getCollisionBoxLastHeight = function() {
+if (this._wasRotated) return this._lastDiagonalSize;
+return this._lastDh;
+};
+
+add eventing to layers and more eventing to elements
+
+
+move element from one layer to another
+  parentLayer
+  canvasContext
+
+LocalStorage - from RuneTx

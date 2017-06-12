@@ -1,9 +1,9 @@
-var C64Style = C64Style || {};
+var SL = SL || {};
 
 /** Simple Queue class
 * @constructor
 */
-C64Style.Queue = function() {
+SL.Queue = function() {
   this.head = null;
   this.tail = null;
   this._size = 0;
@@ -12,8 +12,8 @@ C64Style.Queue = function() {
 /** Adds a new item to the queue.
 * @param {Object} elem The item to be added to the queue.
 */
-C64Style.Queue.prototype.push = function(elem) {
-  var qelem = new C64Style.QueueElement(elem,null);
+SL.Queue.prototype.push = function(elem) {
+  var qelem = new SL.QueueElement(elem,null);
   if (this._size === 0) {
     this.head = qelem;
   } else {
@@ -26,7 +26,7 @@ C64Style.Queue.prototype.push = function(elem) {
 /** Removes and returns the item at the front of the queue
 * @return {Object} The item at the front of the queue. Null if queue is empty.
 */
-C64Style.Queue.prototype.pop = function() {
+SL.Queue.prototype.pop = function() {
   var temp = this.head;
   if (this.head !== null) {
     this.head = this.head.next;
@@ -37,27 +37,27 @@ C64Style.Queue.prototype.pop = function() {
 };
 
 /** Clear the queue. */
-C64Style.Queue.prototype.clear = function() {
+SL.Queue.prototype.clear = function() {
   this.head = null;
   this.tail = null;
   this._size = 0;
 };
 
 /** Retrieve an iterator for this queue.
-* @returns {C64Style.QueueIterator}
+* @returns {SL.QueueIterator}
 */
-C64Style.Queue.prototype.newIterator = function() {
-  return new C64Style.QueueIterator(this.head);
+SL.Queue.prototype.newIterator = function() {
+  return new SL.QueueIterator(this.head);
 };
 
 /** Returns whether this queue contains the target object.
 * @returns {boolean}
 */
-C64Style.Queue.prototype.contains = function(target) {
+SL.Queue.prototype.contains = function(target) {
   var it = this.newIterator();
   var element = null;
   while ((element = it.getCurrent()) !== null ) {
-    if (element === target || (C64Style.isFunction(element.equals) && element.equals(target))) return true;
+    if (element === target || (SL.isFunction(element.equals) && element.equals(target))) return true;
     it.next();
   }
   return false;
@@ -66,11 +66,11 @@ C64Style.Queue.prototype.contains = function(target) {
 /** Check if the specified object exists in the queue; if so return the element, else return null.
 * @returns {Object}
 */
-C64Style.Queue.prototype.getByEquality = function(target) {
+SL.Queue.prototype.getByEquality = function(target) {
   var it = this.newIterator();
   var element = null;
   while ((element = it.getCurrent()) !== null ) {
-    if (element === target || (C64Style.isFunction(element.equals) && element.equals(target))) return element;
+    if (element === target || (SL.isFunction(element.equals) && element.equals(target))) return element;
     it.next();
   }
   return null;
@@ -79,7 +79,7 @@ C64Style.Queue.prototype.getByEquality = function(target) {
 /** Returns the size of the queue
 * @return {int} The size of the queue.
 */
-C64Style.Queue.prototype.size = function() {
+SL.Queue.prototype.size = function() {
   return this._size;
 };
 
@@ -88,26 +88,26 @@ C64Style.Queue.prototype.size = function() {
 * @param {Object} elem The object for this node.
 * @param {Object} next The next element in the queue.
 */
-C64Style.QueueElement = function(elem,next) {
+SL.QueueElement = function(elem,next) {
   this.elem = elem;
   this.next = next;
 };
 
 /** An iterator for a Queue.
 * @constructor
-* @param {C64Style.QueueElement} head The head element of the Queue.
+* @param {SL.QueueElement} head The head element of the Queue.
 */
-C64Style.QueueIterator = function(head) {
+SL.QueueIterator = function(head) {
   this._ptr = head;
 };
 
 /** Return the object for the current position in the queue.
 */
-C64Style.QueueIterator.prototype.getCurrent = function() {
+SL.QueueIterator.prototype.getCurrent = function() {
   return this._ptr === null ? null : this._ptr.elem;
 };
 
 /** Move the iterator to the next position in the queue. */
-C64Style.QueueIterator.prototype.next = function() {
+SL.QueueIterator.prototype.next = function() {
   this._ptr = this._ptr === null ? null : this._ptr.next;
 };

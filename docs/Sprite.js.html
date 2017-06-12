@@ -47,7 +47,7 @@ C64Style.AnimationFrame.prototype.getDuration = function() {throw new Error("get
 * &lt;p>Animation is provided through an array of frames.  Each frame will be shown for a specified duration; after that duration, the next frame is shown.
 * Animation can be looped, or terminated.&lt;/p>
 * &lt;p>Animation lifetime of a Sprite can be controlled through the parameters, ttl (Time-to-live), loop (boolean, loop or not), and Loops-to-Live.
-* If any of these parameters causes the Sprite's animation to stop, an event, C64Style.EventType.SPRITE_ANIMATION_DONE, will be emitted. &lt;/p>
+* If any of these parameters causes the Sprite's animation to stop, an event, SL.EventType.SPRITE_ANIMATION_DONE, will be emitted. &lt;/p>
 * &lt;p>Note that if the animation stops, the sprite itself will remain on screen; if no longer needed, it must be explicitly hidden or removed.&lt;/p>
 * &lt;p>This is an abstract class; you must provide an implementation that overrides renderFrame(), and AnimationFrames that describe what should be rendered.&lt;/p>
 * Current Implementations: {@link C64Style.ImageSprite}, {@link C64Style.PixSprite}
@@ -95,7 +95,7 @@ C64Style.Sprite = function(screenContext, parentLayer, props) {
   this._loopCount = 0;
   this._elapsed = 0;
 
-  this._eventListeners[C64Style.EventType.SPRITE_ANIMATION_DONE] = [];
+  this._eventListeners[SL.EventType.SPRITE_ANIMATION_DONE] = [];
 };
 
 C64Style.Sprite.prototype = new C64Style.GfxElement();
@@ -151,7 +151,7 @@ C64Style.Sprite.prototype.setLoopsToLive = function(loopsToLive) {this._loopsToL
 */
 C64Style.Sprite.prototype.isDone = function() {return this._done;};
 
-/** Set whether this Sprite is done.  If done, will immediately emit event: C64Style.EventType.SPRITE_ANIMATION_DONE
+/** Set whether this Sprite is done.  If done, will immediately emit event: SL.EventType.SPRITE_ANIMATION_DONE
 * @param {boolean} done
 */
 C64Style.Sprite.prototype.setDone = function(done) {
@@ -265,7 +265,7 @@ C64Style.Sprite.prototype.renderFrame = function(time, diff, frame) {
 /** @private */
 C64Style.Sprite.prototype.doEndOfAnimation = function() {
   var event = new C64Style.Event(
-    C64Style.EventType.SPRITE_ANIMATION_DONE,
+    SL.EventType.SPRITE_ANIMATION_DONE,
     {
       element:this
     }

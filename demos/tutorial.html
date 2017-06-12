@@ -47,13 +47,13 @@ First, let's get some basic page stuff out of the way.  Start your HTML page and
   &lt;script type="text/javascript" src="../lib/Color.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/ColorPointer.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/Constants.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/EventType.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Event.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Screen.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="../node_modules/slgfx/EventType.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="../node_modules/slgfx/Event.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="../node_modules/slgfx/Screen.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/PixPathTypes.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/CharacterMap.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/CharacterRenderer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Layer.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="../node_modules/slgfx/Layer.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/TextPrompt.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/TextLayer.js"&gt;&lt;/script&gt;
   &lt;script type="text/javascript" src="../lib/MoveOrder.js"&gt;&lt;/script&gt;
@@ -550,7 +550,7 @@ function updateShip(event) {
 	We get the time diff from an event that is passed into the function.
 	So, In order for this to work, we need to call this function from an event hook, specifically BEFORE_RENDER in the screen.	We can add this in the initialize function after our key event handlers.
 </p>
-<p class="code newCode">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code newCode">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
 </p>
@@ -583,7 +583,7 @@ function updateShip(event) {
   <span class="newCode">GameContext.alienMoveDirection = "RIGHT";
   setAliensMoving();</span>
 
-  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
 </p>
@@ -657,14 +657,14 @@ function updateShip(event) {
   GameContext.alienMoveDirection = "RIGHT";
   setAliensMoving();
 
-  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
 </p>
 <p>
 	So now we have the instruction to move aliens down when they are near the edges of the screen.  We need to make this check every render cycle.  We can add to our before-render event handler:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
 	updateShip(e);
 	<span class="newCode">updateAliens(e);</span>
   });
@@ -783,12 +783,12 @@ var GameContext = GameContext || {};
 <p>
 To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
     updateAliens(e);
   });
 
-  <span class="newCode">GameContext.bulletElement.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
+  <span class="newCode">GameContext.bulletElement.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
 	  removeBullet();
   });</span>
 </p>
@@ -807,11 +807,11 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 	We remove the alien from the screen, and also remove it from our list of aliens in the game context.
 	To call the function, we can add a collision event handler back in the initialization function:
 </p>
-<p class="code">  GameContext.bulletElement.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
+<p class="code">  GameContext.bulletElement.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
     removeBullet();
   });
 
-  <span class="newCode">GameContext.bulletElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
+  <span class="newCode">GameContext.bulletElement.on(SL.EventType.ELEMENT_COLLISION, function(e) {
     if(e.data.element2.isAlien) {
        killAlien(e.data.element2);
     }
@@ -888,7 +888,7 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 <p>
 	And then call that in our before-render handler:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
   	updateShip(e);
   	updateAliens(e);
   	<span class="newCode">updateScore();</span>
@@ -955,7 +955,7 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 <p>
 	Now we need to call the alien attack function. We can add this to our before-render handler.  Anywhere should do fine, I added it second to last:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
 	updateShip(e);
 	updateAliens(e);
 	<span class="newCode">alienAttack();</span>
@@ -986,7 +986,7 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 	var bullet = createAlienBullet(alien.getX() + 8, alien.getY() + 16);
 	GameContext.gfxLayer.addElement(bullet);
 	bullet.setMoveRates(0,135);
-	<span class="newCode">bullet.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));</span>
+	<span class="newCode">bullet.on(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));</span>
   }
 }
 </p>
@@ -1178,7 +1178,7 @@ function unpauseAction() {
 	  So now, the player can't fire bullets, or cause direction movement for the ship.
 	  In before render, we need to stop the normal actions:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
 	<span class="newCode">if (GameContext.actionPaused) return;</span>
 	updateShip(e);
 	updateAliens(e);
@@ -1211,7 +1211,7 @@ function unpauseAction() {
 		Now we need to tie this all together.  We need to trigger these functions when something collides with our ship, say an alien bullet, or an alien.  Back in our initialize
 		code we can add another collision handler:
 </p>
-<p class="code newCode">  GameContext.shipElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
+<p class="code newCode">  GameContext.shipElement.on(SL.EventType.ELEMENT_COLLISION, function(e) {
   	if (e.data.element2.isAlien) {
   	  killAlien(e.data.element2);
   	} else {
@@ -1312,7 +1312,7 @@ function unpauseAction() {
 		Simple enough.
 		We can call this method in our before render handler:
 </p>
-<p class="code">GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     if (GameContext.actionPaused) return;
     updateShip(e);
     updateAliens(e);

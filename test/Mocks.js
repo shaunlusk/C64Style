@@ -87,6 +87,7 @@ C64Style.Mocks.getMockCanvasContext = function(props) {
     this.filledWidth = width;
     this.filledHeight = height;
   };
+  context.getCanvas = function() {return {};};
   return context;
 };
 

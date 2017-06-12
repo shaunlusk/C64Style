@@ -1,16 +1,16 @@
-var C64Style = C64Style || {};
+var SL = SL || {};
 
-/** Directs movement of {@link C64Style.GfxElements} when moveTo() is called.
+/** Directs movement of {@link SL.GfxElements} when moveTo() is called.
 * These are created and handled internally in GfxElements.
 * @constructor
-* @param {C64Style.GfxElements} element The element this MoveOrder will be bound to.
+* @param {SL.GfxElements} element The element this MoveOrder will be bound to.
 * @param {number} tx The target x location for the element.
 * @param {number} ty The target y location for the element.
 * @param {number} duration The length of time (milliseconds) for the movement to the target location.
 * @param {function} elementCallback The callback of the parent element; called when movement is done.
 * @param {function} callback Optional callback to be called when movement is done.
 */
-C64Style.MoveOrder = function(element, tx, ty, duration, elementCallback, callback) {
+SL.MoveOrder = function(element, tx, ty, duration, elementCallback, callback) {
   this._element = element;
   this._tx = tx;
   this._ty = ty;
@@ -26,7 +26,7 @@ C64Style.MoveOrder = function(element, tx, ty, duration, elementCallback, callba
 
 /** Initialize movement conditions.
 */
-C64Style.MoveOrder.prototype.start = function() {
+SL.MoveOrder.prototype.start = function() {
   this._startX = this._element.getX();
   this._startY = this._element.getY();
   this._started = true;
@@ -36,7 +36,7 @@ C64Style.MoveOrder.prototype.start = function() {
 * @param {number} time The current time (milliseconds)
 * @param {number} diff The difference between the last time and the current time  (milliseconds)
 */
-C64Style.MoveOrder.prototype.update = function(time,diff) {
+SL.MoveOrder.prototype.update = function(time,diff) {
   if (!this._started) return;
   if (this._end) return;
   if (this._startTime === -1) this._startTime = time;
@@ -51,15 +51,15 @@ C64Style.MoveOrder.prototype.update = function(time,diff) {
 
 /** Finish movement and notify the parent element.
 */
-C64Style.MoveOrder.prototype.end = function () {
+SL.MoveOrder.prototype.end = function () {
   this._end = true;
   this._element.setX(this._tx);
   this._element.setY(this._ty);
-  if (C64Style.isFunction(this._elementCallback)) this._elementCallback();
-  if (C64Style.isFunction(this._callback)) this._callback(this._element);
+  if (SL.isFunction(this._elementCallback)) this._elementCallback();
+  if (SL.isFunction(this._callback)) this._callback(this._element);
 };
 
 /** @private */
-C64Style.MoveOrder.prototype._timePercent = function (time) {
+SL.MoveOrder.prototype._timePercent = function (time) {
   return (time - this._startTime) / this._duration;
 };

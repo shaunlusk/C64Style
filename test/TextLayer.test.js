@@ -4,11 +4,6 @@ describe("TextLayer", function() {
   beforeEach(function() {
     screenContext = C64Style.Mocks.getMockScreen();
     canvasContext = C64Style.Mocks.getMockCanvasContext();
-    var canvas = {
-      getContext : function() {
-        return canvasContext;
-      }
-    };
     characterRenderer = C64Style.Mocks.getMockCharacterRenderer();
     textPrompt = {
       update : function(time,diff) {
@@ -24,7 +19,7 @@ describe("TextLayer", function() {
       characterRenderer : characterRenderer,
       textPrompt : textPrompt
     };
-    layer = new C64Style.TextLayer(screenContext, canvas, props);
+    layer = new C64Style.TextLayer(screenContext, canvasContext, props);
   });
 
   describe("#update()", function() {

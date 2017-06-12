@@ -48,7 +48,7 @@
 
 
 <div class="description">
-    Base element for displaying animations.<br /><b>Extends</b> <a href="C64Style.GfxElement.html">C64Style.GfxElement</a> <br /><p>Animation is provided through an array of frames.  Each frame will be shown for a specified duration; after that duration, the next frame is shown.Animation can be looped, or terminated.</p><p>Animation lifetime of a Sprite can be controlled through the parameters, ttl (Time-to-live), loop (boolean, loop or not), and Loops-to-Live.If any of these parameters causes the Sprite's animation to stop, an event, C64Style.EventType.SPRITE_ANIMATION_DONE, will be emitted. </p><p>Note that if the animation stops, the sprite itself will remain on screen; if no longer needed, it must be explicitly hidden or removed.</p><p>This is an abstract class; you must provide an implementation that overrides renderFrame(), and AnimationFrames that describe what should be rendered.</p>Current Implementations: <a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a>, <a href="C64Style.PixSprite.html">C64Style.PixSprite</a>
+    Base element for displaying animations.<br /><b>Extends</b> <a href="C64Style.GfxElement.html">C64Style.GfxElement</a> <br /><p>Animation is provided through an array of frames.  Each frame will be shown for a specified duration; after that duration, the next frame is shown.Animation can be looped, or terminated.</p><p>Animation lifetime of a Sprite can be controlled through the parameters, ttl (Time-to-live), loop (boolean, loop or not), and Loops-to-Live.If any of these parameters causes the Sprite's animation to stop, an event, SL.EventType.SPRITE_ANIMATION_DONE, will be emitted. </p><p>Note that if the animation stops, the sprite itself will remain on screen; if no longer needed, it must be explicitly hidden or removed.</p><p>This is an abstract class; you must provide an implementation that overrides renderFrame(), and AnimationFrames that describe what should be rendered.</p>Current Implementations: <a href="C64Style.ImageSprite.html">C64Style.ImageSprite</a>, <a href="C64Style.PixSprite.html">C64Style.PixSprite</a>
 </div>
 
 
@@ -1862,7 +1862,7 @@
 
 
 <div class="description">
-    Set whether this Sprite is done.  If done, will immediately emit event: C64Style.EventType.SPRITE_ANIMATION_DONE
+    Set whether this Sprite is done.  If done, will immediately emit event: SL.EventType.SPRITE_ANIMATION_DONE
 </div>
 
 

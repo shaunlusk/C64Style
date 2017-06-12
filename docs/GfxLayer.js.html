@@ -96,10 +96,10 @@ C64Style.GfxLayer.prototype.removeElement = function(element) {
 * Calls update on each element.
 * Checks for elements colliding with the layer boundary and emits events accordingly (event emitted from the elements themselves): 
 * &lt;ul>
-* &lt;li>C64Style.EventType.ELEMENT_HIT_LEFT_EDGE&lt;/li>
-* &lt;li>C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE&lt;/li>
-* &lt;li>C64Style.EventType.ELEMENT_HIT_TOP_EDGE&lt;/li>
-* &lt;li>C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE&lt;/li>
+* &lt;li>SL.EventType.ELEMENT_HIT_LEFT_EDGE&lt;/li>
+* &lt;li>SL.EventType.ELEMENT_HIT_RIGHT_EDGE&lt;/li>
+* &lt;li>SL.EventType.ELEMENT_HIT_TOP_EDGE&lt;/li>
+* &lt;li>SL.EventType.ELEMENT_HIT_BOTTOM_EDGE&lt;/li>
 * &lt;/ul>
 * The data for these events consists of:
 * &lt;ul>
@@ -126,16 +126,16 @@ C64Style.GfxLayer.prototype.update = function(time,diff) {
 /** @private */
 C64Style.GfxLayer.prototype._checkBorderCollision = function(element,time) {
   if (element.getCollisionBoxX() &lt;= 0) {
-    element.notify(new C64Style.Event(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, {layer:this, element:element}, time));
+    element.notify(new C64Style.Event(SL.EventType.ELEMENT_HIT_LEFT_EDGE, {layer:this, element:element}, time));
   }
   if (element.getCollisionBoxX() + element.getCollisionBoxWidth() > this.getCanvas().width) {
-    element.notify(new C64Style.Event(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, {layer:this, element:element}, time));
+    element.notify(new C64Style.Event(SL.EventType.ELEMENT_HIT_RIGHT_EDGE, {layer:this, element:element}, time));
   }
   if (element.getCollisionBoxY() &lt;= 0) {
-    element.notify(new C64Style.Event(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, {layer:this, element:element}, time));
+    element.notify(new C64Style.Event(SL.EventType.ELEMENT_HIT_TOP_EDGE, {layer:this, element:element}, time));
   }
   if (element.getCollisionBoxY() + element.getCollisionBoxHeight() > this.getCanvas().height) {
-    element.notify(new C64Style.Event(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, {layer:this, element:element}, time));
+    element.notify(new C64Style.Event(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, {layer:this, element:element}, time));
   }
 };
 
