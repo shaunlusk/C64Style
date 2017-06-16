@@ -8,6 +8,6 @@ slcommon@shaunlusk/slcommon:
 
 slgfx@shaunlusk/slgfx:
   version "0.1.0"
-  resolved "https://codeload.github.com/shaunlusk/slgfx/tar.gz/1e6cb506838dc5c14b608bc5b84ca04c2e328bcf"
+  resolved "https://codeload.github.com/shaunlusk/slgfx/tar.gz/8a2072b6b736c787a0009db5d4a7e5a9474460ac"
   dependencies:
     slcommon shaunlusk/slcommon
