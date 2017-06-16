@@ -37,6 +37,7 @@
   <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
   <script type="text/javascript" src="../lib/TextPrompt.js"></script>
   <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -52,8 +53,8 @@
   *** Empty config, use defaults for everything ***
   *************************************************/
   var config = {
-    borderColor:C64Style.Color.LIGHTBLUE,
-    backgroundColor:C64Style.Color.BLUE,
+    // borderColor:C64Style.Color.LIGHTBLUE,
+    // backgroundColor:C64Style.Color.BLUE,
   };
 
   var screen = null, textLayer = null;
@@ -61,7 +62,7 @@
   function initialize(targetDiv, config) {
 
     // Create the C64 Screen
-    screen = new SL.Screen(targetDiv, new C64Style.LayerFactory(), config);
+    screen = new C64Style.Screen(targetDiv, new C64Style.LayerFactory(), config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     screen.render();
