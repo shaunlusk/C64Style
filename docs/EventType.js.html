@@ -36,9 +36,9 @@
 SL.EventType = {
   /** Emitted by an C64Style.GfxElement when it moves */
   "ELEMENT_MOVED" : "ELEMENT_MOVED",
-  /** Emitted by a C64Style.Screen before a render cycle */
+  /** Emitted by a C64Style.C64Screen before a render cycle */
   "BEFORE_RENDER" : "BEFORE_RENDER",
-  /** Emitted by a C64Style.Screen after a render cycle */
+  /** Emitted by a C64Style.C64Screen after a render cycle */
   "AFTER_RENDER" : "AFTER_RENDER",
   /** Emitted when an C64Style.GfxElement starts moving */
   "ELEMENT_STARTED_MOVING" : "ELEMENT_STARTED_MOVING",
@@ -54,15 +54,15 @@ SL.EventType = {
   "ELEMENT_HIT_TOP_EDGE" : "ELEMENT_HIT_TOP_EDGE",
   /** Emitted by a C64Style.GfxLayer when an element hits its bottom edge */
   "ELEMENT_HIT_BOTTOM_EDGE" : "ELEMENT_HIT_BOTTOM_EDGE",
-  /** Emmited by a C64Style.Screen when it is paused */
+  /** Emmited by a C64Style.C64Screen when it is paused */
   "SCREEN_PAUSED" : "SCREEN_PAUSED",
-  /** Emmited by a C64Style.Screen when it is unpaused */
+  /** Emmited by a C64Style.C64Screen when it is unpaused */
   "SCREEN_RESUMED" : "SCREEN_RESUMED",
-  /** Emmited by a C64Style.Screen when the mouse moves somewhere inside its boundaries */
+  /** Emmited by a C64Style.C64Screen when the mouse moves somewhere inside its boundaries */
   "MOUSE_MOVE" : "MOUSE_MOVE",
-  /** Emmited by a C64Style.Screen when a mouse down event occurs on it */
+  /** Emmited by a C64Style.C64Screen when a mouse down event occurs on it */
   "MOUSE_DOWN" : "MOUSE_DOWN",
-  /** Emmited by a C64Style.Screen when a mouse down event occurs on it */
+  /** Emmited by a C64Style.C64Screen when a mouse down event occurs on it */
   "MOUSE_UP" : "MOUSE_UP",
   /** Emmited by a C64Style.GfxElement when the mouse enters its bounding box */
   "MOUSE_ENTER_ELEMENT" : "MOUSE_ENTER_ELEMENT",
@@ -87,7 +87,7 @@ SL.EventType = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.C64Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -97,7 +97,7 @@ var config = {
 };
 
 function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
   GameContext.screen.initialize();
   GameContext.screen.render();
 }
@@ -147,7 +147,7 @@ You can already see that we create a 'screen' property, that is a reference to o
 We'll do the same thing to add a text layer:
 </p>
 <p class="code">function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
   GameContext.screen.initialize();
 
   <span class="newCode">GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
@@ -225,7 +225,7 @@ Then add the element to your graphics layer:
 Your initialize function should look like this:
 </p>
 <p class="code">function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
   GameContext.screen.initialize();
 
   GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
@@ -419,7 +419,7 @@ Now you should have this:
 And your initialize function should look like this:
 </p>
 <p class="code">function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+  GameContext.screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
   GameContext.screen.initialize();
 
   GameContext.textLayer = GameContext.screen.createLayer("TextLayer");

@@ -62,7 +62,7 @@
   function initialize(targetDiv, config) {
 
     // Create the C64 Screen
-    screen = new C64Style.Screen(targetDiv, new C64Style.LayerFactory(), config);
+    screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     screen.render();

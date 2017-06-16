@@ -31,7 +31,7 @@ var targetDiv = document.getElementById("content");
 var config = {};
 
 // create the screen
-screen = new C64Style.Screen(targetDiv, config);
+screen = new C64Style.C64Screen(targetDiv, config);
 
 // call initialize on screen
 screen.initialize();
