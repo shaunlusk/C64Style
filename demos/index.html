@@ -58,7 +58,7 @@
   <script type="text/javascript">
 
   var config = {
-      "rows" : 25,
+      "rows" : 27,
       "cols" : 40,
       "scaleX" : 2,
       "scaleY" : 2,
@@ -157,6 +157,17 @@
 
     element = new C64Style.TextLink(screen, gfxLayer, {
       x:1 * C64Style.CELLWIDTH, y:18 * C64Style.CELLHEIGHT,
+      text:"Text Prompt Demo",
+      color:C64Style.Color.LIGHTGREEN,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.GREEN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"TextPromptDemo.html"
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink(screen, gfxLayer, {
+      x:1 * C64Style.CELLWIDTH, y:20 * C64Style.CELLHEIGHT,
       text:"Tutorial - Alien Invasion",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
@@ -168,7 +179,7 @@
 
     if (new Date().getMonth() === 11) {
       element = new C64Style.TextLink(screen, gfxLayer, {
-        x:1 * C64Style.CELLWIDTH, y:21 * C64Style.CELLHEIGHT,
+        x:1 * C64Style.CELLWIDTH, y:22 * C64Style.CELLHEIGHT,
         text:"Christmas Demo",
         color:C64Style.Color.LIGHTGREEN,
         backgroundColor:C64Style.Color.BLUE,
@@ -180,7 +191,7 @@
     }
 
     element = new C64Style.TextLink(screen, gfxLayer, {
-      x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+      x:1 * C64Style.CELLWIDTH, y:25 * C64Style.CELLHEIGHT,
       text:"Back to Main Index",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,

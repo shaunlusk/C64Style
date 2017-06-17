@@ -1,6 +1,4 @@
 
-fix alien invasion scale
-
 put textprompt back on demos page
 on screen - get unscaled x & y - or have scaled x & y
 update copyright in license file
