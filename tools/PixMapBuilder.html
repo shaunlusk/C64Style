@@ -104,10 +104,8 @@
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
-    drawGrid();
-    drawBoxAroundSelectedColor(0);
 
-    previewScreen = new C64Style.C64Screen(document.getElementById("preview"), {backgroundColor:"#360066", rows:2, cols:2, scaleX:2, scaleY:2, borderSize:2}
+    previewScreen = new C64Style.C64Screen(document.getElementById("preview"), new C64Style.LayerFactory(), {backgroundColor:"#360066", rows:2, cols:2, scaleX:2, scaleY:2, borderSize:2}
     );
     previewScreen.initialize();
     previewGfxLayer = previewScreen.createLayer("GfxLayer");
@@ -149,6 +147,9 @@
 
     screen.render(1);
     previewScreen.render(1);
+
+    drawGrid();
+    drawBoxAroundSelectedColor(0);
   }
 
   function draw(event) {
@@ -214,7 +215,7 @@
 
   function drawGrid() {
     var context = gfxLayer.getCanvasContext();
-    context.strokeStyle = 'black';
+    context.setStrokeStyle('black');
     var xBounds = config.cols * config.scaleX * C64Style.CELLWIDTH;
     var yBounds = config.rows * config.scaleY * C64Style.CELLHEIGHT;
     for (var x = config.scaleX * C64Style.CELLWIDTH; x < xBounds; x += config.scaleX * C64Style.CELLWIDTH) {
@@ -242,8 +243,8 @@
     height = C64Style.CELLHEIGHT * config.scaleY;
     context.beginPath();
     context.rect(x, y, width, height);
-    context.lineWidth = 2;
-    context.strokeStyle = col === 1 ? '#999999' : 'white';
+    context.setLineWidth(2);
+    context.setStrokeStyle(col === 1 ? '#999999' : 'white');
     context.closePath();
     context.stroke();
   }
