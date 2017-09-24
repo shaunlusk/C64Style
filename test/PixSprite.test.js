@@ -1,10 +1,13 @@
 describe("PixSprite", function() {
-  var pixSprite, mockScreen, mockLayer;
+  var pixSprite, mockScreen, mockLayer, mockPixRenderer;
 
   beforeEach(function() {
     mockScreen = C64Style.Mocks.getMockScreen();
     mockLayer = C64Style.Mocks.getMockLayer();
-    pixSprite = new C64Style.PixSprite(mockScreen, mockLayer);
+    mockPixRenderer = {
+      renderPixPathArray : function() {}
+    };
+    pixSprite = new C64Style.PixSprite(mockScreen, mockLayer, {pixRenderer:mockPixRenderer});
   });
 
   describe("#_setDimensions()", function() {
@@ -79,7 +82,7 @@ describe("PixSprite", function() {
     });
   });
   describe("#renderFrame()", function() {
-    it("should call _renderPixPath on each pixPath", function (done) {
+    it("should call renderPixPathArray", function (done) {
       var frame = {
         getPixArray : function() {
           return [
@@ -88,26 +91,14 @@ describe("PixSprite", function() {
           ];
         }
       };
-      var callCount = 0;
-      pixSprite._renderPixPath = function() {callCount++;};
+      var calledRenderPixPathArray = false;
+      mockPixRenderer.renderPixPathArray = function() {
+        calledRenderPixPathArray = true;
+      };
 
       pixSprite.renderFrame(1,1,frame);
 
-      assert(callCount === 2, "should have called renderPixPath twice");
-      done();
-    });
-  });
-  describe("_renderPixPath", function() {
-    it("should call pixRenderer.renderPixPath", function(done) {
-      var calledIt = false;
-      var pixRenderer = {
-        renderPixPath : function(context, x, y, pixPath, palette, elementScaleX, elementScaleY) {calledIt = true;}
-      };
-      pixSprite._pixRenderer = pixRenderer;
-
-      pixSprite._renderPixPath({});
-
-      assert(calledIt === true, "should have called renderPixPath");
+      assert(calledRenderPixPathArray === true, "should have called renderPixPathArray");
       done();
     });
   });

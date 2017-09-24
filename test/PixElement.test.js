@@ -1,10 +1,13 @@
 describe("PixElement", function() {
-  var pixImage, mockScreen, mockLayer;
+  var pixImage, mockScreen, mockLayer, mockPixRenderer;
 
   beforeEach(function() {
     mockScreen = C64Style.Mocks.getMockScreen();
     mockLayer = C64Style.Mocks.getMockLayer();
-    pixImage = new C64Style.PixElement(mockScreen, mockLayer);
+    mockPixRenderer = {
+      renderPixPathArray : function() {}
+    };
+    pixImage = new C64Style.PixElement(mockScreen, mockLayer, {pixRenderer:mockPixRenderer});
   });
 
   describe("#setDimensions()", function() {
@@ -61,70 +64,16 @@ describe("PixElement", function() {
       done();
     });
   });
-  describe("#_renderPixPath()", function() {
-    it("should call renderPixPath", function(done) {
-      var calledWithX = null, calledWithY = null,
-        calledWithPixPath = null, calledWithPalette = null,
-        calledWithElementScaleX = null, calledWithElementScaleY = null;
-      pixImage = new C64Style.PixElement(mockScreen, mockLayer, {
-        pixRenderer : {
-          renderPixPath : function(context, x, y, pixPath, palette, elementScaleX, elementScaleY) {
-            calledWithX = x;
-            calledWithY = y;
-            calledWithPixPath = pixPath;
-            calledWithPalette = palette;
-            calledWithElementScaleX = elementScaleX;
-            calledWithElementScaleY = elementScaleY;
-          }
-        }
-      });
-
-      pixImage._renderPixPath({type:C64Style.PixPathTypes.PIXEL, x:1, y:1, color: C64Style.Color.BLACK});
-
-      assert(calledWithX === 0, "should have called with pix element x");
-      assert(calledWithY === 0, "should have called with pix element y");
-      assert(calledWithPixPath.type === C64Style.PixPathTypes.PIXEL, "should have called with pixPath");
-      assert(calledWithPixPath.x === 1, "should have called with pixPath");
-      assert(calledWithPixPath.y === 1, "should have called with pixPath");
-      assert(calledWithPixPath.color === C64Style.Color.BLACK, "should have called with pixPath");
-      assert(calledWithPalette.length === 0, "should have called with palette");
-      assert(calledWithElementScaleX === 1, "should have called with element x scale");
-      assert(calledWithElementScaleY === 1, "should have called with element y scale");
-      done();
-    });
-  });
   describe("#render()", function() {
-    var calledRenderPixPath;
-
-    beforeEach(function() {
-      calledRenderPixPath = false;
-      pixImage._renderPixPath = function(pixPath) {
-        calledRenderPixPath = true;
+    it("should call renderPixPathArray", function(done) {
+      var calledRenderPixPathArray = false;
+      mockPixRenderer.renderPixPathArray = function() {
+        calledRenderPixPathArray = true;
       };
-    });
-
-    it("should return if hidden", function(done) {
-      pixImage.hide();
 
       pixImage.render(1, 1);
 
-      assert(calledRenderPixPath === false, "should not have called renderImage");
-      done();
-    });
-    it("should return if not dirty", function(done) {
-      pixImage.setDirty(false);
-
-      pixImage.render(1, 1);
-
-      assert(calledRenderPixPath === false, "should not have called renderImage");
-      done();
-    });
-    it("should call renderImage", function(done) {
-      pixImage._pixPathArray = [{}];
-
-      pixImage.render(1, 1);
-
-      assert(calledRenderPixPath === true, "should have called renderImage");
+      assert(calledRenderPixPathArray === true, "should have called renderPixPathArray");
       done();
     });
   });

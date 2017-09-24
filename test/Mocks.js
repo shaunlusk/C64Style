@@ -48,6 +48,7 @@ C64Style.Mocks.getMockScreen = function(props) {
   screen.getScaleX = function() {return this.scaleX;};
   screen.getScaleY = function() {return this.scaleY;};
   screen.addEventListener = function() {};
+  screen.addEventListenerToDocument = function() {};
   screen.notify = function(event) {};
   return screen;
 };

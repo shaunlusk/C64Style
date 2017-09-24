@@ -421,7 +421,7 @@ describe("TextPrompt", function() {
       prompt._on = true;
       prompt._input = ['a'];
       prompt._maxLength = 1;
-      var event = {key:"b"};
+      var event = {key:"b", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
@@ -431,7 +431,7 @@ describe("TextPrompt", function() {
     it("should not add key if char not found in map", function(done) {
       var prompt = getTextPrompt();
       prompt._on = true;
-      var event = {key:"œ"};
+      var event = {key:"œ", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
@@ -441,7 +441,7 @@ describe("TextPrompt", function() {
     it("should add key", function(done) {
       var prompt = getTextPrompt();
       prompt._on = true;
-      var event = {key:"a"};
+      var event = {key:"a", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
@@ -452,7 +452,7 @@ describe("TextPrompt", function() {
       var prompt = getTextPrompt();
       prompt._on = true;
       prompt._cursorX = 3;
-      var event = {key:"a"};
+      var event = {key:"a", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
