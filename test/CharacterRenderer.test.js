@@ -193,18 +193,32 @@ describe("CharacterRenderer", function() {
     });
   });
   describe("#_renderCharacter()", function() {
-    it("should fill background", function(done) {
+    var context = {
+      fillRect : function() {},
+      setFillStyle : function() {}
+    };
+    it("should call setFillStyle", function(done) {
       var _renderPixPathSaved = renderer._renderPixPath;
       renderer._renderPixPath = function() {};
       renderer.setBackgroundColor(C64Style.Color.BLUE);
-      var context = {
-        fillRect : function() {this.calledIt = true;}
-      };
+      context.setFillStyle = function() {this.calledIt = true;};
       var char = "a";
 
       renderer._renderCharacter(context, char);
 
-      assert(context.fillStyle !== undefined, "should have set context fillStyle");
+      assert(context.calledIt === true, "should have called setFillStyle");
+      renderer._renderPixPath = _renderPixPathSaved;
+      done();
+    });
+    it("should fill background", function(done) {
+      var _renderPixPathSaved = renderer._renderPixPath;
+      renderer._renderPixPath = function() {};
+      renderer.setBackgroundColor(C64Style.Color.BLUE);
+      context.fillRect = function() {this.calledIt = true;};
+      var char = "a";
+
+      renderer._renderCharacter(context, char);
+
       assert(context.calledIt === true, "should have called fillRect");
       renderer._renderPixPath = _renderPixPathSaved;
       done();
@@ -213,9 +227,6 @@ describe("CharacterRenderer", function() {
       var _renderPixPathSaved = renderer._renderPixPath;
       var calledRenderPixPath = false;
       renderer._renderPixPath = function() {calledRenderPixPath = true;};
-      var context = {
-        fillRect : function() {}
-      };
       var char = " ";
 
       renderer._renderCharacter(context, char);
@@ -228,9 +239,6 @@ describe("CharacterRenderer", function() {
       var _renderPixPathSaved = renderer._renderPixPath;
       var calledRenderPixPath = false;
       renderer._renderPixPath = function() {calledRenderPixPath = true;};
-      var context = {
-        fillRect : function() {}
-      };
       var char = "¼";
 
       renderer._renderCharacter(context, char);
@@ -243,9 +251,6 @@ describe("CharacterRenderer", function() {
       var _renderPixPathSaved = renderer._renderPixPath;
       var calledRenderPixPathCount = 0;
       renderer._renderPixPath = function() {calledRenderPixPathCount++;};
-      var context = {
-        fillRect : function() {}
-      };
       var char = "a";
       var expectedCount = C64Style.CharacterMap[char].length;
 
@@ -327,6 +332,7 @@ describe("CharacterRenderer", function() {
     });
     it("should handle pixPath with color", function(done) {
       var context = C64Style.Mocks.getMockCanvasContext();
+      context.setFillStyle = function(style) {this.fillStyle = style};
       renderer.setColor(C64Style.Color.LIGHTBLUE);
       var expectedColor = C64Style.Color.BLACK;
       var pixPath = {type:"PIXEL", x:1,y:2, color:expectedColor};
@@ -338,6 +344,7 @@ describe("CharacterRenderer", function() {
     });
     it("should handle pixPath with colorPointer", function(done) {
       var context = C64Style.Mocks.getMockCanvasContext();
+      context.setFillStyle = function(style) {this.fillStyle = style};
       renderer.setColor(C64Style.Color.LIGHTBLUE);
       var expectedColor = C64Style.Color.ORANGE;
       var pixPath = {type:"PIXEL", x:1,y:2, color:new C64Style.ColorPointer(expectedColor)};
