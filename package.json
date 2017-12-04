@@ -7,7 +7,7 @@
   "author": "Shaun Lusk <shaun.lusk@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "slcommon": "shaunlusk/slcommon#0.1.1",
-    "slgfx": "shaunlusk/slgfx#0.1.0"
+    "slcommon": "shaunlusk/slcommon#0.1.2",
+    "slgfx": "shaunlusk/slgfx#develop"
   }
 }
