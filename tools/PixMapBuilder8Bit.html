@@ -1,0 +1,295 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style PixMapBuilder</title>
+  <script type="text/javascript" src="../node_modules/slcommon/Event.js"></script>
+  <script type="text/javascript" src="../node_modules/slcommon/EventNotifierMixin.js"></script>
+  <script type="text/javascript" src="../node_modules/slcommon/Utils.js"></script>
+  <script type="text/javascript" src="../node_modules/slcommon/LinkedList.js"></script>
+  <script type="text/javascript" src="../node_modules/slcommon/MixinTemplate.js"></script>
+  <script type="text/javascript" src="../node_modules/slcommon/Queue.js"></script>
+  <script type="text/javascript" src="../node_modules/slcommon/PriorityQueue.js"></script>
+  <script type="text/javascript" src="../node_modules/slcommon/UniquePriorityQueue.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Utils.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/EventTypes.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/CanvasContextWrapper.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Layer.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/GfxElement.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/GfxElementZIndexComparable.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/GfxLayer.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/ImageElement.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/ImageLoader.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/ImageRenderer.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/SpriteAnimationFrame.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Sprite.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/ImageSpriteFrame.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/ImageSprite.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/LayerFactory.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/MoveOrder.js"></script>
+  <script type="text/javascript" src="../node_modules/slgfx/Screen.js"></script>
+  <script type="text/javascript" src="../lib/SlImport.js"></script>
+  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
+  <script type="text/javascript" src="../lib/Constants.js"></script>
+  <script type="text/javascript" src="../lib/Color.js"></script>
+  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
+  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
+  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
+  <script type="text/javascript" src="../lib/LayerFactory.js"></script>
+  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
+  <script type="text/javascript" src="../lib/PixElement.js"></script>
+  <script type="text/javascript" src="../lib/PixSprite.js"></script>
+  <script type="text/javascript" src="../lib/TextElement.js"></script>
+  <script type="text/javascript" src="../lib/TextLink.js"></script>
+  <script type="text/javascript" src="../lib/TextButton.js"></script>
+  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
+  <script type="text/javascript" src="../lib/TextLayer.js"></script>
+  <script type="text/javascript" src="../lib/Screen.js"></script>
+<link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+  <div>
+  <div id="content">
+  </div>
+  <div id="preview">
+  </div>
+</div>
+<div>
+  <div class="textContent">
+    <p>Using the grid above, select colors and draw your PixElement.  A live
+    preview is shown below the grid.  As you draw, the PixArray is generated
+    and written in the text box below.  This array can be used in your script
+    to create PixElements / PixSprites</p>
+    <p>Note: Preview is 2x scaled.</p>
+  </div>
+  <div id="buttons">
+    <button onclick="reset();">Clear</button>
+    <button onclick="eraser();">Eraser</button>
+    <input type="checkbox" id="colorIdxCheckBox" onchange="changeColorStrategy()"> Use Color Index instead of Hex String
+  </div>
+  <div id="json">
+    <textarea name="jsonData" id="jsonData" rows="8" cols="40"></textarea>
+  </div>
+  <div id="backLinks">
+    <a href="index.html">Back to Tools Index</a><br /><br />
+    <a href="../index.html">Back to Main Index</a>
+  </div>
+</div>
+  <script type="text/javascript">
+  var C64Style = C64Style || {};
+  var screen = null,
+    previewScreen = null,
+    gfxLayer = null,
+    textLayer = null,
+    previewGfxLayer,
+    pixPathArray = null,
+    element = null,
+    drawOn = false,
+    useColorIndex = document.getElementById("colorIdxCheckBox").checked;
+    color = C64Style.Color.BLACK,
+    colorIdx = 0,
+    map = null;
+  var rows = 8;
+  var config = {
+    "rows" : rows + 2,
+    "cols" : 8,
+    "scaleX" : 3,
+    "scaleY" : 3,
+    "backgroundColor" : "#360066",
+    "borderColor" : C64Style.Color.LIGHTGREY,
+    "borderSize" : 2
+  };
+
+  function initialize(targetDiv, config) {
+    screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
+    screen.initialize();
+    textLayer = screen.createLayer("TextLayer");
+    gfxLayer = screen.createLayer("GfxLayer");
+
+    previewScreen = new C64Style.C64Screen(document.getElementById("preview"), new C64Style.LayerFactory(), {backgroundColor:"#360066", rows:1, cols:1, scaleX:5, scaleY:5, borderSize:2}
+    );
+    previewScreen.initialize();
+    previewGfxLayer = previewScreen.createLayer("GfxLayer");
+    element = new C64Style.PixElement(
+      previewScreen,
+      previewGfxLayer,
+      {
+        pixPathArray : pixPathArray,
+        defaultPalette : C64Style.Color.getDefaultPalette()
+      }
+    );
+    previewGfxLayer.addElement(element);
+
+    reset();
+
+    screen.on(SL.EventType.MOUSE_DOWN, function(event) {
+      drawOn = true;
+      if (event.data.row === rows) {
+        color = C64Style.Color.getByIndex(event.data.col);
+        colorIdx = event.data.col;
+        redrawGfx(event);
+      } else if (event.data.row === rows + 1) {
+        color = C64Style.Color.getByIndex(event.data.col + 8);
+        colorIdx = event.data.col + 8;
+        redrawGfx(event);
+      } else {
+        draw(event);
+      }
+      updateJson();
+    });
+
+    screen.on(SL.EventType.MOUSE_MOVE, function(event) {
+      if (!drawOn) return true;
+      if (event.data.row < rows) {
+        draw(event);
+      }
+      updateJson();
+    });
+
+    screen.on(SL.EventType.MOUSE_UP, function(event) {
+      drawOn = false;
+    });
+
+    screen.render(1);
+    previewScreen.render(1);
+
+    drawGrid();
+    drawBoxAroundSelectedColor();
+  }
+
+  function draw(event) {
+    if (color === "eraser") {
+      map[event.data.row][event.data.col] = null;
+      textLayer.clearLength(event.data.col, event.data.row, 1);
+    } else {
+      if (event.data.row < 0 || event.data.col < 0) return;
+      map[event.data.row][event.data.col] = colorIdx;
+      textLayer.drawSymbol("BLOCK", event.data.col, event.data.row, color);
+    }
+  }
+
+  function updateJson() {
+    pixPathArray = [];
+    for (var y = 0; y < config.rows; y++) {
+      for (var x = 0; x < config.cols; x++) {
+          cellColor = map[y][x];
+          if (cellColor !== null) {
+            pixPathArray.push({type:"PIXEL", x:x, y:y, color: useColorIndex ? cellColor : C64Style.Color.getByIndex(cellColor)});
+          }
+      }
+    }
+    document.getElementById("jsonData").value = JSON.stringify(pixPathArray);
+    element._pixPathArray = pixPathArray;
+    element._setDimensions();
+    element.setDirty(true);
+  }
+
+  function eraser() {
+    color = "eraser";
+    redrawGfx();
+  }
+
+  function redrawGfx(event) {
+    gfxLayer.clearLayer();
+    drawGrid();
+    drawBoxAroundSelectedColor();
+  }
+
+  function reset() {
+    textLayer.clearLayer();
+    initializeMap();
+    drawPalette();
+    updateJson();
+  }
+
+  function drawPalette() {
+    var rowIdx = rows;
+    for (var c = 0; c < 16; c++) {
+      if (c == 8) rowIdx = rows + 1;
+      textLayer.drawSymbol("BLOCK", c % 8, rowIdx, C64Style.Color.getByIndex(c));
+    }
+  }
+
+  function initializeMap() {
+    map = [];
+    for (var y = 0; y < config.rows; y++) {
+      map.push([]);
+      for (var x = 0; x < config.cols; x++) {
+        map[y].push(null);
+      }
+    }
+  }
+
+  function drawGrid() {
+    var context = gfxLayer.getCanvasContext();
+    context.setStrokeStyle('black');
+    var xBounds = config.cols * config.scaleX * C64Style.CELLWIDTH;
+    var yBounds = config.rows * config.scaleY * C64Style.CELLHEIGHT;
+    for (var x = config.scaleX * C64Style.CELLWIDTH; x < xBounds; x += config.scaleX * C64Style.CELLWIDTH) {
+      context.beginPath();
+      context.moveTo(x, 0);
+      context.lineTo(x, yBounds);
+      context.closePath();
+      context.stroke();
+    }
+    for (var y = config.scaleY * C64Style.CELLHEIGHT; y < yBounds; y += config.scaleY * C64Style.CELLHEIGHT) {
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(xBounds, y);
+      context.closePath();
+      context.stroke();
+    }
+  }
+
+  function drawBoxAroundSelectedColor() {
+    var x, y, width, height;
+    var context = gfxLayer.getCanvasContext();
+    x = (colorIdx % 8) * C64Style.CELLWIDTH * config.scaleX;
+    y = (config.rows - 2 + (colorIdx >= 8 ? 1 : 0)) * C64Style.CELLHEIGHT * config.scaleY;
+    width = C64Style.CELLWIDTH * config.scaleX;
+    height = C64Style.CELLHEIGHT * config.scaleY;
+    context.beginPath();
+    context.rect(x, y, width, height);
+    context.setLineWidth(2);
+    context.setStrokeStyle(colorIdx === 1 ? '#999999' : 'white');
+    context.closePath();
+    context.stroke();
+  }
+
+  function changeColorStrategy() {
+    var box = document.getElementById("colorIdxCheckBox");
+    if (box.checked) {
+      useColorIndex = true;
+    } else {
+      useColorIndex = false;
+    }
+    updateJson();
+  }
+
+  function importData() {
+    textLayer.clearLayer();
+    initializeMap();
+    drawPalette();
+    document.getElementById("colorIdxCheckBox").checked = true;
+    useColorIndex = true;
+
+    var stringData = document.getElementById("jsonData").value;
+    try{
+      var jsonData = JSON.parse(stringData);
+
+      for (var i = 0; i < jsonData.length; i++) {
+        var entry = jsonData[i];
+        map[entry.y][entry.x] = entry.color;
+        textLayer.drawSymbol("BLOCK", entry.x, entry.y, C64Style.Color.getByIndex(entry.color));
+      }
+      updateJson();
+      console.log("Import successful.");
+    } catch (e) {
+      alert("Import Failed.");
+    }
+  }
+
+  initialize(document.getElementById("content"), config);
+  </script>
+</body>
+</html>
