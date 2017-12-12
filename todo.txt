@@ -1,6 +1,4 @@
-ToFix
-TypeError: C64Style.EventType is undefined[Learn More]  Screen.js:63:1
-
+Revisit C64Screen - some duplicated code from slgfx.Screen
 
 ###############################################################################
 
