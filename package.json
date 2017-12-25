@@ -8,6 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "slcommon": "shaunlusk/slcommon#0.1.2",
-    "slgfx": "shaunlusk/slgfx#BGLayer"
+    "slgfx": "shaunlusk/slgfx#develop"
   }
 }
