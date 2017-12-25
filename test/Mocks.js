@@ -1,5 +1,5 @@
 var C64Style = C64Style || {};
-C64Style.Mocks = {};
+C64Style.Mocks = C64Style.Mocks || {};
 
 C64Style.Mocks.getMockGfxElement = function(props) {
   props = props || {};
