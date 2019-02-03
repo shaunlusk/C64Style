@@ -3,6 +3,7 @@ Revisit C64Screen - some duplicated code from slgfx.Screen
 Textlayer - needs to remember what is written where, so it will render as a viewer would expect
 when the layer viewport changes.
 
+Bug: TextButton rendering borks when mousing over and no background color is specified.
 
 ###############################################################################
 
