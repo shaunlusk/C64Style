@@ -1,8 +1,6 @@
-var C64Style = C64Style || {};
-
 /**
 *  PixMaps for characters from the original C64 character set.
-*  These are drawn via the {@link C64Style.CharacterRenderer CharacterRenderer} class.
+*  These are drawn via the {@link CharacterRenderer CharacterRenderer} class.
 *  These are used by TextLayer and TextElement.
 *  The names of some of the symbols were made up by me somewhat arbitrarily (e.g."DIAGONAL_FILL_TOP_RIGHT");
 *  Note that inverse characters are not included here despite being part of the original C64 character set;
@@ -12,7 +10,7 @@ var C64Style = C64Style || {};
 @static
 @enum {PixMap}
 */
-C64Style.CharacterMap = {
+CharacterMap = {
 
   //----------
   //|  ####  |
@@ -1872,5 +1870,7 @@ C64Style.CharacterMap = {
 };
 
 // Aliases
-C64Style.CharacterMap._ = C64Style.CharacterMap.BAR_82;
-C64Style.CharacterMap.UNDERSCORE = C64Style.CharacterMap.BAR_82;
+CharacterMap._ = CharacterMap.BAR_82;
+CharacterMap.UNDERSCORE = CharacterMap.BAR_82;
+
+module.exports = CharacterMap;
