@@ -1,13 +1,10 @@
-var C64Style = C64Style || {};
-
-
 /**
 * Default Colors.
 * These values are taken from the ccs64 emulator palette.
 * @static
 * @enum {Color}
 */
-C64Style.Color = {
+export const Color = {
   "BLACK":"#000000",
   "WHITE":"#FFFFFF",
   "RED":"#E04040",

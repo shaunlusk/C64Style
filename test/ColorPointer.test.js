@@ -1,33 +1,36 @@
+import ColorPointer from '../src/ColorPointer';
+import {Color} from '../src/Color';
+
 describe("ColorPointer", function() {
   describe("constructor", function() {
     it("should accept injected color", function(done){
-      var expected = C64Style.Color.ORANGE;
-      var cpointer = new C64Style.ColorPointer(expected);
-      assert(cpointer.currentColor === expected, "should have set current color");
+      var expected = Color.ORANGE;
+      var cpointer = new ColorPointer(expected);
+      expect(cpointer.currentColor).toBe(expected);
       done();
     });
     it("should provide default color", function(done){
-      var cpointer = new C64Style.ColorPointer();
-      assert(cpointer.currentColor !== undefined && cpointer.currentColor !== null, "should have set current color");
+      var cpointer = new ColorPointer();
+      expect(cpointer.currentColor !== undefined && cpointer.currentColor !== null).toBeTruthy();
       done();
     });
   });
   describe("#getColor()", function() {
     it("should get current color", function(done){
-      var expected = C64Style.Color.YELLOW;
-      var cpointer = new C64Style.ColorPointer(expected);
+      var expected = Color.YELLOW;
+      var cpointer = new ColorPointer(expected);
       var result = cpointer.getColor();
-      assert(result === expected, "should have returned current color");
+      expect(result).toBe(expected);
       done();
     });
   });
   describe("#setColor()", function() {
     it("should get current color", function(done){
-      var expected = C64Style.Color.GREEN;
-      var cpointer = new C64Style.ColorPointer(C64Style.Color.GREY);
+      var expected = Color.GREEN;
+      var cpointer = new ColorPointer(Color.GREY);
       cpointer.setColor(expected);
       var result = cpointer.getColor();
-      assert(result === expected, "should have returned current color");
+      expect(result).toBe(expected);
       done();
     });
   });
