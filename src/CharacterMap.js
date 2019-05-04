@@ -7,10 +7,8 @@
 *  rather, CharacterRender can render a background and foreground color when rendering text.
 *  Maps generated from:
 *  https://www.c64-wiki.com/index.php/Character_set
-@static
-@enum {PixMap}
 */
-CharacterMap = {
+let CharacterMap = {
 
   //----------
   //|  ####  |
@@ -1873,4 +1871,5 @@ CharacterMap = {
 CharacterMap._ = CharacterMap.BAR_82;
 CharacterMap.UNDERSCORE = CharacterMap.BAR_82;
 
-module.exports = CharacterMap;
+// module.exports = CharacterMap;
+export {CharacterMap};

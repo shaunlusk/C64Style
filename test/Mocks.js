@@ -1,7 +1,5 @@
-var C64Style = C64Style || {};
-C64Style.Mocks = C64Style.Mocks || {};
-
-C64Style.Mocks.getMockGfxElement = function(props) {
+let Mocks = {};
+Mocks.getMockGfxElement = function(props) {
   props = props || {};
   var element = {};
   element.id = props.id || 1;
@@ -40,7 +38,7 @@ C64Style.Mocks.getMockGfxElement = function(props) {
   return element;
 };
 
-C64Style.Mocks.getMockScreen = function(props) {
+Mocks.getMockScreen = function(props) {
   props = props || {};
   var screen = {};
   screen.scaleX = props.scaleX || 1;
@@ -53,17 +51,17 @@ C64Style.Mocks.getMockScreen = function(props) {
   return screen;
 };
 
-C64Style.Mocks.getMockLayer = function(props) {
+Mocks.getMockLayer = function(props) {
   props = props || {};
   var layer = {};
   layer.getCanvasContext = function() {
-    return C64Style.Mocks.getMockCanvasContext();
+    return Mocks.getMockCanvasContext();
   };
 
   return layer;
 };
 
-C64Style.Mocks.getMockTextLayer = function(props) {
+Mocks.getMockTextLayer = function(props) {
   props = props || {};
   var layer = {};
   layer.writeText = function() {};
@@ -73,7 +71,7 @@ C64Style.Mocks.getMockTextLayer = function(props) {
   return layer;
 };
 
-C64Style.Mocks.getMockCanvasContext = function(props) {
+Mocks.getMockCanvasContext = function(props) {
   props = props || {};
   var context = {};
   context.clearRect = function(x, y, width, height) {
@@ -93,7 +91,7 @@ C64Style.Mocks.getMockCanvasContext = function(props) {
   return context;
 };
 
-C64Style.Mocks.getMockCharacterRenderer = function(props) {
+Mocks.getMockCharacterRenderer = function(props) {
   props = props || {};
   var renderer = {};
   renderer.scaleX = props.scaleX || 1;
@@ -113,3 +111,5 @@ C64Style.Mocks.getMockCharacterRenderer = function(props) {
   renderer.setBackgroundColor = function(backgroundColor) {this.calledBackgroundColor = {backgroundColor:backgroundColor};};
   return renderer;
 };
+
+export {Mocks};
