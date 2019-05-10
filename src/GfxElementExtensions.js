@@ -1,39 +1,42 @@
+import GfxElement from 'slgfx/src/GfxElement';
+import {CELLWIDTH, CELLHEIGHT} from './Constants';
+
 /**
 * Move the element to a given column.
 * @param {number} col
 */
-SL.GfxElement.prototype.setCol = function(col) {
-  var x = SL.GfxElement.columnToX(col);
+GfxElement.prototype.setCol = function(col) {
+  var x = GfxElement.columnToX(col);
   if (x !== this._x) this.setDirty(true);
   this._x = x;
 };
-SL.GfxElement.prototype.setColumn = SL.GfxElement.prototype.setCol;
+GfxElement.prototype.setColumn = GfxElement.prototype.setCol;
 
 /**
 * Set the y coordinate of this element.
 * @param {number} y
 */
-SL.GfxElement.prototype.setRow = function(row) {
-  var y = SL.GfxElement.rowToY(row);
+GfxElement.prototype.setRow = function(row) {
+  var y = GfxElement.rowToY(row);
   if (y !== this._y) this.setDirty(true);
   this._y = y;
 };
 
-SL.GfxElement.columnToX = function(col) {
-  var x = col * C64Style.CELLWIDTH;
+GfxElement.columnToX = function(col) {
+  var x = col * CELLWIDTH;
   return x;
 };
-SL.GfxElement.xToColumn = function(x) {
-  var col = x / C64Style.CELLWIDTH;
+GfxElement.xToColumn = function(x) {
+  var col = x / CELLWIDTH;
   return col;
 };
 
-SL.GfxElement.rowToY = function(row) {
-  var y = row * C64Style.CELLHEIGHT;
+GfxElement.rowToY = function(row) {
+  var y = row * CELLHEIGHT;
   return y;
 };
-SL.GfxElement.yToRow = function(y) {
-  var row = y / C64Style.CELLHEIGHT;
+GfxElement.yToRow = function(y) {
+  var row = y / CELLHEIGHT;
   return row;
 };
 
@@ -46,12 +49,12 @@ SL.GfxElement.yToRow = function(y) {
 * @param {number} duration Optional. How long it should take the element to move from its current position to the target position, in milliseconds. Defaults to 16ms.
 * @param {function} callback Optional.  The function to call when the move is complete.
 */
-SL.GfxElement.prototype.moveToCell = function(column,row,duration, callback) {
-  this.moveTo(SL.GfxElement.columnToX(column), SL.GfxElement.rowToY(row),duration,callback);
+GfxElement.prototype.moveToCell = function(column,row,duration, callback) {
+  this.moveTo(GfxElement.columnToX(column), GfxElement.rowToY(row),duration,callback);
 };
 
 
-SL.GfxElement.prototype._setupSecondaryEventData = function(event) {
+GfxElement.prototype._setupSecondaryEventData = function(event) {
   var eventData = {
       x : event.data.x,
       y : event.data.y,
@@ -65,3 +68,5 @@ SL.GfxElement.prototype._setupSecondaryEventData = function(event) {
   };
   return eventData;
 };
+
+export default GfxElement;
