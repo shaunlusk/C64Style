@@ -237,7 +237,7 @@ describe("TextPrompt", function() {
         this.callCount++;
         this.callArgs.push({x:x, y:y, length:length});
       };
-      debugger;
+
       prompt.clearPrompt();
 
       expect(prompt._parentLayer.callCount).toBe(2);
