@@ -270,7 +270,6 @@ describe("CharacterRenderer", function() {
   });
   describe("#_renderPixPath()", function() {
     it("should render pixel", function(done) {
-      debugger;
       var context = Mocks.getMockCanvasContext();
       renderer.setColor(Color.LIGHTBLUE);
       var pixPath = {type:"PIXEL", x:1,y:2};
@@ -392,7 +391,6 @@ describe("CharacterRenderer", function() {
       done();
     });
     it("should increment internal x coord (2x2)", function(done) {
-      debugger;
       var x = 5, y = 9;
       renderer_2x2.setCursorLocation(x, y);
       var expected = x + CELLWIDTH * renderer_2x2.getScaleX();
