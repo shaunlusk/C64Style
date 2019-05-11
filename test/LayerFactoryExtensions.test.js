@@ -1,15 +1,16 @@
 import LayerFactory from '../src/LayerFactoryExtensions';
 import Utils from 'slcommon/src/Utils';
+import TextLayer from '../src/TextLayer';
 
 describe("LayerFactory", function() {
   describe("#constructor", function() {
     it("should setup default layer type creator functions", function(done) {
       var lf = new LayerFactory();
 
-      assert(lf._registeredTypes !== null, "_registeredTypes was not created");
-      assert(Utils.isFunction(lf._registeredTypes.GfxLayer), "_registeredTypes does not contain function for GfxLayer");
-      assert(Utils.isFunction(lf._registeredTypes.BackgroundLayer), "_registeredTypes does not contain function for BackgroundLayer");
-      assert(Utils.isFunction(lf._registeredTypes.TextLayer), "_registeredTypes does not contain function for TextLayer");
+      expect(lf._registeredTypes !== null).toBeTruthy();
+      expect(Utils.isFunction(lf._registeredTypes.GfxLayer)).toBeTruthy();
+      expect(Utils.isFunction(lf._registeredTypes.BackgroundLayer)).toBeTruthy();
+      expect(Utils.isFunction(lf._registeredTypes.TextLayer)).toBeTruthy();
       done();
     });
     it("should setup default layer type creator functions and those passed in", function(done) {
@@ -17,11 +18,11 @@ describe("LayerFactory", function() {
         "BogusLayer":function() {}
       });
 
-      assert(lf._registeredTypes !== null, "_registeredTypes was not created");
-      assert(Utils.isFunction(lf._registeredTypes.GfxLayer), "_registeredTypes does not contain function for GfxLayer");
-      assert(Utils.isFunction(lf._registeredTypes.BackgroundLayer), "_registeredTypes does not contain function for BackgroundLayer");
-      assert(Utils.isFunction(lf._registeredTypes.TextLayer), "_registeredTypes does not contain function for TextLayer");
-      assert(Utils.isFunction(lf._registeredTypes.BogusLayer), "_registeredTypes does not contain function for BogusLayer");
+      expect(lf._registeredTypes !== null).toBeTruthy();
+      expect(Utils.isFunction(lf._registeredTypes.GfxLayer)).toBeTruthy();
+      expect(Utils.isFunction(lf._registeredTypes.BackgroundLayer)).toBeTruthy();
+      expect(Utils.isFunction(lf._registeredTypes.TextLayer)).toBeTruthy();
+      expect(Utils.isFunction(lf._registeredTypes.BogusLayer)).toBeTruthy();
       done();
     });
   });
@@ -29,13 +30,14 @@ describe("LayerFactory", function() {
     it("should create TextLayer", function(done) {
       var lf = new LayerFactory();
 
-      var result = lf.getLayer({
+      var result = lf.getLayer("TextLayer", {
         getScaleX: function() {return 1;},
-        getScaleY: function() {return 1;}
-      }, "TextLayer", null, {textPrompt:{}});
+        getScaleY: function() {return 1;},
+        textPrompt:{}
+      });
 
-      assert(result !== null, "should have created layer");
-      assert(result instanceof TextLayer, "should have created TextLayer type");
+      expect(result !== null).toBeTruthy();
+      expect(result).toBeInstanceOf(TextLayer);
       done();
     });
   });
