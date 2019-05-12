@@ -2,7 +2,7 @@ import {CELLWIDTH, CELLHEIGHT} from './Constants';
 import ColorPointer from './ColorPointer';
 import {CharacterMap} from './CharacterMap';
 import {PixPathTypes} from './PixPathTypes';
-import {Utils} from './Common/Utils';
+import {Utils} from './Utils';
 
 /**
 * Draws Characters on a layer.

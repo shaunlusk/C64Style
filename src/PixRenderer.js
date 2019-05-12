@@ -1,11 +1,12 @@
-var C64Style = C64Style || {};
+import ColorPointer from './ColorPointer';
+import Utils from 'slgfx/src/Utils';
 
 /** Draws Pix Arrays to a canvas.
 * @constructor
 * @param {integer} screenScaleX scale x of the screen
 * @param {integer} screenScaleY scale y of the screen
 */
-C64Style.PixRenderer = function(screenScaleX, screenScaleY) {
+function PixRenderer(screenScaleX, screenScaleY) {
   this._screenScaleX = screenScaleX;
   this._screenScaleY = screenScaleY;
 };
@@ -24,7 +25,7 @@ C64Style.PixRenderer = function(screenScaleX, screenScaleY) {
 * @param {boolean} isVerticallyFlipped Whether the element is flipped vertically.
 * @param {number} rotation The element's rotation in radians.
 */
-C64Style.PixRenderer.prototype.renderPixPathArray = function(context, x, y, width, height, pixPathArray, palette, pixPathScaleX, pixPathScaleY, flipHorizontally, flipVertically, rotation) {
+PixRenderer.prototype.renderPixPathArray = function(context, x, y, width, height, pixPathArray, palette, pixPathScaleX, pixPathScaleY, flipHorizontally, flipVertically, rotation) {
   var screenX = x * this.getScreenScaleX();
   var screenY = y * this.getScreenScaleY();
   var fillFn = context.fillRect.bind(context);
@@ -36,7 +37,7 @@ C64Style.PixRenderer.prototype.renderPixPathArray = function(context, x, y, widt
   }
 };
 
-C64Style.PixRenderer.prototype._renderAllPixPathsTranslated = function(context, screenX, screenY, width, height, pixPathArray, palette, pixPathScaleX, pixPathScaleY, flipHorizontally, flipVertically, rotation) {
+PixRenderer.prototype._renderAllPixPathsTranslated = function(context, screenX, screenY, width, height, pixPathArray, palette, pixPathScaleX, pixPathScaleY, flipHorizontally, flipVertically, rotation) {
   var scaledWidth = width * this.getTotalScaleX(pixPathScaleX);
   var scaledHeight = height * this.getTotalScaleY(pixPathScaleY);
 
@@ -50,18 +51,18 @@ C64Style.PixRenderer.prototype._renderAllPixPathsTranslated = function(context, 
 
   var fillFn = context.fillRectWithTranslation.bind(context);
 
-  SL.renderWithTranslation(context, translationX, translationY, flipHorizontally, flipVertically, rotation, function() {
+  Utils.renderWithTranslation(context, translationX, translationY, flipHorizontally, flipVertically, rotation, function() {
     this._renderAllPixPaths(context, rotatedTx, rotatedTy, pixPathArray, palette, pixPathScaleX, pixPathScaleY, fillFn);
   }.bind(this));
 };
 
-C64Style.PixRenderer.prototype._renderAllPixPaths = function(context, screenX, screenY, pixPathArray, palette, pixPathScaleX, pixPathScaleY, fillFn) {
+PixRenderer.prototype._renderAllPixPaths = function(context, screenX, screenY, pixPathArray, palette, pixPathScaleX, pixPathScaleY, fillFn) {
   for (var i = 0; i < pixPathArray.length; i++) {
     this._renderPixPath(context, screenX, screenY, pixPathArray[i], palette, pixPathScaleX, pixPathScaleY, fillFn);
   }
 };
 
-C64Style.PixRenderer.prototype._renderPixPath = function(context, screenX, screenY, pixPath, palette, pixPathScaleX, pixPathScaleY, fillFn) {
+PixRenderer.prototype._renderPixPath = function(context, screenX, screenY, pixPath, palette, pixPathScaleX, pixPathScaleY, fillFn) {
   // set context fill color
   this.setFillColor(context, pixPath, palette);
 
@@ -75,11 +76,11 @@ C64Style.PixRenderer.prototype._renderPixPath = function(context, screenX, scree
   fillFn(tx, ty, tw, th);
 };
 
-C64Style.PixRenderer.prototype.setFillColor = function(context, pixPath, palette) {
+PixRenderer.prototype.setFillColor = function(context, pixPath, palette) {
     if  (typeof pixPath.color === "number") {
       if (palette.length === 0 || pixPath.color >= palette.length) throw new Error("Color not specified in palette. (" + pixPath.color + ")");
       context.setFillStyle(palette[pixPath.color]);
-    } else if (pixPath.color instanceof C64Style.ColorPointer) {
+    } else if (pixPath.color instanceof ColorPointer) {
       context.setFillStyle(pixPath.color.getColor());
     } else {
       context.setFillStyle(pixPath.color);
@@ -90,24 +91,26 @@ C64Style.PixRenderer.prototype.setFillColor = function(context, pixPath, palette
 * Return the horizontal scale of the renderer.
 * @return {integer}
 */
-C64Style.PixRenderer.prototype.getScreenScaleX = function() {return this._screenScaleX;};
+PixRenderer.prototype.getScreenScaleX = function() {return this._screenScaleX;};
 
 /**
 * Return the vertical scale of the renderer.
 * @return {integer}
 */
-C64Style.PixRenderer.prototype.getScreenScaleY = function() {return this._screenScaleY;};
+PixRenderer.prototype.getScreenScaleY = function() {return this._screenScaleY;};
 
 /**
 * Return the total horizontal scale (screen scale * image scale).
 * @param {integer} imageScaleX The x amount to scale the portion of the image drawn to the canvas.
 * @return {integer}
 */
-C64Style.PixRenderer.prototype.getTotalScaleX = function(pixPathScaleX) {return this._screenScaleX * pixPathScaleX;};
+PixRenderer.prototype.getTotalScaleX = function(pixPathScaleX) {return this._screenScaleX * pixPathScaleX;};
 
 /**
 * Return the total vertical scale (screen scale * image scale).
 * @param {integer} imageScaleY The y amount to scale the portion of the image drawn to the canvas.
 * @return {integer}
 */
-C64Style.PixRenderer.prototype.getTotalScaleY = function(pixPathScaleY) {return this._screenScaleY * pixPathScaleY;};
+PixRenderer.prototype.getTotalScaleY = function(pixPathScaleY) {return this._screenScaleY * pixPathScaleY;};
+
+export default PixRenderer;

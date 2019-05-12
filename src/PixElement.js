@@ -1,12 +1,14 @@
-var C64Style = C64Style || {};
+import GfxElement from './GfxElementExtensions';
+import {Color} from './Color';
+import {PixPathTypes} from './PixPathTypes';
 
 /** Element that draws pixels to a canvas from a PixArray<br />
-* <b>Extends</b>: {@link C64Style.GfxElement}
+* <b>Extends</b>: {@link GfxElement}
 * @constructor
-* @param {C64Style.C64Screen} screenContext The target screen.
-* @param {C64Style.GfxLayer} parentLayer The parent layer that will draw this element.
+* @param {C64Screen} screenContext The target screen.
+* @param {GfxLayer} parentLayer The parent layer that will draw this element.
 * @param {Object} props Properties for this GfxElement.  Supports:<br>
-* From {@link C64Style.GfxElement}
+* From {@link GfxElement}
 *   <ul>
 *     <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>
 *     <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>
@@ -21,11 +23,11 @@ var C64Style = C64Style || {};
 *     {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}</br>
 *     where:
 *     <ul>
-*       <li>type can be either "PIXEL" or "RECTANGLE" (see {@link C64Style.PixPathTypes})</li>
+*       <li>type can be either "PIXEL" or "RECTANGLE" (see {@link PixPathTypes})</li>
 *       <li>x, y are coordinates relative to the element's origin</li>
 *       <li>width, height are only used by RECTANGLE types to determine the size of the rectangle drawn</li>
 *       <li>color can be any of: a valid CSS color (hex format "#1234AB", or "rbg(100, 200, 255)"),
-*           a C64Style.ColorPointer,
+*           a ColorPointer,
 *           or an integer value corresponding to an index on this element's color palette.</li>
 *     </ul>
 *     As an example, the PixPath: [{type:"PIXEL", x:2, y:5, color:"#00FF00"}]<br />
@@ -35,49 +37,49 @@ var C64Style = C64Style || {};
 *         {type:"PIXEL", x:2, y:3, color:6}]<br />
 *     This will draw a rectangle from 1,1 to 2,2 using the the 3rd color from the element's palette, and  a pixel at 2,3 using the 6th color from the element's palette.</li>
 *          <li>defaultPalette - Array - An array of colors.  When a Pix Array entry references a color index, the corresponding color in this array will be used for the entry.</li>
-*          <li>pixRenderer - {@link C64Style.PixRenderer} - Optional.  The PixRenderer that will draw on the canvas.
+*          <li>pixRenderer - {@link PixRenderer} - Optional.  The PixRenderer that will draw on the canvas.
 *            If not provided, this element will create one.
 *            If using multiple PixElements's or PixSprite's it is good practice to create a single PixRenderer and pass the reference to each element via this property.</li>
 *  </ul>
 */
-C64Style.PixElement = function(screenContext, parentLayer, props) {
+function PixElement(props) {
   props = props || {};
-  SL.GfxElement.call(this, screenContext, parentLayer, props);
+  GfxElement.call(this, props);
   this._width = 0;
   this._height = 0;
   this._pixPathArray = props.pixPathArray || [];
-  this._palette = props.defaultPalette || C64Style.Color.getDefaultPalette();
-  this._pixRenderer = props.pixRenderer || new C64Style.PixRenderer(screenContext.getScaleX(), screenContext.getScaleY());
+  this._palette = props.defaultPalette || Color.getDefaultPalette();
+  this._pixRenderer = props.pixRenderer;
 
   this._setDimensions();
 };
 
-C64Style.PixElement.prototype = new SL.GfxElement();
-C64Style.PixElement.prototype.constructor = C64Style.PixElement;
+PixElement.prototype = new GfxElement();
+PixElement.prototype.constructor = PixElement;
 
 /** Return the width for this element
 * @override
 * @returns {number}
 */
-C64Style.PixElement.prototype.getWidth = function() {return this._width;};
+PixElement.prototype.getWidth = function() {return this._width;};
 
 /** Return the height for this element
 * @override
 * @returns {number}
 */
-C64Style.PixElement.prototype.getHeight = function() {return this._height;};
+PixElement.prototype.getHeight = function() {return this._height;};
 
 /** Return the palette color for a given palette index.
 * @param {integer} idx
 * @returns {string} Color string
 */
-C64Style.PixElement.prototype.getPaletteColor = function(idx) {return this._palette[idx];};
+PixElement.prototype.getPaletteColor = function(idx) {return this._palette[idx];};
 
 /** Set the palette color for a given palette index.
 * @param {integer} idx
 * @param {string} Color string
 */
-C64Style.PixElement.prototype.setPaletteColor = function(idx, color) {
+PixElement.prototype.setPaletteColor = function(idx, color) {
   this._palette[idx] = color;
   this.setDirty(true);
 };
@@ -85,29 +87,29 @@ C64Style.PixElement.prototype.setPaletteColor = function(idx, color) {
 /** Return palette array.
 * @returns {array} Array of color strings
 */
-C64Style.PixElement.prototype.getPalette = function() {return this._palette;};
+PixElement.prototype.getPalette = function() {return this._palette;};
 
 /** Sets the palette array.
 * @param {array} palette Array of colors.
 */
-C64Style.PixElement.prototype.setPalette = function(palette) {
+PixElement.prototype.setPalette = function(palette) {
   this._palette = palette;
   this.setDirty(true);
 };
 
 /** @private */
-C64Style.PixElement.prototype._setDimensions = function() {
+PixElement.prototype._setDimensions = function() {
   var width = 0, height = 0;
   for (var i = 0; i < this._pixPathArray.length; i++) {
     var pixPath = this._pixPathArray[i];
     var tx = pixPath.x;
     var ty = pixPath.y;
     switch(pixPath.type) {
-      case C64Style.PixPathTypes.PIXEL:
+      case PixPathTypes.PIXEL:
       width = tx + 1;
       height = ty + 1;
       break;
-      case C64Style.PixPathTypes.RECTANGLE:
+      case PixPathTypes.RECTANGLE:
       width = tx + pixPath.width;
       height = ty + pixPath.height;
       break;
@@ -121,9 +123,9 @@ C64Style.PixElement.prototype._setDimensions = function() {
 * @param {number} time The current time (milliseconds)
 * @param {number} diff The difference between the last time and the current time  (milliseconds)
 */
-C64Style.PixElement.prototype.render = function(time,diff) {
+PixElement.prototype.render = function(time,diff) {
   this._pixRenderer.renderPixPathArray(
-    this.getCanvasContext(),
+    this.getCanvasContextWrapper(),
     this.getX(),
     this.getY(),
     this.getWidth(),
@@ -137,3 +139,5 @@ C64Style.PixElement.prototype.render = function(time,diff) {
     this.getRotation()
   );
 };
+
+export default PixElement;
