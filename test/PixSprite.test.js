@@ -1,63 +1,79 @@
+import PixSprite from '../src/PixSprite';
+import {Mocks} from './Mocks';
+import PixSpriteFrame from '../src/PixSpriteFrame';
+import {Color} from '../src/Color';
+import {PixPathTypes} from '../src/PixPathTypes';
+
 describe("PixSprite", function() {
-  var pixSprite, mockScreen, mockLayer, mockPixRenderer;
+  var pixSprite, mockScreen, mockPixRenderer, mockCanvasContextWrapper;
 
   beforeEach(function() {
-    mockScreen = C64Style.Mocks.getMockScreen();
-    mockLayer = C64Style.Mocks.getMockLayer();
+    mockScreen = Mocks.getMockScreen();
+    mockCanvasContextWrapper = Mocks.getMockCanvasContext()
     mockPixRenderer = {
       renderPixPathArray : function() {}
     };
-    pixSprite = new C64Style.PixSprite(mockScreen, mockLayer, {pixRenderer:mockPixRenderer});
+    pixSprite = new PixSprite({
+      screenContext:mockScreen,
+      canvasContextWrapper:mockCanvasContextWrapper,
+      pixRenderer:mockPixRenderer
+    });
   });
 
   describe("#_setDimensions()", function() {
     it("should set dimensions to 0 if no pixPaths", function(done) {
-      assert(pixSprite.getWidth() === 0, "should have set width = 0");
-      assert(pixSprite.getHeight() === 0, "should have set height = 0");
+      expect(pixSprite.getWidth()).toBe(0);
+      expect(pixSprite.getHeight()).toBe(0);
       done();
     });
     it("should calculate dimensions correctly", function(done) {
-      var pixSprite = new C64Style.PixSprite(mockScreen, mockLayer, {
-          frames:[
-            new C64Style.PixSpriteFrame({
-              duraton:100, pixArray:[
-                {type:C64Style.PixPathTypes.PIXEL, x:1, y:1, color:C64Style.Color.BLACK},
-                {type:C64Style.PixPathTypes.PIXEL, x:2, y:2, color:C64Style.Color.BLACK}
-              ]
-            })
-          ]
+      var pixSprite = new PixSprite({
+        screenContext:mockScreen,
+        canvasContextWrapper:mockCanvasContextWrapper,
+        pixRenderer:mockPixRenderer,
+        frames:[
+          new PixSpriteFrame({
+            duraton:100, pixArray:[
+              {type:PixPathTypes.PIXEL, x:1, y:1, color:Color.BLACK},
+              {type:PixPathTypes.PIXEL, x:2, y:2, color:Color.BLACK}
+            ]
+          })
+        ]
       });
 
       var exectedWidth = 3, expectedHeight = 3;
-      assert(pixSprite.getWidth() === exectedWidth, "should have set width = " + exectedWidth + ", actual:" + pixSprite.getWidth());
-      assert(pixSprite.getHeight() === expectedHeight, "should have set height = " + expectedHeight + ", actual:" + pixSprite.getHeight());
+      expect(pixSprite.getWidth()).toBe(exectedWidth);
+      expect(pixSprite.getHeight()).toBe(expectedHeight);
       done();
     });
     it("should calculate dimensions correctly", function(done) {
-      var mockScreen = C64Style.Mocks.getMockScreen({scaleX:3, scaleY:4});
+      var mockScreen = Mocks.getMockScreen({scaleX:3, scaleY:4});
       var props = {
+        screenContext:mockScreen,
+        canvasContextWrapper:mockCanvasContextWrapper,
+        pixRenderer:mockPixRenderer,
         scaleX:5,
         scaleY:6,
         frames : [
-          new C64Style.PixSpriteFrame({
+          new PixSpriteFrame({
             duration:100,
             pixArray:[
-              {type:C64Style.PixPathTypes.RECTANGLE, x: 1, y: 1, width: 2, height: 3},
-              {type:C64Style.PixPathTypes.RECTANGLE, x: 1, y: 2, width: 3, height: 4}
+              {type:PixPathTypes.RECTANGLE, x: 1, y: 1, width: 2, height: 3},
+              {type:PixPathTypes.RECTANGLE, x: 1, y: 2, width: 3, height: 4}
             ]
           }),
-          new C64Style.PixSpriteFrame({
+          new PixSpriteFrame({
             duration:100,
             pixArray:[
-              {type:C64Style.PixPathTypes.RECTANGLE, x: 2, y: 2, width: 1, height: 1}
+              {type:PixPathTypes.RECTANGLE, x: 2, y: 2, width: 1, height: 1}
             ]
           })
         ]
       };
-      var pixSprite = new C64Style.PixSprite(mockScreen, mockLayer, props);
+      var pixSprite = new PixSprite(props);
 
-      assert(pixSprite.getWidth() === 4, "should have set width = 4");
-      assert(pixSprite.getHeight() === 6, "should have set height = 6");
+      expect(pixSprite.getWidth()).toBe(4);
+      expect(pixSprite.getHeight()).toBe(6);
       done();
     });
   });
@@ -66,8 +82,8 @@ describe("PixSprite", function() {
       var expected = "#564321";
       pixSprite.setPaletteColor(0, expected);
 
-      assert(pixSprite._palette[0] === expected, "should have set color");
-      assert(pixSprite.isDirty() === true, "should have set color");
+      expect(pixSprite._palette[0]).toBe(expected);
+      expect(pixSprite.isDirty()).toBeTruthy();
       done();
     });
   });
@@ -76,8 +92,8 @@ describe("PixSprite", function() {
       var expected = ["#564321"];
       pixSprite.setPalette(expected);
 
-      assert(pixSprite._palette[0] === expected[0], "should have set color");
-      assert(pixSprite.isDirty() === true, "should have set color");
+      expect(pixSprite._palette[0]).toBe(expected[0]);
+      expect(pixSprite.isDirty()).toBeTruthy();
       done();
     });
   });
@@ -86,8 +102,8 @@ describe("PixSprite", function() {
       var frame = {
         getPixArray : function() {
           return [
-            {type:C64Style.PixPathTypes.PIXEL, x:0, y:0, color:C64Style.Color.BLACK},
-            {type:C64Style.PixPathTypes.PIXEL, x:0, y:0, color:C64Style.Color.BLACK}
+            {type:PixPathTypes.PIXEL, x:0, y:0, color:Color.BLACK},
+            {type:PixPathTypes.PIXEL, x:0, y:0, color:Color.BLACK}
           ];
         }
       };
@@ -98,7 +114,7 @@ describe("PixSprite", function() {
 
       pixSprite.renderFrame(1,1,frame);
 
-      assert(calledRenderPixPathArray === true, "should have called renderPixPathArray");
+      expect(calledRenderPixPathArray).toBeTruthy();
       done();
     });
   });
