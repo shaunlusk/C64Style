@@ -1,12 +1,14 @@
-var C64Style = C64Style || {};
+import {CELLHEIGHT,CELLWIDTH} from './Constants';
+import {Color} from './Color';
+import TextLink from './TextLink';
 
 /** Provides a clickable button link.<br />
-* <b>Extends</b>: {@link C64Style.TextLink}
+* <b>Extends</b>: {@link TextLink}
 * @constructor
-* @param {C64Style.C64Screen} screenContext The target screen.
-* @param {C64Style.GfxLayer} parentLayer The parent layer that will draw this element.
+* @param {C64Screen} screenContext The target screen.
+* @param {GfxLayer} parentLayer The parent layer that will draw this element.
 * @param {Object} props Properties for this TextLink.  Supports:
-* From {@link C64Style.GfxElement}
+* From {@link GfxElement}
 *   <ul>
 *     <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>
 *     <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>
@@ -18,12 +20,12 @@ var C64Style = C64Style || {};
 * From {@link TextElement}:
 * <ul>
 *   <li>text - string - The text for this element. A text string or a symbol name is required for TextElement.</li>
-*   <li>symbolName - string - The symbolName for this element.  A text string or a symbol name is required for TextElement.  Refer to symbol names in {@link C64Style.CharacterMap}.</li>
-*   <li>color - Color - The color for the text. Default: C64Style.Color.LIGHTBLUE</li>
+*   <li>symbolName - string - The symbolName for this element.  A text string or a symbol name is required for TextElement.  Refer to symbol names in {@link CharacterMap}.</li>
+*   <li>color - Color - The color for the text. Default: Color.LIGHTBLUE</li>
 *   <li>backgroundColor - Color - The backgroundColor for the text. Default: no background color</li>
 *   <li>characterRenderer - CharacterRenderer - The renderer to use to draw text.
 *     This can be shared with a renderer for drawing text elements.  If a renderer is not provided,
-*     This TextLayer will create a {@link C64Style.CharacterRenderer}.</li>
+*     This TextLayer will create a {@link CharacterRenderer}.</li>
 * </ul>
 * From TextLink:
 * <ul>
@@ -39,9 +41,9 @@ var C64Style = C64Style || {};
 *   <li>highlightTextColor - Color - The color to draw the button text.</li>
 * </ul>
 */
-C64Style.TextButton = function(screenContext, parentLayer, props) {
+function TextButton(props) {
   props = props || {};
-  C64Style.TextLink.call(this, screenContext, parentLayer, props);
+  TextLink.call(this, props);
 
   this._buttonColor = props.buttonColor || this.getColor();
   this._textColor = props.textColor || this.getColor();
@@ -49,16 +51,16 @@ C64Style.TextButton = function(screenContext, parentLayer, props) {
   this._highlightButtonColor = props.highlightButtonColor || this.getColor();
   this._highlightTextColor = props.highlightTextColor || this.getBackgroundColor();
 
-  this._height = C64Style.CELLHEIGHT * 3;
+  this._height = CELLHEIGHT * 3;
 };
 
-C64Style.TextButton.prototype = new C64Style.TextLink(null, null, {characterRenderer:{}});
-C64Style.TextButton.prototype.constructor = C64Style.TextButton;
+TextButton.prototype = new TextLink(null, null, {characterRenderer:{}});
+TextButton.prototype.constructor = TextButton;
 
 /** @private  */
-C64Style.TextButton.prototype._setWidth = function() {
+TextButton.prototype._setWidth = function() {
   this._lastWidth = this._width;
-  this._width = C64Style.CELLWIDTH * ((this._text ? this._text.length : 1) + 2);
+  this._width = CELLWIDTH * ((this._text ? this._text.length : 1) + 2);
 };
 
 /** Render this element.
@@ -66,22 +68,22 @@ C64Style.TextButton.prototype._setWidth = function() {
 * @param {number} diff The difference between the previous time and the current time, in milliseconds.
 * @override
 */
-C64Style.TextButton.prototype.render = function(time,diff) {
+TextButton.prototype.render = function(time,diff) {
   if (!this.isHidden() && this.isDirty()) {
     this.drawTextButton();
   }
 };
 
 /** @private */
-C64Style.TextButton.prototype.drawTextButton = function() {
+TextButton.prototype.drawTextButton = function() {
   var x = this.getX() * this.getScreenScaleX();
   var y = this.getY() * this.getScreenScaleY();
-  var scaledCellWidth = C64Style.CELLWIDTH * this.getTotalScaleX();
-  var scaledCellHeight = C64Style.CELLHEIGHT * this.getTotalScaleY();
+  var scaledCellWidth = CELLWIDTH * this.getTotalScaleX();
+  var scaledCellHeight = CELLHEIGHT * this.getTotalScaleY();
   var edgeX = x + scaledCellWidth;
   var rightEdge = x + (this.getLength() * scaledCellWidth) + scaledCellWidth;
   var characterRenderer = this.getCharacterRenderer();
-  var canvas = this.getCanvasContext();
+  var canvas = this.getCanvasContextWrapper();
 
   if (this._mouseIsOver) {
     for ( ; edgeX < rightEdge; edgeX += scaledCellWidth) {
@@ -124,11 +126,13 @@ C64Style.TextButton.prototype.drawTextButton = function() {
 };
 
 /** @private  */
-C64Style.TextButton.prototype.getTextX = function() {
-  return this.getX() * this.getScreenScaleX() + C64Style.CELLWIDTH * this.getTotalScaleX();
+TextButton.prototype.getTextX = function() {
+  return this.getX() * this.getScreenScaleX() + CELLWIDTH * this.getTotalScaleX();
 };
 
 /** @private  */
-C64Style.TextButton.prototype.getTextY = function() {
-  return this.getY() * this.getScreenScaleY() + C64Style.CELLHEIGHT * this.getTotalScaleY();
+TextButton.prototype.getTextY = function() {
+  return this.getY() * this.getScreenScaleY() + CELLHEIGHT * this.getTotalScaleY();
 };
+
+export default TextButton;

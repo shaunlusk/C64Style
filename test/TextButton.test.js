@@ -1,18 +1,19 @@
+import TextButton from '../src/TextButton';
+import {CELLHEIGHT,CELLWIDTH} from '../src/Constants';
+import {Mocks} from './Mocks';
+
 describe("TextButton", function() {
   var button, screenContext, parentLayer, props;
 
   beforeEach(function() {
-    screenContext = C64Style.Mocks.getMockScreen();
-    parentLayer = {
-      getCanvasContext : function() {
-        return {};
-      }
-    };
+    screenContext = Mocks.getMockScreen();
     props = {
+      screenContext:screenContext,
+      canvasContextWrapper:Mocks.getMockCanvasContext(),
       text : "text",
-      characterRenderer : C64Style.Mocks.getMockCharacterRenderer()
+      characterRenderer : Mocks.getMockCharacterRenderer()
     };
-    button = new C64Style.TextButton(screenContext, parentLayer, props);
+    button = new TextButton(props);
   });
 
   describe("#_setWidth()", function() {
@@ -21,10 +22,10 @@ describe("TextButton", function() {
 
       button._setWidth();
 
-      var expected = (button._text.length + 2) * C64Style.CELLWIDTH;
-      assert(button.getWidth() === expected, "should have set width. actual: " + button.getWidth() + ", expected: " + expected);
-      expected = (props.text.length + 2) * C64Style.CELLWIDTH;
-      assert(button.getLastWidth() === expected, "should have set width. actual: " + button.getLastWidth() + ", expected: " + expected);
+      var expected = (button._text.length + 2) * CELLWIDTH;
+      expect(button.getWidth()).toBe(expected);
+      expected = (props.text.length + 2) * CELLWIDTH;
+      expect(button.getLastWidth()).toBe(expected);
       done();
     });
     it("should set lastWidth and for symbol", function(done) {
@@ -32,10 +33,10 @@ describe("TextButton", function() {
 
       button._setWidth();
 
-      var expected = 3 * C64Style.CELLWIDTH;
-      assert(button.getWidth() === expected, "should have set width. actual: " + button.getWidth() + ", expected: " + expected);
-      expected = (props.text.length + 2) * C64Style.CELLWIDTH;
-      assert(button.getLastWidth() === expected, "should have set width. actual: " + button.getLastWidth() + ", expected: " + expected);
+      var expected = 3 * CELLWIDTH;
+      expect(button.getWidth()).toBe(expected);
+      expected = (props.text.length + 2) * CELLWIDTH;
+      expect(button.getLastWidth()).toBe(expected);
       done();
     });
   });
@@ -47,7 +48,7 @@ describe("TextButton", function() {
 
       button.render(1,1);
 
-      assert(calledIt === false, "should have returned");
+      expect(calledIt).toBeFalsy();
       done();
     });
     it("should return if not dirty", function(done) {
@@ -57,7 +58,7 @@ describe("TextButton", function() {
 
       button.render(1,1);
 
-      assert(calledIt === false, "should have returned");
+      expect(calledIt).toBeFalsy();
       done();
     });
     it("should call drawTextButton", function(done) {
@@ -66,7 +67,7 @@ describe("TextButton", function() {
 
       button.render(1,1);
 
-      assert(calledIt === true, "should called drawTextButton");
+      expect(calledIt).toBeTruthy();
       done();
     });
   });
@@ -76,13 +77,13 @@ describe("TextButton", function() {
 
       button.drawTextButton();
 
-      assert(button._characterRenderer.calledRenderSymbol !== undefined && button._characterRenderer.calledRenderSymbol !== null, "should have called render symbol");
+      expect(button._characterRenderer.calledRenderSymbol !== undefined && button._characterRenderer.calledRenderSymbol !== null).toBeTruthy();
       done();
     });
     it("should draw", function(done) {
       button.drawTextButton();
 
-      assert(button._characterRenderer.calledRenderSymbol !== undefined && button._characterRenderer.calledRenderSymbol !== null, "should have called render symbol");
+      expect(button._characterRenderer.calledRenderSymbol !== undefined && button._characterRenderer.calledRenderSymbol !== null).toBeTruthy();
       done();
     });
   });
