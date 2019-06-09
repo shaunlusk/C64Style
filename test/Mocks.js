@@ -112,4 +112,14 @@ Mocks.getMockCharacterRenderer = function(props) {
   return renderer;
 };
 
+Mocks.getMockLayerFactory = function(props) {
+  props = props || {};
+  var factory = {
+    layer : Mocks.getMockLayer(props),
+    getLayer : function() {return this.layer;}
+  };
+
+  return factory;
+};
+
 export {Mocks};

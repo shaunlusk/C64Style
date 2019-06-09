@@ -26,7 +26,6 @@ describe("PixElement", function() {
       done();
     });
     it("should calculate dimensions correctly", function(done) {
-      debugger;
       var pixImage = new PixElement({
         screenContext: mockScreen,
         canvasContextWrapper: mockCanvasContextWrapper,

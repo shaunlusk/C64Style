@@ -1,11 +1,15 @@
+import C64Screen from '../src/C64Screen';
+import Screen from 'slgfx/src/Screen';
+import {Mocks} from './Mocks';
+
 describe("C64Screen", function() {
-  var scrn, targetDiv, layerFactory, fpsElem, config, calledRequestAnimationFrame,
+  var scrn, props, targetDiv, layerFactory, fpsElem, config, calledRequestAnimationFrame,
   windowEventListeners = {};
 
-  requestAnimationFrame = function() {calledRequestAnimationFrame = true;};
+  var requestAnimationFrame = function() {calledRequestAnimationFrame = true;};
   beforeEach(function() {
     // blanket.js weirdness means we have to reset document link each time
-    SL.Screen.document = {
+    Screen.document = {
       addEventListener : function(event, listener) {
         if (!windowEventListeners[event]) windowEventListeners[event] = [];
         windowEventListeners[event].push(listener);
@@ -24,16 +28,13 @@ describe("C64Screen", function() {
       offsetTop : 16
     };
     fpsElem = {};
-    layerFactory = SL.Mocks.getMockLayerFactory();
-    config = {"fpsElem" : fpsElem};
-    scrn = new C64Style.C64Screen(targetDiv, layerFactory, config);
-  });
-
-  describe("constructor", function() {
-    it("should create C64Screen", function(done) {
-      assert(scrn instanceof C64Style.C64Screen, "should have create C64Screen");
-      done();
-    });
+    layerFactory = Mocks.getMockLayerFactory();
+    props = {
+      "fpsElem" : fpsElem,
+      layerFactory:layerFactory,
+      targetDiv:targetDiv
+    };
+    scrn = new C64Screen(props);
   });
 
   describe("#xToColumn()", function() {
@@ -43,7 +44,7 @@ describe("C64Screen", function() {
 
       var result = scrn.xToColumn(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
     it("should return column when scale is 2, view origin is 0", function(done) {
@@ -53,7 +54,7 @@ describe("C64Screen", function() {
 
       var result = scrn.xToColumn(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
     it("should return column when scale is 1, view origin is not 0", function(done) {
@@ -63,7 +64,7 @@ describe("C64Screen", function() {
 
       var result = scrn.xToColumn(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
     it("should return column when scale is 2, view origin is not 0", function(done) {
@@ -74,7 +75,7 @@ describe("C64Screen", function() {
 
       var result = scrn.xToColumn(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
   });
@@ -85,7 +86,7 @@ describe("C64Screen", function() {
 
       var result = scrn.yToRow(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
     it("should return column when scale is 2, view origin is 0", function(done) {
@@ -95,7 +96,7 @@ describe("C64Screen", function() {
 
       var result = scrn.yToRow(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
     it("should return column when scale is 1, view origin is not 0", function(done) {
@@ -105,7 +106,7 @@ describe("C64Screen", function() {
 
       var result = scrn.yToRow(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
     it("should return column when scale is 2, view origin is not 0", function(done) {
@@ -116,7 +117,7 @@ describe("C64Screen", function() {
 
       var result = scrn.yToRow(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
   });
@@ -127,7 +128,7 @@ describe("C64Screen", function() {
 
       var result = scrn._xToColumnFromMouseEvent(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
   });
@@ -138,7 +139,7 @@ describe("C64Screen", function() {
 
       var result = scrn._yToRowFromMouseEvent(c);
 
-      assert(result === expected, "expected " + expected + ", actual " + result);
+      expect(result).toBe(expected);
       done();
     });
   });
@@ -146,8 +147,8 @@ describe("C64Screen", function() {
     it("should set row and col", function(done) {
       var x = 10;
       var y = 33;
-      var savedFn = SL.Screen.prototype._getCoordinateDataForMouseEvent;
-      SL.Screen.prototype._getCoordinateDataForMouseEvent = function() {
+      var savedFn = Screen.prototype._getCoordinateDataForMouseEvent;
+      Screen.prototype._getCoordinateDataForMouseEvent = function() {
         return {
           x: x,
           y: y
@@ -160,9 +161,9 @@ describe("C64Screen", function() {
 
       var result = scrn._getCoordinateDataForMouseEvent(x, y);
 
-      SL.Screen.prototype._getCoordinateDataForMouseEvent = savedFn;
-      assert(result.row === expected.row, "row expected " + expected.row + ", actual " + result.row);
-      assert(result.col === expected.col, "col expected " + expected.col + ", actual " + result.col);
+      Screen.prototype._getCoordinateDataForMouseEvent = savedFn;
+      expect(result.row).toBe(expected.row);
+      expect(result.col).toBe(expected.col);
       done();
     });
   });
