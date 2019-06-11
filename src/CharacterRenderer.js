@@ -2,7 +2,7 @@ import {CELLWIDTH, CELLHEIGHT} from './Constants';
 import ColorPointer from './ColorPointer';
 import {CharacterMap} from './CharacterMap';
 import {PixPathTypes} from './PixPathTypes';
-import {Utils} from './Utils';
+import Utils from 'slgfx/src/Utils';
 
 /**
 * Draws Characters on a layer.
@@ -94,7 +94,7 @@ CharacterRenderer.prototype._renderCharacter = function(context, char) {
   var pixPathArray = CharacterMap[char];
 
   if (!pixPathArray) {
-    Utils.log("No pix path found for character:" + char);
+    console.log("No pix path found for character:" + char);
     return;
   }
   for (var i = 0; i < pixPathArray.length; i++) {

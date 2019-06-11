@@ -1,6 +1,8 @@
+import {CELLWIDTH, CELLHEIGHT} from './Constants';
 import Layer from  'slgfx/src/Layer';
 import {Color} from './Color';
 import {CharacterMap} from './CharacterMap';
+import TextPrompt from './TextPrompt';
 
 /** Text-only layer.<br />
 * Extends {@link Layer}<br />
@@ -31,10 +33,15 @@ function TextLayer(props) {
   this._color = Color.LIGHTBLUE;
   this._backgroundColor = Color.BLUE;
   this._characterRenderer = props.characterRenderer;
-  this._textPrompt = props.textPrompt;
+  this._textPrompt = props.textPrompt || new TextPrompt({
+    parentLayer : this,
+    registerKeyHandler : props.registerKeyHandler
+  });
   this._pendingTextStrings = [];
   this._width = props.width || 320;
   this._height = props.height || 200;
+  this._scaledCellWidth = CELLWIDTH * (props.scaleX || 1);
+  this._scaledCellHeight = CELLHEIGHT * (props.scaleY || 1);
 };
 
 TextLayer.prototype = new Layer();
@@ -74,7 +81,7 @@ TextLayer.prototype.render = function() {
     pendingString = this._pendingTextStrings[i];
     if (pendingString.string !== undefined && pendingString.string !== null) {
       this._characterRenderer.renderString(
-        this._canvasContext,
+        this.getCanvasContextWrapper(),
         pendingString.string,
         pendingString.cellX * this._scaledCellWidth,
         pendingString.cellY * this._scaledCellHeight,
@@ -83,7 +90,7 @@ TextLayer.prototype.render = function() {
       );
     } else {
       this._characterRenderer.renderSymbol(
-        this._canvasContext,
+        this.getCanvasContextWrapper(),
         pendingString.pixMapId,
         pendingString.cellX * this._scaledCellWidth,
         pendingString.cellY * this._scaledCellHeight,
@@ -103,7 +110,7 @@ TextLayer.prototype.render = function() {
 */
 TextLayer.prototype.clearLength = function(cellX, cellY, length) {
   this._characterRenderer.clearRect(
-    this._canvasContext,
+    this.getCanvasContextWrapper(),
     cellX * this._scaledCellWidth,
     cellY * this._scaledCellHeight,
     length || 1

@@ -469,8 +469,8 @@ describe("TextPrompt", function() {
 
 function getTextPrompt(props) {
   props = props || {
-    screenContext: Mocks.getMockScreen(),
-    parentLayer: Mocks.getMockTextLayer()
+    parentLayer: Mocks.getMockTextLayer(),
+    registerKeyHandler : function() {}
   };
   var prompt = new TextPrompt(props);
   return prompt;
