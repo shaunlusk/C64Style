@@ -10,25 +10,12 @@ import Utils from 'slgfx/src/Utils';
 * @param {integer} scaleX Horizontal scale.  Should be taken from screen's scale.
 * @param {integer} scaleY Vertical scale.  Should be taken from screen's scale.
 */
-function CharacterRenderer(scaleX, scaleY) {
-  this._scaleX = scaleX;
-  this._scaleY = scaleY;
+function CharacterRenderer() {
   this._cx = 0;
   this._cy = 0;
   this._color = null;
   this._backgroundColor = null;
-  this._scaledCellWidth = CELLWIDTH * scaleX;
-  this._scaledCellHeight = CELLHEIGHT * scaleY;
 };
-
-/**
-* Return scaleX value.
-*/
-CharacterRenderer.prototype.getScaleX = function() {return this._scaleX;};
-/**
-* Return scaleY value.
-*/
-CharacterRenderer.prototype.getScaleY = function() {return this._scaleY;};
 
 /**
 * Clears a length of the screen in preparation for writing characters.
@@ -38,9 +25,15 @@ CharacterRenderer.prototype.getScaleY = function() {return this._scaleY;};
 * @param {integer} y The y location to start clearing.
 * @param {integer} length The length of characters to clear.
 */
-CharacterRenderer.prototype.clearRect = function(context, x, y, length)  {
+CharacterRenderer.prototype.clearRect = function(context, x, y, length, pixelWidth, pixelHeight)  {
+  pixelWidth = pixelWidth || 1;
+  pixelHeight = pixelHeight || 1;
   this.setCursorLocation(x, y);
-  context.clearRect(this._cx, this._cy, length * this._scaledCellWidth, this._scaledCellHeight);
+  context.clearRect(
+    this._cx,
+    this._cy,
+    length * pixelWidth * CELLWIDTH,
+    pixelHeight * CELLHEIGHT);
 };
 
 /**
@@ -52,12 +45,14 @@ CharacterRenderer.prototype.clearRect = function(context, x, y, length)  {
 * @param {Color} color The color to draw the symbol.
 * @param {Color} backgroundColor Optional. The background color for the symbol.
 */
-CharacterRenderer.prototype.renderSymbol = function(context, char, x, y, color, backgroundColor) {
-  this.setCursorLocation(x, y);
+CharacterRenderer.prototype.renderSymbol = function(context, char, x, y, color, backgroundColor, pixelWidth, pixelHeight) {
+  pixelWidth = pixelWidth || 1;
+  pixelHeight = pixelHeight || 1;
+  this.setCursorLocation(x, y, pixelWidth, pixelHeight);
   this.setColor(color);
   this.setBackgroundColor(backgroundColor);
 
-  this._renderCharacter(context, char);
+  this._renderCharacter(context, char, pixelWidth, pixelHeight);
 };
 
 /**
@@ -69,25 +64,27 @@ CharacterRenderer.prototype.renderSymbol = function(context, char, x, y, color, 
 * @param {Color} color The color to draw the string.
 * @param {Color} backgroundColor Optional. The background color for the string.
 */
-CharacterRenderer.prototype.renderString = function(context, text, x, y, color, backgroundColor) {
-  this.setCursorLocation(x, y);
+CharacterRenderer.prototype.renderString = function(context, text, x, y, color, backgroundColor, pixelWidth, pixelHeight) {
+  pixelWidth = pixelWidth || 1;
+  pixelHeight = pixelHeight || 1;
+  this.setCursorLocation(x, y, pixelWidth, pixelHeight);
   this.setColor(color);
   this.setBackgroundColor(backgroundColor);
 
   for (var i = 0; i < text.length; i++) {
     var char = text.charAt(i);
-    this._renderCharacter(context, char);
-    this.advanceCursor();
+    this._renderCharacter(context, char, pixelWidth, pixelHeight);
+    this.advanceCursor(pixelWidth);
   }
 };
 
 /**
 * @private
 */
-CharacterRenderer.prototype._renderCharacter = function(context, char) {
+CharacterRenderer.prototype._renderCharacter = function(context, char, pixelWidth, pixelHeight) {
   if (this._backgroundColor) {
     context.setFillStyle(this._backgroundColor);
-    context.fillRect(this._cx, this._cy, this._scaledCellWidth, this._scaledCellHeight);
+    context.fillRect(this._cx, this._cy, CELLWIDTH * pixelWidth, CELLHEIGHT * pixelHeight);
   }
 
   if (char === " ") return;
@@ -98,23 +95,28 @@ CharacterRenderer.prototype._renderCharacter = function(context, char) {
     return;
   }
   for (var i = 0; i < pixPathArray.length; i++) {
-    this._renderPixPath(context, pixPathArray[i]);
+    this._renderPixPath(context, pixPathArray[i], pixelWidth, pixelHeight);
   }
 };
 
 /**
 * @private
 */
-CharacterRenderer.prototype._renderPixPath = function(context, pixPath) {
+CharacterRenderer.prototype._renderPixPath = function(context, pixPath, pixelWidth, pixelHeight) {
   context.setFillStyle(pixPath.color && pixPath.color instanceof ColorPointer ? pixPath.color.getColor() : pixPath.color || this._color);
-  var tx = (pixPath.x * this.getScaleX()) + this._cx;
-  var ty = (pixPath.y * this.getScaleY()) + this._cy;
+  var tx = (pixPath.x * pixelWidth) + this._cx;
+  var ty = (pixPath.y * pixelHeight) + this._cy;
   switch (pixPath.type) {
     case PixPathTypes.PIXEL :
-      context.fillRect(tx, ty, this.getScaleX(), this.getScaleY());
+      context.fillRect(tx, ty, pixelWidth, pixelHeight);
       break;
     case PixPathTypes.RECTANGLE :
-      context.fillRect(tx, ty, pixPath.width * this.getScaleX(), pixPath.height * this.getScaleY());
+      context.fillRect(
+        tx,
+        ty,
+        pixPath.width * pixelWidth,
+        pixPath.height * pixelWidth
+      );
       break;
     default:
       throw new Error("Unknown Pix Path Type");
@@ -132,8 +134,8 @@ CharacterRenderer.prototype.setCursorLocation = function(x, y) {
 /**
 * @private
 */
-CharacterRenderer.prototype.advanceCursor = function() {
-  this._cx = this._cx + this._scaledCellWidth;
+CharacterRenderer.prototype.advanceCursor = function(pixelWidth) {
+  this._cx = this._cx + CELLWIDTH * pixelWidth;
 };
 
 /**

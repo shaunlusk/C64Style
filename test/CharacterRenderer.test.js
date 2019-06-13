@@ -7,41 +7,11 @@ import {CharacterMap} from '../src/CharacterMap';
 
 describe("CharacterRenderer", function() {
   var renderer;
-  var renderer_2x2;
 
   beforeEach(function() {
-    renderer = new CharacterRenderer(1,1);
-    renderer_2x2 = new CharacterRenderer(2,2);
+    renderer = new CharacterRenderer();
   });
 
-  describe("#getScaleX()", function() {
-    it("should return scaleX", function(done) {
-      var expected = 1;
-      var result = renderer.getScaleX();
-      expect(result).toBe(expected);
-      done();
-    });
-    it("should return scaleX (2)", function(done) {
-      var expected = 2;
-      var result = renderer_2x2.getScaleX();
-      expect(result).toBe(expected);
-      done();
-    });
-  });
-  describe("#getScaleY()", function() {
-    it("should return scaleY", function(done) {
-      var expected = 1;
-      var result = renderer.getScaleY();
-      expect(result).toBe(expected);
-      done();
-    });
-    it("should return scaleY (2)", function(done) {
-      var expected = 2;
-      var result = renderer_2x2.getScaleY();
-      expect(result).toBe(expected);
-      done();
-    });
-  });
   describe("#clearRect()", function() {
     it("should clear a rectangle of specified length at specified cell coordinates", function(done) {
       var mockContext = Mocks.getMockCanvasContext();
@@ -98,7 +68,7 @@ describe("CharacterRenderer", function() {
         width : length * CELLWIDTH * 2,
         height : CELLHEIGHT * 2
       };
-      renderer_2x2.clearRect(mockContext, x, y, length);
+      renderer.clearRect(mockContext, x, y, length, 2, 2);
       expect(mockContext.x).toBe(expected.x);
       expect(mockContext.y).toBe(expected.y);
       expect(mockContext.width).toBe(expected.width);
@@ -109,9 +79,9 @@ describe("CharacterRenderer", function() {
       var mockContext = {
         clearRect : function(x, y, width, height) {}
       };
-      var savedFn = renderer_2x2.setCursorLocation;
+      var savedFn = renderer.setCursorLocation;
       var actual = {};
-      renderer_2x2.setCursorLocation = function(x,y) {
+      renderer.setCursorLocation = function(x,y) {
         actual.x = x;
         actual.y = y;
       };
@@ -121,10 +91,10 @@ describe("CharacterRenderer", function() {
         x : x,
         y : y
       };
-      renderer_2x2.clearRect(mockContext, x, y, length);
+      renderer.clearRect(mockContext, x, y, length, 2, 2);
       expect(actual.x).toBe(expected.x);
       expect(actual.y).toBe(expected.y);
-      renderer_2x2.setCursorLocation = savedFn;
+      renderer.setCursorLocation = savedFn;
       done();
     });
   });
@@ -275,10 +245,10 @@ describe("CharacterRenderer", function() {
       var pixPath = {type:"PIXEL", x:1,y:2};
       var expectedX = pixPath.x;
       var expectedY = pixPath.y;
-      var expectedWidth = renderer.getScaleX();
-      var expectedHeight = renderer.getScaleY();
+      var expectedWidth = 1;
+      var expectedHeight = 1;
 
-      renderer._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, 1, 1);
 
       expect(context.filledX).toBe(expectedX);
       expect(context.filledY).toBe(expectedY);
@@ -292,10 +262,10 @@ describe("CharacterRenderer", function() {
       var pixPath = {type:"RECTANGLE", x:2,y:3, width:4, height:6};
       var expectedX = pixPath.x;
       var expectedY = pixPath.y;
-      var expectedWidth = pixPath.width * renderer.getScaleX();
-      var expectedHeight = pixPath.height * renderer.getScaleY();
+      var expectedWidth = pixPath.width;
+      var expectedHeight = pixPath.height;
 
-      renderer._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, 1, 1);
 
       expect(context.filledX).toBe(expectedX);
       expect(context.filledY).toBe(expectedY);
@@ -305,14 +275,15 @@ describe("CharacterRenderer", function() {
     });
     it("should render pixel (2x2)", function(done) {
       var context = Mocks.getMockCanvasContext();
-      renderer_2x2.setColor(Color.LIGHTBLUE);
+      renderer.setColor(Color.LIGHTBLUE);
+      var scale = 2;
       var pixPath = {type:"PIXEL", x:1,y:2};
-      var expectedX = pixPath.x * renderer_2x2.getScaleX();
-      var expectedY = pixPath.y * renderer_2x2.getScaleY();
-      var expectedWidth = renderer_2x2.getScaleX();
-      var expectedHeight = renderer_2x2.getScaleY();
+      var expectedX = pixPath.x * scale;
+      var expectedY = pixPath.y * scale;
+      var expectedWidth = scale;
+      var expectedHeight = scale;
 
-      renderer_2x2._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, scale, scale);
 
       expect(context.filledX).toBe(expectedX);
       expect(context.filledY).toBe(expectedY);
@@ -322,14 +293,15 @@ describe("CharacterRenderer", function() {
     });
     it("should render rectangle (2x2)", function(done) {
       var context = Mocks.getMockCanvasContext();
-      renderer_2x2.setColor(Color.LIGHTBLUE);
+      renderer.setColor(Color.LIGHTBLUE);
+      var scale = 2;
       var pixPath = {type:"RECTANGLE", x:2,y:3, width:4, height:6};
-      var expectedX = pixPath.x * renderer_2x2.getScaleX();
-      var expectedY = pixPath.y * renderer_2x2.getScaleY();
-      var expectedWidth = pixPath.width * renderer_2x2.getScaleX();
-      var expectedHeight = pixPath.height * renderer_2x2.getScaleY();
+      var expectedX = pixPath.x * scale;
+      var expectedY = pixPath.y * scale;
+      var expectedWidth = pixPath.width * scale;
+      var expectedHeight = pixPath.height * scale;
 
-      renderer_2x2._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, scale, scale);
 
       expect(context.filledX).toBe(expectedX);
       expect(context.filledY).toBe(expectedY);
@@ -384,19 +356,19 @@ describe("CharacterRenderer", function() {
     it("should increment internal x coord", function(done) {
       var x = 5, y = 9;
       renderer.setCursorLocation(x, y);
-      var expected = x + CELLWIDTH * renderer.getScaleX();
-      renderer.advanceCursor();
+      var expected = x + CELLWIDTH;
+      renderer.advanceCursor(1);
 
       expect(renderer._cx).toBe(expected);
       done();
     });
     it("should increment internal x coord (2x2)", function(done) {
       var x = 5, y = 9;
-      renderer_2x2.setCursorLocation(x, y);
-      var expected = x + CELLWIDTH * renderer_2x2.getScaleX();
-      renderer_2x2.advanceCursor();
+      renderer.setCursorLocation(x, y);
+      var expected = x + CELLWIDTH * 2;
+      renderer.advanceCursor(2);
 
-      expect(renderer_2x2._cx).toBe(expected);
+      expect(renderer._cx).toBe(expected);
       done();
     });
   });

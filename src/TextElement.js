@@ -166,7 +166,9 @@ TextElement.prototype.render = function(time,diff) {
         this.getX() * this.getScreenScaleX(),
         this.getY() * this.getScreenScaleY(),
         this._color,
-        this._backgroundColor
+        this._backgroundColor,
+        this.getTotalScaleX(),
+        this.getTotalScaleY()
       );
     } else {
       this._characterRenderer.renderSymbol(
@@ -175,7 +177,9 @@ TextElement.prototype.render = function(time,diff) {
         this.getX() * this.getScreenScaleX(),
         this.getY() * this.getScreenScaleY(),
         this._color,
-        this._backgroundColor
+        this._backgroundColor,
+        this.getTotalScaleX(),
+        this.getTotalScaleY()
       );
     }
   }

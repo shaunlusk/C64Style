@@ -2,51 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Text Element Demo</title>
-  <script type="text/javascript" src="../node_modules/slcommon/Event.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/EventNotifierMixin.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/Utils.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/LinkedList.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/MixinTemplate.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/Queue.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Utils.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/EventTypes.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/MouseEvent.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/CanvasContextWrapper.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Layer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxElement.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxLayer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageElement.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageLoader.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageRenderer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/SpriteAnimationFrame.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Sprite.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageSpriteFrame.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageSprite.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/LayerFactory.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/MoveOrder.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Screen.js"></script>
-  <script type="text/javascript" src="../lib/SlImport.js"></script>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/LayerFactory.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementExtensions.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/PixSprite.js"></script>
-  <script type="text/javascript" src="../lib/TextElement.js"></script>
-  <script type="text/javascript" src="../lib/TextLink.js"></script>
-  <script type="text/javascript" src="../lib/TextButton.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -59,7 +15,6 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
     textLayer2 = null,
@@ -68,54 +23,66 @@
     element2 = null,
     element3 = null;
   var config = {
-    "rows" : 25,
-    "cols" : 40,
-    "scaleX" : 1,
-    "scaleY" : 1,
-    "fpsElem" : document.getElementById('info')
+    layerFactory:new C64Style.LayerFactory(),
+    targetDiv:document.getElementById("content"),
+    rows : 25,
+    cols : 40,
+    scaleX : 1,
+    scaleY : 1,
+    fpsElem : document.getElementById('info')
   };
 
-  function initialize(targetDiv, config) {
+  function initialize(config) {
     var xBounds = config.cols * C64Style.CELLWIDTH - 16;
     var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
 
-    screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
-
+    screen = new C64Style.C64Screen(config);
     screen.initialize();
+    var characterRenderer = new C64Style.CharacterRenderer();
 
     gfxLayer = screen.createLayer("GfxLayer");
+    var canvasContext = gfxLayer.getCanvasContextWrapper();
 
-    element = new C64Style.TextElement(screen, gfxLayer, {
+    element = new C64Style.TextElement({
       scaleX:1,
       scaleY:1,
       text:"Regular Text",
       color:C64Style.Color.LIGHTBLUE,
-      backgroundColor:C64Style.Color.BLUE
+      backgroundColor:C64Style.Color.BLUE,
+      characterRenderer:characterRenderer,
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     element.setX(10);
     element.setY(10);
     element.setMoveRates(25, 10);
     gfxLayer.addElement(element);
 
-    element2 = new C64Style.TextElement(screen, gfxLayer, {
+    element2 = new C64Style.TextElement({
       scaleX:2,
       scaleY:2,
       text:"SCALED TEXT!",
       color:C64Style.Color.GREEN,
-      backgroundColor:C64Style.Color.BLACK
+      backgroundColor:C64Style.Color.BLACK,
+      characterRenderer:characterRenderer,
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     element2.setX(20);
     element2.setY(20);
     element2.setMoveRates(35, 20);
     gfxLayer.addElement(element2);
 
-    element3 = new C64Style.TextElement(screen, gfxLayer, {
+    element3 = new C64Style.TextElement({
       scaleX:2,
       scaleY:2,
 
       symbolName:"HEART",
       color:C64Style.Color.RED,
-      backgroundColor:C64Style.Color.PINK
+      backgroundColor:C64Style.Color.PINK,
+      characterRenderer:characterRenderer,
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     element3.setX(50);
     element3.setY(50);
@@ -142,9 +109,9 @@
       element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
     });
 
-    screen.render(1);
+    screen.render();
   }
-  initialize(document.getElementById("content"), config);
+  initialize(config);
   </script>
 </body>
 </html>
