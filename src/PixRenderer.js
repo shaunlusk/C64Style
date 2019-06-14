@@ -3,13 +3,8 @@ import Utils from 'slgfx/src/Utils';
 
 /** Draws Pix Arrays to a canvas.
 * @constructor
-* @param {integer} screenScaleX scale x of the screen
-* @param {integer} screenScaleY scale y of the screen
 */
-function PixRenderer(screenScaleX, screenScaleY) {
-  this._screenScaleX = screenScaleX;
-  this._screenScaleY = screenScaleY;
-};
+function PixRenderer() {};
 
 /** Render an array of pix paths to a canvas.
 * @param {CanvasContext} context The canvas context.
@@ -25,25 +20,23 @@ function PixRenderer(screenScaleX, screenScaleY) {
 * @param {boolean} isVerticallyFlipped Whether the element is flipped vertically.
 * @param {number} rotation The element's rotation in radians.
 */
-PixRenderer.prototype.renderPixPathArray = function(context, x, y, width, height, pixPathArray, palette, pixPathScaleX, pixPathScaleY, flipHorizontally, flipVertically, rotation) {
-  var screenX = x * this.getScreenScaleX();
-  var screenY = y * this.getScreenScaleY();
+PixRenderer.prototype.renderPixPathArray = function(context, x, y, width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation) {
   var fillFn = context.fillRect.bind(context);
 
   if (flipHorizontally || flipVertically || rotation) {
-    this._renderAllPixPathsTranslated(context, screenX, screenY,  width, height, pixPathArray, palette, pixPathScaleX, pixPathScaleY, flipHorizontally, flipVertically, rotation);
+    this._renderAllPixPathsTranslated(context, x, y,  width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation);
   } else {
-    this._renderAllPixPaths(context, screenX, screenY, pixPathArray, palette, pixPathScaleX, pixPathScaleY, fillFn);
+    this._renderAllPixPaths(context, x, y, pixPathArray, palette, pixelWidth, pixelHeight, fillFn);
   }
 };
 
-PixRenderer.prototype._renderAllPixPathsTranslated = function(context, screenX, screenY, width, height, pixPathArray, palette, pixPathScaleX, pixPathScaleY, flipHorizontally, flipVertically, rotation) {
-  var scaledWidth = width * this.getTotalScaleX(pixPathScaleX);
-  var scaledHeight = height * this.getTotalScaleY(pixPathScaleY);
+PixRenderer.prototype._renderAllPixPathsTranslated = function(context, x, y, width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation) {
+  var scaledWidth = width * pixelWidth;
+  var scaledHeight = height * pixelHeight;
 
   // where to reposition the canvas context
-  var translationX = screenX + scaledWidth/2;
-  var translationY = screenY + scaledHeight/2;
+  var translationX = x + scaledWidth/2;
+  var translationY = x + scaledHeight/2;
 
   // target coordinates to draw the element to on the rotated canvas
   var rotatedTx = 0 - scaledWidth/2;
@@ -56,21 +49,21 @@ PixRenderer.prototype._renderAllPixPathsTranslated = function(context, screenX, 
   }.bind(this));
 };
 
-PixRenderer.prototype._renderAllPixPaths = function(context, screenX, screenY, pixPathArray, palette, pixPathScaleX, pixPathScaleY, fillFn) {
+PixRenderer.prototype._renderAllPixPaths = function(context, x, y, pixPathArray, palette, pixelWidth, pixelHeight, fillFn) {
   for (var i = 0; i < pixPathArray.length; i++) {
-    this._renderPixPath(context, screenX, screenY, pixPathArray[i], palette, pixPathScaleX, pixPathScaleY, fillFn);
+    this._renderPixPath(context, x, y, pixPathArray[i], palette, pixelWidth, pixelHeight, fillFn);
   }
 };
 
-PixRenderer.prototype._renderPixPath = function(context, screenX, screenY, pixPath, palette, pixPathScaleX, pixPathScaleY, fillFn) {
+PixRenderer.prototype._renderPixPath = function(context, x, y, pixPath, palette, pixelWidth, pixelHeight, fillFn) {
   // set context fill color
   this.setFillColor(context, pixPath, palette);
 
   // calculate tx, ty, tw, th
-  var tx = (pixPath.x * this.getTotalScaleX(pixPathScaleX)) + screenX;
-  var ty = (pixPath.y * this.getTotalScaleY(pixPathScaleY)) + screenY;
-  var tw = (pixPath.width || 1) * this.getTotalScaleX(pixPathScaleX);
-  var th = (pixPath.height || 1) * this.getTotalScaleY(pixPathScaleY);
+  var tx = (pixPath.x * pixelWidth) + x;
+  var ty = (pixPath.y * pixelHeight) + y;
+  var tw = (pixPath.width || 1) * pixelWidth;
+  var th = (pixPath.height || 1) * pixelHeight;
 
   // draw it
   fillFn(tx, ty, tw, th);
@@ -86,31 +79,5 @@ PixRenderer.prototype.setFillColor = function(context, pixPath, palette) {
       context.setFillStyle(pixPath.color);
     }
 };
-
-/**
-* Return the horizontal scale of the renderer.
-* @return {integer}
-*/
-PixRenderer.prototype.getScreenScaleX = function() {return this._screenScaleX;};
-
-/**
-* Return the vertical scale of the renderer.
-* @return {integer}
-*/
-PixRenderer.prototype.getScreenScaleY = function() {return this._screenScaleY;};
-
-/**
-* Return the total horizontal scale (screen scale * image scale).
-* @param {integer} imageScaleX The x amount to scale the portion of the image drawn to the canvas.
-* @return {integer}
-*/
-PixRenderer.prototype.getTotalScaleX = function(pixPathScaleX) {return this._screenScaleX * pixPathScaleX;};
-
-/**
-* Return the total vertical scale (screen scale * image scale).
-* @param {integer} imageScaleY The y amount to scale the portion of the image drawn to the canvas.
-* @return {integer}
-*/
-PixRenderer.prototype.getTotalScaleY = function(pixPathScaleY) {return this._screenScaleY * pixPathScaleY;};
 
 export default PixRenderer;
