@@ -40,8 +40,10 @@ function TextLayer(props) {
   this._pendingTextStrings = [];
   this._width = props.width || 320;
   this._height = props.height || 200;
-  this._scaledCellWidth = CELLWIDTH * (props.scaleX || 1);
-  this._scaledCellHeight = CELLHEIGHT * (props.scaleY || 1);
+  this._scaleX = props.scaleX || 1;
+  this._scaleY = props.scaleY || 1;
+  this._scaledCellWidth = CELLWIDTH * this._scaleX;
+  this._scaledCellHeight = CELLHEIGHT * this._scaleY;
 };
 
 TextLayer.prototype = new Layer();
@@ -86,7 +88,9 @@ TextLayer.prototype.render = function() {
         pendingString.cellX * this._scaledCellWidth,
         pendingString.cellY * this._scaledCellHeight,
         pendingString.color,
-        pendingString.backgroundColor
+        pendingString.backgroundColor,
+        this._scaleX,
+        this._scaleY
       );
     } else {
       this._characterRenderer.renderSymbol(
@@ -95,7 +99,9 @@ TextLayer.prototype.render = function() {
         pendingString.cellX * this._scaledCellWidth,
         pendingString.cellY * this._scaledCellHeight,
         pendingString.color,
-        pendingString.backgroundColor
+        pendingString.backgroundColor,
+        this._scaleX,
+        this._scaleY
       );
     }
   }
@@ -113,7 +119,9 @@ TextLayer.prototype.clearLength = function(cellX, cellY, length) {
     this.getCanvasContextWrapper(),
     cellX * this._scaledCellWidth,
     cellY * this._scaledCellHeight,
-    length || 1
+    length || 1,
+    this._scaleX,
+    this._scaleY
   );
 };
 
