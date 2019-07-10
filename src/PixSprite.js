@@ -130,14 +130,14 @@ PixSprite.prototype.renderFrame = function(time, diff, frame) {
 
   this._pixRenderer.renderPixPathArray(
     this.getCanvasContextWrapper(),
-    this.getX(),
-    this.getY(),
-    this.getWidth(),
-    this.getHeight(),
+    this.getScaledX(),
+    this.getScaledY(),
+    this.getScaledWidth(),
+    this.getScaledHeight(),
     pixPathArray,
     this._palette,
-    this.getElementScaleX(),
-    this.getElementScaleY(),
+    this.getTotalScaleX(),
+    this.getTotalScaleY(),
     this.isHorizontallyFlipped(),
     this.isVerticallyFlipped(),
     this.getRotation()

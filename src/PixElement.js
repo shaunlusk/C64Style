@@ -126,10 +126,10 @@ PixElement.prototype._setDimensions = function() {
 PixElement.prototype.render = function(time,diff) {
   this._pixRenderer.renderPixPathArray(
     this.getCanvasContextWrapper(),
-    this.getX(),
-    this.getY(),
-    this.getWidth(),
-    this.getHeight(),
+    this.getScaledX(),
+    this.getScaledY(),
+    this.getScaledWidth(),
+    this.getScaledHeight(),
     this._pixPathArray,
     this._palette,
     this.getElementScaleX(),

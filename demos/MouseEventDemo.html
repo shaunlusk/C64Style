@@ -2,51 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Mouse Event Demo</title>
-  <script type="text/javascript" src="../node_modules/slcommon/Event.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/EventNotifierMixin.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/Utils.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/LinkedList.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/MixinTemplate.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/Queue.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Utils.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/EventTypes.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/MouseEvent.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/CanvasContextWrapper.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Layer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxElement.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxLayer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageElement.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageLoader.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageRenderer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/SpriteAnimationFrame.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Sprite.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageSpriteFrame.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageSprite.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/LayerFactory.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/MoveOrder.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Screen.js"></script>
-  <script type="text/javascript" src="../lib/SlImport.js"></script>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/LayerFactory.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementExtensions.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/PixSprite.js"></script>
-  <script type="text/javascript" src="../lib/TextElement.js"></script>
-  <script type="text/javascript" src="../lib/TextLink.js"></script>
-  <script type="text/javascript" src="../lib/TextButton.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
+<script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -59,7 +15,6 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
     gfxLayer = null,
@@ -72,20 +27,31 @@
     element = null,
     xOffset = null,
     yOffset = null,
+    mouseIsOver = false,
     dragOn;
+
   var config = {
-    "rows" : 25,
-    "cols" : 40,
-    "scaleX" : 1,
-    "scaleY" : 1,
-    "fpsElem" : document.getElementById('info')
+    layerFactory:new C64Style.LayerFactory(),
+    targetDiv:document.getElementById("content"),
+    rows : 25,
+    cols : 40,
+    scaleX : 2,
+    scaleY : 2,
+    fpsElem : document.getElementById('info')
   };
 
-  function initialize(targetDiv, config) {
-    screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
+  function initialize(config) {
+    screen = new C64Style.C64Screen(config);
 
     screen.initialize();
-    textLayer = screen.createLayer("TextLayer");
+
+    var characterRenderer = new C64Style.CharacterRenderer();
+    textLayer = screen.createLayer("TextLayer", {
+      registerKeyHandler : screen.addEventListenerToDocument,
+      characterRenderer : characterRenderer,
+      scaleX:config.scaleX,
+      scaleY:config.scaleY
+    });
     textLayer.writeText("Try clicking and dragging", 4,1,C64Style.Color.LIGHTBLUE);
     textLayer.writeText("the PixSprite.", 4,2,C64Style.Color.LIGHTBLUE);
 
@@ -96,23 +62,31 @@
     textLayer.writeText("Mouse Over Element?", 1,23,C64Style.Color.LIGHTBLUE);
 
     gfxLayer = screen.createLayer("GfxLayer");
+    var canvasContext = gfxLayer.getCanvasContextWrapper();
+    var pixRenderer = new C64Style.PixRenderer();
 
-    sprite1 = new C64Style.PixSprite(screen, gfxLayer, {
+    sprite1 = new C64Style.PixSprite({
       x:10, y:10,
       scaleX:2, scaleY:2,
       frames:[
         new C64Style.PixSpriteFrame({pixArray:pixPathArray1, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray2, duration:400}),
-      ]
+      ],
+      pixRenderer:pixRenderer,
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
-    sprite2 = new C64Style.PixSprite(screen, gfxLayer, {
+    sprite2 = new C64Style.PixSprite({
       x:10, y:10,
       scaleX:2, scaleY:2,
       hidden:true,
       frames:[
         new C64Style.PixSpriteFrame({pixArray:pixPathArray3, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray4, duration:400}),
-      ]
+      ],
+      pixRenderer:pixRenderer,
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(sprite1);
     gfxLayer.addElement(sprite2);
@@ -141,8 +115,20 @@
         sprite1.setY(event.data.y - yOffset);
       }
     });
+    screen.on(SL.EventType.MOUSE_ENTER_ELEMENT, function(event) {
+      mouseIsOver = true;
+    });
+    screen.on(SL.EventType.MOUSE_EXIT_ELEMENT, function(event) {
+      mouseIsOver = false;
+    });
 
+    dump();
     screen.render(1);
+  }
+
+  function dump() {
+    console.log("x:",sprite1.getX(),"; y:",sprite1.getY(), "; width:", sprite1.getWidth(), "; height;",sprite1.getHeight());
+    console.log("cboxx:",sprite1.getCollisionBoxX(),"; cboxy:",sprite1.getCollisionBoxY(), "; cboxwidth:", sprite1.getCollisionBoxWidth(), "; cboxheight;",sprite1.getCollisionBoxHeight());
   }
 
   function updateMouseStats(event) {
@@ -155,11 +141,10 @@
     textLayer.clearLength(15,22,4);
     textLayer.writeText(event.data.row.toString(), 15,22,C64Style.Color.LIGHTGREEN);
     textLayer.clearLength(21,23,6);
-    var mouseIsOver = sprite1.collidesWithCoordinates(event.data.x, event.data.y);
     textLayer.writeText(mouseIsOver.toString(), 21,23,C64Style.Color.LIGHTGREEN);
   }
 
-  initialize(document.getElementById("content"), config);
+  initialize(config);
   </script>
 </body>
 </html>
