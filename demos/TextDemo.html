@@ -25,7 +25,7 @@
     // Create the C64 Screen
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    
+
     textLayer = screen.createLayer("TextLayer", {
       registerKeyHandler : screen.addEventListenerToDocument,
       characterRenderer : new C64Style.CharacterRenderer()
