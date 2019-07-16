@@ -2,51 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style PixMapBuilder</title>
-  <script type="text/javascript" src="../node_modules/slcommon/Event.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/EventNotifierMixin.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/Utils.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/LinkedList.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/MixinTemplate.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/Queue.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../node_modules/slcommon/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Utils.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/EventTypes.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/MouseEvent.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/CanvasContextWrapper.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Layer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxElement.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/GfxLayer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageElement.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageLoader.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageRenderer.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/SpriteAnimationFrame.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Sprite.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageSpriteFrame.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/ImageSprite.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/LayerFactory.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/MoveOrder.js"></script>
-  <script type="text/javascript" src="../node_modules/slgfx/Screen.js"></script>
-  <script type="text/javascript" src="../lib/SlImport.js"></script>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/LayerFactory.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementExtensions.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/PixSprite.js"></script>
-  <script type="text/javascript" src="../lib/TextElement.js"></script>
-  <script type="text/javascript" src="../lib/TextLink.js"></script>
-  <script type="text/javascript" src="../lib/TextButton.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
@@ -78,7 +34,6 @@
   </div>
 </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     previewScreen = null,
     gfxLayer = null,
@@ -92,33 +47,46 @@
     colorIdx = 0,
     map = null;
   var config = {
-    "rows" : 17,
-    "cols" : 16,
-    "scaleX" : 2,
-    "scaleY" : 2,
-    "backgroundColor" : "#360066",
-    "borderColor" : C64Style.Color.LIGHTGREY,
-    "borderSize" : 2
+    layerFactory:new C64Style.LayerFactory(),
+    targetDiv:document.getElementById("content"),
+    rows : 17,
+    cols : 16,
+    scaleX : 2,
+    scaleY : 2,
+    backgroundColor : "#360066",
+    borderColor : C64Style.Color.LIGHTGREY,
+    borderSize : 2
   };
 
-  function initialize(targetDiv, config) {
-    screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
+  function initialize(config) {
+    screen = new C64Style.C64Screen(config);
     screen.initialize();
-    textLayer = screen.createLayer("TextLayer");
+    var characterRenderer = new C64Style.CharacterRenderer();
+    textLayer = screen.createLayer("TextLayer", {
+      registerKeyHandler : screen.addEventListenerToDocument,
+      characterRenderer : characterRenderer,
+      scaleX:config.scaleX,
+      scaleY:config.scaleY
+    });
     gfxLayer = screen.createLayer("GfxLayer");
 
-    previewScreen = new C64Style.C64Screen(document.getElementById("preview"), new C64Style.LayerFactory(), {backgroundColor:"#360066", rows:2, cols:2, scaleX:2, scaleY:2, borderSize:2}
-    );
+    previewScreen = new C64Style.C64Screen({
+      targetDiv: document.getElementById("preview"),
+      layerFactory: config.layerFactory,
+      backgroundColor:"#360066", rows:2, cols:2, scaleX:2, scaleY:2, borderSize:2
+    });
     previewScreen.initialize();
+
     previewGfxLayer = previewScreen.createLayer("GfxLayer");
-    element = new C64Style.PixElement(
-      previewScreen,
-      previewGfxLayer,
-      {
-        pixPathArray : pixPathArray,
-        defaultPalette : C64Style.Color.getDefaultPalette()
-      }
-    );
+    var canvasContext = previewGfxLayer.getCanvasContextWrapper();
+    var pixRenderer = new C64Style.PixRenderer();
+    element = new C64Style.PixElement({
+      screenContext: previewScreen,
+      canvasContextWrapper: canvasContext,
+      pixRenderer: pixRenderer,
+      pixPathArray : pixPathArray,
+      defaultPalette : C64Style.Color.getDefaultPalette()
+    });
     previewGfxLayer.addElement(element);
 
     reset();
@@ -216,7 +184,7 @@
   }
 
   function drawGrid() {
-    var context = gfxLayer.getCanvasContext();
+    var context = gfxLayer.getCanvasContextWrapper();
     context.setStrokeStyle('black');
     var xBounds = config.cols * config.scaleX * C64Style.CELLWIDTH;
     var yBounds = config.rows * config.scaleY * C64Style.CELLHEIGHT;
@@ -238,7 +206,7 @@
 
   function drawBoxAroundSelectedColor(col) {
     var x, y, width, height;
-    var context = gfxLayer.getCanvasContext();
+    var context = gfxLayer.getCanvasContextWrapper();
     x = col * C64Style.CELLWIDTH * config.scaleX;
     y = (config.rows - 1) * C64Style.CELLHEIGHT * config.scaleY;
     width = C64Style.CELLWIDTH * config.scaleX;
@@ -284,7 +252,7 @@
     }
   }
 
-  initialize(document.getElementById("content"), config);
+  initialize(config);
   </script>
 </body>
 </html>

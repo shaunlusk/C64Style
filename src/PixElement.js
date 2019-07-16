@@ -132,8 +132,8 @@ PixElement.prototype.render = function(time,diff) {
     this.getScaledHeight(),
     this._pixPathArray,
     this._palette,
-    this.getElementScaleX(),
-    this.getElementScaleY(),
+    this.getTotalScaleX(),
+    this.getTotalScaleY(),
     this.isHorizontallyFlipped(),
     this.isVerticallyFlipped(),
     this.getRotation()
