@@ -45,7 +45,7 @@ function TextLink(props) {
   this._newWindow = props.newWindow;
   this._baseColor = this._color;
   this._baseBackgroundColor = this._backgroundColor;
-  this._windowOpen = props.windowOpen || window.open;
+  this._windowOpen = props.windowOpen || window.open.bind(window);
   this._setDocumentLocation = props.setDocumentLocation || ((location) => {document.location = location});
   this.on("MOUSE_UP_ON_ELEMENT", this._click.bind(this));
   this.on("MOUSE_ENTER_ELEMENT", this._enter.bind(this));

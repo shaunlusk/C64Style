@@ -25,7 +25,7 @@ function TextPrompt (props) {
   this._callback = null;
   this._elapsed = 0;
   this._on = false;
-  // props.screenContext.addEventListenerToDocument("keydown", this.handleKeyboardEvent.bind(this));
+
   props.registerKeyHandler("keydown", this.handleKeyboardEvent.bind(this));
 };
 

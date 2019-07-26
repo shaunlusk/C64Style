@@ -49,7 +49,7 @@ function PixSprite(props) {
   this._width = 0;
   this._height = 0;
 
-  this._pixRenderer = props.pixRenderer;
+  this._pixRenderer = props.pixRenderer || new PixRenderer();
 
   this._setDimensions();
 };

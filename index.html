@@ -16,7 +16,6 @@
   <script type="text/javascript">
 
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : 28,
     cols : 40,
@@ -31,11 +30,9 @@
     // Create the C64 Screen
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    var characterRenderer = new C64Style.CharacterRenderer();
 
     textLayer = screen.createLayer("TextLayer", {
       registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
@@ -46,23 +43,21 @@
     element = new C64Style.TextButton({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer:characterRenderer,
-      x:12 * C64Style.CELLWIDTH,
+      x:9.5 * C64Style.CELLWIDTH,
       y:7 * C64Style.CELLHEIGHT,
-      text:"Download .zip",
+      text:"Download Bundle.JS",
       backgroundColor:C64Style.Color.BLUE,
       buttonColor : C64Style.Color.LIGHTBLUE,
       textColor : C64Style.Color.LIGHTBLUE,
       highlightButtonColor : C64Style.Color.LIGHTBLUE,
       highlightTextColor : C64Style.Color.BLUE,
-      href:"https://github.com/shaunlusk/C64Style/zipball/master",
+      href:"https://github.com/shaunlusk/C64Style/dist/bundle.js",
       newWindow : true
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer:characterRenderer,
       x:11 * C64Style.CELLWIDTH + 4,
       y:10 * C64Style.CELLHEIGHT,
       text:"View On GitHub",
@@ -78,7 +73,6 @@
     element = new C64Style.TextButton({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer:characterRenderer,
       x:12 * C64Style.CELLWIDTH,
       y:13 * C64Style.CELLHEIGHT,
       text:"Documentation",
@@ -94,7 +88,6 @@
     element = new C64Style.TextButton({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer:characterRenderer,
       x:16 * C64Style.CELLWIDTH,
       y:16 * C64Style.CELLHEIGHT,
       text:"Tools",
@@ -109,7 +102,6 @@
     element = new C64Style.TextButton({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer:characterRenderer,
       x:15 * C64Style.CELLWIDTH + 4,
       y:19 * C64Style.CELLHEIGHT,
       text:"Demos!",
@@ -128,7 +120,6 @@
     element = new C64Style.TextButton({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer:characterRenderer,
       x:14 * C64Style.CELLWIDTH + 4,
       y:22 * C64Style.CELLHEIGHT,
       text:"Tutorial",
@@ -153,7 +144,6 @@
     element = new C64Style.TextLink({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer:characterRenderer,
       x:27 * C64Style.CELLWIDTH, y:26 * C64Style.CELLHEIGHT,
       text:"shaunlusk",
       color:C64Style.Color.LIGHTBLUE,

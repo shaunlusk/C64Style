@@ -51,8 +51,7 @@
   <script type="text/javascript">
 
   var config = {
-    targetDiv : document.getElementById("content"),
-    layerFactory : new C64Style.LayerFactory()
+    targetDiv : document.getElementById("content")
   };
 
   var screen = null,
@@ -879,19 +878,14 @@
     // Create the C64 Screen
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : new C64Style.CharacterRenderer()
-    });
+    textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
     var canvasContextWrapper = gfxLayer.getCanvasContextWrapper();
-    pixRenderer = new C64Style.PixRenderer();
 
     sprite1 = new C64Style.PixSprite({
       screenContext : screen,
       canvasContextWrapper : canvasContextWrapper,
-      pixRenderer : pixRenderer,
       x:10, y:16,
       scaleX:2, scaleY:2,
       defaultPalette : palettes[0],

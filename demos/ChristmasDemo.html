@@ -24,7 +24,6 @@
     textLayer2 = null,
     gfxLayer = null;
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : 30,
     cols : 44,
@@ -43,10 +42,8 @@
     screen.setBorderColor(C64Style.Color.RED);
     screen.setBorderSize(35);
 
-    var characterRenderer = new C64Style.CharacterRenderer(1,1);
     textLayer = screen.createLayer("TextLayer", {
       registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
@@ -122,7 +119,6 @@
       var element = new C64Style.TextElement({
         symbolName:"DOT",
         color:getRandomLightColor(),
-        characterRenderer:characterRenderer,
         canvasContextWrapper:canvasContext,
         screenContext:screen
       });
@@ -148,7 +144,6 @@
       scaleY:1,
       text:"*",
       color:C64Style.Color.YELLOW,
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });

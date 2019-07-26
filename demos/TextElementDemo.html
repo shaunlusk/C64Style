@@ -23,7 +23,6 @@
     element2 = null,
     element3 = null;
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : 25,
     cols : 40,
@@ -38,7 +37,6 @@
 
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    var characterRenderer = new C64Style.CharacterRenderer();
 
     gfxLayer = screen.createLayer("GfxLayer");
     var canvasContext = gfxLayer.getCanvasContextWrapper();
@@ -49,7 +47,6 @@
       text:"Regular Text",
       color:C64Style.Color.LIGHTBLUE,
       backgroundColor:C64Style.Color.BLUE,
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -64,7 +61,6 @@
       text:"SCALED TEXT!",
       color:C64Style.Color.GREEN,
       backgroundColor:C64Style.Color.BLACK,
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -76,11 +72,9 @@
     element3 = new C64Style.TextElement({
       scaleX:2,
       scaleY:2,
-
       symbolName:"HEART",
       color:C64Style.Color.RED,
       backgroundColor:C64Style.Color.PINK,
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });

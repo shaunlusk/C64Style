@@ -3,6 +3,7 @@ import Layer from  'slgfx/src/Layer';
 import {Color} from './Color';
 import {CharacterMap} from './CharacterMap';
 import TextPrompt from './TextPrompt';
+import CharacterRenderer from './CharacterRenderer';
 
 /** Text-only layer.<br />
 * Extends {@link Layer}<br />
@@ -32,10 +33,10 @@ function TextLayer(props) {
   this._cy = 0;
   this._color = Color.LIGHTBLUE;
   this._backgroundColor = Color.BLUE;
-  this._characterRenderer = props.characterRenderer;
+  this._characterRenderer = props.characterRenderer = new CharacterRenderer();
   this._textPrompt = props.textPrompt || new TextPrompt({
     parentLayer : this,
-    registerKeyHandler : props.registerKeyHandler
+    registerKeyHandler : props.registerKeyHandler || window.document.addEventListener.bind(window.document)
   });
   this._pendingTextStrings = [];
   this._width = props.width || 320;

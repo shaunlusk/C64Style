@@ -26,7 +26,6 @@ GameContext.actionPaused = false;
 GameContext.shipsRemaining = 2;
 
 var config = {
-  layerFactory:new C64Style.LayerFactory(),
   targetDiv:document.getElementById("content"),
   rows : 25,
   cols : 40,
@@ -39,12 +38,8 @@ var config = {
 function initialize(config) {
   GameContext.screen = new C64Style.C64Screen(config);
   GameContext.screen.initialize();
-  GameContext.pixRenderer = new C64Style.PixRenderer();
-  GameContext.characterRenderer = new C64Style.CharacterRenderer();
 
   GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {
-    registerKeyHandler : GameContext.screen.addEventListenerToDocument,
-    characterRenderer : GameContext.characterRenderer,
     scaleX : config.scaleX,
     scaleY : config.scaleY
   });
@@ -75,7 +70,6 @@ function initialize(config) {
   GameContext.bulletElement = new C64Style.PixElement({
     screenContext: GameContext.screen,
     canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
-    pixRenderer: GameContext.pixRenderer,
     hidden:true,
     pixPathArray: GameContext.bulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette()
@@ -205,7 +199,6 @@ function createAlien(x,y, palette, scoreValue) {
   var newAlien = new C64Style.PixSprite({
     screenContext: GameContext.screen,
     canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
-    pixRenderer: GameContext.pixRenderer,
     frames:[GameContext.alienFrame1,GameContext.alienFrame2],
     x:x,
     y:y,
@@ -323,7 +316,6 @@ function createAlienBullet(x, y) {
   var bullet = new C64Style.PixElement({
     screenContext: GameContext.screen,
     canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
-    pixRenderer: GameContext.pixRenderer,
     pixPathArray: GameContext.alienBulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette(),
     x:x,
@@ -391,7 +383,6 @@ function endGame(victory) {
   var msgElement = new C64Style.TextElement({
     screenContext: GameContext.screen,
     canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
-    characterRenderer : GameContext.characterRenderer,
     text:msg,
     color:color,
     backgroundColor:bgColor,

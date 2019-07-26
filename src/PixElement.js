@@ -1,6 +1,7 @@
 import GfxElement from './GfxElementExtensions';
 import {Color} from './Color';
 import {PixPathTypes} from './PixPathTypes';
+import PixRenderer from './PixRenderer';
 
 /** Element that draws pixels to a canvas from a PixArray<br />
 * <b>Extends</b>: {@link GfxElement}
@@ -49,7 +50,7 @@ function PixElement(props) {
   this._height = 0;
   this._pixPathArray = props.pixPathArray || [];
   this._palette = props.defaultPalette || Color.getDefaultPalette();
-  this._pixRenderer = props.pixRenderer;
+  this._pixRenderer = props.pixRenderer || new PixRenderer();
 
   this._setDimensions();
 };

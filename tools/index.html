@@ -16,7 +16,6 @@
   <script type="text/javascript">
 
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : 25,
     cols : 40,
@@ -31,10 +30,7 @@
     // Create the C64 Screen
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    var characterRenderer = new C64Style.CharacterRenderer();
     textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
@@ -47,7 +43,6 @@
     element = new C64Style.TextLink({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer: characterRenderer,
       x:1 * C64Style.CELLWIDTH, y:4 * C64Style.CELLHEIGHT,
       text:"PixMap Builder",
       color:C64Style.Color.LIGHTGREEN,
@@ -61,7 +56,6 @@
     element = new C64Style.TextLink({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer: characterRenderer,
       x:1 * C64Style.CELLWIDTH, y:6 * C64Style.CELLHEIGHT,
       text:"PixMap Import Preview",
       color:C64Style.Color.LIGHTGREEN,
@@ -75,7 +69,6 @@
     element = new C64Style.TextLink({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer: characterRenderer,
       x:1 * C64Style.CELLWIDTH, y:8 * C64Style.CELLHEIGHT,
       text:"C64PixMapExtractor Documentation",
       color:C64Style.Color.LIGHTGREEN,
@@ -89,7 +82,6 @@
     element = new C64Style.TextLink({
       screenContext:screen,
       canvasContextWrapper:canvasContext,
-      characterRenderer: characterRenderer,
       x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
       text:"Back to Main Index",
       color:C64Style.Color.LIGHTGREEN,

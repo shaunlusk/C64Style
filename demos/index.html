@@ -15,27 +15,23 @@
   </div>
   <script type="text/javascript">
 
-    var config = {
-      layerFactory:new C64Style.LayerFactory(),
-      targetDiv:document.getElementById("content"),
-      rows : 27,
-      cols : 40,
-      scaleX : 2,
-      scaleY : 2
-    };
+  var config = {
+    targetDiv:document.getElementById("content"),
+    rows : 27,
+    cols : 40,
+    scaleX : 2,
+    scaleY : 2
+  };
 
   var screen = null, textLayer = null, gfxLayer;
 
   function initialize(config) {
-
     // Create the C64 Screen
     screen = new C64Style.C64Screen(config);
     screen.initialize();
 
-    var characterRenderer = new C64Style.CharacterRenderer();
     textLayer = screen.createLayer("TextLayer", {
       registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
@@ -55,7 +51,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"TextDemo.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -69,7 +64,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"TextElementDemo.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -83,7 +77,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"Confetti.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -97,7 +90,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"ImageSpriteDemo.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -111,7 +103,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"PaletteDemo.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -125,7 +116,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"PaletteDemo2.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -139,7 +129,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"MouseEventDemo.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -153,7 +142,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"TextPromptDemo.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -167,7 +155,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"invaders.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -182,7 +169,6 @@
         mouseOverColor: C64Style.Color.GREEN,
         mouseOverBackgroundColor: C64Style.Color.BLACK,
         href:"ChristmasDemo.html",
-        characterRenderer:characterRenderer,
         canvasContextWrapper:canvasContext,
         screenContext:screen
       });
@@ -197,7 +183,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"../index.html",
-      characterRenderer:characterRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });

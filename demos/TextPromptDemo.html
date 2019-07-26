@@ -22,7 +22,6 @@
     gfxLayer = null
   var debug = false;
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content")
   };
 
@@ -31,10 +30,7 @@
 
     screen.initialize();
 
-    textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : new C64Style.CharacterRenderer()
-    });
+    textLayer = screen.createLayer("TextLayer");
 
     p = textLayer.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
     screen.render(1);

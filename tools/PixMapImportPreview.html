@@ -24,13 +24,11 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
     gfxLayer = null,
     element = null;
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : 30,
     cols : 50
@@ -39,21 +37,16 @@
   function initialize(config) {
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    var characterRenderer = new C64Style.CharacterRenderer();
     textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
     gfxLayer = screen.createLayer("GfxLayer");
 
     var canvasContext = gfxLayer.getCanvasContextWrapper();
-    var pixRenderer = new C64Style.PixRenderer();
     element = new C64Style.PixElement({
       screenContext: screen,
       canvasContextWrapper: canvasContext,
-      pixRenderer: pixRenderer,
       x:2,y:2,scaleX:2, scaleY:2,
       pixPathArray:[],
       defaultPalette:C64Style.Color.getDefaultPalette()

@@ -47,7 +47,6 @@
     ],
     element = null;
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : 50,
     cols : 80,
@@ -73,16 +72,11 @@
 
     screen.initialize();
 
-    var characterRenderer = new C64Style.CharacterRenderer(1,1);
-    textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer
-    });
+    textLayer = screen.createLayer("TextLayer");
     textLayer.writeText("This is probably a bit more than C64 could have handled.",11,24, C64Style.Color.WHITE);
 
     gfxLayer = screen.createLayer("GfxLayer");
     var canvasContext = gfxLayer.getCanvasContextWrapper();
-    var pixRenderer = new C64Style.PixRenderer();
 
     for (var i = 0; i < 600; i++) {
       var x = Math.floor(Math.random() * xBounds);
@@ -95,7 +89,6 @@
          C64Style.Color.getByIndex(Math.floor(Math.random() * 16)),
          C64Style.Color.getByIndex(Math.floor(Math.random() * 16))
         ],
-        pixRenderer:pixRenderer,
         canvasContextWrapper:canvasContext,
         screenContext:screen
       });

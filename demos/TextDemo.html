@@ -15,7 +15,6 @@
   <script type="text/javascript">
 
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content")
   };
 
@@ -26,10 +25,7 @@
     screen = new C64Style.C64Screen(config);
     screen.initialize();
 
-    textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : new C64Style.CharacterRenderer()
-    });
+    textLayer = screen.createLayer("TextLayer");
     screen.render();
 
     // Write some characters to it

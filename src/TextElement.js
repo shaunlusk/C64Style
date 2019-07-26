@@ -1,6 +1,7 @@
 import GfxElement from 'slgfx/src/GfxElement';
 import {CELLHEIGHT,CELLWIDTH} from './Constants';
 import {Color} from './Color';
+import CharacterRenderer from './CharacterRenderer';
 
 /** Element that draws a text string or a text symbol to a canvas.<br />
 * <b>Extends</b>: {@link GfxElement}
@@ -37,7 +38,7 @@ function TextElement(props) {
   this._backgroundColor = props.backgroundColor;
   this._text = props.text;
   this._symbolName = props.symbolName;
-  this._characterRenderer = props.characterRenderer;
+  this._characterRenderer = props.characterRenderer || new CharacterRenderer();
 
   this._setWidth();
 };

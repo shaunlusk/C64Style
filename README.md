@@ -1,7 +1,7 @@
 # C64Style
 
 ## What is it?
-A framework for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.
+A library for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.
 
 - Fun for creating retro-style games and animations.
 - Lightweight
@@ -27,17 +27,23 @@ Then setup your screen:
 // get the screen element
 var targetDiv = document.getElementById("content");
 
-// empty config = use defaults for everything
-var config = {};
+// create basic configuration
+var config = {
+  layerFactory:new C64Style.LayerFactory(),
+  targetDiv:document.getElementById("content")
+};
 
 // create the screen
-screen = new C64Style.C64Screen(targetDiv, config);
+screen = new C64Style.C64Screen(config);
 
 // call initialize on screen
 screen.initialize();
 
 // add a layer to draw to
-textLayer = screen.createLayer("TextLayer");
+textLayer = screen.createLayer("TextLayer", {
+  registerKeyHandler : screen.addEventListenerToDocument,
+  characterRenderer : characterRenderer
+});
 
 // Write some text to the layer
 textLayer.writeText("Hello World", 0, 0, C64Style.Color.LIGHTBLUE);

@@ -34,7 +34,6 @@
   </div>
 </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     previewScreen = null,
     gfxLayer = null,
@@ -49,7 +48,6 @@
     map = null;
   var rows = 8;
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : rows + 2,
     cols : 8,
@@ -63,10 +61,7 @@
   function initialize(config) {
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    var characterRenderer = new C64Style.CharacterRenderer();
     textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
@@ -74,18 +69,15 @@
 
     previewScreen = new C64Style.C64Screen({
       targetDiv: document.getElementById("preview"),
-      layerFactory: config.layerFactory,
       backgroundColor:"#360066", rows:1, cols:1, scaleX:3, scaleY:3, borderSize:2
     });
     previewScreen.initialize();
 
     previewGfxLayer = previewScreen.createLayer("GfxLayer");
     var canvasContext = previewGfxLayer.getCanvasContextWrapper();
-    var pixRenderer = new C64Style.PixRenderer();
     element = new C64Style.PixElement({
       screenContext: previewScreen,
       canvasContextWrapper: canvasContext,
-      pixRenderer: pixRenderer,
       pixPathArray : pixPathArray,
       defaultPalette : C64Style.Color.getDefaultPalette()
     });

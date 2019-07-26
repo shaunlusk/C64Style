@@ -47,7 +47,6 @@
     colorIdx = 0,
     map = null;
   var config = {
-    layerFactory:new C64Style.LayerFactory(),
     targetDiv:document.getElementById("content"),
     rows : 17,
     cols : 16,
@@ -61,10 +60,7 @@
   function initialize(config) {
     screen = new C64Style.C64Screen(config);
     screen.initialize();
-    var characterRenderer = new C64Style.CharacterRenderer();
     textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
@@ -72,18 +68,15 @@
 
     previewScreen = new C64Style.C64Screen({
       targetDiv: document.getElementById("preview"),
-      layerFactory: config.layerFactory,
       backgroundColor:"#360066", rows:2, cols:2, scaleX:2, scaleY:2, borderSize:2
     });
     previewScreen.initialize();
 
     previewGfxLayer = previewScreen.createLayer("GfxLayer");
     var canvasContext = previewGfxLayer.getCanvasContextWrapper();
-    var pixRenderer = new C64Style.PixRenderer();
     element = new C64Style.PixElement({
       screenContext: previewScreen,
       canvasContextWrapper: canvasContext,
-      pixRenderer: pixRenderer,
       pixPathArray : pixPathArray,
       defaultPalette : C64Style.Color.getDefaultPalette()
     });

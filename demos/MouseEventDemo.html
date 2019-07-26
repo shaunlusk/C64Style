@@ -45,10 +45,7 @@
 
     screen.initialize();
 
-    var characterRenderer = new C64Style.CharacterRenderer();
     textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      characterRenderer : characterRenderer,
       scaleX:config.scaleX,
       scaleY:config.scaleY
     });
@@ -63,7 +60,6 @@
 
     gfxLayer = screen.createLayer("GfxLayer");
     var canvasContext = gfxLayer.getCanvasContextWrapper();
-    var pixRenderer = new C64Style.PixRenderer();
 
     sprite1 = new C64Style.PixSprite({
       x:10, y:10,
@@ -72,7 +68,6 @@
         new C64Style.PixSpriteFrame({pixArray:pixPathArray1, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray2, duration:400}),
       ],
-      pixRenderer:pixRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -84,7 +79,6 @@
         new C64Style.PixSpriteFrame({pixArray:pixPathArray3, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray4, duration:400}),
       ],
-      pixRenderer:pixRenderer,
       canvasContextWrapper:canvasContext,
       screenContext:screen
     });
@@ -122,7 +116,6 @@
       mouseIsOver = false;
     });
 
-    dump();
     screen.render(1);
   }
 
