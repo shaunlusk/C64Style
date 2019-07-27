@@ -10,7 +10,7 @@
     "build": "npm run test && npm run build:docs && webpack --config webpack.config.js",
     "build:dev": "webpack --config webpack.dev.config.js",
     "test": "node ./node_modules/jest/bin/jest ./test --colors --coverage",
-    "build:docs": "node ./node_modules/jsdoc/jsdoc.js -R DOCSREADME.MD -d docs ./src/"
+    "build:docs": "node ./node_modules/jsdoc/jsdoc.js -R README.MD -d docs ./src/"
   },
   "dependencies": {
     "slcommon": "github:shaunlusk/slcommon",

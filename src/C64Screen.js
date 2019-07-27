@@ -5,17 +5,21 @@ import Screen from 'slgfx/src/Screen';
 /** The Screen is the overriding container for all C64Style components.
 * The Screen orchestrates updating and rendering its layers, propagates
 * mouse events down to the layers, and notifies event listeners when events occur.
-* @constructor
-* @param {HTMLElement} targetDiv The target HTMLElement into which the screen and its layers will be built.
-* @param {LayerFactory} layerFactory A factory that produces {@link Layer Layers}.  Default: new {@link Layer}();
-* @param {Object} config Configuration properties
-* @param {int} config.scaleX the horizontal scale of the screen.  Default: 1
-* @param {int} config.scaleY the vertical scale of the screen.  Default: 1
-* @param {int} config.cols The number of columns for the screen.  Width will be sized accordingly: cols * {@link CELLWIDTH}.  Default: 40
-* @param {int} config.rows The number of rows for the screen.  Width will be sized accordingly: cols * {@link CELLHEIGHT}.  Default: 25
-* @param {string} config.backgroundColor The color to set the screen background to. Default: Color.BLUE
-* @param {string} config.borderColor The color to set the screen border to. Default: Color.LIGHTBLUE
-* @param {int} config.borderSize The borderSize of the screen, in pixels. Default: 20
+* @class
+* @param {Object} props Properties
+* @param {HTMLElement} props.targetDiv The target HTMLElement into which the screen and its layers will be built.
+* @param {LayerFactory} [props.layerFactory=LayerFactory] The layer factory to use to create layers.  Defaults to LayerFactory.
+* @param {int} [props.scaleX=1] The horizontal scale of the screen.
+* @param {int} [props.scaleY=1] The vertical scale of the screen.
+* @param {HTMLElement} [props.fpsElem] Optional. An HTMLElement to write Frames-per-second information to.
+* @param {boolean} [props.imageSmoothingEnabled=false] Whether to use image smoothing on child canvases.
+* @param {boolean} [props.useMouseMoveEvents=true] Whether to listen for mouseevents on this screen.
+* @param {number} [props.borderSize=20] The size of the border.
+* @param {function} [props.requestAnimationFrame=window.requestAnimationFrame] A function that regulates render rate.  Uses window.requestAnimationFrame by default.
+* @param {int} [props.cols=40] The number of columns for the screen.  Width will be sized accordingly: cols * {@link CELLWIDTH}.  Default: 40
+* @param {int} [props.rows=25] The number of rows for the screen.  Width will be sized accordingly: cols * {@link CELLHEIGHT}.  Default: 25
+* @param {string} [props.backgroundColor=Color.BLUE] The color to set the screen background to. Default: Color.BLUE
+* @param {string} [props.borderColor=Color.LIGHTBLUE] The color to set the screen border to. Default: Color.LIGHTBLUE
 */
 function C64Screen(props) {
   Screen.call(this, props);
@@ -57,7 +61,6 @@ C64Screen.prototype.getMouseRow = function() {return this._mouseRow;};
 C64Screen.prototype.getMouseCol = function() {return this._mouseCol;};
 
 /** @private
-* @override
 */
 C64Screen.prototype._getCoordinateDataForMouseEvent = function(scaledX, scaledY) {
   var data = Screen.prototype._getCoordinateDataForMouseEvent.call(this, scaledX, scaledY);
@@ -80,15 +83,15 @@ C64Screen.prototype.yToRow = function(y) {
   return Math.floor((y - this.getViewOriginY()) / (CELLHEIGHT * this._scaleY));
 };
 
-/** @private
-* Assumes scale and view origin have already been factored out.
+/** Assumes scale and view origin have already been factored out.
+* @private
 */
 C64Screen.prototype._xToColumnFromMouseEvent = function(x) {
   return Math.floor(x / CELLWIDTH);
 };
 
-/** @private
-* Assumes scale and view origin have already been factored out.
+/** Assumes scale and view origin have already been factored out.
+* @private
 */
 C64Screen.prototype._yToRowFromMouseEvent = function(y) {
   return Math.floor(y / CELLHEIGHT);

@@ -26,16 +26,21 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
+            <pre class="prettyprint source linenums"><code>import {CELLWIDTH, CELLHEIGHT} from './Constants';
+import Layer from  'slgfx/src/Layer';
+import {Color} from './Color';
+import {CharacterMap} from './CharacterMap';
+import TextPrompt from './TextPrompt';
+import CharacterRenderer from './CharacterRenderer';
 
 /** Text-only layer.&lt;br />
-* Extends {@link C64Style.Layer}&lt;br />
-* Generally, the use of C64Style.C64Screen.createLayer("TextLayer") is preferred over creating layer by hand.
+* Extends {@link Layer}&lt;br />
+* Generally, the use of C64Screen.createLayer("TextLayer") is preferred over creating layer by hand.
 * @constructor
-* @param {C64Style.C64Screen} screenContext The parent screen for this layer.
+* @param {C64Screen} screenContext The parent screen for this layer.
 * @param {CanvasContext} canvas The CanvasContext that this layer will draw to.
 * @param {Object} props The properties to create this layer with. &lt;br />
-* From C64Style.Layer:
+* From Layer:
 * &lt;ul>
 *   &lt;li>width - number - The width of the layer.  Should match Screen.&lt;/li>
 *   &lt;li>height - number - The height of the layer.  Should match Screen.&lt;/li>
@@ -44,34 +49,41 @@
 * &lt;ul>
 *   &lt;li>characterRenderer - CharacterRenderer - The renderer to use to draw text.
 *     This can be shared with a renderer for drawing text elements.  If a renderer is not provided,
-*     This TextLayer will create a {@link C64Style.CharacterRenderer}.&lt;/li>
+*     This TextLayer will create a {@link CharacterRenderer}.&lt;/li>
 *   &lt;li>textPrompt - TextPrompt - A text prompt for this layer.  If not provided,
-*     a {@link C64Style.TextPrompt} will be created.&lt;/li>
+*     a {@link TextPrompt} will be created.&lt;/li>
 * &lt;/ul>
 */
-C64Style.TextLayer = function(screenContext, canvas, props) {
+function TextLayer(props) {
   props = props || {};
-  C64Style.Layer.call(this, screenContext, canvas, props);
+  Layer.call(this, props);
   this._cx = 0;
   this._cy = 0;
-  this._color = C64Style.Color.LIGHTBLUE;
-  this._backgroundColor = C64Style.Color.BLUE;
-  this._characterRenderer = props.characterRenderer || new C64Style.CharacterRenderer(screenContext.getScaleX(), screenContext.getScaleY());
-  this._textPrompt = props.textPrompt || new C64Style.TextPrompt(screenContext, this);
+  this._color = Color.LIGHTBLUE;
+  this._backgroundColor = Color.BLUE;
+  this._characterRenderer = props.characterRenderer || new CharacterRenderer();
+  this._textPrompt = props.textPrompt || new TextPrompt({
+    parentLayer : this,
+    registerKeyHandler : props.registerKeyHandler || window.document.addEventListener.bind(window.document)
+  });
   this._pendingTextStrings = [];
-  this._scaledCellWidth = C64Style.CELLWIDTH * screenContext.getScaleX();
-  this._scaledCellHeight = C64Style.CELLHEIGHT * screenContext.getScaleY();
+  this._width = props.width || 320;
+  this._height = props.height || 200;
+  this._scaleX = props.scaleX || 1;
+  this._scaleY = props.scaleY || 1;
+  this._scaledCellWidth = CELLWIDTH * this._scaleX;
+  this._scaledCellHeight = CELLHEIGHT * this._scaleY;
 };
 
-C64Style.TextLayer.prototype = new C64Style.Layer();
-C64Style.TextLayer.prototype.constructor = C64Style.TextLayer;
+TextLayer.prototype = new Layer();
+TextLayer.prototype.constructor = TextLayer;
 
 /** Updates this layer
 * @param {number} time The current time, in milliseconds.
 * @param {number} diff The difference between the previous time and the current time, in milliseconds.
 * @override
 */
-C64Style.TextLayer.prototype.update = function(time,diff) {
+TextLayer.prototype.update = function(time,diff) {
   this._textPrompt.update(time,diff);
 };
 
@@ -79,7 +91,7 @@ C64Style.TextLayer.prototype.update = function(time,diff) {
 * Renders this layer, drawing any new text that has been added since the last render cycle.
 * @override
 */
-C64Style.TextLayer.prototype.render = function() {
+TextLayer.prototype.render = function() {
   var i, pendingString;
 
   this._textPrompt.render();
@@ -100,21 +112,25 @@ C64Style.TextLayer.prototype.render = function() {
     pendingString = this._pendingTextStrings[i];
     if (pendingString.string !== undefined &amp;&amp; pendingString.string !== null) {
       this._characterRenderer.renderString(
-        this._canvasContext,
+        this.getCanvasContextWrapper(),
         pendingString.string,
         pendingString.cellX * this._scaledCellWidth,
         pendingString.cellY * this._scaledCellHeight,
         pendingString.color,
-        pendingString.backgroundColor
+        pendingString.backgroundColor,
+        this._scaleX,
+        this._scaleY
       );
     } else {
       this._characterRenderer.renderSymbol(
-        this._canvasContext,
+        this.getCanvasContextWrapper(),
         pendingString.pixMapId,
         pendingString.cellX * this._scaledCellWidth,
         pendingString.cellY * this._scaledCellHeight,
         pendingString.color,
-        pendingString.backgroundColor
+        pendingString.backgroundColor,
+        this._scaleX,
+        this._scaleY
       );
     }
   }
@@ -127,12 +143,14 @@ C64Style.TextLayer.prototype.render = function() {
 * @param {integer} cellY The row number to start clearing.
 * @param {integer} length The number of columns to clear.
 */
-C64Style.TextLayer.prototype.clearLength = function(cellX, cellY, length) {
+TextLayer.prototype.clearLength = function(cellX, cellY, length) {
   this._characterRenderer.clearRect(
-    this._canvasContext,
+    this.getCanvasContextWrapper(),
     cellX * this._scaledCellWidth,
     cellY * this._scaledCellHeight,
-    length || 1
+    length || 1,
+    this._scaleX,
+    this._scaleY
   );
 };
 
@@ -143,7 +161,7 @@ C64Style.TextLayer.prototype.clearLength = function(cellX, cellY, length) {
 * @param {Color} color The color of the text.
 * @param {Color} backgroundColor The background color for the text.
 */
-C64Style.TextLayer.prototype.writeText = function(string, cellX, cellY, color, backgroundColor) {
+TextLayer.prototype.writeText = function(string, cellX, cellY, color, backgroundColor) {
   this._pendingTextStrings.push({
     string:string.toString(),
     cellX:cellX,
@@ -154,13 +172,13 @@ C64Style.TextLayer.prototype.writeText = function(string, cellX, cellY, color, b
 };
 
 /** Draws a single symbol to the layer.
-* @param {string} pixMapId The name of the symbol to draw, e.g. "BRITISH_POUND".  Refer to {@link C64Style.CharacterMap} for symbol names.
+* @param {string} pixMapId The name of the symbol to draw, e.g. "BRITISH_POUND".  Refer to {@link CharacterMap} for symbol names.
 * @param {integer} cellX The column to write the symbol to.
 * @param {integer} cellY The row to write the syymbol to.
 * @param {Color} color The color of the symbol.
 * @param {Color} backgroundColor The background color for the symbol.
 */
-C64Style.TextLayer.prototype.drawSymbol = function(pixMapId, cellX, cellY, color, backgroundColor) {
+TextLayer.prototype.drawSymbol = function(pixMapId, cellX, cellY, color, backgroundColor) {
   this._pendingTextStrings.push({
     pixMapId:pixMapId,
     cellX:cellX,
@@ -171,9 +189,9 @@ C64Style.TextLayer.prototype.drawSymbol = function(pixMapId, cellX, cellY, color
 };
 
 /** Return the text prompt
-* @returns {C64Style.TextPrompt}
+* @returns {TextPrompt}
 */
-C64Style.TextLayer.prototype.getTextPrompt = function() {return this._textPrompt;};
+TextLayer.prototype.getTextPrompt = function() {return this._textPrompt;};
 
 /** Prompt the user for text input.
 * @param {string} prompt The text prompt to provide the user, e.g. "Enter your name:".
@@ -183,11 +201,21 @@ C64Style.TextLayer.prototype.getTextPrompt = function() {return this._textPrompt
 * @param {integer} maxLength The maximum allowed length for the input.
 * @param {function} callback The function to call when the user has hit the Enter key.
 *   The argument to the callback is the text the user entered.
-* @see C64Style.TextPrompt
+* @see TextPrompt
 */
-C64Style.TextLayer.prototype.prompt = function(prompt, x, y, color, maxLength, callback) {
+TextLayer.prototype.prompt = function(prompt, x, y, color, maxLength, callback) {
   return this._textPrompt.prompt(prompt,x,y,color,maxLength,callback);
 };
+
+/** Override clearLayer in base class: clear pending strings to prevent
+* rendering things the caller expects to be cleared.
+*/
+TextLayer.prototype.clearLayer = function() {
+  Layer.prototype.clearLayer.call(this);
+  this._pendingTextStrings = [];
+};
+
+export default TextLayer;
 </code></pre>
         </article>
     </section>
@@ -198,13 +226,13 @@ C64Style.TextLayer.prototype.prompt = function(prompt, x, y, color, maxLength, c
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.C64Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Screen.html">C64Screen</a></li><li><a href="CharacterRenderer.html">CharacterRenderer</a></li><li><a href="ColorPointer.html">ColorPointer</a></li><li><a href="PixElement.html">PixElement</a></li><li><a href="PixRenderer.html">PixRenderer</a></li><li><a href="PixSprite.html">PixSprite</a></li><li><a href="PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="TextButton.html">TextButton</a></li><li><a href="TextElement.html">TextElement</a></li><li><a href="TextLayer.html">TextLayer</a></li><li><a href="TextLink.html">TextLink</a></li><li><a href="TextPrompt.html">TextPrompt</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CELLHEIGHT">CELLHEIGHT</a></li><li><a href="global.html#CELLWIDTH">CELLWIDTH</a></li><li><a href="global.html#CharacterMap">CharacterMap</a></li><li><a href="global.html#Color">Color</a></li><li><a href="global.html#PixPathTypes">PixPathTypes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 26 2019 21:19:12 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

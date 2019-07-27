@@ -26,74 +26,89 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var C64Style = C64Style || {};
+            <pre class="prettyprint source linenums"><code>import ColorPointer from './ColorPointer';
+import Utils from 'slgfx/src/Utils';
 
 /** Draws Pix Arrays to a canvas.
 * @constructor
-* @param {integer} screenScaleX scale x of the screen
-* @param {integer} screenScaleY scale y of the screen
 */
-C64Style.PixRenderer = function(screenScaleX, screenScaleY) {
-  this._screenScaleX = screenScaleX;
-  this._screenScaleY = screenScaleY;
-};
+function PixRenderer() {};
 
-/** Render a pix path to a canvas.
+/** Render an array of pix paths to a canvas.
 * @param {CanvasContext} context The canvas context.
 * @param {number} x The x location to draw
 * @param {number} y The y location to draw
-* @param {array} palette the palette to use.
+* @param {number} width The width of the pixElement
+* @param {number} height The height of the pixElement
+* @param {array} pixPathArray The array of pix paths to draw
+* @param {array} palette The palette to use.
 * @param {integer} pixPathScaleX x-scale
 * @param {integer} pixPathScaleY y-scale
+* @param {boolean} isHorizontallyFlipped Whether the element is flipped horizontally.
+* @param {boolean} isVerticallyFlipped Whether the element is flipped vertically.
+* @param {number} rotation The element's rotation in radians.
 */
-C64Style.PixRenderer.prototype.renderPixPath = function(context, x, y, pixPath, palette, pixPathScaleX, pixPathScaleY) {
-  if  (typeof pixPath.color === "number") {
-    if (palette.length === 0 || pixPath.color >= palette.length) throw new Error("Color not specified in palette. (" + pixPath.color + ")");
-    context.fillStyle = palette[pixPath.color];
-  } else if (pixPath.color instanceof C64Style.ColorPointer) {
-    context.fillStyle = pixPath.color.getColor();
+PixRenderer.prototype.renderPixPathArray = function(context, x, y, width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation) {
+  var fillFn = context.fillRect.bind(context);
+
+  if (flipHorizontally || flipVertically || rotation) {
+    this._renderAllPixPathsTranslated(context, x, y,  width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation);
   } else {
-    context.fillStyle = pixPath.color;
-  }
-  var tx = (pixPath.x * this.getTotalScaleX(pixPathScaleX)) + x * this.getScreenScaleX();
-  var ty = (pixPath.y * this.getTotalScaleY(pixPathScaleY)) + y * this.getScreenScaleY();
-  switch (pixPath.type) {
-    case C64Style.PixPathTypes.PIXEL :
-      context.fillRect(tx, ty, this.getTotalScaleX(pixPathScaleX), this.getTotalScaleY(pixPathScaleY));
-      break;
-    case C64Style.PixPathTypes.RECTANGLE :
-      context.fillRect(tx, ty, pixPath.width * this.getTotalScaleX(pixPathScaleX), pixPath.height * this.getTotalScaleY(pixPathScaleY));
-      break;
-    default:
-      throw new Error("Unknown Pix Path Type");
+    this._renderAllPixPaths(context, x, y, pixPathArray, palette, pixelWidth, pixelHeight, fillFn);
   }
 };
 
-/**
-* Return the horizontal scale of the renderer.
-* @return {integer}
-*/
-C64Style.PixRenderer.prototype.getScreenScaleX = function() {return this._screenScaleX;};
+PixRenderer.prototype._renderAllPixPathsTranslated = function(context, x, y, width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation) {
+  var scaledWidth = width * pixelWidth;
+  var scaledHeight = height * pixelHeight;
 
-/**
-* Return the vertical scale of the renderer.
-* @return {integer}
-*/
-C64Style.PixRenderer.prototype.getScreenScaleY = function() {return this._screenScaleY;};
+  // where to reposition the canvas context
+  var translationX = x + scaledWidth/2;
+  var translationY = x + scaledHeight/2;
 
-/**
-* Return the total horizontal scale (screen scale * image scale).
-* @param {integer} imageScaleX The x amount to scale the portion of the image drawn to the canvas.
-* @return {integer}
-*/
-C64Style.PixRenderer.prototype.getTotalScaleX = function(pixPathScaleX) {return this._screenScaleX * pixPathScaleX;};
+  // target coordinates to draw the element to on the rotated canvas
+  var rotatedTx = 0 - scaledWidth/2;
+  var rotatedTy = 0 - scaledHeight/2;
 
-/**
-* Return the total vertical scale (screen scale * image scale).
-* @param {integer} imageScaleY The y amount to scale the portion of the image drawn to the canvas.
-* @return {integer}
-*/
-C64Style.PixRenderer.prototype.getTotalScaleY = function(pixPathScaleY) {return this._screenScaleY * pixPathScaleY;};
+  var fillFn = context.fillRectWithTranslation.bind(context);
+
+  Utils.renderWithTranslation(context, translationX, translationY, flipHorizontally, flipVertically, rotation, function() {
+    this._renderAllPixPaths(context, rotatedTx, rotatedTy, pixPathArray, palette, pixPathScaleX, pixPathScaleY, fillFn);
+  }.bind(this));
+};
+
+PixRenderer.prototype._renderAllPixPaths = function(context, x, y, pixPathArray, palette, pixelWidth, pixelHeight, fillFn) {
+  for (var i = 0; i &lt; pixPathArray.length; i++) {
+    this._renderPixPath(context, x, y, pixPathArray[i], palette, pixelWidth, pixelHeight, fillFn);
+  }
+};
+
+PixRenderer.prototype._renderPixPath = function(context, x, y, pixPath, palette, pixelWidth, pixelHeight, fillFn) {
+  // set context fill color
+  this.setFillColor(context, pixPath, palette);
+
+  // calculate tx, ty, tw, th
+  var tx = (pixPath.x * pixelWidth) + x;
+  var ty = (pixPath.y * pixelHeight) + y;
+  var tw = (pixPath.width || 1) * pixelWidth;
+  var th = (pixPath.height || 1) * pixelHeight;
+
+  // draw it
+  fillFn(tx, ty, tw, th);
+};
+
+PixRenderer.prototype.setFillColor = function(context, pixPath, palette) {
+    if  (typeof pixPath.color === "number") {
+      if (palette.length === 0 || pixPath.color >= palette.length) throw new Error("Color not specified in palette. (" + pixPath.color + ")");
+      context.setFillStyle(palette[pixPath.color]);
+    } else if (pixPath.color instanceof ColorPointer) {
+      context.setFillStyle(pixPath.color.getColor());
+    } else {
+      context.setFillStyle(pixPath.color);
+    }
+};
+
+export default PixRenderer;
 </code></pre>
         </article>
     </section>
@@ -104,13 +119,13 @@ C64Style.PixRenderer.prototype.getTotalScaleY = function(pixPathScaleY) {return 
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Style.CharacterRenderer.html">CharacterRenderer</a></li><li><a href="C64Style.ColorPointer.html">ColorPointer</a></li><li><a href="C64Style.Event.html">Event</a></li><li><a href="C64Style.GfxElement.html">GfxElement</a></li><li><a href="C64Style.GfxElementZIndexComparable.html">GfxElementZIndexComparable</a></li><li><a href="C64Style.GfxLayer.html">GfxLayer</a></li><li><a href="C64Style.ImageElement.html">ImageElement</a></li><li><a href="C64Style.ImageRenderer.html">ImageRenderer</a></li><li><a href="C64Style.ImageSprite.html">ImageSprite</a></li><li><a href="C64Style.ImageSpriteFrame.html">ImageSpriteFrame</a></li><li><a href="C64Style.Layer.html">Layer</a></li><li><a href="C64Style.MoveOrder.html">MoveOrder</a></li><li><a href="C64Style.PixElement.html">PixElement</a></li><li><a href="C64Style.PixRenderer.html">PixRenderer</a></li><li><a href="C64Style.PixSprite.html">PixSprite</a></li><li><a href="C64Style.PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="C64Style.Queue.html">Queue</a></li><li><a href="C64Style.QueueElement.html">QueueElement</a></li><li><a href="C64Style.QueueIterator.html">QueueIterator</a></li><li><a href="C64Style.C64Screen.html">Screen</a></li><li><a href="C64Style.Sprite.html">Sprite</a></li><li><a href="C64Style.TextButton.html">TextButton</a></li><li><a href="C64Style.TextElement.html">TextElement</a></li><li><a href="C64Style.TextLayer.html">TextLayer</a></li><li><a href="C64Style.TextLink.html">TextLink</a></li><li><a href="C64Style.TextPrompt.html">TextPrompt</a></li><li><a href="PriorityQueue.html">PriorityQueue</a></li><li><a href="UniquePriorityQueue.html">UniquePriorityQueue</a></li></ul><h3>Namespaces</h3><ul><li><a href="C64Style.html">C64Style</a></li></ul><h3>Interfaces</h3><ul><li><a href="AnimationFrame.html">AnimationFrame</a></li><li><a href="IComparable.html">IComparable</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Screen.html">C64Screen</a></li><li><a href="CharacterRenderer.html">CharacterRenderer</a></li><li><a href="ColorPointer.html">ColorPointer</a></li><li><a href="PixElement.html">PixElement</a></li><li><a href="PixRenderer.html">PixRenderer</a></li><li><a href="PixSprite.html">PixSprite</a></li><li><a href="PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="TextButton.html">TextButton</a></li><li><a href="TextElement.html">TextElement</a></li><li><a href="TextLayer.html">TextLayer</a></li><li><a href="TextLink.html">TextLink</a></li><li><a href="TextPrompt.html">TextPrompt</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CELLHEIGHT">CELLHEIGHT</a></li><li><a href="global.html#CELLWIDTH">CELLWIDTH</a></li><li><a href="global.html#CharacterMap">CharacterMap</a></li><li><a href="global.html#Color">Color</a></li><li><a href="global.html#PixPathTypes">PixPathTypes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jan 07 2017 22:46:22 GMT-0600 (Central Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 26 2019 21:19:12 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
