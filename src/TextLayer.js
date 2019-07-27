@@ -33,7 +33,7 @@ function TextLayer(props) {
   this._cy = 0;
   this._color = Color.LIGHTBLUE;
   this._backgroundColor = Color.BLUE;
-  this._characterRenderer = props.characterRenderer = new CharacterRenderer();
+  this._characterRenderer = props.characterRenderer || new CharacterRenderer();
   this._textPrompt = props.textPrompt || new TextPrompt({
     parentLayer : this,
     registerKeyHandler : props.registerKeyHandler || window.document.addEventListener.bind(window.document)
