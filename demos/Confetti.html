@@ -2,28 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Confetti Demo</title>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../lib/GfxElement.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -36,7 +15,6 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
     gfxLayer = null,
@@ -69,11 +47,12 @@
     ],
     element = null;
   var config = {
-    "rows" : 50,
-    "cols" : 80,
-    "scaleX" : 1,
-    "scaleY" : 1,
-    "fpsElem" : document.getElementById('info')
+    targetDiv:document.getElementById("content"),
+    rows : 50,
+    cols : 80,
+    scaleX : 1,
+    scaleY : 1,
+    fpsElem : document.getElementById('info')
   };
 
   var xBounds = config.cols * C64Style.CELLWIDTH - 16;
@@ -88,8 +67,8 @@
     return rate;
   }
 
-  function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv, config);
+  function initialize(config) {
+    screen = new C64Style.C64Screen(config);
 
     screen.initialize();
 
@@ -97,18 +76,21 @@
     textLayer.writeText("This is probably a bit more than C64 could have handled.",11,24, C64Style.Color.WHITE);
 
     gfxLayer = screen.createLayer("GfxLayer");
+    var canvasContext = gfxLayer.getCanvasContextWrapper();
 
     for (var i = 0; i < 600; i++) {
       var x = Math.floor(Math.random() * xBounds);
       var y = Math.floor(Math.random() * yBounds);
-      element = new C64Style.PixElement(screen, gfxLayer, {
+      element = new C64Style.PixElement({
         scaleX:1,
         scaleY:1,
-         pixPathArray : pixPathArray,
-         defaultPalette : [
-           C64Style.Color.getByIndex(Math.floor(Math.random() * 16)),
-           C64Style.Color.getByIndex(Math.floor(Math.random() * 16))
-         ]
+        pixPathArray : pixPathArray,
+        defaultPalette : [
+         C64Style.Color.getByIndex(Math.floor(Math.random() * 16)),
+         C64Style.Color.getByIndex(Math.floor(Math.random() * 16))
+        ],
+        canvasContextWrapper:canvasContext,
+        screenContext:screen
       });
       element.setX(x);
       element.setY(y);
@@ -120,29 +102,29 @@
       gfxLayer.addElement(element);
     }
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
     });
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
     });
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
     });
 
-    screen.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
+    screen.on(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
       var element = event.data.element;
       element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
     });
 
     screen.render(1);
   }
-  initialize(document.getElementById("content"), config);
+  initialize(config);
   </script>
 </body>
 </html>

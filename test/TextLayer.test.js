@@ -1,15 +1,16 @@
+import TextLayer from '../src/TextLayer';
+import {Mocks} from './Mocks';
+import {Color} from '../src/Color';
+import CharacterRenderer from '../src/CharacterRenderer';
+import TextPrompt from '../src/TextPrompt';
+
 describe("TextLayer", function() {
-  var layer, screenContext, characterRenderer, textPromp, canvasContext, props;
+  let layer, screenContext, characterRenderer, textPrompt, canvasContext, props;
 
   beforeEach(function() {
-    screenContext = C64Style.Mocks.getMockScreen();
-    canvasContext = C64Style.Mocks.getMockCanvasContext();
-    var canvas = {
-      getContext : function() {
-        return canvasContext;
-      }
-    };
-    characterRenderer = C64Style.Mocks.getMockCharacterRenderer();
+    screenContext = Mocks.getMockScreen();
+    canvasContext = Mocks.getMockCanvasContext();
+    characterRenderer = Mocks.getMockCharacterRenderer();
     textPrompt = {
       update : function(time,diff) {
         this.calledUpdate = {time:time,diff:diff};
@@ -21,17 +22,19 @@ describe("TextLayer", function() {
     };
     props = {
       text : "text",
+      screenContext : screenContext,
+      canvasContext : canvasContext,
       characterRenderer : characterRenderer,
       textPrompt : textPrompt
     };
-    layer = new C64Style.TextLayer(screenContext, canvas, props);
+    layer = new TextLayer(props);
   });
 
   describe("#update()", function() {
     it("should call textPrompt update", function(done) {
       layer.update(1,1);
 
-      assert(textPrompt.calledUpdate.diff === 1, "should have called update");
+      expect(textPrompt.calledUpdate.diff).toBe(1);
       done();
     });
   });
@@ -39,51 +42,51 @@ describe("TextLayer", function() {
     it("should call textprompt render", function(done) {
       layer.render();
 
-      assert(textPrompt.calledRender === true, "should have called textPrompt render");
+      expect(textPrompt.calledRender).toBeTruthy();
       done();
     });
     it("should clear pending string area", function(done) {
       var calledClearLength = {};
-      layer.writeText("string", 0, 0, C64Style.Color.WHITE, C64Style.Color.BLACK);
+      layer.writeText("string", 0, 0, Color.WHITE, Color.BLACK);
       layer.clearLength = function(x,y, length) {calledClearLength = {x:x,y:y,length:length};};
 
       layer.render();
 
-      assert(calledClearLength.length === 6, "should have cleared text length");
+      expect(calledClearLength.length).toBe(6);
       done();
     });
     it("should render string", function(done) {
-      layer.writeText("string", 0, 0, C64Style.Color.WHITE, C64Style.Color.BLACK);
+      layer.writeText("string", 0, 0, Color.WHITE, Color.BLACK);
 
       layer.render();
 
-      assert(characterRenderer.calledRenderString.text === "string", "should have rendered text");
+      expect(characterRenderer.calledRenderString.text).toBe("string");
       done();
     });
     it("should clear pending symbol area", function(done) {
       var calledClearLength = {};
-      layer.drawSymbol("string", 0, 0, C64Style.Color.WHITE, C64Style.Color.BLACK);
+      layer.drawSymbol("string", 0, 0, Color.WHITE, Color.BLACK);
       layer.clearLength = function(x,y, length) {calledClearLength = {x:x,y:y,length:length};};
 
       layer.render();
 
-      assert(calledClearLength !== null && calledClearLength.length === undefined, "should have cleared symbol length");
+      expect(calledClearLength !== null && calledClearLength.length).toBe(undefined);
       done();
     });
     it("should render symbol", function(done) {
-      layer.drawSymbol("string", 0, 0, C64Style.Color.WHITE, C64Style.Color.BLACK);
+      layer.drawSymbol("string", 0, 0, Color.WHITE, Color.BLACK);
 
       layer.render();
 
-      assert(characterRenderer.calledRenderSymbol.char === "string", "should have rendered symbol");
+      expect(characterRenderer.calledRenderSymbol.char).toBe("string");
       done();
     });
     it("should clear pending stings", function(done) {
-      layer.drawSymbol("string", 0, 0, C64Style.Color.WHITE, C64Style.Color.BLACK);
+      layer.drawSymbol("string", 0, 0, Color.WHITE, Color.BLACK);
 
       layer.render();
 
-      assert(layer._pendingTextStrings.length === 0, "should have cleared pending strings");
+      expect(layer._pendingTextStrings.length).toBe(0);
       done();
     });
   });
@@ -91,31 +94,31 @@ describe("TextLayer", function() {
     it("should clear specified length", function(done) {
       layer.clearLength(0,0,5);
 
-      assert(characterRenderer.calledClearRect.length === 5, "should have called clear length with specified length");
+      expect(characterRenderer.calledClearRect.length).toBe(5);
       done();
     });
     it("should clear length", function(done) {
       layer.clearLength(0,0);
 
-      assert(characterRenderer.calledClearRect.length === 1, "should have called clear length with 1 length");
+      expect(characterRenderer.calledClearRect.length).toBe(1);
       done();
     });
   });
   describe("#writeText()", function() {
     it("should add pending string", function(done) {
-      layer.writeText("new text",0,0,C64Style.Color.BLACK, C64Style.Color.WHITE);
+      layer.writeText("new text",0,0,Color.BLACK, Color.WHITE);
 
-      assert(layer._pendingTextStrings.length === 1, "should have added pending string");
-      assert(layer._pendingTextStrings[0].string === "new text", "should have added pending string");
+      expect(layer._pendingTextStrings.length).toBe(1);
+      expect(layer._pendingTextStrings[0].string).toBe("new text");
       done();
     });
   });
   describe("#drawSymbol()", function() {
     it("should add pending string", function(done) {
-      layer.drawSymbol("SYMBOL",0,0,C64Style.Color.BLACK, C64Style.Color.WHITE);
+      layer.drawSymbol("SYMBOL",0,0,Color.BLACK, Color.WHITE);
 
-      assert(layer._pendingTextStrings.length === 1, "should have added pending string");
-      assert(layer._pendingTextStrings[0].pixMapId === "SYMBOL", "should have added pending string");
+      expect(layer._pendingTextStrings.length).toBe(1);
+      expect(layer._pendingTextStrings[0].pixMapId).toBe("SYMBOL");
       done();
     });
   });
@@ -123,15 +126,15 @@ describe("TextLayer", function() {
     it("should return text prompt", function(done) {
       var result = layer.getTextPrompt();
 
-      assert(result === textPrompt, "should have returned text prompt");
+      expect(result).toBe(textPrompt);
       done();
     });
   });
   describe("#prompt()", function() {
     it("should call prompt on text prompt", function(done) {
-      layer.prompt("input?", 1,2, C64Style.Color.ORANGE, 5);
+      layer.prompt("input?", 1,2, Color.ORANGE, 5);
 
-      assert(textPrompt.prompt === "input?", "should have called prompt on textPrompt");
+      expect(textPrompt.prompt).toBe("input?");
       done();
     });
   });

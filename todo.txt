@@ -1,5 +1,15 @@
-on screen - get unscaled x & y - or have scaled x & y
-update copyright in license file
+Revisit C64Screen - some duplicated code from slgfx.Screen
+
+Textlayer - needs to remember what is written where, so it will render as a viewer would expect
+when the layer viewport changes.
+
+Bug: TextButton rendering borks when mousing over and no background color is specified.
+
+###############################################################################
+
+text rotation?
+
+
 add aliases to some functions, e.g. getColumns to getCols
 
 down & right arrow character Maps

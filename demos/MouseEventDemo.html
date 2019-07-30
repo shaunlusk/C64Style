@@ -2,30 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Mouse Event Demo</title>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../lib/GfxElement.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/Sprite.js"></script>
-  <script type="text/javascript" src="../lib/PixSprite.js"></script>
-  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+<script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -38,7 +15,6 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
     gfxLayer = null,
@@ -51,20 +27,28 @@
     element = null,
     xOffset = null,
     yOffset = null,
+    mouseIsOver = false,
     dragOn;
+
   var config = {
-    "rows" : 25,
-    "cols" : 40,
-    "scaleX" : 1,
-    "scaleY" : 1,
-    "fpsElem" : document.getElementById('info')
+    layerFactory:new C64Style.LayerFactory(),
+    targetDiv:document.getElementById("content"),
+    rows : 25,
+    cols : 40,
+    scaleX : 2,
+    scaleY : 2,
+    fpsElem : document.getElementById('info')
   };
 
-  function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv, config);
+  function initialize(config) {
+    screen = new C64Style.C64Screen(config);
 
     screen.initialize();
-    textLayer = screen.createLayer("TextLayer");
+
+    textLayer = screen.createLayer("TextLayer", {
+      scaleX:config.scaleX,
+      scaleY:config.scaleY
+    });
     textLayer.writeText("Try clicking and dragging", 4,1,C64Style.Color.LIGHTBLUE);
     textLayer.writeText("the PixSprite.", 4,2,C64Style.Color.LIGHTBLUE);
 
@@ -75,43 +59,48 @@
     textLayer.writeText("Mouse Over Element?", 1,23,C64Style.Color.LIGHTBLUE);
 
     gfxLayer = screen.createLayer("GfxLayer");
+    var canvasContext = gfxLayer.getCanvasContextWrapper();
 
-    sprite1 = new C64Style.PixSprite(screen, gfxLayer, {
+    sprite1 = new C64Style.PixSprite({
       x:10, y:10,
       scaleX:2, scaleY:2,
       frames:[
         new C64Style.PixSpriteFrame({pixArray:pixPathArray1, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray2, duration:400}),
-      ]
+      ],
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
-    sprite2 = new C64Style.PixSprite(screen, gfxLayer, {
+    sprite2 = new C64Style.PixSprite({
       x:10, y:10,
       scaleX:2, scaleY:2,
       hidden:true,
       frames:[
         new C64Style.PixSpriteFrame({pixArray:pixPathArray3, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray4, duration:400}),
-      ]
+      ],
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(sprite1);
     gfxLayer.addElement(sprite2);
 
-    screen.on(C64Style.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
+    screen.on(SL.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
       dragOn = true;
       xOffset = event.data.x - sprite1.getX();
       yOffset = event.data.y - sprite1.getY();
       sprite1.hide();
       sprite2.show();
     });
-    screen.on(C64Style.EventType.MOUSE_UP, function(event) {
+    screen.on(SL.EventType.MOUSE_UP, function(event) {
       dragOn = false;
     });
-    screen.on(C64Style.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
+    screen.on(SL.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
       dragOn = false;
       sprite2.hide();
       sprite1.show();
     });
-    screen.on(C64Style.EventType.MOUSE_MOVE, function(event) {
+    screen.on(SL.EventType.MOUSE_MOVE, function(event) {
       updateMouseStats(event);
       if (dragOn) {
         sprite2.setX(event.data.x - xOffset);
@@ -120,8 +109,19 @@
         sprite1.setY(event.data.y - yOffset);
       }
     });
+    screen.on(SL.EventType.MOUSE_ENTER_ELEMENT, function(event) {
+      mouseIsOver = true;
+    });
+    screen.on(SL.EventType.MOUSE_EXIT_ELEMENT, function(event) {
+      mouseIsOver = false;
+    });
 
     screen.render(1);
+  }
+
+  function dump() {
+    console.log("x:",sprite1.getX(),"; y:",sprite1.getY(), "; width:", sprite1.getWidth(), "; height;",sprite1.getHeight());
+    console.log("cboxx:",sprite1.getCollisionBoxX(),"; cboxy:",sprite1.getCollisionBoxY(), "; cboxwidth:", sprite1.getCollisionBoxWidth(), "; cboxheight;",sprite1.getCollisionBoxHeight());
   }
 
   function updateMouseStats(event) {
@@ -134,11 +134,10 @@
     textLayer.clearLength(15,22,4);
     textLayer.writeText(event.data.row.toString(), 15,22,C64Style.Color.LIGHTGREEN);
     textLayer.clearLength(21,23,6);
-    var mouseIsOver = sprite1.collidesWithCoordinates(event.data.x, event.data.y);
     textLayer.writeText(mouseIsOver.toString(), 21,23,C64Style.Color.LIGHTGREEN);
   }
 
-  initialize(document.getElementById("content"), config);
+  initialize(config);
   </script>
 </body>
 </html>

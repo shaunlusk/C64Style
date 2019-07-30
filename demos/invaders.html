@@ -2,34 +2,8 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Tutorial - Alien Invasion</title>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../lib/GfxElement.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/ImageRenderer.js"></script>
-  <script type="text/javascript" src="../lib/ImageElement.js"></script>
-  <script type="text/javascript" src="../lib/TextElement.js"></script>
-  <script type="text/javascript" src="../lib/Sprite.js"></script>
-  <script type="text/javascript" src="../lib/PixSprite.js"></script>
-  <script type="text/javascript" src="../lib/ImageSprite.js"></script>
-  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
+
   <script type="text/javascript" src="alienPix1.js"></script>
   <script type="text/javascript" src="alienPix2.js"></script>
 </head>
@@ -52,26 +26,34 @@ GameContext.actionPaused = false;
 GameContext.shipsRemaining = 2;
 
 var config = {
-  "rows" : 25,
-  "cols" : 40,
-  "scaleX" : 2,
-  "scaleY" : 2,
-  "backgroundColor" : C64Style.Color.BLACK,
-  "borderColor" : C64Style.Color.DARKGREY
+  targetDiv:document.getElementById("content"),
+  rows : 25,
+  cols : 40,
+  scaleX : 2,
+  scaleY : 2,
+  backgroundColor : C64Style.Color.BLACK,
+  borderColor : C64Style.Color.DARKGREY
 };
 
-function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+function initialize(config) {
+  GameContext.screen = new C64Style.C64Screen(config);
   GameContext.screen.initialize();
 
-  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {
+    scaleX : config.scaleX,
+    scaleY : config.scaleY
+  });
   GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
   GameContext.textLayer.writeText("Score:", 1, 24, C64Style.Color.WHITE);
   GameContext.textLayer.writeText("Ships Remaining:", 22, 24, C64Style.Color.WHITE);
 
   GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
 
-  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+  var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
+  GameContext.shipElement = new C64Style.ImageElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
     sourceY:0,
@@ -85,14 +67,19 @@ function initialize(targetDiv, config) {
 
   GameContext.gfxLayer.addElement(GameContext.shipElement);
 
-  GameContext.bulletElement = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
+  GameContext.bulletElement = new C64Style.PixElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     hidden:true,
     pixPathArray: GameContext.bulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette()
   });
   GameContext.gfxLayer.addElement(GameContext.bulletElement);
 
-  GameContext.explosionElement = new C64Style.ImageSprite(GameContext.screen, GameContext.gfxLayer, {
+  GameContext.explosionElement = new C64Style.ImageSprite({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    imageRenderer: imageRenderer,
     hidden:true,
     width:32,
     height:32,
@@ -175,7 +162,7 @@ function initialize(targetDiv, config) {
   GameContext.alienCounter = 0;
   setAliensMoving();
 
-  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     if (GameContext.actionPaused) return;
     updateShip(e);
     updateAliens(e);
@@ -185,17 +172,17 @@ function initialize(targetDiv, config) {
     checkVictoryCondition();
   });
 
-  GameContext.bulletElement.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
+  GameContext.bulletElement.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
     removeBullet();
   });
 
-  GameContext.bulletElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
+  GameContext.bulletElement.on(SL.EventType.ELEMENT_COLLISION, function(e) {
     if(e.data.element2.isAlien) {
        killAlien(e.data.element2);
     }
   });
 
-  GameContext.shipElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
+  GameContext.shipElement.on(SL.EventType.ELEMENT_COLLISION, function(e) {
     if (e.data.element2.isAlien) {
       killAlien(e.data.element2);
     } else {
@@ -209,7 +196,9 @@ function initialize(targetDiv, config) {
 }
 
 function createAlien(x,y, palette, scoreValue) {
-  var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+  var newAlien = new C64Style.PixSprite({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     frames:[GameContext.alienFrame1,GameContext.alienFrame2],
     x:x,
     y:y,
@@ -293,7 +282,7 @@ function removeBullet() {
 function killAlien(alien) {
   GameContext.score += alien.scoreValue;
   GameContext.gfxLayer.removeElement(alien);
-  var idx = C64Style.linSearch(GameContext.aliens, alien, function(element,value){return element.getId() === value.getId();});
+  var idx = C64Style.Utils.linSearch(GameContext.aliens, alien, function(element,value){return element.getId() === value.getId();});
   GameContext.aliens.splice(idx,1);
   removeBullet();
 }
@@ -314,7 +303,7 @@ function alienAttack() {
     var bullet = createAlienBullet(alien.getX() + 8, alien.getY() + 16);
     GameContext.gfxLayer.addElement(bullet);
     bullet.setMoveRates(0,135);
-    bullet.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));
+    bullet.on(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));
   }
 }
 
@@ -324,7 +313,9 @@ function pickAlien() {
 }
 
 function createAlienBullet(x, y) {
-  var bullet = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
+  var bullet = new C64Style.PixElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     pixPathArray: GameContext.alienBulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette(),
     x:x,
@@ -389,7 +380,9 @@ function endGame(victory) {
   var scaleX = 3;
   var scaleY = 3;
   var x = ((C64Style.CELLWIDTH * config.cols) - (msg.length * C64Style.CELLWIDTH * scaleX)) / 2;
-  var msgElement = new C64Style.TextElement(GameContext.screen, GameContext.gfxLayer, {
+  var msgElement = new C64Style.TextElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     text:msg,
     color:color,
     backgroundColor:bgColor,
@@ -418,7 +411,7 @@ var imagesToLoad = 2;
 function checkImagesLoaded() {
   imagesLoadedCount++;
   if (imagesLoadedCount === imagesToLoad) {
-    initialize(document.getElementById("content"), config);
+    initialize(config);
   }
 }
 </script>

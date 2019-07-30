@@ -1,3 +1,6 @@
+import TextPrompt from '../src/TextPrompt';
+import {Mocks} from './Mocks';
+
 describe("TextPrompt", function() {
   describe("#reset()", function() {
     it("should reset things", function(done) {
@@ -6,7 +9,7 @@ describe("TextPrompt", function() {
 
       prompt.reset();
 
-      assert(prompt._input.length === 0, "should have reset input");
+      expect(prompt._input.length).toBe(0);
       done();
     });
   });
@@ -16,11 +19,11 @@ describe("TextPrompt", function() {
       var inputPrompt = "Input Prompt:";
       var x = 0;
       var y = 5;
-      expected = inputPrompt.length + x;
+      var expected = inputPrompt.length + x;
 
       prompt.prompt(inputPrompt, x, y);
 
-      assert(prompt._cursorXOrigin === expected, "should have set cursorXOrigin (actual:" + prompt._cursorXOrigin + ", expected: " + expected +")");
+      expect(prompt._cursorXOrigin).toBe(expected);
       done();
     });
     it("should set cursorX", function(done) {
@@ -28,11 +31,11 @@ describe("TextPrompt", function() {
       var inputPrompt = "Input Prompt:";
       var x = 3;
       var y = 5;
-      expected = inputPrompt.length + x;
+      var expected = inputPrompt.length + x;
 
       prompt.prompt(inputPrompt, x, y);
 
-      assert(prompt._cursorX === expected, "should have set cursorXOrigin (actual:" + prompt._cursorXOrigin + ", expected: " + expected +")");
+      expect(prompt._cursorX).toBe(expected);
       done();
     });
     it("should call writeText on parentLayer", function(done) {
@@ -46,7 +49,7 @@ describe("TextPrompt", function() {
 
       prompt.prompt(inputPrompt, x, y);
 
-      assert(prompt._parentLayer.text === inputPrompt, "should have written text (actual:" + prompt._parentLayer.text + ", expected: \"" + inputPrompt +"\")");
+      expect(prompt._parentLayer.text).toBe(inputPrompt);
       done();
     });
     it("should call render", function(done) {
@@ -60,7 +63,7 @@ describe("TextPrompt", function() {
 
       prompt.prompt(inputPrompt, x, y);
 
-      assert(prompt.calledIt === true, "should have called render");
+      expect(prompt.calledIt).toBeTruthy();
       done();
     });
     it("should return prompt", function(done) {
@@ -71,7 +74,7 @@ describe("TextPrompt", function() {
 
       var p = prompt.prompt(inputPrompt, x, y);
 
-      assert(p === prompt, "should have returned prompt");
+      expect(p).toBe(prompt);
       done();
     });
   });
@@ -81,7 +84,7 @@ describe("TextPrompt", function() {
 
       prompt.update(10,10);
 
-      assert(prompt._elapsed === 0, "should not have increased elapsed");
+      expect(prompt._elapsed).toBe(0);
       done();
     });
     it("should increase elapsed if on", function(done) {
@@ -90,7 +93,7 @@ describe("TextPrompt", function() {
 
       prompt.update(10,10);
 
-      assert(prompt._elapsed === 10, "should have increased elapsed");
+      expect(prompt._elapsed).toBe(10);
       done();
     });
     it("should subtract flash interval from elapsed", function(done) {
@@ -101,7 +104,7 @@ describe("TextPrompt", function() {
 
       prompt.update(10000,diff);
 
-      assert(prompt._elapsed === expected, "should have subtracted flash interval from elapsed");
+      expect(prompt._elapsed).toBe(expected);
       done();
     });
     it("should turn cursor on when elapsed = flash interval and cursor off", function(done) {
@@ -111,7 +114,7 @@ describe("TextPrompt", function() {
 
       prompt.update(10000,diff);
 
-      assert(prompt._cursorOn === true, "should turn cursor on");
+      expect(prompt._cursorOn).toBeTruthy();
       done();
     });
     it("should turn cursor on when elapsed > flash interval and cursor off", function(done) {
@@ -121,7 +124,7 @@ describe("TextPrompt", function() {
 
       prompt.update(10000,diff);
 
-      assert(prompt._cursorOn === true, "should turn cursor on");
+      expect(prompt._cursorOn).toBeTruthy();
       done();
     });
     it("should turn cursor off when elapsed = flash interval and cursor on", function(done) {
@@ -132,7 +135,7 @@ describe("TextPrompt", function() {
 
       prompt.update(10000,diff);
 
-      assert(prompt._cursorOn === false, "should turn cursor off");
+      expect(prompt._cursorOn).toBeFalsy();
       done();
     });
   });
@@ -145,8 +148,8 @@ describe("TextPrompt", function() {
 
       prompt.render();
 
-      assert(prompt.calledDrawCursor === undefined, "should not call drawCursor");
-      assert(prompt.calledClearCursor === undefined, "should not call clearcursor");
+      expect(prompt.calledDrawCursor).toBe(undefined);
+      expect(prompt.calledClearCursor).toBe(undefined);
       done();
     });
     it("should call draw cursor if cursor on", function(done) {
@@ -158,8 +161,8 @@ describe("TextPrompt", function() {
 
       prompt.render();
 
-      assert(prompt.calledDrawCursor === true, "should call drawCursor");
-      assert(prompt.calledClearCursor === undefined, "should not call clearcursor");
+      expect(prompt.calledDrawCursor).toBeTruthy();
+      expect(prompt.calledClearCursor).toBe(undefined);
       done();
     });
     it("should call clear cursor if cursor on", function(done) {
@@ -171,8 +174,8 @@ describe("TextPrompt", function() {
 
       prompt.render();
 
-      assert(prompt.calledDrawCursor === undefined, "should not call drawCursor");
-      assert(prompt.calledClearCursor === true, "should call clearcursor");
+      expect(prompt.calledDrawCursor).toBe(undefined);
+      expect(prompt.calledClearCursor).toBeTruthy();
       done();
     });
   });
@@ -184,7 +187,7 @@ describe("TextPrompt", function() {
 
       var input = prompt.getInput();
 
-      assert(input === expected, "should return input (actual: " + input + ", expected: "+ expected +")");
+      expect(input).toBe(expected);
       done();
     });
     it("should return empty string", function(done) {
@@ -194,7 +197,7 @@ describe("TextPrompt", function() {
 
       var input = prompt.getInput();
 
-      assert(input === expected, "should return input (actual: " + input + ", expected: "+ expected +")");
+      expect(input).toBe(expected);
       done();
     });
   });
@@ -207,7 +210,7 @@ describe("TextPrompt", function() {
 
       prompt.clearInput();
 
-      assert(prompt._parentLayer.calledIt === true, "should return call clear length");
+      expect(prompt._parentLayer.calledIt).toBeTruthy();
       done();
     });
     it("should clear input", function(done) {
@@ -216,7 +219,7 @@ describe("TextPrompt", function() {
 
       prompt.clearInput();
 
-      assert(prompt._input.length === 0, "should clear input");
+      expect(prompt._input.length).toBe(0);
       done();
     });
   });
@@ -225,9 +228,9 @@ describe("TextPrompt", function() {
       var prompt = getTextPrompt();
       prompt._x = 10;
       prompt._y = 12;
-      prompt._prompt = "check";
-      prompt._cursorXOrigin = prompt._x + prompt._prompt.length;
-      prompt._input = "input";
+      prompt._text = "check";
+      prompt._cursorXOrigin = prompt._x + prompt._text.length;
+      prompt._input = ["i","n","p","u","t"];
       prompt._parentLayer.callCount = 0;
       prompt._parentLayer.callArgs = [];
       prompt._parentLayer.clearLength = function(x, y, length) {
@@ -237,13 +240,14 @@ describe("TextPrompt", function() {
 
       prompt.clearPrompt();
 
-      assert(prompt._parentLayer.callCount === 2, "should call clearLength");
-      assert(prompt._parentLayer.callArgs[0].x === prompt._x, "should call clearLength with proper x value");
-      assert(prompt._parentLayer.callArgs[0].y === prompt._y, "should call clearLength with proper y value");
-      assert(prompt._parentLayer.callArgs[0].length === prompt._prompt.length, "should call clearLength with proper length value");
-      assert(prompt._parentLayer.callArgs[1].x === prompt._cursorXOrigin, "should call clearLength with proper x value");
-      assert(prompt._parentLayer.callArgs[1].y === prompt._y, "should call clearLength with proper y value");
-      assert(prompt._parentLayer.callArgs[1].length === prompt._input.length + 1, "should call clearLength with proper length value");
+      expect(prompt._parentLayer.callCount).toBe(2);
+      expect(prompt._parentLayer.callArgs[0].x).toBe(prompt._x);
+      expect(prompt._parentLayer.callArgs[0].y).toBe(prompt._y);
+      expect(prompt._parentLayer.callArgs[0].length).toBe(prompt._text.length);
+      expect(prompt._parentLayer.callArgs[1].x).toBe(prompt._cursorXOrigin);
+      expect(prompt._parentLayer.callArgs[1].y).toBe(prompt._y);
+      expect(prompt._parentLayer.callArgs[1].length).toBe(prompt._input.length + 1);
+
       done();
     });
   });
@@ -261,10 +265,10 @@ describe("TextPrompt", function() {
 
       prompt.clearCursor();
 
-      assert(prompt._parentLayer.callCount === 1, "should call clearLength");
-      assert(prompt._parentLayer.callArgs[0].x === prompt._cursorX, "should call clearLength with proper x value");
-      assert(prompt._parentLayer.callArgs[0].y === prompt._y, "should call clearLength with proper y value");
-      assert(prompt._parentLayer.callArgs[0].length === 1, "should call clearLength with proper length value");
+      expect(prompt._parentLayer.callCount).toBe(1);
+      expect(prompt._parentLayer.callArgs[0].x).toBe(prompt._cursorX);
+      expect(prompt._parentLayer.callArgs[0].y).toBe(prompt._y);
+      expect(prompt._parentLayer.callArgs[0].length).toBe(1);
       done();
     });
   });
@@ -283,11 +287,11 @@ describe("TextPrompt", function() {
 
       prompt.drawCursor();
 
-      assert(prompt._parentLayer.callCount === 1, "should call clearLength");
-      assert(prompt._parentLayer.callArgs[0].id === "BLOCK", "should call clearLength with \"BLOCK\" symbol id");
-      assert(prompt._parentLayer.callArgs[0].x === prompt._cursorX, "should call clearLength with proper x value");
-      assert(prompt._parentLayer.callArgs[0].y === prompt._y, "should call clearLength with proper y value");
-      assert(prompt._parentLayer.callArgs[0].color === prompt._color, "should call clearLength with proper length value");
+      expect(prompt._parentLayer.callCount).toBe(1);
+      expect(prompt._parentLayer.callArgs[0].id).toBe("BLOCK");
+      expect(prompt._parentLayer.callArgs[0].x).toBe(prompt._cursorX);
+      expect(prompt._parentLayer.callArgs[0].y).toBe(prompt._y);
+      expect(prompt._parentLayer.callArgs[0].color).toBe(prompt._color);
       done();
     });
   });
@@ -298,7 +302,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleEnterKey(event);
 
-      assert(result === false, "should have returned false");
+      expect(result).toBeFalsy();
       done();
     });
     it("should return true if enter key", function(done) {
@@ -307,7 +311,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleEnterKey(event);
 
-      assert(result === true, "should have returned true");
+      expect(result).toBeTruthy();
       done();
     });
     it("should call callback if enter key", function(done) {
@@ -319,7 +323,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleEnterKey(event);
 
-      assert(prompt.calledIt === true, "should have called callback");
+      expect(prompt.calledIt).toBeTruthy();
       done();
     });
   });
@@ -330,7 +334,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleBackspaceKey(event);
 
-      assert(result === false, "should have returned false");
+      expect(result).toBeFalsy();
       done();
     });
     it("should return true if backspace key", function(done) {
@@ -339,7 +343,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleBackspaceKey(event);
 
-      assert(result === true, "should have returned true");
+      expect(result).toBeTruthy();
       done();
     });
     it("should return remove last input char", function(done) {
@@ -349,17 +353,18 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleBackspaceKey(event);
 
-      assert(prompt._input.length === 1, "should have removed last char");
+      expect(prompt._input.length).toBe(1);
       done();
     });
     it("should decrement cursorx", function(done) {
       var prompt = getTextPrompt();
       prompt._cursorX = 5;
+      prompt._input = ["i","n","p","u","t"];
       var event = {key:"Backspace"};
 
       var result = prompt._handleBackspaceKey(event);
 
-      assert(prompt._cursorX === 4, "should have decremented cursorx");
+      expect(prompt._cursorX).toBe(4);
       done();
     });
   });
@@ -370,7 +375,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleSpaceKey(event);
 
-      assert(result === false, "should have returned false");
+      expect(result).toBeFalsy();
       done();
     });
     it("should return true if space key", function(done) {
@@ -379,7 +384,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleSpaceKey(event);
 
-      assert(result === true, "should have returned true");
+      expect(result).toBeTruthy();
       done();
     });
     it("should add space to char input", function(done) {
@@ -389,8 +394,8 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleSpaceKey(event);
 
-      assert(prompt._input.length === 3, "should have added space char");
-      assert(prompt._input[2] === " ", "should have added space char");
+      expect(prompt._input.length).toBe(3);
+      expect(prompt._input[2]).toBe(" ");
       done();
     });
     it("should increment cursorx", function(done) {
@@ -400,7 +405,7 @@ describe("TextPrompt", function() {
 
       var result = prompt._handleSpaceKey(event);
 
-      assert(prompt._cursorX === 6, "should have incremented cursorx");
+      expect(prompt._cursorX).toBe(6);
       done();
     });
   });
@@ -413,7 +418,7 @@ describe("TextPrompt", function() {
 
       prompt.handleKeyboardEvent(event);
 
-      assert(prompt._input.length === 1, "should not have added key to input");
+      expect(prompt._input.length).toBe(1);
       done();
     });
     it("should not add key if input length === maxlength", function(done) {
@@ -421,49 +426,52 @@ describe("TextPrompt", function() {
       prompt._on = true;
       prompt._input = ['a'];
       prompt._maxLength = 1;
-      var event = {key:"b"};
+      var event = {key:"b", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
-      assert(prompt._input.length === 1, "should not have added key to input");
+      expect(prompt._input.length).toBe(1);
       done();
     });
     it("should not add key if char not found in map", function(done) {
       var prompt = getTextPrompt();
       prompt._on = true;
-      var event = {key:"œ"};
+      var event = {key:"œ", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
-      assert(prompt._input.length === 0, "should not have added key to input");
+      expect(prompt._input.length).toBe(0);
       done();
     });
     it("should add key", function(done) {
       var prompt = getTextPrompt();
       prompt._on = true;
-      var event = {key:"a"};
+      var event = {key:"a", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
-      assert(prompt._input.length === 1, "should have added key to input");
+      expect(prompt._input.length).toBe(1);
       done();
     });
     it("should increment cursorx", function(done) {
       var prompt = getTextPrompt();
       prompt._on = true;
       prompt._cursorX = 3;
-      var event = {key:"a"};
+      var event = {key:"a", preventDefault:function(){}};
 
       prompt.handleKeyboardEvent(event);
 
-      assert(prompt._cursorX === 4, "should have incremented cursorx");
+      expect(prompt._cursorX).toBe(4);
       done();
     });
   });
 });
 
 function getTextPrompt(props) {
-  props = props || {};
-  var prompt = new C64Style.TextPrompt(C64Style.Mocks.getMockScreen(), C64Style.Mocks.getMockTextLayer(), props);
+  props = props || {
+    parentLayer: Mocks.getMockTextLayer(),
+    registerKeyHandler : function() {}
+  };
+  var prompt = new TextPrompt(props);
   return prompt;
 }

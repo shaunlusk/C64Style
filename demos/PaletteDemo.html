@@ -2,29 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Palette Demo</title>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../lib/GfxElement.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/Sprite.js"></script>
-  <script type="text/javascript" src="../lib/PixSprite.js"></script>
-  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -53,9 +31,9 @@
     </div>
   </div>
   <script type="text/javascript">
-
-  var config = {};
-
+  var config = {
+    targetDiv : document.getElementById("content")
+  };
   var screen = null,
     textLayer = null,
     gfxLayer = null,
@@ -64,29 +42,40 @@
     pixImage3 = null,
     pixImage4 = null;
 
-  function initialize(targetDiv, config) {
-
+  function initialize(config) {
     // Create the C64 Screen
-    screen = new C64Style.Screen(targetDiv, config);
+    screen = new C64Style.C64Screen(config);
     screen.initialize();
+
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
-    pixImage1 = new C64Style.PixElement(screen, gfxLayer, {
-      x:10,y:40,scaleX:3, scaleY:3,
-      pixPathArray:[{"type":"PIXEL","x":3,"y":0,"color":0},{"type":"PIXEL","x":6,"y":0,"color":0},{"type":"PIXEL","x":7,"y":0,"color":0},{"type":"PIXEL","x":8,"y":0,"color":0},{"type":"PIXEL","x":9,"y":0,"color":0},{"type":"PIXEL","x":12,"y":0,"color":0},{"type":"PIXEL","x":3,"y":1,"color":0},{"type":"PIXEL","x":4,"y":1,"color":0},{"type":"PIXEL","x":5,"y":1,"color":0},{"type":"PIXEL","x":6,"y":1,"color":15},{"type":"PIXEL","x":7,"y":1,"color":0},{"type":"PIXEL","x":8,"y":1,"color":15},{"type":"PIXEL","x":9,"y":1,"color":15},{"type":"PIXEL","x":10,"y":1,"color":0},{"type":"PIXEL","x":11,"y":1,"color":0},{"type":"PIXEL","x":12,"y":1,"color":0},{"type":"PIXEL","x":1,"y":2,"color":15},{"type":"PIXEL","x":4,"y":2,"color":0},{"type":"PIXEL","x":5,"y":2,"color":15},{"type":"PIXEL","x":6,"y":2,"color":0},{"type":"PIXEL","x":7,"y":2,"color":15},{"type":"PIXEL","x":8,"y":2,"color":0},{"type":"PIXEL","x":9,"y":2,"color":15},{"type":"PIXEL","x":10,"y":2,"color":15},{"type":"PIXEL","x":11,"y":2,"color":0},{"type":"PIXEL","x":1,"y":3,"color":15},{"type":"PIXEL","x":2,"y":3,"color":15},{"type":"PIXEL","x":4,"y":3,"color":0},{"type":"PIXEL","x":5,"y":3,"color":0},{"type":"PIXEL","x":6,"y":3,"color":0},{"type":"PIXEL","x":7,"y":3,"color":0},{"type":"PIXEL","x":8,"y":3,"color":0},{"type":"PIXEL","x":9,"y":3,"color":0},{"type":"PIXEL","x":10,"y":3,"color":0},{"type":"PIXEL","x":11,"y":3,"color":0},{"type":"PIXEL","x":1,"y":4,"color":9},{"type":"PIXEL","x":4,"y":4,"color":0},{"type":"PIXEL","x":5,"y":4,"color":5},{"type":"PIXEL","x":6,"y":4,"color":6},{"type":"PIXEL","x":7,"y":4,"color":5},{"type":"PIXEL","x":8,"y":4,"color":5},{"type":"PIXEL","x":9,"y":4,"color":6},{"type":"PIXEL","x":10,"y":4,"color":5},{"type":"PIXEL","x":11,"y":4,"color":0},{"type":"PIXEL","x":1,"y":5,"color":9},{"type":"PIXEL","x":4,"y":5,"color":0},{"type":"PIXEL","x":5,"y":5,"color":5},{"type":"PIXEL","x":6,"y":5,"color":5},{"type":"PIXEL","x":7,"y":5,"color":11},{"type":"PIXEL","x":8,"y":5,"color":5},{"type":"PIXEL","x":9,"y":5,"color":5},{"type":"PIXEL","x":10,"y":5,"color":5},{"type":"PIXEL","x":11,"y":5,"color":0},{"type":"PIXEL","x":1,"y":6,"color":9},{"type":"PIXEL","x":5,"y":6,"color":0},{"type":"PIXEL","x":6,"y":6,"color":1},{"type":"PIXEL","x":7,"y":6,"color":5},{"type":"PIXEL","x":8,"y":6,"color":1},{"type":"PIXEL","x":9,"y":6,"color":5},{"type":"PIXEL","x":10,"y":6,"color":0},{"type":"PIXEL","x":1,"y":7,"color":9},{"type":"PIXEL","x":6,"y":7,"color":5},{"type":"PIXEL","x":7,"y":7,"color":5},{"type":"PIXEL","x":8,"y":7,"color":5},{"type":"PIXEL","x":9,"y":7,"color":0},{"type":"PIXEL","x":1,"y":8,"color":5},{"type":"PIXEL","x":2,"y":8,"color":5},{"type":"PIXEL","x":4,"y":8,"color":0},{"type":"PIXEL","x":5,"y":8,"color":0},{"type":"PIXEL","x":6,"y":8,"color":0},{"type":"PIXEL","x":7,"y":8,"color":0},{"type":"PIXEL","x":8,"y":8,"color":0},{"type":"PIXEL","x":9,"y":8,"color":0},{"type":"PIXEL","x":10,"y":8,"color":0},{"type":"PIXEL","x":11,"y":8,"color":0},{"type":"PIXEL","x":1,"y":9,"color":9},{"type":"PIXEL","x":2,"y":9,"color":5},{"type":"PIXEL","x":3,"y":9,"color":0},{"type":"PIXEL","x":4,"y":9,"color":0},{"type":"PIXEL","x":5,"y":9,"color":2},{"type":"PIXEL","x":6,"y":9,"color":2},{"type":"PIXEL","x":7,"y":9,"color":0},{"type":"PIXEL","x":8,"y":9,"color":10},{"type":"PIXEL","x":9,"y":9,"color":2},{"type":"PIXEL","x":10,"y":9,"color":2},{"type":"PIXEL","x":11,"y":9,"color":0},{"type":"PIXEL","x":12,"y":9,"color":0},{"type":"PIXEL","x":1,"y":10,"color":9},{"type":"PIXEL","x":3,"y":10,"color":5},{"type":"PIXEL","x":4,"y":10,"color":0},{"type":"PIXEL","x":5,"y":10,"color":2},{"type":"PIXEL","x":6,"y":10,"color":2},{"type":"PIXEL","x":7,"y":10,"color":0},{"type":"PIXEL","x":8,"y":10,"color":2},{"type":"PIXEL","x":9,"y":10,"color":2},{"type":"PIXEL","x":10,"y":10,"color":2},{"type":"PIXEL","x":11,"y":10,"color":0},{"type":"PIXEL","x":12,"y":10,"color":5},{"type":"PIXEL","x":1,"y":11,"color":9},{"type":"PIXEL","x":4,"y":11,"color":0},{"type":"PIXEL","x":5,"y":11,"color":2},{"type":"PIXEL","x":6,"y":11,"color":2},{"type":"PIXEL","x":7,"y":11,"color":0},{"type":"PIXEL","x":8,"y":11,"color":2},{"type":"PIXEL","x":9,"y":11,"color":2},{"type":"PIXEL","x":10,"y":11,"color":2},{"type":"PIXEL","x":11,"y":11,"color":0},{"type":"PIXEL","x":12,"y":11,"color":5},{"type":"PIXEL","x":1,"y":12,"color":9},{"type":"PIXEL","x":5,"y":12,"color":0},{"type":"PIXEL","x":6,"y":12,"color":0},{"type":"PIXEL","x":7,"y":12,"color":0},{"type":"PIXEL","x":8,"y":12,"color":0},{"type":"PIXEL","x":9,"y":12,"color":0},{"type":"PIXEL","x":10,"y":12,"color":0},{"type":"PIXEL","x":12,"y":12,"color":5},{"type":"PIXEL","x":1,"y":13,"color":9},{"type":"PIXEL","x":6,"y":13,"color":0},{"type":"PIXEL","x":7,"y":13,"color":9},{"type":"PIXEL","x":8,"y":13,"color":9},{"type":"PIXEL","x":9,"y":13,"color":0},{"type":"PIXEL","x":1,"y":14,"color":9},{"type":"PIXEL","x":5,"y":14,"color":0},{"type":"PIXEL","x":6,"y":14,"color":9},{"type":"PIXEL","x":7,"y":14,"color":9},{"type":"PIXEL","x":8,"y":14,"color":0},{"type":"PIXEL","x":9,"y":14,"color":9},{"type":"PIXEL","x":10,"y":14,"color":0},{"type":"PIXEL","x":4,"y":15,"color":0},{"type":"PIXEL","x":5,"y":15,"color":0},{"type":"PIXEL","x":6,"y":15,"color":0},{"type":"PIXEL","x":7,"y":15,"color":0},{"type":"PIXEL","x":8,"y":15,"color":0},{"type":"PIXEL","x":9,"y":15,"color":0},{"type":"PIXEL","x":10,"y":15,"color":0},{"type":"PIXEL","x":11,"y":15,"color":0}],
-      defaultPalette:C64Style.Color.getDefaultPalette()
+
+    var canvasContextWrapper = gfxLayer.getCanvasContextWrapper();
+
+    pixImage1 = new C64Style.PixElement({
+      screenContext : screen,
+      canvasContextWrapper : canvasContextWrapper,
+      x : 10, y : 40,
+      scaleX : 3, scaleY : 3,
+      pixPathArray : [{"type":"PIXEL","x":3,"y":0,"color":0},{"type":"PIXEL","x":6,"y":0,"color":0},{"type":"PIXEL","x":7,"y":0,"color":0},{"type":"PIXEL","x":8,"y":0,"color":0},{"type":"PIXEL","x":9,"y":0,"color":0},{"type":"PIXEL","x":12,"y":0,"color":0},{"type":"PIXEL","x":3,"y":1,"color":0},{"type":"PIXEL","x":4,"y":1,"color":0},{"type":"PIXEL","x":5,"y":1,"color":0},{"type":"PIXEL","x":6,"y":1,"color":15},{"type":"PIXEL","x":7,"y":1,"color":0},{"type":"PIXEL","x":8,"y":1,"color":15},{"type":"PIXEL","x":9,"y":1,"color":15},{"type":"PIXEL","x":10,"y":1,"color":0},{"type":"PIXEL","x":11,"y":1,"color":0},{"type":"PIXEL","x":12,"y":1,"color":0},{"type":"PIXEL","x":1,"y":2,"color":15},{"type":"PIXEL","x":4,"y":2,"color":0},{"type":"PIXEL","x":5,"y":2,"color":15},{"type":"PIXEL","x":6,"y":2,"color":0},{"type":"PIXEL","x":7,"y":2,"color":15},{"type":"PIXEL","x":8,"y":2,"color":0},{"type":"PIXEL","x":9,"y":2,"color":15},{"type":"PIXEL","x":10,"y":2,"color":15},{"type":"PIXEL","x":11,"y":2,"color":0},{"type":"PIXEL","x":1,"y":3,"color":15},{"type":"PIXEL","x":2,"y":3,"color":15},{"type":"PIXEL","x":4,"y":3,"color":0},{"type":"PIXEL","x":5,"y":3,"color":0},{"type":"PIXEL","x":6,"y":3,"color":0},{"type":"PIXEL","x":7,"y":3,"color":0},{"type":"PIXEL","x":8,"y":3,"color":0},{"type":"PIXEL","x":9,"y":3,"color":0},{"type":"PIXEL","x":10,"y":3,"color":0},{"type":"PIXEL","x":11,"y":3,"color":0},{"type":"PIXEL","x":1,"y":4,"color":9},{"type":"PIXEL","x":4,"y":4,"color":0},{"type":"PIXEL","x":5,"y":4,"color":5},{"type":"PIXEL","x":6,"y":4,"color":6},{"type":"PIXEL","x":7,"y":4,"color":5},{"type":"PIXEL","x":8,"y":4,"color":5},{"type":"PIXEL","x":9,"y":4,"color":6},{"type":"PIXEL","x":10,"y":4,"color":5},{"type":"PIXEL","x":11,"y":4,"color":0},{"type":"PIXEL","x":1,"y":5,"color":9},{"type":"PIXEL","x":4,"y":5,"color":0},{"type":"PIXEL","x":5,"y":5,"color":5},{"type":"PIXEL","x":6,"y":5,"color":5},{"type":"PIXEL","x":7,"y":5,"color":11},{"type":"PIXEL","x":8,"y":5,"color":5},{"type":"PIXEL","x":9,"y":5,"color":5},{"type":"PIXEL","x":10,"y":5,"color":5},{"type":"PIXEL","x":11,"y":5,"color":0},{"type":"PIXEL","x":1,"y":6,"color":9},{"type":"PIXEL","x":5,"y":6,"color":0},{"type":"PIXEL","x":6,"y":6,"color":1},{"type":"PIXEL","x":7,"y":6,"color":5},{"type":"PIXEL","x":8,"y":6,"color":1},{"type":"PIXEL","x":9,"y":6,"color":5},{"type":"PIXEL","x":10,"y":6,"color":0},{"type":"PIXEL","x":1,"y":7,"color":9},{"type":"PIXEL","x":6,"y":7,"color":5},{"type":"PIXEL","x":7,"y":7,"color":5},{"type":"PIXEL","x":8,"y":7,"color":5},{"type":"PIXEL","x":9,"y":7,"color":0},{"type":"PIXEL","x":1,"y":8,"color":5},{"type":"PIXEL","x":2,"y":8,"color":5},{"type":"PIXEL","x":4,"y":8,"color":0},{"type":"PIXEL","x":5,"y":8,"color":0},{"type":"PIXEL","x":6,"y":8,"color":0},{"type":"PIXEL","x":7,"y":8,"color":0},{"type":"PIXEL","x":8,"y":8,"color":0},{"type":"PIXEL","x":9,"y":8,"color":0},{"type":"PIXEL","x":10,"y":8,"color":0},{"type":"PIXEL","x":11,"y":8,"color":0},{"type":"PIXEL","x":1,"y":9,"color":9},{"type":"PIXEL","x":2,"y":9,"color":5},{"type":"PIXEL","x":3,"y":9,"color":0},{"type":"PIXEL","x":4,"y":9,"color":0},{"type":"PIXEL","x":5,"y":9,"color":2},{"type":"PIXEL","x":6,"y":9,"color":2},{"type":"PIXEL","x":7,"y":9,"color":0},{"type":"PIXEL","x":8,"y":9,"color":10},{"type":"PIXEL","x":9,"y":9,"color":2},{"type":"PIXEL","x":10,"y":9,"color":2},{"type":"PIXEL","x":11,"y":9,"color":0},{"type":"PIXEL","x":12,"y":9,"color":0},{"type":"PIXEL","x":1,"y":10,"color":9},{"type":"PIXEL","x":3,"y":10,"color":5},{"type":"PIXEL","x":4,"y":10,"color":0},{"type":"PIXEL","x":5,"y":10,"color":2},{"type":"PIXEL","x":6,"y":10,"color":2},{"type":"PIXEL","x":7,"y":10,"color":0},{"type":"PIXEL","x":8,"y":10,"color":2},{"type":"PIXEL","x":9,"y":10,"color":2},{"type":"PIXEL","x":10,"y":10,"color":2},{"type":"PIXEL","x":11,"y":10,"color":0},{"type":"PIXEL","x":12,"y":10,"color":5},{"type":"PIXEL","x":1,"y":11,"color":9},{"type":"PIXEL","x":4,"y":11,"color":0},{"type":"PIXEL","x":5,"y":11,"color":2},{"type":"PIXEL","x":6,"y":11,"color":2},{"type":"PIXEL","x":7,"y":11,"color":0},{"type":"PIXEL","x":8,"y":11,"color":2},{"type":"PIXEL","x":9,"y":11,"color":2},{"type":"PIXEL","x":10,"y":11,"color":2},{"type":"PIXEL","x":11,"y":11,"color":0},{"type":"PIXEL","x":12,"y":11,"color":5},{"type":"PIXEL","x":1,"y":12,"color":9},{"type":"PIXEL","x":5,"y":12,"color":0},{"type":"PIXEL","x":6,"y":12,"color":0},{"type":"PIXEL","x":7,"y":12,"color":0},{"type":"PIXEL","x":8,"y":12,"color":0},{"type":"PIXEL","x":9,"y":12,"color":0},{"type":"PIXEL","x":10,"y":12,"color":0},{"type":"PIXEL","x":12,"y":12,"color":5},{"type":"PIXEL","x":1,"y":13,"color":9},{"type":"PIXEL","x":6,"y":13,"color":0},{"type":"PIXEL","x":7,"y":13,"color":9},{"type":"PIXEL","x":8,"y":13,"color":9},{"type":"PIXEL","x":9,"y":13,"color":0},{"type":"PIXEL","x":1,"y":14,"color":9},{"type":"PIXEL","x":5,"y":14,"color":0},{"type":"PIXEL","x":6,"y":14,"color":9},{"type":"PIXEL","x":7,"y":14,"color":9},{"type":"PIXEL","x":8,"y":14,"color":0},{"type":"PIXEL","x":9,"y":14,"color":9},{"type":"PIXEL","x":10,"y":14,"color":0},{"type":"PIXEL","x":4,"y":15,"color":0},{"type":"PIXEL","x":5,"y":15,"color":0},{"type":"PIXEL","x":6,"y":15,"color":0},{"type":"PIXEL","x":7,"y":15,"color":0},{"type":"PIXEL","x":8,"y":15,"color":0},{"type":"PIXEL","x":9,"y":15,"color":0},{"type":"PIXEL","x":10,"y":15,"color":0},{"type":"PIXEL","x":11,"y":15,"color":0}],
+      defaultPalette : C64Style.Color.getDefaultPalette()
     });
     gfxLayer.addElement(pixImage1);
 
-    pixImage2 = new C64Style.PixElement(screen, gfxLayer, {
-      x:10,y:40,scaleX:3, scaleY:3,
+    pixImage2 = new C64Style.PixElement({
+      screenContext : screen,
+      canvasContextWrapper : canvasContextWrapper,
+      x : 10, y : 40,
+      scaleX : 3, scaleY : 3,
       hidden:true,
       pixPathArray:[{"type":"PIXEL","x":1,"y":0,"color":15},{"type":"PIXEL","x":3,"y":0,"color":0},{"type":"PIXEL","x":6,"y":0,"color":0},{"type":"PIXEL","x":7,"y":0,"color":0},{"type":"PIXEL","x":8,"y":0,"color":0},{"type":"PIXEL","x":9,"y":0,"color":0},{"type":"PIXEL","x":12,"y":0,"color":0},{"type":"PIXEL","x":1,"y":1,"color":15},{"type":"PIXEL","x":2,"y":1,"color":15},{"type":"PIXEL","x":3,"y":1,"color":0},{"type":"PIXEL","x":4,"y":1,"color":0},{"type":"PIXEL","x":5,"y":1,"color":0},{"type":"PIXEL","x":6,"y":1,"color":15},{"type":"PIXEL","x":7,"y":1,"color":0},{"type":"PIXEL","x":8,"y":1,"color":15},{"type":"PIXEL","x":9,"y":1,"color":15},{"type":"PIXEL","x":10,"y":1,"color":0},{"type":"PIXEL","x":11,"y":1,"color":0},{"type":"PIXEL","x":12,"y":1,"color":0},{"type":"PIXEL","x":1,"y":2,"color":9},{"type":"PIXEL","x":4,"y":2,"color":0},{"type":"PIXEL","x":5,"y":2,"color":15},{"type":"PIXEL","x":6,"y":2,"color":0},{"type":"PIXEL","x":7,"y":2,"color":15},{"type":"PIXEL","x":8,"y":2,"color":0},{"type":"PIXEL","x":9,"y":2,"color":15},{"type":"PIXEL","x":10,"y":2,"color":15},{"type":"PIXEL","x":11,"y":2,"color":0},{"type":"PIXEL","x":1,"y":3,"color":9},{"type":"PIXEL","x":4,"y":3,"color":0},{"type":"PIXEL","x":5,"y":3,"color":0},{"type":"PIXEL","x":6,"y":3,"color":0},{"type":"PIXEL","x":7,"y":3,"color":0},{"type":"PIXEL","x":8,"y":3,"color":0},{"type":"PIXEL","x":9,"y":3,"color":0},{"type":"PIXEL","x":10,"y":3,"color":0},{"type":"PIXEL","x":11,"y":3,"color":0},{"type":"PIXEL","x":1,"y":4,"color":9},{"type":"PIXEL","x":4,"y":4,"color":0},{"type":"PIXEL","x":5,"y":4,"color":5},{"type":"PIXEL","x":6,"y":4,"color":2},{"type":"PIXEL","x":7,"y":4,"color":5},{"type":"PIXEL","x":8,"y":4,"color":5},{"type":"PIXEL","x":9,"y":4,"color":2},{"type":"PIXEL","x":10,"y":4,"color":5},{"type":"PIXEL","x":11,"y":4,"color":0},{"type":"PIXEL","x":1,"y":5,"color":9},{"type":"PIXEL","x":4,"y":5,"color":0},{"type":"PIXEL","x":5,"y":5,"color":5},{"type":"PIXEL","x":6,"y":5,"color":5},{"type":"PIXEL","x":7,"y":5,"color":11},{"type":"PIXEL","x":8,"y":5,"color":5},{"type":"PIXEL","x":9,"y":5,"color":5},{"type":"PIXEL","x":10,"y":5,"color":5},{"type":"PIXEL","x":11,"y":5,"color":0},{"type":"PIXEL","x":1,"y":6,"color":5},{"type":"PIXEL","x":2,"y":6,"color":5},{"type":"PIXEL","x":5,"y":6,"color":0},{"type":"PIXEL","x":6,"y":6,"color":1},{"type":"PIXEL","x":7,"y":6,"color":5},{"type":"PIXEL","x":8,"y":6,"color":1},{"type":"PIXEL","x":9,"y":6,"color":5},{"type":"PIXEL","x":10,"y":6,"color":0},{"type":"PIXEL","x":1,"y":7,"color":9},{"type":"PIXEL","x":2,"y":7,"color":5},{"type":"PIXEL","x":6,"y":7,"color":5},{"type":"PIXEL","x":7,"y":7,"color":5},{"type":"PIXEL","x":8,"y":7,"color":5},{"type":"PIXEL","x":9,"y":7,"color":0},{"type":"PIXEL","x":14,"y":7,"color":5},{"type":"PIXEL","x":1,"y":8,"color":9},{"type":"PIXEL","x":2,"y":8,"color":5},{"type":"PIXEL","x":3,"y":8,"color":0},{"type":"PIXEL","x":4,"y":8,"color":0},{"type":"PIXEL","x":5,"y":8,"color":0},{"type":"PIXEL","x":6,"y":8,"color":0},{"type":"PIXEL","x":7,"y":8,"color":0},{"type":"PIXEL","x":8,"y":8,"color":0},{"type":"PIXEL","x":9,"y":8,"color":0},{"type":"PIXEL","x":10,"y":8,"color":0},{"type":"PIXEL","x":11,"y":8,"color":0},{"type":"PIXEL","x":13,"y":8,"color":5},{"type":"PIXEL","x":14,"y":8,"color":5},{"type":"PIXEL","x":1,"y":9,"color":9},{"type":"PIXEL","x":3,"y":9,"color":0},{"type":"PIXEL","x":4,"y":9,"color":0},{"type":"PIXEL","x":5,"y":9,"color":2},{"type":"PIXEL","x":6,"y":9,"color":2},{"type":"PIXEL","x":7,"y":9,"color":0},{"type":"PIXEL","x":8,"y":9,"color":10},{"type":"PIXEL","x":9,"y":9,"color":2},{"type":"PIXEL","x":10,"y":9,"color":2},{"type":"PIXEL","x":11,"y":9,"color":0},{"type":"PIXEL","x":12,"y":9,"color":0},{"type":"PIXEL","x":13,"y":9,"color":5},{"type":"PIXEL","x":1,"y":10,"color":9},{"type":"PIXEL","x":4,"y":10,"color":0},{"type":"PIXEL","x":5,"y":10,"color":2},{"type":"PIXEL","x":6,"y":10,"color":2},{"type":"PIXEL","x":7,"y":10,"color":0},{"type":"PIXEL","x":8,"y":10,"color":2},{"type":"PIXEL","x":9,"y":10,"color":2},{"type":"PIXEL","x":10,"y":10,"color":2},{"type":"PIXEL","x":11,"y":10,"color":0},{"type":"PIXEL","x":1,"y":11,"color":9},{"type":"PIXEL","x":4,"y":11,"color":0},{"type":"PIXEL","x":5,"y":11,"color":2},{"type":"PIXEL","x":6,"y":11,"color":2},{"type":"PIXEL","x":7,"y":11,"color":0},{"type":"PIXEL","x":8,"y":11,"color":2},{"type":"PIXEL","x":9,"y":11,"color":2},{"type":"PIXEL","x":10,"y":11,"color":2},{"type":"PIXEL","x":11,"y":11,"color":0},{"type":"PIXEL","x":1,"y":12,"color":9},{"type":"PIXEL","x":5,"y":12,"color":0},{"type":"PIXEL","x":6,"y":12,"color":0},{"type":"PIXEL","x":7,"y":12,"color":0},{"type":"PIXEL","x":8,"y":12,"color":0},{"type":"PIXEL","x":9,"y":12,"color":0},{"type":"PIXEL","x":10,"y":12,"color":0},{"type":"PIXEL","x":6,"y":13,"color":0},{"type":"PIXEL","x":7,"y":13,"color":9},{"type":"PIXEL","x":8,"y":13,"color":9},{"type":"PIXEL","x":9,"y":13,"color":0},{"type":"PIXEL","x":5,"y":14,"color":0},{"type":"PIXEL","x":6,"y":14,"color":9},{"type":"PIXEL","x":7,"y":14,"color":9},{"type":"PIXEL","x":8,"y":14,"color":0},{"type":"PIXEL","x":9,"y":14,"color":9},{"type":"PIXEL","x":10,"y":14,"color":0},{"type":"PIXEL","x":4,"y":15,"color":0},{"type":"PIXEL","x":5,"y":15,"color":0},{"type":"PIXEL","x":6,"y":15,"color":0},{"type":"PIXEL","x":7,"y":15,"color":0},{"type":"PIXEL","x":8,"y":15,"color":0},{"type":"PIXEL","x":9,"y":15,"color":0},{"type":"PIXEL","x":10,"y":15,"color":0},{"type":"PIXEL","x":11,"y":15,"color":0}],
       defaultPalette:C64Style.Color.getDefaultPalette()
     });
     gfxLayer.addElement(pixImage2);
 
-    pixImage3 = new C64Style.PixElement(screen, gfxLayer, {
+    pixImage3 = new C64Style.PixElement({
+      screenContext : screen,
+      canvasContextWrapper : canvasContextWrapper,
       x:12,y:130,scaleX:4, scaleY:2,
       pixPathArray:[
         {"type":"RECTANGLE","x":0,"y":0,"width":8,"height":8,"color":0},
@@ -101,7 +90,10 @@
       defaultPalette:C64Style.Color.getDefaultPalette()
     });
     gfxLayer.addElement(pixImage3);
-    pixImage4 = new C64Style.PixElement(screen, gfxLayer, {
+
+    pixImage4 = new C64Style.PixElement({
+      screenContext : screen,
+      canvasContextWrapper : canvasContextWrapper,
       x:12,y:170,scaleX:4, scaleY:2,
       pixPathArray:[
         {"type":"RECTANGLE","x":0,"y":0,"width":8,"height":8,"color":8},
@@ -174,7 +166,7 @@
 
   function isOdd(num) {return num%2===1;}
 
-  initialize(document.getElementById("content"), config);
+  initialize(config);
   </script>
 </body>
 </html>

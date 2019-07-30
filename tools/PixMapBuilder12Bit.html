@@ -1,0 +1,264 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <title>C64Style PixMapBuilder</title>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
+<link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+  <div>
+  <div id="content">
+  </div>
+  <div id="preview">
+  </div>
+</div>
+<div>
+  <div class="textContent">
+    <p>Using the grid above, select colors and draw your PixElement.  A live
+    preview is shown below the grid.  As you draw, the PixArray is generated
+    and written in the text box below.  This array can be used in your script
+    to create PixElements / PixSprites</p>
+    <p>Note: Preview is 2x scaled.</p>
+  </div>
+  <div id="buttons">
+    <button onclick="reset();">Clear</button>
+    <button onclick="eraser();">Eraser</button>
+    <input type="checkbox" id="colorIdxCheckBox" onchange="changeColorStrategy()"> Use Color Index instead of Hex String
+  </div>
+  <div id="json">
+    <textarea name="jsonData" id="jsonData" rows="8" cols="40"></textarea>
+  </div>
+  <div id="backLinks">
+    <a href="index.html">Back to Tools Index</a><br /><br />
+    <a href="../index.html">Back to Main Index</a>
+  </div>
+</div>
+  <script type="text/javascript">
+  var screen = null,
+    previewScreen = null,
+    gfxLayer = null,
+    textLayer = null,
+    previewGfxLayer,
+    pixPathArray = null,
+    element = null,
+    drawOn = false,
+    useColorIndex = document.getElementById("colorIdxCheckBox").checked;
+    color = C64Style.Color.BLACK,
+    colorIdx = 0,
+    map = null;
+  var rows = 12;
+  var config = {
+    targetDiv:document.getElementById("content"),
+    rows : rows + 2,
+    cols : 12,
+    scaleX : 3,
+    scaleY : 3,
+    backgroundColor : "#360066",
+    borderColor : C64Style.Color.LIGHTGREY,
+    borderSize : 2
+  };
+
+  function initialize(config) {
+    screen = new C64Style.C64Screen(config);
+    screen.initialize();
+    textLayer = screen.createLayer("TextLayer", {
+      scaleX:config.scaleX,
+      scaleY:config.scaleY
+    });
+    gfxLayer = screen.createLayer("GfxLayer");
+
+    previewScreen = new C64Style.C64Screen({
+      targetDiv: document.getElementById("preview"),
+      backgroundColor:"#360066", rows:2, cols:2, scaleX:4, scaleY:4, borderSize:2
+    });
+    previewScreen.initialize();
+
+    previewGfxLayer = previewScreen.createLayer("GfxLayer");
+    var canvasContext = previewGfxLayer.getCanvasContextWrapper();
+    var pixRenderer = new C64Style.PixRenderer();
+    element = new C64Style.PixElement({
+      screenContext: previewScreen,
+      canvasContextWrapper: canvasContext,
+      pixPathArray : pixPathArray,
+      defaultPalette : C64Style.Color.getDefaultPalette()
+    });
+    previewGfxLayer.addElement(element);
+
+    reset();
+
+    screen.on(SL.EventType.MOUSE_DOWN, function(event) {
+      drawOn = true;
+      if (event.data.row === rows) {
+        color = C64Style.Color.getByIndex(event.data.col);
+        colorIdx = event.data.col;
+        redrawGfx(event);
+      } else if (event.data.row === rows + 1) {
+        color = C64Style.Color.getByIndex(event.data.col + 8);
+        colorIdx = event.data.col + 8;
+        redrawGfx(event);
+      } else {
+        draw(event);
+      }
+      updateJson();
+    });
+
+    screen.on(SL.EventType.MOUSE_MOVE, function(event) {
+      if (!drawOn) return true;
+      if (event.data.row < rows) {
+        draw(event);
+      }
+      updateJson();
+    });
+
+    screen.on(SL.EventType.MOUSE_UP, function(event) {
+      drawOn = false;
+    });
+
+    screen.render(1);
+    previewScreen.render(1);
+
+    drawGrid();
+    drawBoxAroundSelectedColor();
+  }
+
+  function draw(event) {
+    if (color === "eraser") {
+      map[event.data.row][event.data.col] = null;
+      textLayer.clearLength(event.data.col, event.data.row, 1);
+    } else {
+      if (event.data.row < 0 || event.data.col < 0) return;
+      map[event.data.row][event.data.col] = colorIdx;
+      textLayer.drawSymbol("BLOCK", event.data.col, event.data.row, color);
+    }
+  }
+
+  function updateJson() {
+    pixPathArray = [];
+    for (var y = 0; y < config.rows; y++) {
+      for (var x = 0; x < config.cols; x++) {
+          cellColor = map[y][x];
+          if (cellColor !== null) {
+            pixPathArray.push({type:"PIXEL", x:x, y:y, color: useColorIndex ? cellColor : C64Style.Color.getByIndex(cellColor)});
+          }
+      }
+    }
+    document.getElementById("jsonData").value = JSON.stringify(pixPathArray);
+    element._pixPathArray = pixPathArray;
+    element._setDimensions();
+    element.setDirty(true);
+  }
+
+  function eraser() {
+    color = "eraser";
+    redrawGfx();
+  }
+
+  function redrawGfx(event) {
+    gfxLayer.clearLayer();
+    drawGrid();
+    drawBoxAroundSelectedColor();
+  }
+
+  function reset() {
+    textLayer.clearLayer();
+    initializeMap();
+    drawPalette();
+    updateJson();
+  }
+
+  function drawPalette() {
+    var rowIdx = rows;
+    for (var c = 0; c < 16; c++) {
+      if (c == 8) rowIdx = rows + 1;
+      textLayer.drawSymbol("BLOCK", c % 8, rowIdx, C64Style.Color.getByIndex(c));
+    }
+    for (var y = rows; y < rows + 2; y++) {
+      for (var x = 8; x < 16; x++) {
+        textLayer.drawSymbol("BLOCK", x, y, C64Style.Color.BLACK);
+      }
+    }
+  }
+
+  function initializeMap() {
+    map = [];
+    for (var y = 0; y < config.rows; y++) {
+      map.push([]);
+      for (var x = 0; x < config.cols; x++) {
+        map[y].push(null);
+      }
+    }
+  }
+
+  function drawGrid() {
+    var context = gfxLayer.getCanvasContextWrapper();
+    context.setStrokeStyle('black');
+    var xBounds = config.cols * config.scaleX * C64Style.CELLWIDTH;
+    var yBounds = config.rows * config.scaleY * C64Style.CELLHEIGHT;
+    for (var x = config.scaleX * C64Style.CELLWIDTH; x < xBounds; x += config.scaleX * C64Style.CELLWIDTH) {
+      context.beginPath();
+      context.moveTo(x, 0);
+      context.lineTo(x, yBounds);
+      context.closePath();
+      context.stroke();
+    }
+    for (var y = config.scaleY * C64Style.CELLHEIGHT; y < yBounds; y += config.scaleY * C64Style.CELLHEIGHT) {
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(xBounds, y);
+      context.closePath();
+      context.stroke();
+    }
+  }
+
+  function drawBoxAroundSelectedColor() {
+    var x, y, width, height;
+    var context = gfxLayer.getCanvasContextWrapper();
+    x = (colorIdx % 8) * C64Style.CELLWIDTH * config.scaleX;
+    y = (config.rows - 2 + (colorIdx >= 8 ? 1 : 0)) * C64Style.CELLHEIGHT * config.scaleY;
+    width = C64Style.CELLWIDTH * config.scaleX;
+    height = C64Style.CELLHEIGHT * config.scaleY;
+    context.beginPath();
+    context.rect(x, y, width, height);
+    context.setLineWidth(2);
+    context.setStrokeStyle(colorIdx === 1 ? '#999999' : 'white');
+    context.closePath();
+    context.stroke();
+  }
+
+  function changeColorStrategy() {
+    var box = document.getElementById("colorIdxCheckBox");
+    if (box.checked) {
+      useColorIndex = true;
+    } else {
+      useColorIndex = false;
+    }
+    updateJson();
+  }
+
+  function importData() {
+    textLayer.clearLayer();
+    initializeMap();
+    drawPalette();
+    document.getElementById("colorIdxCheckBox").checked = true;
+    useColorIndex = true;
+
+    var stringData = document.getElementById("jsonData").value;
+    try{
+      var jsonData = JSON.parse(stringData);
+
+      for (var i = 0; i < jsonData.length; i++) {
+        var entry = jsonData[i];
+        map[entry.y][entry.x] = entry.color;
+        textLayer.drawSymbol("BLOCK", entry.x, entry.y, C64Style.Color.getByIndex(entry.color));
+      }
+      updateJson();
+      console.log("Import successful.");
+    } catch (e) {
+      alert("Import Failed.");
+    }
+  }
+
+  initialize(config);
+  </script>
+</body>
+</html>

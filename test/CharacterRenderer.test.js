@@ -1,55 +1,32 @@
+import CharacterRenderer from '../src/CharacterRenderer';
+import {Mocks} from './Mocks';
+import {CELLWIDTH, CELLHEIGHT} from '../src/Constants';
+import {Color} from '../src/Color';
+import ColorPointer from '../src/ColorPointer';
+import {CharacterMap} from '../src/CharacterMap';
+
 describe("CharacterRenderer", function() {
   var renderer;
-  var renderer_2x2;
 
-  before(function() {
-    renderer = new C64Style.CharacterRenderer(1,1);
-    renderer_2x2 = new C64Style.CharacterRenderer(2,2);
+  beforeEach(function() {
+    renderer = new CharacterRenderer();
   });
 
-  describe("#getScaleX()", function() {
-    it("should return scaleX", function(done) {
-      var expected = 1;
-      var result = renderer.getScaleX();
-      assert(result === expected, "should have returned scaleX (expected: " + expected + ", actual:" + result + ")");
-      done();
-    });
-    it("should return scaleX (2)", function(done) {
-      var expected = 2;
-      var result = renderer_2x2.getScaleX();
-      assert(result === expected, "should have returned scaleX (expected: " + expected + ", actual:" + result + ")");
-      done();
-    });
-  });
-  describe("#getScaleY()", function() {
-    it("should return scaleY", function(done) {
-      var expected = 1;
-      var result = renderer.getScaleY();
-      assert(result === expected, "should have returned scaleY (expected: " + expected + ", actual:" + result + ")");
-      done();
-    });
-    it("should return scaleY (2)", function(done) {
-      var expected = 2;
-      var result = renderer_2x2.getScaleY();
-      assert(result === expected, "should have returned scaleY (expected: " + expected + ", actual:" + result + ")");
-      done();
-    });
-  });
   describe("#clearRect()", function() {
     it("should clear a rectangle of specified length at specified cell coordinates", function(done) {
-      var mockContext = C64Style.Mocks.getMockCanvasContext();
+      var mockContext = Mocks.getMockCanvasContext();
       var x = 2, y = 2, length = 3;
       var expected = {
         x : x,
         y : y,
-        width : length * C64Style.CELLWIDTH,
-        height : C64Style.CELLHEIGHT
+        width : length * CELLWIDTH,
+        height : CELLHEIGHT
       };
       renderer.clearRect(mockContext, x, y, length);
-      assert(mockContext.clearedX === expected.x, "should have specified proper x (expected: " + expected.x + ", actual:" + mockContext.clearedX + ")");
-      assert(mockContext.clearedY === expected.y, "should have specified proper y (expected: " + expected.y + ", actual:" + mockContext.clearedY + ")");
-      assert(mockContext.clearedWidth === expected.width, "should have specified proper width (expected: " + expected.width + ", actual:" + mockContext.clearedWidth + ")");
-      assert(mockContext.clearedHeight === expected.height, "should have specified proper x (expected: " + expected.height + ", actual:" + mockContext.clearedHeight + ")");
+      expect(mockContext.clearedX).toBe(expected.x);
+      expect(mockContext.clearedY).toBe(expected.y);
+      expect(mockContext.clearedWidth).toBe(expected.width);
+      expect(mockContext.clearedHeight).toBe(expected.height);
       done();
     });
     it("should setCursorLocation", function(done) {
@@ -69,8 +46,8 @@ describe("CharacterRenderer", function() {
         y : y
       };
       renderer.clearRect(mockContext, x, y, length);
-      assert(actual.x === expected.x, "should have set proper x cursor (expected: " + expected.x + ", actual:" + mockContext.x + ")");
-      assert(actual.y === expected.y, "should have set proper y cursor (expected: " + expected.y + ", actual:" + mockContext.y + ")");
+      expect(actual.x).toBe(expected.x);
+      expect(actual.y).toBe(expected.y);
       renderer.setCursorLocation = savedFn;
       done();
     });
@@ -88,23 +65,23 @@ describe("CharacterRenderer", function() {
       var expected = {
         x : x,
         y : y,
-        width : length * C64Style.CELLWIDTH * 2,
-        height : C64Style.CELLHEIGHT * 2
+        width : length * CELLWIDTH * 2,
+        height : CELLHEIGHT * 2
       };
-      renderer_2x2.clearRect(mockContext, x, y, length);
-      assert(mockContext.x === expected.x, "should have specified proper x (expected: " + expected.x + ", actual:" + mockContext.x + ")");
-      assert(mockContext.y === expected.y, "should have specified proper y (expected: " + expected.y + ", actual:" + mockContext.y + ")");
-      assert(mockContext.width === expected.width, "should have specified proper width (expected: " + expected.width + ", actual:" + mockContext.width + ")");
-      assert(mockContext.height === expected.height, "should have specified proper x (expected: " + expected.height + ", actual:" + mockContext.height + ")");
+      renderer.clearRect(mockContext, x, y, length, 2, 2);
+      expect(mockContext.x).toBe(expected.x);
+      expect(mockContext.y).toBe(expected.y);
+      expect(mockContext.width).toBe(expected.width);
+      expect(mockContext.height).toBe(expected.height);
       done();
     });
     it("should setCursorLocation (2x2)", function(done) {
       var mockContext = {
         clearRect : function(x, y, width, height) {}
       };
-      var savedFn = renderer_2x2.setCursorLocation;
+      var savedFn = renderer.setCursorLocation;
       var actual = {};
-      renderer_2x2.setCursorLocation = function(x,y) {
+      renderer.setCursorLocation = function(x,y) {
         actual.x = x;
         actual.y = y;
       };
@@ -114,10 +91,10 @@ describe("CharacterRenderer", function() {
         x : x,
         y : y
       };
-      renderer_2x2.clearRect(mockContext, x, y, length);
-      assert(actual.x === expected.x, "should have set proper x cursor (expected: " + expected.x + ", actual:" + mockContext.x + ")");
-      assert(actual.y === expected.y, "should have set proper y cursor (expected: " + expected.y + ", actual:" + mockContext.y + ")");
-      renderer_2x2.setCursorLocation = savedFn;
+      renderer.clearRect(mockContext, x, y, length, 2, 2);
+      expect(actual.x).toBe(expected.x);
+      expect(actual.y).toBe(expected.y);
+      renderer.setCursorLocation = savedFn;
       done();
     });
   });
@@ -142,10 +119,10 @@ describe("CharacterRenderer", function() {
 
       renderer.renderSymbol(context, char, x, y, color, backgroundColor);
 
-      assert(calledSetCursorLocation, "should have called setCursorLocation");
-      assert(calledSetColor, "should have called setColor");
-      assert(calledSetBackgroundColor, "should have called setBackgroundColor");
-      assert(calledSet_rendCharacter, "should have called _renderCharacter");
+      expect(calledSetCursorLocation).toBeTruthy();
+      expect(calledSetColor).toBeTruthy();
+      expect(calledSetBackgroundColor).toBeTruthy();
+      expect(calledSet_rendCharacter).toBeTruthy();
       renderer.setCursorLocation = setCursorLocationSaved;
       renderer.setColor = setColorSaved;
       renderer.setBackgroundColor = setBackgroundColorSaved;
@@ -179,11 +156,11 @@ describe("CharacterRenderer", function() {
       var expectedCount = text.length;
       renderer.renderString(context, text, x, y, color, backgroundColor);
 
-      assert(calledSetCursorLocation, "should have called setCursorLocation");
-      assert(calledSetColor, "should have called setColor");
-      assert(calledSetBackgroundColor, "should have called setBackgroundColor");
-      assert(renderCharacterCount === expectedCount, "should have called _renderCharacter " + expectedCount + " times.");
-      assert(advanceCursorCount === expectedCount, "should have called advanceCursor " + expectedCount + " times.");
+      expect(calledSetCursorLocation).toBeTruthy();
+      expect(calledSetColor).toBeTruthy();
+      expect(calledSetBackgroundColor).toBeTruthy();
+      expect(renderCharacterCount).toBe(expectedCount);
+      expect(advanceCursorCount).toBe(expectedCount);
       renderer.setCursorLocation = setCursorLocationSaved;
       renderer.setColor = setColorSaved;
       renderer.setBackgroundColor = setBackgroundColorSaved;
@@ -193,19 +170,33 @@ describe("CharacterRenderer", function() {
     });
   });
   describe("#_renderCharacter()", function() {
-    it("should fill background", function(done) {
+    var context = {
+      fillRect : function() {},
+      setFillStyle : function() {}
+    };
+    it("should call setFillStyle", function(done) {
       var _renderPixPathSaved = renderer._renderPixPath;
       renderer._renderPixPath = function() {};
-      renderer.setBackgroundColor(C64Style.Color.BLUE);
-      var context = {
-        fillRect : function() {this.calledIt = true;}
-      };
+      renderer.setBackgroundColor(Color.BLUE);
+      context.setFillStyle = function() {this.calledIt = true;};
       var char = "a";
 
       renderer._renderCharacter(context, char);
 
-      assert(context.fillStyle !== undefined, "should have set context fillStyle");
-      assert(context.calledIt === true, "should have called fillRect");
+      expect(context.calledIt).toBeTruthy();
+      renderer._renderPixPath = _renderPixPathSaved;
+      done();
+    });
+    it("should fill background", function(done) {
+      var _renderPixPathSaved = renderer._renderPixPath;
+      renderer._renderPixPath = function() {};
+      renderer.setBackgroundColor(Color.BLUE);
+      context.fillRect = function() {this.calledIt = true;};
+      var char = "a";
+
+      renderer._renderCharacter(context, char);
+
+      expect(context.calledIt).toBeTruthy();
       renderer._renderPixPath = _renderPixPathSaved;
       done();
     });
@@ -213,14 +204,11 @@ describe("CharacterRenderer", function() {
       var _renderPixPathSaved = renderer._renderPixPath;
       var calledRenderPixPath = false;
       renderer._renderPixPath = function() {calledRenderPixPath = true;};
-      var context = {
-        fillRect : function() {}
-      };
       var char = " ";
 
       renderer._renderCharacter(context, char);
 
-      assert(calledRenderPixPath === false, "should have returned");
+      expect(calledRenderPixPath).toBeFalsy();
       renderer._renderPixPath = _renderPixPathSaved;
       done();
     });
@@ -228,14 +216,11 @@ describe("CharacterRenderer", function() {
       var _renderPixPathSaved = renderer._renderPixPath;
       var calledRenderPixPath = false;
       renderer._renderPixPath = function() {calledRenderPixPath = true;};
-      var context = {
-        fillRect : function() {}
-      };
       var char = "¼";
 
       renderer._renderCharacter(context, char);
 
-      assert(calledRenderPixPath === false, "should have returned");
+      expect(calledRenderPixPath).toBeFalsy();
       renderer._renderPixPath = _renderPixPathSaved;
       done();
     });
@@ -243,119 +228,117 @@ describe("CharacterRenderer", function() {
       var _renderPixPathSaved = renderer._renderPixPath;
       var calledRenderPixPathCount = 0;
       renderer._renderPixPath = function() {calledRenderPixPathCount++;};
-      var context = {
-        fillRect : function() {}
-      };
       var char = "a";
-      var expectedCount = C64Style.CharacterMap[char].length;
+      var expectedCount = CharacterMap[char].length;
 
       renderer._renderCharacter(context, char);
 
-      assert(calledRenderPixPathCount === expectedCount, "should have called _renderPixPath " + expectedCount + " times.");
+      expect(calledRenderPixPathCount).toBe(expectedCount);
       renderer._renderPixPath = _renderPixPathSaved;
       done();
     });
   });
   describe("#_renderPixPath()", function() {
     it("should render pixel", function(done) {
-      var context = C64Style.Mocks.getMockCanvasContext();
-      renderer.setColor(C64Style.Color.LIGHTBLUE);
+      var context = Mocks.getMockCanvasContext();
+      renderer.setColor(Color.LIGHTBLUE);
       var pixPath = {type:"PIXEL", x:1,y:2};
       var expectedX = pixPath.x;
       var expectedY = pixPath.y;
-      var expectedWidth = renderer.scaleX;
-      var expectedHeight = renderer.scaleY;
+      var expectedWidth = 1;
+      var expectedHeight = 1;
 
-      renderer._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, 1, 1);
 
-      assert(context.filledX !== expectedX, "should have filled starting at x=" + expectedX + " (actual: " + context.filledX + ")");
-      assert(context.filledY !== expectedY, "should have filled starting at y=" + expectedY + " (actual: " + context.filledY + ")");
-      assert(context.filledWidth !== expectedWidth, "should have filled width=" + expectedWidth + " (actual: " + context.filledWidth + ")");
-      assert(context.filledHeight !== expectedHeight, "should have filled height=" + expectedHeight + " (actual: " + context.filledHeight + ")");
+      expect(context.filledX).toBe(expectedX);
+      expect(context.filledY).toBe(expectedY);
+      expect(context.filledWidth).toBe(expectedWidth);
+      expect(context.filledHeight).toBe(expectedHeight);
       done();
     });
     it("should render rectangle", function(done) {
-      var context = C64Style.Mocks.getMockCanvasContext();
-      renderer.setColor(C64Style.Color.LIGHTBLUE);
+      var context = Mocks.getMockCanvasContext();
+      renderer.setColor(Color.LIGHTBLUE);
       var pixPath = {type:"RECTANGLE", x:2,y:3, width:4, height:6};
       var expectedX = pixPath.x;
       var expectedY = pixPath.y;
-      var expectedWidth = pixPath.x * renderer.scaleX;
-      var expectedHeight = pixPath.y * renderer.scaleY;
+      var expectedWidth = pixPath.width;
+      var expectedHeight = pixPath.height;
 
-      renderer._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, 1, 1);
 
-      assert(context.filledX !== expectedX, "should have filled starting at x=" + expectedX + " (actual: " + context.filledX + ")");
-      assert(context.filledY !== expectedY, "should have filled starting at y=" + expectedY + " (actual: " + context.filledY + ")");
-      assert(context.filledWidth !== expectedWidth, "should have filled width=" + expectedWidth + " (actual: " + context.filledWidth + ")");
-      assert(context.filledHeight !== expectedHeight, "should have filled height=" + expectedHeight + " (actual: " + context.filledHeight + ")");
+      expect(context.filledX).toBe(expectedX);
+      expect(context.filledY).toBe(expectedY);
+      expect(context.filledWidth).toBe(expectedWidth);
+      expect(context.filledHeight).toBe(expectedHeight);
       done();
     });
     it("should render pixel (2x2)", function(done) {
-      var context = C64Style.Mocks.getMockCanvasContext();
-      renderer_2x2.setColor(C64Style.Color.LIGHTBLUE);
+      var context = Mocks.getMockCanvasContext();
+      renderer.setColor(Color.LIGHTBLUE);
+      var scale = 2;
       var pixPath = {type:"PIXEL", x:1,y:2};
-      var expectedX = pixPath.x;
-      var expectedY = pixPath.y;
-      var expectedWidth = renderer.scaleX;
-      var expectedHeight = renderer.scaleY;
+      var expectedX = pixPath.x * scale;
+      var expectedY = pixPath.y * scale;
+      var expectedWidth = scale;
+      var expectedHeight = scale;
 
-      renderer_2x2._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, scale, scale);
 
-      assert(context.filledX !== expectedX, "should have filled starting at x=" + expectedX + " (actual: " + context.filledX + ")");
-      assert(context.filledY !== expectedY, "should have filled starting at y=" + expectedY + " (actual: " + context.filledY + ")");
-      assert(context.filledWidth !== expectedWidth, "should have filled width=" + expectedWidth + " (actual: " + context.filledWidth + ")");
-      assert(context.filledHeight !== expectedHeight, "should have filled height=" + expectedHeight + " (actual: " + context.filledHeight + ")");
+      expect(context.filledX).toBe(expectedX);
+      expect(context.filledY).toBe(expectedY);
+      expect(context.filledWidth).toBe(expectedWidth);
+      expect(context.filledHeight).toBe(expectedHeight);
       done();
     });
     it("should render rectangle (2x2)", function(done) {
-      var context = C64Style.Mocks.getMockCanvasContext();
-      renderer_2x2.setColor(C64Style.Color.LIGHTBLUE);
+      var context = Mocks.getMockCanvasContext();
+      renderer.setColor(Color.LIGHTBLUE);
+      var scale = 2;
       var pixPath = {type:"RECTANGLE", x:2,y:3, width:4, height:6};
-      var expectedX = pixPath.x;
-      var expectedY = pixPath.y;
-      var expectedWidth = pixPath.x * renderer.scaleX;
-      var expectedHeight = pixPath.y * renderer.scaleY;
+      var expectedX = pixPath.x * scale;
+      var expectedY = pixPath.y * scale;
+      var expectedWidth = pixPath.width * scale;
+      var expectedHeight = pixPath.height * scale;
 
-      renderer_2x2._renderPixPath(context, pixPath);
+      renderer._renderPixPath(context, pixPath, scale, scale);
 
-      assert(context.filledX !== expectedX, "should have filled starting at x=" + expectedX + " (actual: " + context.filledX + ")");
-      assert(context.filledY !== expectedY, "should have filled starting at y=" + expectedY + " (actual: " + context.filledY + ")");
-      assert(context.filledWidth !== expectedWidth, "should have filled width=" + expectedWidth + " (actual: " + context.filledWidth + ")");
-      assert(context.filledHeight !== expectedHeight, "should have filled height=" + expectedHeight + " (actual: " + context.filledHeight + ")");
+      expect(context.filledX).toBe(expectedX);
+      expect(context.filledY).toBe(expectedY);
+      expect(context.filledWidth).toBe(expectedWidth);
+      expect(context.filledHeight).toBe(expectedHeight);
       done();
     });
     it("should handle pixPath with color", function(done) {
-      var context = C64Style.Mocks.getMockCanvasContext();
-      renderer.setColor(C64Style.Color.LIGHTBLUE);
-      var expectedColor = C64Style.Color.BLACK;
+      var context = Mocks.getMockCanvasContext();
+      context.setFillStyle = function(style) {this.fillStyle = style};
+      renderer.setColor(Color.LIGHTBLUE);
+      var expectedColor = Color.BLACK;
       var pixPath = {type:"PIXEL", x:1,y:2, color:expectedColor};
 
       renderer._renderPixPath(context, pixPath);
 
-      assert(context.fillStyle === expectedColor, "should have set color=" + expectedColor + " (actual: " + context.fillStyle + ")");
+      expect(context.fillStyle).toBe(expectedColor);
       done();
     });
     it("should handle pixPath with colorPointer", function(done) {
-      var context = C64Style.Mocks.getMockCanvasContext();
-      renderer.setColor(C64Style.Color.LIGHTBLUE);
-      var expectedColor = C64Style.Color.ORANGE;
-      var pixPath = {type:"PIXEL", x:1,y:2, color:new C64Style.ColorPointer(expectedColor)};
+      var context = Mocks.getMockCanvasContext();
+      context.setFillStyle = function(style) {this.fillStyle = style};
+      renderer.setColor(Color.LIGHTBLUE);
+      var expectedColor = Color.ORANGE;
+      var pixPath = {type:"PIXEL", x:1,y:2, color:new ColorPointer(expectedColor)};
 
       renderer._renderPixPath(context, pixPath);
 
-      assert(context.fillStyle === expectedColor, "should have set color=" + expectedColor + " (actual: " + context.fillStyle + ")");
+      expect(context.fillStyle).toBe(expectedColor);
       done();
     });
     it("should throw error on unrecognized pix path type", function(done) {
-      var context = C64Style.Mocks.getMockCanvasContext();
+      var context = Mocks.getMockCanvasContext();
       var pixPath = {type:"VOXEL", x:1,y:2};
 
-      var result = throwsError(function() {
-        renderer._renderPixPath(context, pixPath);
-      });
+      expect (() => {renderer._renderPixPath(context, pixPath);}).toThrowError();
 
-      assert(result === true, "should have thrown exception.");
       done();
     });
   });
@@ -364,8 +347,8 @@ describe("CharacterRenderer", function() {
       var x = 5, y = 9;
       renderer.setCursorLocation(x, y);
 
-      assert(renderer._cx === x, "should have set x (expected:" + x + ", actual: " + renderer._cx + ")");
-      assert(renderer._cy === y, "should have set y (expected:" + y + ", actual: " + renderer._cy + ")");
+      expect(renderer._cx).toBe(x);
+      expect(renderer._cy).toBe(y);
       done();
     });
   });
@@ -373,35 +356,35 @@ describe("CharacterRenderer", function() {
     it("should increment internal x coord", function(done) {
       var x = 5, y = 9;
       renderer.setCursorLocation(x, y);
-      var expected = x + C64Style.CELLWIDTH * renderer.getScaleX();
-      renderer.advanceCursor();
+      var expected = x + CELLWIDTH;
+      renderer.advanceCursor(1);
 
-      assert(renderer._cx === expected, "should have set x (expected:" + x + ", actual: " + renderer._cx + ")");
+      expect(renderer._cx).toBe(expected);
       done();
     });
     it("should increment internal x coord (2x2)", function(done) {
       var x = 5, y = 9;
-      renderer_2x2.setCursorLocation(x, y);
-      var expected = x + C64Style.CELLWIDTH * renderer.getScaleX();
-      renderer_2x2.advanceCursor();
+      renderer.setCursorLocation(x, y);
+      var expected = x + CELLWIDTH * 2;
+      renderer.advanceCursor(2);
 
-      assert(renderer._cx === expected, "should have set x (expected:" + x + ", actual: " + renderer._cx + ")");
+      expect(renderer._cx).toBe(expected);
       done();
     });
   });
   describe("#setColor()", function() {
     it("should set internal color", function(done) {
-      var expected = C64Style.Color.YELLOW;
+      var expected = Color.YELLOW;
       renderer.setColor(expected);
-      assert(renderer._color === expected, "should have set color (expected: " + expected + ", actual: " + renderer._color +")");
+      expect(renderer._color).toBe(expected);
       done();
     });
   });
   describe("#setBackgroundColor()", function() {
     it("should set internal bg color", function(done) {
-      var expected = C64Style.Color.YELLOW;
+      var expected = Color.YELLOW;
       renderer.setBackgroundColor(expected);
-      assert(renderer._color === expected, "should have set color (expected: " + expected + ", actual: " + renderer._color +")");
+      expect(renderer._backgroundColor).toBe(expected);
       done();
     });
   });

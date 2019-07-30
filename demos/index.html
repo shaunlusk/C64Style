@@ -2,27 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Demos</title>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../lib/GfxElement.js"></script>
-  <script type="text/javascript" src="../lib/TextElement.js"></script>
-  <script type="text/javascript" src="../lib/TextLink.js"></script>
-  <script type="text/javascript" src="../lib/TextButton.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
 #content {
@@ -36,140 +16,180 @@
   <script type="text/javascript">
 
   var config = {
-      "rows" : 25,
-      "cols" : 40,
-      "scaleX" : 2,
-      "scaleY" : 2,
-      "fpsElem" : document.getElementById('info')
-    };
+    targetDiv:document.getElementById("content"),
+    rows : 27,
+    cols : 40,
+    scaleX : 2,
+    scaleY : 2
+  };
 
   var screen = null, textLayer = null, gfxLayer;
 
-  function initialize(targetDiv, config) {
-
+  function initialize(config) {
     // Create the C64 Screen
-    screen = new C64Style.Screen(targetDiv, config);
+    screen = new C64Style.C64Screen(config);
     screen.initialize();
-    textLayer = screen.createLayer("TextLayer");
+
+    textLayer = screen.createLayer("TextLayer", {
+      registerKeyHandler : screen.addEventListenerToDocument,
+      scaleX:config.scaleX,
+      scaleY:config.scaleY
+    });
+
     gfxLayer = screen.createLayer("GfxLayer");
     screen.render();
 
+    var canvasContext = gfxLayer.getCanvasContextWrapper();
+
     textLayer.writeText("C64Style Demos", 1, 1, C64Style.Color.WHITE, C64Style.Color.BLUE);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:4 * C64Style.CELLHEIGHT,
       text:"Text Demo",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"TextDemo.html"
+      href:"TextDemo.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:6 * C64Style.CELLHEIGHT,
       text:"Text Element Demo",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"TextElementDemo.html"
+      href:"TextElementDemo.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:8 * C64Style.CELLHEIGHT,
       text:"Confetti",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"Confetti.html"
+      href:"Confetti.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:10 * C64Style.CELLHEIGHT,
       text:"Image Sprite Demo",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"ImageSpriteDemo.html"
+      href:"ImageSpriteDemo.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:12 * C64Style.CELLHEIGHT,
       text:"Palette Demo 1",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"PaletteDemo.html"
+      href:"PaletteDemo.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:14 * C64Style.CELLHEIGHT,
       text:"Palette Demo 2",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"PaletteDemo2.html"
+      href:"PaletteDemo2.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:16 * C64Style.CELLHEIGHT,
       text:"Mouse Event Demo",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"MouseEventDemo.html"
+      href:"MouseEventDemo.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
+    element = new C64Style.TextLink({
       x:1 * C64Style.CELLWIDTH, y:18 * C64Style.CELLHEIGHT,
+      text:"Text Prompt Demo",
+      color:C64Style.Color.LIGHTGREEN,
+      backgroundColor:C64Style.Color.BLUE,
+      mouseOverColor: C64Style.Color.GREEN,
+      mouseOverBackgroundColor: C64Style.Color.BLACK,
+      href:"TextPromptDemo.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
+    });
+    gfxLayer.addElement(element);
+
+    element = new C64Style.TextLink({
+      x:1 * C64Style.CELLWIDTH, y:20 * C64Style.CELLHEIGHT,
       text:"Tutorial - Alien Invasion",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"invaders.html"
+      href:"invaders.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
 
     if (new Date().getMonth() === 11) {
-      element = new C64Style.TextLink(screen, gfxLayer, {
-        x:1 * C64Style.CELLWIDTH, y:21 * C64Style.CELLHEIGHT,
+      element = new C64Style.TextLink({
+        x:1 * C64Style.CELLWIDTH, y:22 * C64Style.CELLHEIGHT,
         text:"Christmas Demo",
         color:C64Style.Color.LIGHTGREEN,
         backgroundColor:C64Style.Color.BLUE,
         mouseOverColor: C64Style.Color.GREEN,
         mouseOverBackgroundColor: C64Style.Color.BLACK,
-        href:"ChristmasDemo.html"
+        href:"ChristmasDemo.html",
+        canvasContextWrapper:canvasContext,
+        screenContext:screen
       });
       gfxLayer.addElement(element);
     }
 
-    element = new C64Style.TextLink(screen, gfxLayer, {
-      x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
+    element = new C64Style.TextLink({
+      x:1 * C64Style.CELLWIDTH, y:25 * C64Style.CELLHEIGHT,
       text:"Back to Main Index",
       color:C64Style.Color.LIGHTGREEN,
       backgroundColor:C64Style.Color.BLUE,
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
-      href:"../index.html"
+      href:"../index.html",
+      canvasContextWrapper:canvasContext,
+      screenContext:screen
     });
     gfxLayer.addElement(element);
   }
 
-  initialize(document.getElementById("content"), config);
+  initialize(config);
   </script>
 </body>
 </html>

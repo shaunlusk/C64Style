@@ -35,41 +35,12 @@ This tutorial assumes at least a basic working knowledge of HTML and Javascript.
 We will be making an alien invasion type of game, in the spirit of Space Invaders and Gorf.</p>
 <p>
 
-First, let's get some basic page stuff out of the way.  Start your HTML page and import all the Javascript files:
+First, let's get some basic page stuff out of the way.  Start your HTML page and import the Javascript bundle:
 </p>
 <p class="code newCode">&lt;html&gt;
 &lt;head&gt;
   &lt;title&gt;C64Style Tutorial - Alien Invasion&lt;/title&gt;
-  &lt;script type="text/javascript" src="../lib/Common/Utils.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Common/PriorityQueue.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Common/Queue.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Color.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/ColorPointer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Constants.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/EventType.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Event.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Screen.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/PixPathTypes.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/CharacterMap.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/CharacterRenderer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Layer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/TextPrompt.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/TextLayer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/MoveOrder.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/GfxElement.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/PixRenderer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/PixElement.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/ImageRenderer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/ImageElement.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/TextElement.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/Sprite.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/PixSprite.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/ImageSprite.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="../lib/GfxLayer.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="alienPix1.js"&gt;&lt;/script&gt;
-  &lt;script type="text/javascript" src="alienPix2.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="bundle.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 </p>
 <p>
@@ -90,19 +61,20 @@ So now, let's create a bare-bones screen:
 var GameContext = GameContext || {};
 
 var config = {
-  "rows" : 25,
-  "cols" : 40,
-  "scaleX" : 2,
-  "scaleY" : 2
+  targetDiv:document.getElementById("content"),
+  rows : 25,
+  cols : 40,
+  scaleX : 2,
+  scaleY : 2
 };
 
-function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+function initialize(config) {
+  GameContext.screen = new C64Style.C64Screen(config);
   GameContext.screen.initialize();
   GameContext.screen.render();
 }
 
-initialize(document.getElementById("content"), config);
+initialize(config);
 &lt;/script&gt;
 </p>
 <p>
@@ -146,11 +118,14 @@ You can already see that we create a 'screen' property, that is a reference to o
 <p>
 We'll do the same thing to add a text layer:
 </p>
-<p class="code">function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+<p class="code">function initialize(config) {
+  GameContext.screen = new C64Style.C64Screen(config);
   GameContext.screen.initialize();
 
-  <span class="newCode">GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  <span class="newCode">GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {
+      scaleX : config.scaleX,
+      scaleY : config.scaleY
+    });
   GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
 </span>
   GameContext.screen.render();
@@ -176,14 +151,14 @@ has finished loading before we start rendering the screen.
 <p>
 At the bottom of your script, replace this:
 </p>
-<p class="code">initialize(document.getElementById("content"), config);</p>
+<p class="code">initialize(config);</p>
 <p>
 with this:
 </p>
 <p class="code newCode">GameContext.shipPng = new Image();
 GameContext.shipPng.src = "ship.png";
 GameContext.shipPng.onload = function() {
-  initialize(document.getElementById("content"), config);
+  initialize(config);
 }
 </p>
 <p>
@@ -196,7 +171,10 @@ our screen.
 Below the code that creates the text layer,
 let's add a graphics layer:
 </p>
-<p class="code">  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+<p class="code">  GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {
+    scaleX : config.scaleX,
+    scaleY : config.scaleY
+  });
   GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
 
   <span class="newCode">GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");</span>
@@ -204,7 +182,11 @@ let's add a graphics layer:
 <p>
 Now it's time to create the element for the ship:
 </p>
-<p class="code newCode">  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+<p class="code newCode">  var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
+  GameContext.shipElement = new C64Style.ImageElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
     sourceY:0,
@@ -224,16 +206,23 @@ Then add the element to your graphics layer:
 <p>
 Your initialize function should look like this:
 </p>
-<p class="code">function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+<p class="code">function initialize(config) {
+  GameContext.screen = new C64Style.C64Screen(config);
   GameContext.screen.initialize();
 
-  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {
+    scaleX : config.scaleX,
+    scaleY : config.scaleY
+  });
   GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
 
   GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
 
-  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+  var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
+  GameContext.shipElement = new C64Style.ImageElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
     sourceY:0,
@@ -312,11 +301,13 @@ Duration tells us how long (milliseconds) to display each frame.
 
   <span class="newCode">var x = 8;
   for (var i = 0; i &lt; 8; i++) {
-    var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+    var newAlien = new C64Style.PixSprite({
+      screenContext: GameContext.screen,
+      canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
       frames:[GameContext.alienFrame1,GameContext.alienFrame2],
       x:x,
-      y:32,
-      defaultPalette: C64Style.Color.getDefaultPalette()
+      y:y,
+      defaultPalette: palette
     });
     GameContext.aliens.push(newAlien);
     GameContext.gfxLayer.addElement(newAlien);
@@ -360,7 +351,9 @@ We're doing basically the same thing again, but with a different palette.
 Let's extract what we did before into a function:
 </p>
 <p class="code newCode"> function createAlien(x,y, palette) {
-  var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
+  var newAlien = new C64Style.PixSprite({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     frames:[GameContext.alienFrame1,GameContext.alienFrame2],
     x:x,
     y:y,
@@ -418,16 +411,23 @@ Now you should have this:
 <p>
 And your initialize function should look like this:
 </p>
-<p class="code">function initialize(targetDiv, config) {
-  GameContext.screen = new C64Style.Screen(targetDiv, config);
+<p class="code">function initialize(config) {
+  GameContext.screen = new C64Style.C64Screen(config);
   GameContext.screen.initialize();
 
-  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+  GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {
+    scaleX : config.scaleX,
+    scaleY : config.scaleY
+  });
   GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
 
   GameContext.gfxLayer = GameContext.screen.createLayer("GfxLayer");
 
-  GameContext.shipElement = new C64Style.ImageElement(GameContext.screen, GameContext.gfxLayer, {
+  var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
+  GameContext.shipElement = new C64Style.ImageElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
     sourceY:0,
@@ -550,7 +550,7 @@ function updateShip(event) {
 	We get the time diff from an event that is passed into the function.
 	So, In order for this to work, we need to call this function from an event hook, specifically BEFORE_RENDER in the screen.	We can add this in the initialize function after our key event handlers.
 </p>
-<p class="code newCode">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code newCode">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
 </p>
@@ -583,7 +583,7 @@ function updateShip(event) {
   <span class="newCode">GameContext.alienMoveDirection = "RIGHT";
   setAliensMoving();</span>
 
-  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
 </p>
@@ -657,14 +657,14 @@ function updateShip(event) {
   GameContext.alienMoveDirection = "RIGHT";
   setAliensMoving();
 
-  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
   });
 </p>
 <p>
 	So now we have the instruction to move aliens down when they are near the edges of the screen.  We need to make this check every render cycle.  We can add to our before-render event handler:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
 	updateShip(e);
 	<span class="newCode">updateAliens(e);</span>
   });
@@ -732,10 +732,12 @@ var GameContext = GameContext || {};
 </p>
 <p class="code">  GameContext.gfxLayer.addElement(GameContext.shipElement);
 
-  <span class="newCode">GameContext.bulletElement = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
-	hidden:true,
-	pixPathArray: GameContext.bulletPix,
-	defaultPalette: C64Style.Color.getDefaultPalette()
+  <span class="newCode">GameContext.bulletElement = new C64Style.PixElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    hidden:true,
+    pixPathArray: GameContext.bulletPix,
+    defaultPalette: C64Style.Color.getDefaultPalette()
   });
   GameContext.gfxLayer.addElement(GameContext.bulletElement);</span>
 </p>
@@ -783,12 +785,12 @@ var GameContext = GameContext || {};
 <p>
 To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     updateShip(e);
     updateAliens(e);
   });
 
-  <span class="newCode">GameContext.bulletElement.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
+  <span class="newCode">GameContext.bulletElement.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
 	  removeBullet();
   });</span>
 </p>
@@ -807,11 +809,11 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 	We remove the alien from the screen, and also remove it from our list of aliens in the game context.
 	To call the function, we can add a collision event handler back in the initialization function:
 </p>
-<p class="code">  GameContext.bulletElement.on(C64Style.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
+<p class="code">  GameContext.bulletElement.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(e) {
     removeBullet();
   });
 
-  <span class="newCode">GameContext.bulletElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
+  <span class="newCode">GameContext.bulletElement.on(SL.EventType.ELEMENT_COLLISION, function(e) {
     if(e.data.element2.isAlien) {
        killAlien(e.data.element2);
     }
@@ -830,11 +832,13 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
   We can add this directly to the alien elements, in our createAlien() function:
 </p>
 <p class="code">function createAlien(x,y, palette, scoreValue) {
-  var newAlien = new C64Style.PixSprite(GameContext.screen, GameContext.gfxLayer, {
-	frames:[GameContext.alienFrame1,GameContext.alienFrame2],
-	x:x,
-	y:y,
-	defaultPalette: palette
+  var newAlien = new C64Style.PixSprite({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    frames:[GameContext.alienFrame1,GameContext.alienFrame2],
+    x:x,
+    y:y,
+    defaultPalette: palette
   });
   <span class="newCode">newAlien.scoreValue = scoreValue;</span>
   return newAlien;
@@ -874,7 +878,10 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 <p>
 	We can add the score place holder just after we added our other text:
 </p>
-<p class="code">  GameContext.textLayer = GameContext.screen.createLayer("TextLayer");
+<p class="code">  GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {
+    scaleX : config.scaleX,
+    scaleY : config.scaleY
+  });
   GameContext.textLayer.writeText("Alien Invasion!", 12,1, C64Style.Color.WHITE);
   <span class="newCode">GameContext.textLayer.writeText("Score:", 1,24, C64Style.Color.WHITE);</span>
 </p>
@@ -888,7 +895,7 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 <p>
 	And then call that in our before-render handler:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
   	updateShip(e);
   	updateAliens(e);
   	<span class="newCode">updateScore();</span>
@@ -916,11 +923,13 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 	Create a function to create an alien bullet:
 </p>
 <p class="code newCode">function createAlienBullet(x, y) {
-  var bullet = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
-	pixPathArray: GameContext.alienBulletPix,
-	defaultPalette: C64Style.Color.getDefaultPalette(),
-	x:x,
-	y:y
+  var bullet = new C64Style.PixElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    pixPathArray: GameContext.alienBulletPix,
+    defaultPalette: C64Style.Color.getDefaultPalette(),
+    x:x,
+    y:y
   });
   return bullet;
 }
@@ -955,7 +964,7 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 <p>
 	Now we need to call the alien attack function. We can add this to our before-render handler.  Anywhere should do fine, I added it second to last:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
 	updateShip(e);
 	updateAliens(e);
 	<span class="newCode">alienAttack();</span>
@@ -986,7 +995,7 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 	var bullet = createAlienBullet(alien.getX() + 8, alien.getY() + 16);
 	GameContext.gfxLayer.addElement(bullet);
 	bullet.setMoveRates(0,135);
-	<span class="newCode">bullet.on(C64Style.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));</span>
+	<span class="newCode">bullet.on(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, removeAlienBullet.bind(null, bullet));</span>
   }
 }
 </p>
@@ -1021,7 +1030,7 @@ var imagesToLoad = 2;
 function checkImagesLoaded() {
   imagesLoadedCount++;
   if (imagesLoadedCount === imagesToLoad) {
-	initialize(document.getElementById("content"), config);
+	initialize(config);
   }
 }
 </p>
@@ -1033,14 +1042,19 @@ function checkImagesLoaded() {
 <p>
 	So, now we've loaded our explosion png, we need to make an animated sprite out of it.  We can add this code after our bullet element creation code:
 </p>
-<p class="code">GameContext.bulletElement = new C64Style.PixElement(GameContext.screen, GameContext.gfxLayer, {
+<p class="code">GameContext.bulletElement = new C64Style.PixElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     hidden:true,
     pixPathArray: GameContext.bulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette()
   });
   GameContext.gfxLayer.addElement(GameContext.bulletElement);
 
-  <span class="newCode">GameContext.explosionElement = new C64Style.ImageSprite(GameContext.screen, GameContext.gfxLayer, {
+  <span class="newCode">GameContext.explosionElement = new C64Style.ImageSprite({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
+    imageRenderer: imageRenderer,
     hidden:true,
     width:32,
     height:32,
@@ -1178,7 +1192,7 @@ function unpauseAction() {
 	  So now, the player can't fire bullets, or cause direction movement for the ship.
 	  In before render, we need to stop the normal actions:
 </p>
-<p class="code">  GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">  GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
 	<span class="newCode">if (GameContext.actionPaused) return;</span>
 	updateShip(e);
 	updateAliens(e);
@@ -1211,7 +1225,7 @@ function unpauseAction() {
 		Now we need to tie this all together.  We need to trigger these functions when something collides with our ship, say an alien bullet, or an alien.  Back in our initialize
 		code we can add another collision handler:
 </p>
-<p class="code newCode">  GameContext.shipElement.on(C64Style.EventType.ELEMENT_COLLISION, function(e) {
+<p class="code newCode">  GameContext.shipElement.on(SL.EventType.ELEMENT_COLLISION, function(e) {
   	if (e.data.element2.isAlien) {
   	  killAlien(e.data.element2);
   	} else {
@@ -1273,7 +1287,9 @@ function unpauseAction() {
   var scaleX = 3;
   var scaleY = 3;
   var x = ((C64Style.CELLWIDTH * config.cols) - (msg.length * C64Style.CELLWIDTH * scaleX)) / 2;
-  var msgElement = new C64Style.TextElement(GameContext.screen, GameContext.gfxLayer, {
+  var msgElement = new C64Style.TextElement({
+    screenContext: GameContext.screen,
+    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     text:msg,
     color:color,
     backgroundColor:bgColor,
@@ -1312,7 +1328,7 @@ function unpauseAction() {
 		Simple enough.
 		We can call this method in our before render handler:
 </p>
-<p class="code">GameContext.screen.on(C64Style.EventType.BEFORE_RENDER, function(e) {
+<p class="code">GameContext.screen.on(SL.EventType.BEFORE_RENDER, function(e) {
     if (GameContext.actionPaused) return;
     updateShip(e);
     updateAliens(e);

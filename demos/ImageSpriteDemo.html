@@ -2,34 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Image Sprite Demo</title>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../lib/GfxElement.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/Sprite.js"></script>
-  <script type="text/javascript" src="../lib/PixSprite.js"></script>
-  <script type="text/javascript" src="../lib/TextElement.js"></script>
-  <script type="text/javascript" src="../lib/ImageRenderer.js"></script>
-  <script type="text/javascript" src="../lib/ImageElement.js"></script>
-  <script type="text/javascript" src="../lib/ImageSprite.js"></script>
-  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -42,7 +15,6 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     image = null,
     gfxLayer = null,
@@ -50,16 +22,18 @@
     elementLeft = null,
     elementRight = null,
     elementBack = null;
+
   var config = {
-    "rows" : 50,
-    "cols" : 80,
-    "scaleX" : 1,
-    "scaleY" : 1,
-    "fpsElem" : document.getElementById('info')
+    targetDiv:document.getElementById("content"),
+    rows : 50,
+    cols : 80,
+    scaleX : 1,
+    scaleY : 1,
+    fpsElem : document.getElementById('info')
   };
 
-  function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv, config);
+  function initialize(config) {
+    screen = new C64Style.C64Screen(config);
     screen.initialize();
 
     gfxLayer = screen.createLayer("GfxLayer");
@@ -71,12 +45,14 @@
 
     screen.render(1);
   }
-  initialize(document.getElementById("content"), config);
+  initialize(config);
 
   function setupSprites() {
     console.log("Image loaded.");
+    var canvasContext = gfxLayer.getCanvasContextWrapper();
+    var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
 
-    elementFront = new C64Style.ImageSprite(screen, gfxLayer, {
+    elementFront = new C64Style.ImageSprite({
       image:image,
       x : 100, y : 100,
       scaleX:1, scaleY:1,
@@ -92,11 +68,14 @@
           sourceX:32, sourceY:0,
           sourceWidth:32, sourceHeight:32
         }),
-      ]
+      ],
+      canvasContextWrapper:canvasContext,
+      screenContext:screen,
+      imageRenderer:imageRenderer
     });
     gfxLayer.addElement(elementFront);
 
-    elementRight = new C64Style.ImageSprite(screen, gfxLayer, {
+    elementRight = new C64Style.ImageSprite({
       image:image,
       x : 100, y : 300,
       scaleX:1, scaleY:1,
@@ -113,11 +92,14 @@
           sourceX:96, sourceY:0,
           sourceWidth:32, sourceHeight:32
         }),
-      ]
+      ],
+      canvasContextWrapper:canvasContext,
+      screenContext:screen,
+      imageRenderer:imageRenderer
     });
     gfxLayer.addElement(elementRight);
 
-    elementLeft = new C64Style.ImageSprite(screen, gfxLayer, {
+    elementLeft = new C64Style.ImageSprite({
       image:image,
       x: 500, y: 100,
       scaleX:1, scaleY:1,
@@ -134,11 +116,14 @@
           sourceX:32, sourceY:32,
           sourceWidth:32, sourceHeight:32
         }),
-      ]
+      ],
+      canvasContextWrapper:canvasContext,
+      screenContext:screen,
+      imageRenderer:imageRenderer
     });
     gfxLayer.addElement(elementLeft);
 
-    elementBack = new C64Style.ImageSprite(screen, gfxLayer, {
+    elementBack = new C64Style.ImageSprite({
       image:image,
       x:500, y:300,
       scaleX:1, scaleY:1,
@@ -150,7 +135,10 @@
           sourceX:64, sourceY:32,
           sourceWidth:32, sourceHeight:32
         })
-      ]
+      ],
+      canvasContextWrapper:canvasContext,
+      screenContext:screen,
+      imageRenderer:imageRenderer
     });
     gfxLayer.addElement(elementBack);
 

@@ -1,0 +1,32 @@
+{
+  "name": "C64Style",
+  "version": "1.0.0",
+  "description": "A library for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.",
+  "main": "index.js",
+  "repository": "https://github.com/shaunlusk/c64Style.git",
+  "author": "Shaun Lusk <shaun.lusk@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run test && npm run build:docs && webpack --config webpack.config.js",
+    "build:dev": "webpack --config webpack.dev.config.js",
+    "test": "node ./node_modules/jest/bin/jest ./test --colors --coverage",
+    "build:docs": "node ./node_modules/jsdoc/jsdoc.js -R README.MD -d docs ./src/"
+  },
+  "dependencies": {
+    "slcommon": "github:shaunlusk/slcommon",
+    "slgfx": "github:shaunlusk/slgfx"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "@babel/register": "^7.0.0",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "jest": "^24.8.0",
+    "jsdoc": "^3.6.2",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5"
+  }
+}

@@ -2,28 +2,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Pix Map Import Preview</title>
-  <script type="text/javascript" src="../lib/Common/Utils.js"></script>
-  <script type="text/javascript" src="../lib/Common/PriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/UniquePriorityQueue.js"></script>
-  <script type="text/javascript" src="../lib/Common/Queue.js"></script>
-  <script type="text/javascript" src="../lib/Color.js"></script>
-  <script type="text/javascript" src="../lib/ColorPointer.js"></script>
-  <script type="text/javascript" src="../lib/Constants.js"></script>
-  <script type="text/javascript" src="../lib/EventType.js"></script>
-  <script type="text/javascript" src="../lib/Event.js"></script>
-  <script type="text/javascript" src="../lib/Screen.js"></script>
-  <script type="text/javascript" src="../lib/PixPathTypes.js"></script>
-  <script type="text/javascript" src="../lib/CharacterMap.js"></script>
-  <script type="text/javascript" src="../lib/CharacterRenderer.js"></script>
-  <script type="text/javascript" src="../lib/Layer.js"></script>
-  <script type="text/javascript" src="../lib/TextPrompt.js"></script>
-  <script type="text/javascript" src="../lib/TextLayer.js"></script>
-  <script type="text/javascript" src="../lib/MoveOrder.js"></script>
-  <script type="text/javascript" src="../lib/GfxElementZIndexComparable.js"></script>
-  <script type="text/javascript" src="../lib/GfxElement.js"></script>
-  <script type="text/javascript" src="../lib/PixRenderer.js"></script>
-  <script type="text/javascript" src="../lib/PixElement.js"></script>
-  <script type="text/javascript" src="../lib/GfxLayer.js"></script>
+  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="../style.css">
 </head>
 <body>
@@ -45,29 +24,31 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var C64Style = C64Style || {};
   var screen = null,
     textLayer = null,
     gfxLayer = null,
     element = null;
   var config = {
-    "rows" : 30,
-    "cols" : 50,
-    "scaleX" : 1,
-    "scaleY" : 1
+    targetDiv:document.getElementById("content"),
+    rows : 30,
+    cols : 50
   };
 
-  function initialize(targetDiv, config) {
-    screen = new C64Style.Screen(targetDiv, config);
+  function initialize(config) {
+    screen = new C64Style.C64Screen(config);
     screen.initialize();
-    textLayer = screen.createLayer("TextLayer");
+    textLayer = screen.createLayer("TextLayer", {
+      scaleX:config.scaleX,
+      scaleY:config.scaleY
+    });
     gfxLayer = screen.createLayer("GfxLayer");
 
-    element = new C64Style.PixElement(screen, gfxLayer, {
+    var canvasContext = gfxLayer.getCanvasContextWrapper();
+    element = new C64Style.PixElement({
+      screenContext: screen,
+      canvasContextWrapper: canvasContext,
       x:2,y:2,scaleX:2, scaleY:2,
-      pixPathArray:[
-
-      ],
+      pixPathArray:[],
       defaultPalette:C64Style.Color.getDefaultPalette()
     });
     gfxLayer.addElement(element);
@@ -88,7 +69,7 @@
     }
   }
 
-  initialize(document.getElementById("content"), config);
+  initialize(config);
 
   </script>
 </body>
