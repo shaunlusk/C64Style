@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: C64Screen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: C64Screen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {CELLHEIGHT,CELLWIDTH} from './Constants';
+import {Color} from './Color';
+import Screen from 'slgfx/src/Screen';
+
+/** The Screen is the overriding container for all C64Style components.
+* The Screen orchestrates updating and rendering its layers, propagates
+* mouse events down to the layers, and notifies event listeners when events occur.
+* @class
+* @param {Object} props Properties
+* @param {HTMLElement} props.targetDiv The target HTMLElement into which the screen and its layers will be built.
+* @param {LayerFactory} [props.layerFactory=LayerFactory] The layer factory to use to create layers.  Defaults to LayerFactory.
+* @param {int} [props.scaleX=1] The horizontal scale of the screen.
+* @param {int} [props.scaleY=1] The vertical scale of the screen.
+* @param {HTMLElement} [props.fpsElem] Optional. An HTMLElement to write Frames-per-second information to.
+* @param {boolean} [props.imageSmoothingEnabled=false] Whether to use image smoothing on child canvases.
+* @param {boolean} [props.useMouseMoveEvents=true] Whether to listen for mouseevents on this screen.
+* @param {number} [props.borderSize=20] The size of the border.
+* @param {function} [props.requestAnimationFrame=window.requestAnimationFrame] A function that regulates render rate.  Uses window.requestAnimationFrame by default.
+* @param {int} [props.cols=40] The number of columns for the screen.  Width will be sized accordingly: cols * {@link CELLWIDTH}.  Default: 40
+* @param {int} [props.rows=25] The number of rows for the screen.  Width will be sized accordingly: cols * {@link CELLHEIGHT}.  Default: 25
+* @param {string} [props.backgroundColor=Color.BLUE] The color to set the screen background to. Default: Color.BLUE
+* @param {string} [props.borderColor=Color.LIGHTBLUE] The color to set the screen border to. Default: Color.LIGHTBLUE
+*/
+function C64Screen(props) {
+  Screen.call(this, props);
+
+  this._cols = props.cols || 40;
+  this._rows = props.rows || 25;
+  this._width = this._cols * this._scaleX * CELLWIDTH;
+  this._height = this._rows * this._scaleY * CELLHEIGHT;
+
+  this._mouseRow = -1;
+  this._mouseCol = -1;
+
+  this._backgroundColor = props.backgroundColor || Color.BLUE;
+  this._borderColor = props.borderColor || Color.LIGHTBLUE;
+  this._borderSize = props.borderSize || 20;
+};
+
+C64Screen.prototype = new Screen();
+C64Screen.prototype.constructor = C64Screen;
+
+/** Return the number of rows.
+* @returns {integer}
+*/
+C64Screen.prototype.getRows = function() {return this._rows;};
+
+/** Return the number of columns.
+* @returns {integer}
+*/
+C64Screen.prototype.getCols = function() {return this._cols;};
+
+/** Return the current row coordinate of the mouse.
+* @returns {integer}
+*/
+C64Screen.prototype.getMouseRow = function() {return this._mouseRow;};
+
+/** Return the current column coordinate of the mouse.
+* @returns {integer}
+*/
+C64Screen.prototype.getMouseCol = function() {return this._mouseCol;};
+
+/** @private
+*/
+C64Screen.prototype._getCoordinateDataForMouseEvent = function(scaledX, scaledY) {
+  var data = Screen.prototype._getCoordinateDataForMouseEvent.call(this, scaledX, scaledY);
+  data.col = this._xToColumnFromMouseEvent(data.x);
+  data.row = this._yToRowFromMouseEvent(data.y);
+  return data;
+};
+
+/** Return the column coordinate from a given X. Factors in screen scale and view origin.
+* @param {int} x The x coordinate from the event.
+*/
+C64Screen.prototype.xToColumn = function(x) {
+  return Math.floor((x - this.getViewOriginX()) / (CELLWIDTH * this._scaleX));
+};
+
+/** Return the column coordinate from a given X. Factors in screen scale and view origin.
+* @param {int} x The x coordinate from the event.
+*/
+C64Screen.prototype.yToRow = function(y) {
+  return Math.floor((y - this.getViewOriginY()) / (CELLHEIGHT * this._scaleY));
+};
+
+/** Assumes scale and view origin have already been factored out.
+* @private
+*/
+C64Screen.prototype._xToColumnFromMouseEvent = function(x) {
+  return Math.floor(x / CELLWIDTH);
+};
+
+/** Assumes scale and view origin have already been factored out.
+* @private
+*/
+C64Screen.prototype._yToRowFromMouseEvent = function(y) {
+  return Math.floor(y / CELLHEIGHT);
+};
+
+export default C64Screen;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Screen.html">C64Screen</a></li><li><a href="CharacterRenderer.html">CharacterRenderer</a></li><li><a href="ColorPointer.html">ColorPointer</a></li><li><a href="PixElement.html">PixElement</a></li><li><a href="PixRenderer.html">PixRenderer</a></li><li><a href="PixSprite.html">PixSprite</a></li><li><a href="PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="TextButton.html">TextButton</a></li><li><a href="TextElement.html">TextElement</a></li><li><a href="TextLayer.html">TextLayer</a></li><li><a href="TextLink.html">TextLink</a></li><li><a href="TextPrompt.html">TextPrompt</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CELLHEIGHT">CELLHEIGHT</a></li><li><a href="global.html#CELLWIDTH">CELLWIDTH</a></li><li><a href="global.html#CharacterMap">CharacterMap</a></li><li><a href="global.html#Color">Color</a></li><li><a href="global.html#PixPathTypes">PixPathTypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Mon Jul 29 2019 21:10:43 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

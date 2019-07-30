@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CharacterRenderer.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CharacterRenderer.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {CELLWIDTH, CELLHEIGHT} from './Constants';
+import ColorPointer from './ColorPointer';
+import {CharacterMap} from './CharacterMap';
+import {PixPathTypes} from './PixPathTypes';
+import Utils from 'slgfx/src/Utils';
+
+/**
+* Draws Characters on a layer.
+* @constructor
+*/
+function CharacterRenderer() {
+  this._cx = 0;
+  this._cy = 0;
+  this._color = null;
+  this._backgroundColor = null;
+};
+
+/**
+* Clears a length of the screen in preparation for writing characters.
+*
+* @param {CanvasContext} context The canvas context to work on.
+* @param {integer} x The x location to start clearing.
+* @param {integer} y The y location to start clearing.
+* @param {integer} length The length of characters to clear.
+* @param {integer} pixelWidth The width of pixels to draw.
+* @param {integer} pixelHeight The height of pixels to draw.
+*/
+CharacterRenderer.prototype.clearRect = function(context, x, y, length, pixelWidth, pixelHeight)  {
+  pixelWidth = pixelWidth || 1;
+  pixelHeight = pixelHeight || 1;
+  this.setCursorLocation(x, y);
+  context.clearRect(
+    this._cx,
+    this._cy,
+    length * pixelWidth * CELLWIDTH,
+    pixelHeight * CELLHEIGHT);
+};
+
+/**
+* Draws a symbol on the canvas.
+* @param {CanvasContext} context The canvas context to work on.
+* @param {string} char The name of the character to draw.  Refer to {@link CharacterMap}
+* @param {integer} x The x location to draw the symbol to.
+* @param {integer} y The y location to draw the symbol to.
+* @param {Color} color The color to draw the symbol.
+* @param {Color} backgroundColor Optional. The background color for the symbol.
+* @param {integer} pixelWidth The width of pixels to draw.
+* @param {integer} pixelHeight The height of pixels to draw.
+*/
+CharacterRenderer.prototype.renderSymbol = function(context, char, x, y, color, backgroundColor, pixelWidth, pixelHeight) {
+  pixelWidth = pixelWidth || 1;
+  pixelHeight = pixelHeight || 1;
+  this.setCursorLocation(x, y, pixelWidth, pixelHeight);
+  this.setColor(color);
+  this.setBackgroundColor(backgroundColor);
+
+  this._renderCharacter(context, char, pixelWidth, pixelHeight);
+};
+
+/**
+* Draws a string on the canvas.
+* @param {CanvasContext} context The canvas context to work on.
+* @param {string} text The text to draw to the canvas.
+* @param {integer} x The x location to draw the symbol to.
+* @param {integer} y The y location to draw the symbol to.
+* @param {Color} color The color to draw the string.
+* @param {Color} backgroundColor Optional. The background color for the string.
+* @param {integer} pixelWidth The width of pixels to draw.
+* @param {integer} pixelHeight The height of pixels to draw.
+*/
+CharacterRenderer.prototype.renderString = function(context, text, x, y, color, backgroundColor, pixelWidth, pixelHeight) {
+  pixelWidth = pixelWidth || 1;
+  pixelHeight = pixelHeight || 1;
+  this.setCursorLocation(x, y, pixelWidth, pixelHeight);
+  this.setColor(color);
+  this.setBackgroundColor(backgroundColor);
+
+  for (var i = 0; i &lt; text.length; i++) {
+    var char = text.charAt(i);
+    this._renderCharacter(context, char, pixelWidth, pixelHeight);
+    this.advanceCursor(pixelWidth);
+  }
+};
+
+/**
+* @private
+*/
+CharacterRenderer.prototype._renderCharacter = function(context, char, pixelWidth, pixelHeight) {
+  if (this._backgroundColor) {
+    context.setFillStyle(this._backgroundColor);
+    context.fillRect(this._cx, this._cy, CELLWIDTH * pixelWidth, CELLHEIGHT * pixelHeight);
+  }
+
+  if (char === " ") return;
+  var pixPathArray = CharacterMap[char];
+
+  if (!pixPathArray) {
+    console.log("No pix path found for character:" + char);
+    return;
+  }
+  for (var i = 0; i &lt; pixPathArray.length; i++) {
+    this._renderPixPath(context, pixPathArray[i], pixelWidth, pixelHeight);
+  }
+};
+
+/**
+* @private
+*/
+CharacterRenderer.prototype._renderPixPath = function(context, pixPath, pixelWidth, pixelHeight) {
+  context.setFillStyle(pixPath.color &amp;&amp; pixPath.color instanceof ColorPointer ? pixPath.color.getColor() : pixPath.color || this._color);
+  var tx = (pixPath.x * pixelWidth) + this._cx;
+  var ty = (pixPath.y * pixelHeight) + this._cy;
+  switch (pixPath.type) {
+    case PixPathTypes.PIXEL :
+      context.fillRect(tx, ty, pixelWidth, pixelHeight);
+      break;
+    case PixPathTypes.RECTANGLE :
+      context.fillRect(
+        tx,
+        ty,
+        pixPath.width * pixelWidth,
+        pixPath.height * pixelWidth
+      );
+      break;
+    default:
+      throw new Error("Unknown Pix Path Type");
+  }
+};
+
+/**
+* @private
+*/
+CharacterRenderer.prototype.setCursorLocation = function(x, y) {
+  this._cx = x;
+  this._cy = y;
+};
+
+/**
+* @private
+*/
+CharacterRenderer.prototype.advanceCursor = function(pixelWidth) {
+  this._cx = this._cx + CELLWIDTH * pixelWidth;
+};
+
+/**
+* @private
+*/
+CharacterRenderer.prototype.setColor = function(color) {
+  this._color = color;
+};
+
+/**
+* @private
+*/
+CharacterRenderer.prototype.setBackgroundColor = function(backgroundColor) {
+  this._backgroundColor = backgroundColor;
+};
+
+export default CharacterRenderer;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="C64Screen.html">C64Screen</a></li><li><a href="CharacterRenderer.html">CharacterRenderer</a></li><li><a href="ColorPointer.html">ColorPointer</a></li><li><a href="PixElement.html">PixElement</a></li><li><a href="PixRenderer.html">PixRenderer</a></li><li><a href="PixSprite.html">PixSprite</a></li><li><a href="PixSpriteFrame.html">PixSpriteFrame</a></li><li><a href="TextButton.html">TextButton</a></li><li><a href="TextElement.html">TextElement</a></li><li><a href="TextLayer.html">TextLayer</a></li><li><a href="TextLink.html">TextLink</a></li><li><a href="TextPrompt.html">TextPrompt</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CELLHEIGHT">CELLHEIGHT</a></li><li><a href="global.html#CELLWIDTH">CELLWIDTH</a></li><li><a href="global.html#CharacterMap">CharacterMap</a></li><li><a href="global.html#Color">Color</a></li><li><a href="global.html#PixPathTypes">PixPathTypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Mon Jul 29 2019 21:10:44 GMT-0500 (Central Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
