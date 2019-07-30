@@ -14,8 +14,8 @@ function PixRenderer() {};
 * @param {number} height The height of the pixElement
 * @param {array} pixPathArray The array of pix paths to draw
 * @param {array} palette The palette to use.
-* @param {integer} pixPathScaleX x-scale
-* @param {integer} pixPathScaleY y-scale
+* @param {integer} pixelWidth The width of the pixel to draw.  Typically Element scale * screen scale.
+* @param {integer} pixelHeight The height of the pixel to draw. Typically Element scale * screen scale.
 * @param {boolean} isHorizontallyFlipped Whether the element is flipped horizontally.
 * @param {boolean} isVerticallyFlipped Whether the element is flipped vertically.
 * @param {number} rotation The element's rotation in radians.
@@ -30,6 +30,7 @@ PixRenderer.prototype.renderPixPathArray = function(context, x, y, width, height
   }
 };
 
+/** @private */
 PixRenderer.prototype._renderAllPixPathsTranslated = function(context, x, y, width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation) {
   var scaledWidth = width * pixelWidth;
   var scaledHeight = height * pixelHeight;
@@ -49,12 +50,14 @@ PixRenderer.prototype._renderAllPixPathsTranslated = function(context, x, y, wid
   }.bind(this));
 };
 
+/** @private */
 PixRenderer.prototype._renderAllPixPaths = function(context, x, y, pixPathArray, palette, pixelWidth, pixelHeight, fillFn) {
   for (var i = 0; i < pixPathArray.length; i++) {
     this._renderPixPath(context, x, y, pixPathArray[i], palette, pixelWidth, pixelHeight, fillFn);
   }
 };
 
+/** @private */
 PixRenderer.prototype._renderPixPath = function(context, x, y, pixPath, palette, pixelWidth, pixelHeight, fillFn) {
   // set context fill color
   this.setFillColor(context, pixPath, palette);
@@ -69,6 +72,7 @@ PixRenderer.prototype._renderPixPath = function(context, x, y, pixPath, palette,
   fillFn(tx, ty, tw, th);
 };
 
+/** @private */
 PixRenderer.prototype.setFillColor = function(context, pixPath, palette) {
     if  (typeof pixPath.color === "number") {
       if (palette.length === 0 || pixPath.color >= palette.length) throw new Error("Color not specified in palette. (" + pixPath.color + ")");

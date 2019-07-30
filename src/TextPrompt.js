@@ -6,9 +6,9 @@ import Utils from 'slcommon/src/Utils';
 * The enter key confirms the input.
 * Used by {@link TextLayer}
 * @constructor
-* @param {C64Screen} screenContext The target screen.
-* @param {GfxLayer} parentLayer The parent layer will receive text prompts.
-* @param {Object} props Properties for this TextPrompt.  No properties supported at this time.
+* @param {Object} props Properties
+* @param {TextLayer} props.parentLayer The parent layer will receive text prompts.
+* @param {function} props.registerKeyHandler A fuction that can register a handler for a keydown event.
 */
 function TextPrompt (props) {
   props = props || {};

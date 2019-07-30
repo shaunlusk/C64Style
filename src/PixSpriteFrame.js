@@ -4,10 +4,9 @@ import AnimationFrame from 'slgfx/src/SpriteAnimationFrame';
 * PixSprite Implementation of AnimationFrame.
 * @extends {AnimationFrame}
 * @constructor
-* @param {Object} props Properties supported:
-* <ul>
-*   <li>duration - number - How long (milliseconds) to display this frame.
-*   <li>pixArray - Array - The Array of Pix entries for this frame. Format: <br />
+* @param {Object} props Object properties.
+* @param {number} props.duration Object properties.
+* @param {Array} props.pixArray The Array of Pix entries for this frame. Format: <br />
 *     {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}</br>
 *     where:
 *     <ul>
@@ -18,9 +17,7 @@ import AnimationFrame from 'slgfx/src/SpriteAnimationFrame';
 *           a ColorPointer,
 *           or an integer value corresponding to an index on this element's color palette.</li>
 *     </ul>
-*   </li>
-* </ul>
-* @see {PixElement}
+* @see {PixSprite}
 */
 function PixSpriteFrame(props) {
   props = props || {};

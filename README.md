@@ -1,7 +1,7 @@
 # C64Style
 
 ## What is it?
-A library for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.
+A library for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.  It is an extension of [slgfx](https://shaunlusk.github.io/slgfx/index.html).
 
 - Fun for creating retro-style games and animations.
 - Lightweight

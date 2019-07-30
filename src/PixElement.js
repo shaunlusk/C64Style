@@ -4,24 +4,27 @@ import {PixPathTypes} from './PixPathTypes';
 import PixRenderer from './PixRenderer';
 
 /** Element that draws pixels to a canvas from a PixArray<br />
-* <b>Extends</b>: {@link GfxElement}
+* <b>Extends</b> [GfxElement]{@link https://shaunlusk.github.io/slgfx/docs/GfxElement.html}
 * @constructor
-* @param {C64Screen} screenContext The target screen.
-* @param {GfxLayer} parentLayer The parent layer that will draw this element.
-* @param {Object} props Properties for this GfxElement.  Supports:<br>
-* From {@link GfxElement}
-*   <ul>
-*     <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>
-*     <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>
-*     <li>hidden - boolean - Whether to hide this element.</li>
-*     <li>x - number - The X coordinate for this element.</li>
-*     <li>y - number - The Y coordinate for this element.</li>
-*     <li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).</li>
-*   </ul>
-* For PixElement:
-*  <ul>
-*   <li>pixPathArray - Array - An array of PixPaths that will be drawn.  Format: <br />
-*     {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}</br>
+* @param {Object} props Properties
+* @param {Screen} props.screenContext The target screen.
+* @param {CanvasContextWrapper} props.canvasContextWrapper The canvasContextWrapper. This layer will draw to the canvas' context, via wrapper's exposed methods.
+* @param {int} [props.scaleX=1] Horizontal scale of this element.  Independent of screen scale.
+* @param {int} [props.scaleY=1] Vertical scale of this element.  Independent of screen scale.
+* @param {boolean} [props.hidden=false] Whether to hide this element.
+* @param {number} [props.x=0] The X coordinate for this element.
+* @param {number} [props.y=0] The Y coordinate for this element.
+* @param {number} [props.rotation=0] The amount of rotation to apply to the element, in radians.  Applied on top of base rotation.
+* @param {number} [props.baseRotation=0] The amount of base rotation to apply to the element, in radians. Usually used to apply an initial, unchanging rotation to the element.  Useful for correcting orientation of images.
+* @param {boolean} [props.horizontalFlip=false] Whether to flip the element horizontally.
+* @param {boolean} [props.verticalFlip=false] Whether to flip the element vertically.
+* @param {number} [props.zIndex=-1] The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).
+* @param {Array.<Color>} [props.defaultPalette=Color.getDefaultPalette()] An array of colors.  When a Pix Array entry references a color index, the corresponding color in this array will be used for the entry.
+* @param {PixRenderer} [props.pixRenderer=new PixRenderer] The PixRenderer that will draw on the canvas.
+*   If not provided, this element will create one.
+*   PixRenderer is lightweight, but if using a large number of PixElements's or PixSprite's, it may be desirable to create a single PixRenderer and pass the reference to each element via this property.
+* @param {Array} [props.pixPathArray=[]] An array of PixPaths that will be drawn.
+*   Format: <br /> {type:"TYPE", x:x, y:y, [width:width, height:height,] color:ColorObject}</br>
 *     where:
 *     <ul>
 *       <li>type can be either "PIXEL" or "RECTANGLE" (see {@link PixPathTypes})</li>
@@ -36,12 +39,7 @@ import PixRenderer from './PixRenderer';
 *     Another Example:<br />
 *         [{type:"RECTANGLE", x:1, y:1, width:2, height:2, color:3},<br />
 *         {type:"PIXEL", x:2, y:3, color:6}]<br />
-*     This will draw a rectangle from 1,1 to 2,2 using the the 3rd color from the element's palette, and  a pixel at 2,3 using the 6th color from the element's palette.</li>
-*          <li>defaultPalette - Array - An array of colors.  When a Pix Array entry references a color index, the corresponding color in this array will be used for the entry.</li>
-*          <li>pixRenderer - {@link PixRenderer} - Optional.  The PixRenderer that will draw on the canvas.
-*            If not provided, this element will create one.
-*            If using multiple PixElements's or PixSprite's it is good practice to create a single PixRenderer and pass the reference to each element via this property.</li>
-*  </ul>
+*     This will draw a rectangle from 1,1 to 2,2 using the the 3rd color from the element's palette, and  a pixel at 2,3 using the 6th color from the element's palette.
 */
 function PixElement(props) {
   props = props || {};
@@ -120,10 +118,12 @@ PixElement.prototype._setDimensions = function() {
   }
 };
 
-/** Render all PixPaths for this element.
+
+/* Render all PixPaths for this element. Automatically called as needed during screen render cycle.
 * @param {number} time The current time (milliseconds)
 * @param {number} diff The difference between the last time and the current time  (milliseconds)
 */
+/** @private */
 PixElement.prototype.render = function(time,diff) {
   this._pixRenderer.renderPixPathArray(
     this.getCanvasContextWrapper(),

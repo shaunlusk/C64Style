@@ -7,8 +7,6 @@ import Utils from 'slgfx/src/Utils';
 /**
 * Draws Characters on a layer.
 * @constructor
-* @param {integer} scaleX Horizontal scale.  Should be taken from screen's scale.
-* @param {integer} scaleY Vertical scale.  Should be taken from screen's scale.
 */
 function CharacterRenderer() {
   this._cx = 0;
@@ -24,6 +22,8 @@ function CharacterRenderer() {
 * @param {integer} x The x location to start clearing.
 * @param {integer} y The y location to start clearing.
 * @param {integer} length The length of characters to clear.
+* @param {integer} pixelWidth The width of pixels to draw.
+* @param {integer} pixelHeight The height of pixels to draw.
 */
 CharacterRenderer.prototype.clearRect = function(context, x, y, length, pixelWidth, pixelHeight)  {
   pixelWidth = pixelWidth || 1;
@@ -44,6 +44,8 @@ CharacterRenderer.prototype.clearRect = function(context, x, y, length, pixelWid
 * @param {integer} y The y location to draw the symbol to.
 * @param {Color} color The color to draw the symbol.
 * @param {Color} backgroundColor Optional. The background color for the symbol.
+* @param {integer} pixelWidth The width of pixels to draw.
+* @param {integer} pixelHeight The height of pixels to draw.
 */
 CharacterRenderer.prototype.renderSymbol = function(context, char, x, y, color, backgroundColor, pixelWidth, pixelHeight) {
   pixelWidth = pixelWidth || 1;
@@ -63,6 +65,8 @@ CharacterRenderer.prototype.renderSymbol = function(context, char, x, y, color, 
 * @param {integer} y The y location to draw the symbol to.
 * @param {Color} color The color to draw the string.
 * @param {Color} backgroundColor Optional. The background color for the string.
+* @param {integer} pixelWidth The width of pixels to draw.
+* @param {integer} pixelHeight The height of pixels to draw.
 */
 CharacterRenderer.prototype.renderString = function(context, text, x, y, color, backgroundColor, pixelWidth, pixelHeight) {
   pixelWidth = pixelWidth || 1;

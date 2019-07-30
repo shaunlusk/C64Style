@@ -2,44 +2,34 @@ import {CELLHEIGHT,CELLWIDTH} from './Constants';
 import {Color} from './Color';
 import TextLink from './TextLink';
 
-/** Provides a clickable button link.<br />
-* <b>Extends</b>: {@link TextLink}
+/** Provides a clickable button link.
 * @constructor
-* @param {C64Screen} screenContext The target screen.
-* @param {GfxLayer} parentLayer The parent layer that will draw this element.
-* @param {Object} props Properties for this TextLink.  Supports:
-* From {@link GfxElement}
-*   <ul>
-*     <li>scaleX - integer - Horizontal scale of this element.  Independent of screen scale.</li>
-*     <li>scaleY - integer - Vertical scale of this element.  Independent of screen scale.</li>
-*     <li>hidden - boolean - Whether to hide this element.</li>
-*     <li>x - number - The X coordinate for this element.</li>
-*     <li>y - number - The Y coordinate for this element.</li>
-*     <li>zIndex - number - The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).</li>
-*   </ul>
-* From {@link TextElement}:
-* <ul>
-*   <li>text - string - The text for this element. A text string or a symbol name is required for TextElement.</li>
-*   <li>symbolName - string - The symbolName for this element.  A text string or a symbol name is required for TextElement.  Refer to symbol names in {@link CharacterMap}.</li>
-*   <li>color - Color - The color for the text. Default: Color.LIGHTBLUE</li>
-*   <li>backgroundColor - Color - The backgroundColor for the text. Default: no background color</li>
-*   <li>characterRenderer - CharacterRenderer - The renderer to use to draw text.
+* @augments TextLink
+* @param {Object} props Properties
+* @param {Screen} props.screenContext The target screen.
+* @param {CanvasContextWrapper} props.canvasContextWrapper The canvasContextWrapper. This layer will draw to the canvas' context, via wrapper's exposed methods.
+* @param {int} [props.scaleX=1] Horizontal scale of this element.  Independent of screen scale.
+* @param {int} [props.scaleY=1] Vertical scale of this element.  Independent of screen scale.
+* @param {boolean} [props.hidden=false] Whether to hide this element.
+* @param {number} [props.x=0] The X coordinate for this element.
+* @param {number} [props.y=0] The Y coordinate for this element.
+* @param {boolean} [props.horizontalFlip=false] Whether to flip the element horizontally.
+* @param {boolean} [props.verticalFlip=false] Whether to flip the element vertically.
+* @param {number} [props.zIndex=-1] The z-index; elements with higher zIndex values will be drawn later than those with lower values (drawn on top of those with lower values).
+* @param {string} props.text The text for this element. A text string or a symbol name is required for TextElement.
+* @param {string} props.symbolName The symbolName for this element.  A text string or a symbol name is required for TextElement.  Refer to symbol names in {@link CharacterMap}.
+* @param {Color} [props.color=Color.LIGHTBLUE] The color for the text.
+* @param {Color} [props.backgroundColor=none] The backgroundColor for the text.
+* @param {CharacterRenderer} [props.characterRenderer=new CharacterRenderer] The renderer to use to draw text.
 *     This can be shared with a renderer for drawing text elements.  If a renderer is not provided,
-*     This TextLayer will create a {@link CharacterRenderer}.</li>
-* </ul>
-* From TextLink:
-* <ul>
-*   <li>mouseOverColor - Color - IGNORED FOR TEXTBUTTON</li>
-*   <li>mouseOverBackgroundColor - Color - IGNORED FOR TEXTBUTTON</li>
-*   <li>onClick - function - An optional function to call when the link is clicked.</li>
-*   <li>href - string - The location to navigate to when the link is clicked.</li>
-*   <li>newWindow - boolean - Whether to open the new location in a new window or not.</li>
-* </ul>
-* For TextButton:
-* <ul>
-*   <li>highlightButtonColor - Color - The color to draw the button border and to highlight the button with when the mouse is over.</li>
-*   <li>highlightTextColor - Color - The color to draw the button text.</li>
-* </ul>
+*     This TextElement will create a {@link CharacterRenderer}.
+* @param {function} [props.onClick] An optional function to call when the link is clicked.
+* @param {string} [props.href] The location to navigate to when the link is clicked.
+* @param {boolean} [props.newWindow] Whether to open the new location in a new window or not.
+* @param {Color} [props.buttonColor=props.color] The text color to display when the mouse is over this element.
+* @param {Color} [props.textColor=props.color] The text backgroundColor to display when the mouse is over this element.
+* @param {Color} [props.highlightButtonColor=props.color] The color to draw the button border and to highlight the button with when the mouse is over.
+* @param {Color} [props.highlightTextColor=props.backgroundColor] The color to draw the button text.
 */
 function TextButton(props) {
   props = props || {};

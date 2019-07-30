@@ -6,25 +6,23 @@ import TextPrompt from './TextPrompt';
 import CharacterRenderer from './CharacterRenderer';
 
 /** Text-only layer.<br />
-* Extends {@link Layer}<br />
+* <b>Extends</b> [Layer]{@link https://shaunlusk.github.io/slgfx/docs/Layer.html}
 * Generally, the use of C64Screen.createLayer("TextLayer") is preferred over creating layer by hand.
 * @constructor
-* @param {C64Screen} screenContext The parent screen for this layer.
-* @param {CanvasContext} canvas The CanvasContext that this layer will draw to.
-* @param {Object} props The properties to create this layer with. <br />
-* From Layer:
-* <ul>
-*   <li>width - number - The width of the layer.  Should match Screen.</li>
-*   <li>height - number - The height of the layer.  Should match Screen.</li>
-* </ul>
-* For TextLayer:
-* <ul>
-*   <li>characterRenderer - CharacterRenderer - The renderer to use to draw text.
+* @param {Object} props Properties
+* @param {Screen} props.screenContext The parent screen.
+* @param {CanvasContextWrapper} props.canvasContextWrapper The canvasContextWrapper. This layer will draw to the canvas' context, via wrapper's exposed methods.
+* @param {number} props.width The width of the layer.  Should match Screen.
+* @param {number} props.height The height of the layer.  Should match Screen.
+* @param {CharacterRenderer} [props.characterRenderer=new CharacterRenderer] The renderer to use to draw text.
 *     This can be shared with a renderer for drawing text elements.  If a renderer is not provided,
-*     This TextLayer will create a {@link CharacterRenderer}.</li>
-*   <li>textPrompt - TextPrompt - A text prompt for this layer.  If not provided,
-*     a {@link TextPrompt} will be created.</li>
-* </ul>
+*     This TextLayer will create a {@link CharacterRenderer}.
+* @param {TextPrompt} [props.textPrompt=new TextPrompt] A text prompt for this layer.  If not provided,
+*     a {@link TextPrompt} will be created.
+* @param {function} [props.registerKeyHandler=window.document.addEventListener] A function to register a key handler with; this allows keystrokes to be sent to the default TextPrompt.
+*     If not provided, window.document.addEventListener will be used.
+* @param {integer} [props.scaleX=1] The horizontal scale.
+* @param {integer} [props.scaleY=1] The vertical scale.
 */
 function TextLayer(props) {
   props = props || {};
@@ -50,19 +48,21 @@ function TextLayer(props) {
 TextLayer.prototype = new Layer();
 TextLayer.prototype.constructor = TextLayer;
 
-/** Updates this layer
+/* Updates this layer.  Automatically called during screen update cycle.
 * @param {number} time The current time, in milliseconds.
 * @param {number} diff The difference between the previous time and the current time, in milliseconds.
 * @override
 */
+/** @private */
 TextLayer.prototype.update = function(time,diff) {
   this._textPrompt.update(time,diff);
 };
 
-/**
+/*
 * Renders this layer, drawing any new text that has been added since the last render cycle.
 * @override
 */
+/** @private */
 TextLayer.prototype.render = function() {
   var i, pendingString;
 

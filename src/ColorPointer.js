@@ -1,7 +1,7 @@
 import {Color} from './Color';
 
 /**
-* For use with PixMap entries in {@link C64Style.PixElements} and {@link C64Style.PixSprites}
+* For use with PixMap entries in {@link PixElement} and {@link PixSprite}
 * @constructor
 * @param {Color} defaultColor The starting color for the ColorPointer
 */
