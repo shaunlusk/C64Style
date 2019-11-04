@@ -1,6 +1,6 @@
 {
   "name": "C64Style",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.",
   "main": "index.js",
   "repository": "https://github.com/shaunlusk/c64Style.git",
