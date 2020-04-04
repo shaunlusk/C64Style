@@ -49,7 +49,6 @@
 
   function setupSprites() {
     console.log("Image loaded.");
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
     var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
 
     elementFront = new C64Style.ImageSprite({
@@ -69,7 +68,6 @@
           sourceWidth:32, sourceHeight:32
         }),
       ],
-      canvasContextWrapper:canvasContext,
       screenContext:screen,
       imageRenderer:imageRenderer
     });
@@ -93,7 +91,6 @@
           sourceWidth:32, sourceHeight:32
         }),
       ],
-      canvasContextWrapper:canvasContext,
       screenContext:screen,
       imageRenderer:imageRenderer
     });
@@ -117,7 +114,6 @@
           sourceWidth:32, sourceHeight:32
         }),
       ],
-      canvasContextWrapper:canvasContext,
       screenContext:screen,
       imageRenderer:imageRenderer
     });
@@ -136,7 +132,6 @@
           sourceWidth:32, sourceHeight:32
         })
       ],
-      canvasContextWrapper:canvasContext,
       screenContext:screen,
       imageRenderer:imageRenderer
     });

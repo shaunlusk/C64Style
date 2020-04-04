@@ -58,14 +58,14 @@ TextButton.prototype._setWidth = function() {
 * @param {number} diff The difference between the previous time and the current time, in milliseconds.
 * @override
 */
-TextButton.prototype.render = function(time,diff) {
+TextButton.prototype.render = function(canvasContext, time,diff) {
   if (!this.isHidden() && this.isDirty()) {
-    this.drawTextButton();
+    this.drawTextButton(canvasContext);
   }
 };
 
 /** @private */
-TextButton.prototype.drawTextButton = function() {
+TextButton.prototype.drawTextButton = function(canvasContext) {
   var x = this.getX() * this.getScreenScaleX();
   var y = this.getY() * this.getScreenScaleY();
   var scaledCellWidth = CELLWIDTH * this.getTotalScaleX();
@@ -73,43 +73,42 @@ TextButton.prototype.drawTextButton = function() {
   var edgeX = x + scaledCellWidth;
   var rightEdge = x + (this.getLength() * scaledCellWidth) + scaledCellWidth;
   var characterRenderer = this.getCharacterRenderer();
-  var canvas = this.getCanvasContextWrapper();
 
   if (this._mouseIsOver) {
     for ( ; edgeX < rightEdge; edgeX += scaledCellWidth) {
-      characterRenderer.renderSymbol(canvas, "BAR_120", edgeX, y,  this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
-      characterRenderer.renderSymbol(canvas, "BAR_121", edgeX, y + 2 * scaledCellHeight, this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
+      characterRenderer.renderSymbol(canvasContext, "BAR_120", edgeX, y,  this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
+      characterRenderer.renderSymbol(canvasContext, "BAR_121", edgeX, y + 2 * scaledCellHeight, this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
     }
-    characterRenderer.renderSymbol(canvas, "PIPE_117", x, y + scaledCellHeight, this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "PIPE_118", rightEdge, y + scaledCellHeight, this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "PIPE_117", x, y + scaledCellHeight, this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "PIPE_118", rightEdge, y + scaledCellHeight, this.getBackgroundColor(), this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
 
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_FILLED_TOP_LEFT", x, y, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_FILLED_TOP_RIGHT", rightEdge, y, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_FILLED_BOTTOM_LEFT", x, y + 2 * scaledCellHeight, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_FILLED_BOTTOM_RIGHT", rightEdge, y + 2 * scaledCellHeight, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_FILLED_TOP_LEFT", x, y, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_FILLED_TOP_RIGHT", rightEdge, y, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_FILLED_BOTTOM_LEFT", x, y + 2 * scaledCellHeight, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_FILLED_BOTTOM_RIGHT", rightEdge, y + 2 * scaledCellHeight, this._highlightButtonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
 
     if (this.getText()) {
-      characterRenderer.renderString(canvas, this.getText(), this.getTextX(), this.getTextY(), this._highlightTextColor, this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
+      characterRenderer.renderString(canvasContext, this.getText(), this.getTextX(), this.getTextY(), this._highlightTextColor, this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
     } else {
-     characterRenderer.renderSymbol(canvas, this.getSymbolName(), this.getTextX(), this.getTextY(), this._highlightTextColor, this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
+     characterRenderer.renderSymbol(canvasContext, this.getSymbolName(), this.getTextX(), this.getTextY(), this._highlightTextColor, this._highlightButtonColor, this.getTotalScaleX(),this.getTotalScaleY());
     }
   } else {
     for ( ; edgeX < rightEdge; edgeX += scaledCellWidth) {
-      characterRenderer.renderSymbol(canvas, "BAR", edgeX, y, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-      characterRenderer.renderSymbol(canvas, "BAR", edgeX, y + 2 * scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+      characterRenderer.renderSymbol(canvasContext, "BAR", edgeX, y, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+      characterRenderer.renderSymbol(canvasContext, "BAR", edgeX, y + 2 * scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
     }
-    characterRenderer.renderSymbol(canvas, "|", x, y + scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "|", rightEdge, y + scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "|", x, y + scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "|", rightEdge, y + scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
 
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_TOP_LEFT", x, y, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_TOP_RIGHT", rightEdge, y, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_BOTTOM_LEFT", x, y + 2 * scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
-    characterRenderer.renderSymbol(canvas, "ROUNDED_CORNER_BOTTOM_RIGHT", rightEdge, y + 2 * scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_TOP_LEFT", x, y, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_TOP_RIGHT", rightEdge, y, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_BOTTOM_LEFT", x, y + 2 * scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+    characterRenderer.renderSymbol(canvasContext, "ROUNDED_CORNER_BOTTOM_RIGHT", rightEdge, y + 2 * scaledCellHeight, this._buttonColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
 
     if (this.getText()) {
-      characterRenderer.renderString(canvas, this.getText(), this.getTextX(), this.getTextY(), this._textColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+      characterRenderer.renderString(canvasContext, this.getText(), this.getTextX(), this.getTextY(), this._textColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
     } else {
-      characterRenderer.renderSymbol(canvas, this.getSymbolName(), this.getTextX(), this.getTextY(), this._textColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
+      characterRenderer.renderSymbol(canvasContext, this.getSymbolName(), this.getTextX(), this.getTextY(), this._textColor, this.getBackgroundColor(), this.getTotalScaleX(),this.getTotalScaleY());
     }
   }
 

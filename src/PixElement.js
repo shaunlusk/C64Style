@@ -124,9 +124,9 @@ PixElement.prototype._setDimensions = function() {
 * @param {number} diff The difference between the last time and the current time  (milliseconds)
 */
 /** @private */
-PixElement.prototype.render = function(time,diff) {
+PixElement.prototype.render = function(canvasContext, time,diff) {
   this._pixRenderer.renderPixPathArray(
-    this.getCanvasContextWrapper(),
+    canvasContext,
     this.getScaledX(),
     this.getScaledY(),
     this.getScaledWidth(),

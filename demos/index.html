@@ -39,8 +39,6 @@
     gfxLayer = screen.createLayer("GfxLayer");
     screen.render();
 
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
-
     textLayer.writeText("C64Style Demos", 1, 1, C64Style.Color.WHITE, C64Style.Color.BLUE);
 
     element = new C64Style.TextLink({
@@ -51,7 +49,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"TextDemo.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -64,7 +61,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"TextElementDemo.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -77,7 +73,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"Confetti.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -90,7 +85,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"ImageSpriteDemo.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -103,7 +97,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"PaletteDemo.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -116,7 +109,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"PaletteDemo2.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -129,7 +121,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"MouseEventDemo.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -142,7 +133,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"TextPromptDemo.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -155,7 +145,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"invaders.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);
@@ -169,7 +158,6 @@
         mouseOverColor: C64Style.Color.GREEN,
         mouseOverBackgroundColor: C64Style.Color.BLACK,
         href:"ChristmasDemo.html",
-        canvasContextWrapper:canvasContext,
         screenContext:screen
       });
       gfxLayer.addElement(element);
@@ -183,7 +171,6 @@
       mouseOverColor: C64Style.Color.GREEN,
       mouseOverBackgroundColor: C64Style.Color.BLACK,
       href:"../index.html",
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(element);

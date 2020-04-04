@@ -13,20 +13,20 @@
     "build:docs": "node ./node_modules/jsdoc/jsdoc.js -R README.MD -d docs ./src/"
   },
   "dependencies": {
-    "slcommon": "github:shaunlusk/slcommon",
-    "slgfx": "github:shaunlusk/slgfx"
+    "slcommon": "github:shaunlusk/slcommon#1.1.4",
+    "slgfx": "github:shaunlusk/slgfx#develop"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.0",
-    "@babel/node": "^7.5.0",
-    "@babel/preset-env": "^7.5.0",
-    "@babel/register": "^7.0.0",
-    "babel-jest": "^24.8.0",
-    "babel-loader": "^8.0.6",
-    "jest": "^24.8.0",
-    "jsdoc": "^3.6.2",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5"
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "babel-jest": "^25.2.6",
+    "babel-loader": "^8.1.0",
+    "jest": "^25.2.7",
+    "jsdoc": "^3.6.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   }
 }

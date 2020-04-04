@@ -4,7 +4,7 @@ import {Color} from '../src/Color';
 import {Mocks} from './Mocks';
 
 describe("TextElement", function() {
-  var element, screenContext, parentLayer, props, canvasContext, characterRenderer;
+  var element, screenContext, props, canvasContext, characterRenderer;
 
   beforeEach(function() {
     screenContext = Mocks.getMockScreen();
@@ -17,8 +17,7 @@ describe("TextElement", function() {
     props = {
       text : "text",
       characterRenderer : characterRenderer,
-      screenContext:screenContext,
-      canvasContextWrapper:canvasContext
+      screenContext:screenContext
     };
     element = new TextElement(props);
   });
@@ -154,13 +153,13 @@ describe("TextElement", function() {
   });
   describe("#clear()", function() {
     it("should clear canvas", function(done) {
-      element.clear(1,1);
+      element.clear(canvasContext, 1,1);
 
       expect(canvasContext.calledClearRect).toBeTruthy();
       done();
     });
     it("should clear lastWidth", function(done) {
-      element.clear(1,1);
+      element.clear(canvasContext, 1,1);
 
       expect(element._lastWidth).toBe(null,"should have cleared lastWidth");
       done();
@@ -170,7 +169,7 @@ describe("TextElement", function() {
     it("should return if hidden", function(done) {
       element.setHidden(true);
 
-      element.render(1,1);
+      element.render(canvasContext,1,1);
 
       expect("calledRenderString" in characterRenderer).toBeFalsy();
       expect("calledRenderSymbol" in characterRenderer).toBeFalsy();
@@ -179,14 +178,14 @@ describe("TextElement", function() {
     it("should return if not dirty", function(done) {
       element.setDirty(false);
 
-      element.render(1,1);
+      element.render(canvasContext,1,1);
 
       expect("calledRenderString" in characterRenderer).toBeFalsy();
       expect("calledRenderSymbol" in characterRenderer).toBeFalsy();
       done();
     });
     it("should render text", function(done) {
-      element.render(1,1);
+      element.render(canvasContext,1,1);
 
       expect("calledRenderString" in characterRenderer).toBeTruthy();
       expect("calledRenderSymbol" in characterRenderer).toBeFalsy();
@@ -194,7 +193,7 @@ describe("TextElement", function() {
     });
     it("should render symbol", function(done) {
       element.setSymbolName("SYMBOL");
-      element.render(1,1);
+      element.render(canvasContext,1,1);
 
       expect("calledRenderString" in characterRenderer).toBeFalsy();
       expect("calledRenderSymbol" in characterRenderer).toBeTruthy();
