@@ -8,7 +8,6 @@ import PixRenderer from './PixRenderer';
 * @constructor
 * @param {Object} props Properties
 * @param {Screen} props.screenContext The target screen.
-* @param {CanvasContextWrapper} props.canvasContextWrapper The canvasContextWrapper. This layer will draw to the canvas' context, via wrapper's exposed methods.
 * @param {int} [props.scaleX=1] Horizontal scale of this element.  Independent of screen scale.
 * @param {int} [props.scaleY=1] Vertical scale of this element.  Independent of screen scale.
 * @param {boolean} [props.hidden=false] Whether to hide this element.
