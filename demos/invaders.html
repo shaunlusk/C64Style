@@ -52,7 +52,6 @@ function initialize(config) {
   var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
   GameContext.shipElement = new C64Style.ImageElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
@@ -69,7 +68,6 @@ function initialize(config) {
 
   GameContext.bulletElement = new C64Style.PixElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     hidden:true,
     pixPathArray: GameContext.bulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette()
@@ -78,7 +76,6 @@ function initialize(config) {
 
   GameContext.explosionElement = new C64Style.ImageSprite({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     imageRenderer: imageRenderer,
     hidden:true,
     width:32,
@@ -198,7 +195,6 @@ function initialize(config) {
 function createAlien(x,y, palette, scoreValue) {
   var newAlien = new C64Style.PixSprite({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     frames:[GameContext.alienFrame1,GameContext.alienFrame2],
     x:x,
     y:y,
@@ -315,7 +311,6 @@ function pickAlien() {
 function createAlienBullet(x, y) {
   var bullet = new C64Style.PixElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     pixPathArray: GameContext.alienBulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette(),
     x:x,
@@ -382,7 +377,6 @@ function endGame(victory) {
   var x = ((C64Style.CELLWIDTH * config.cols) - (msg.length * C64Style.CELLWIDTH * scaleX)) / 2;
   var msgElement = new C64Style.TextElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     text:msg,
     color:color,
     backgroundColor:bgColor,

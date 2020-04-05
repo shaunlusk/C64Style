@@ -15,7 +15,6 @@ describe("PixElement", function() {
     pixImage = new PixElement({
       screenContext: mockScreen,
       pixRenderer: mockPixRenderer,
-      canvasContextWrapper: mockCanvasContextWrapper
     });
   });
 
@@ -28,7 +27,6 @@ describe("PixElement", function() {
     it("should calculate dimensions correctly", function(done) {
       var pixImage = new PixElement({
         screenContext: mockScreen,
-        canvasContextWrapper: mockCanvasContextWrapper,
         pixPathArray:[
           {type:PixPathTypes.PIXEL, x:1, y:1, color:Color.BLACK},
           {type:PixPathTypes.PIXEL, x:2, y:2, color:Color.BLACK}
@@ -46,7 +44,6 @@ describe("PixElement", function() {
         scaleX:5,
         scaleY:6,
         screenContext: mockScreen,
-        canvasContextWrapper: mockCanvasContextWrapper,
         pixPathArray : [
           {type:PixPathTypes.RECTANGLE, x: 1, y: 1, width: 2, height: 3},
           {type:PixPathTypes.RECTANGLE, x: 1, y: 2, width: 3, height: 4},
@@ -84,7 +81,7 @@ describe("PixElement", function() {
         calledRenderPixPathArray = true;
       };
 
-      pixImage.render(1, 1);
+      pixImage.render(mockCanvasContextWrapper, 1, 1);
 
       expect(calledRenderPixPathArray).toBeTruthy();
       done();

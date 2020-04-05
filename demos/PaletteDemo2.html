@@ -881,11 +881,8 @@
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");
 
-    var canvasContextWrapper = gfxLayer.getCanvasContextWrapper();
-
     sprite1 = new C64Style.PixSprite({
       screenContext : screen,
-      canvasContextWrapper : canvasContextWrapper,
       x:10, y:16,
       scaleX:2, scaleY:2,
       defaultPalette : palettes[0],

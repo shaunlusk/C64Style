@@ -59,7 +59,6 @@
     textLayer.writeText("Mouse Over Element?", 1,23,C64Style.Color.LIGHTBLUE);
 
     gfxLayer = screen.createLayer("GfxLayer");
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
 
     sprite1 = new C64Style.PixSprite({
       x:10, y:10,
@@ -68,7 +67,6 @@
         new C64Style.PixSpriteFrame({pixArray:pixPathArray1, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray2, duration:400}),
       ],
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     sprite2 = new C64Style.PixSprite({
@@ -79,7 +77,6 @@
         new C64Style.PixSpriteFrame({pixArray:pixPathArray3, duration:400}),
         new C64Style.PixSpriteFrame({pixArray:pixPathArray4, duration:400}),
       ],
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     gfxLayer.addElement(sprite1);

@@ -76,7 +76,6 @@
     textLayer.writeText("This is probably a bit more than C64 could have handled.",11,24, C64Style.Color.WHITE);
 
     gfxLayer = screen.createLayer("GfxLayer");
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
 
     for (var i = 0; i < 600; i++) {
       var x = Math.floor(Math.random() * xBounds);
@@ -89,7 +88,6 @@
          C64Style.Color.getByIndex(Math.floor(Math.random() * 16)),
          C64Style.Color.getByIndex(Math.floor(Math.random() * 16))
         ],
-        canvasContextWrapper:canvasContext,
         screenContext:screen
       });
       element.setX(x);

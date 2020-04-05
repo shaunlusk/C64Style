@@ -3,13 +3,12 @@ import {CELLHEIGHT,CELLWIDTH} from '../src/Constants';
 import {Mocks} from './Mocks';
 
 describe("TextButton", function() {
-  var button, screenContext, parentLayer, props;
-
+  var button, screenContext, canvasContextWrapper, props;
   beforeEach(function() {
     screenContext = Mocks.getMockScreen();
+    canvasContextWrapper = Mocks.getMockCanvasContext();
     props = {
       screenContext:screenContext,
-      canvasContextWrapper:Mocks.getMockCanvasContext(),
       text : "text",
       characterRenderer : Mocks.getMockCharacterRenderer()
     };
@@ -46,7 +45,7 @@ describe("TextButton", function() {
       button.drawTextButton = function() {calledIt = true;};
       button.setHidden(true);
 
-      button.render(1,1);
+      button.render(canvasContextWrapper, 1,1);
 
       expect(calledIt).toBeFalsy();
       done();
@@ -56,7 +55,7 @@ describe("TextButton", function() {
       button.drawTextButton = function() {calledIt = true;};
       button.setDirty(false);
 
-      button.render(1,1);
+      button.render(canvasContextWrapper, 1,1);
 
       expect(calledIt).toBeFalsy();
       done();
@@ -65,7 +64,7 @@ describe("TextButton", function() {
       var calledIt = false;
       button.drawTextButton = function() {calledIt = true;};
 
-      button.render(1,1);
+      button.render(canvasContextWrapper, 1,1);
 
       expect(calledIt).toBeTruthy();
       done();

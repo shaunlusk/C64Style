@@ -34,7 +34,7 @@ function C64Screen(props) {
 
   this._backgroundColor = props.backgroundColor || Color.BLUE;
   this._borderColor = props.borderColor || Color.LIGHTBLUE;
-  this._borderSize = props.borderSize || 20;
+  this._setBorderSize(props.borderSize || 20);
 };
 
 C64Screen.prototype = new Screen();

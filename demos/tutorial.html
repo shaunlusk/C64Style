@@ -185,7 +185,6 @@ Now it's time to create the element for the ship:
 <p class="code newCode">  var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
   GameContext.shipElement = new C64Style.ImageElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
@@ -221,7 +220,6 @@ Your initialize function should look like this:
   var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
   GameContext.shipElement = new C64Style.ImageElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
@@ -303,7 +301,6 @@ Duration tells us how long (milliseconds) to display each frame.
   for (var i = 0; i &lt; 8; i++) {
     var newAlien = new C64Style.PixSprite({
       screenContext: GameContext.screen,
-      canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
       frames:[GameContext.alienFrame1,GameContext.alienFrame2],
       x:x,
       y:y,
@@ -353,7 +350,6 @@ Let's extract what we did before into a function:
 <p class="code newCode"> function createAlien(x,y, palette) {
   var newAlien = new C64Style.PixSprite({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     frames:[GameContext.alienFrame1,GameContext.alienFrame2],
     x:x,
     y:y,
@@ -426,7 +422,6 @@ And your initialize function should look like this:
   var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
   GameContext.shipElement = new C64Style.ImageElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     imageRenderer: imageRenderer,
     image: GameContext.shipPng,
     sourceX:0,
@@ -734,7 +729,6 @@ var GameContext = GameContext || {};
 
   <span class="newCode">GameContext.bulletElement = new C64Style.PixElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     hidden:true,
     pixPathArray: GameContext.bulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette()
@@ -834,7 +828,6 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 <p class="code">function createAlien(x,y, palette, scoreValue) {
   var newAlien = new C64Style.PixSprite({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     frames:[GameContext.alienFrame1,GameContext.alienFrame2],
     x:x,
     y:y,
@@ -925,7 +918,6 @@ To call this, we can attach it to the ELEMENT_HIT_TOP_EDGE event on the bullet:
 <p class="code newCode">function createAlienBullet(x, y) {
   var bullet = new C64Style.PixElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     pixPathArray: GameContext.alienBulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette(),
     x:x,
@@ -1044,7 +1036,6 @@ function checkImagesLoaded() {
 </p>
 <p class="code">GameContext.bulletElement = new C64Style.PixElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     hidden:true,
     pixPathArray: GameContext.bulletPix,
     defaultPalette: C64Style.Color.getDefaultPalette()
@@ -1053,7 +1044,6 @@ function checkImagesLoaded() {
 
   <span class="newCode">GameContext.explosionElement = new C64Style.ImageSprite({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     imageRenderer: imageRenderer,
     hidden:true,
     width:32,
@@ -1289,7 +1279,6 @@ function unpauseAction() {
   var x = ((C64Style.CELLWIDTH * config.cols) - (msg.length * C64Style.CELLWIDTH * scaleX)) / 2;
   var msgElement = new C64Style.TextElement({
     screenContext: GameContext.screen,
-    canvasContextWrapper: GameContext.gfxLayer.getCanvasContextWrapper(),
     text:msg,
     color:color,
     backgroundColor:bgColor,

@@ -74,10 +74,8 @@
     previewScreen.initialize();
 
     previewGfxLayer = previewScreen.createLayer("GfxLayer");
-    var canvasContext = previewGfxLayer.getCanvasContextWrapper();
     element = new C64Style.PixElement({
       screenContext: previewScreen,
-      canvasContextWrapper: canvasContext,
       pixPathArray : pixPathArray,
       defaultPalette : C64Style.Color.getDefaultPalette()
     });

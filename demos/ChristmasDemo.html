@@ -49,7 +49,6 @@
     });
 
     gfxLayer = screen.createLayer("GfxLayer");
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
 
     textLayer.writeText("Merry Christmas", 12, 1, C64Style.Color.LIGHTGREEN);
     textLayer.writeText("" + (new Date().getYear() + 1900), 28, 1, C64Style.Color.LIGHTGREEN);
@@ -119,7 +118,6 @@
       var element = new C64Style.TextElement({
         symbolName:"DOT",
         color:getRandomLightColor(),
-        canvasContextWrapper:canvasContext,
         screenContext:screen
       });
       element.setX(lightCoords[i].x * C64Style.CELLWIDTH);
@@ -144,7 +142,6 @@
       scaleY:1,
       text:"*",
       color:C64Style.Color.YELLOW,
-      canvasContextWrapper:canvasContext,
       screenContext:screen
     });
     star.setX(21 * C64Style.CELLWIDTH + (C64Style.CELLWIDTH / 2));

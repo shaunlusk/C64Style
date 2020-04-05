@@ -141,8 +141,8 @@ TextElement.prototype._setWidth = function() {
 * @param {number} diff The difference between the previous time and the current time, in milliseconds.
 * @override
 */
-TextElement.prototype.clear = function(time, diff) {
-  this.getCanvasContextWrapper().clearRect(
+TextElement.prototype.clear = function(canvasContext, time, diff) {
+  canvasContext.clearRect(
     this.getLastX() * this.getScreenScaleX() - 1,
     this.getLastY() * this.getScreenScaleY() - 1,
     this.getLastWidth() * this.getTotalScaleX() + 2,
@@ -156,11 +156,11 @@ TextElement.prototype.clear = function(time, diff) {
 * @override
 */
 /** @private */
-TextElement.prototype.render = function(time,diff) {
+TextElement.prototype.render = function(canvasContext, time,diff) {
   if (!this.isHidden() && this.isDirty()) {
     if (this._text) {
       this._characterRenderer.renderString(
-        this.getCanvasContextWrapper(),
+        canvasContext,
         this._text,
         this.getX() * this.getScreenScaleX(),
         this.getY() * this.getScreenScaleY(),
@@ -171,7 +171,7 @@ TextElement.prototype.render = function(time,diff) {
       );
     } else {
       this._characterRenderer.renderSymbol(
-        this.getCanvasContextWrapper(),
+        canvasContext,
         this._symbolName,
         this.getX() * this.getScreenScaleX(),
         this.getY() * this.getScreenScaleY(),
