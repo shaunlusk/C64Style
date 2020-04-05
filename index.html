@@ -37,12 +37,10 @@
       scaleY:config.scaleY
     });
     gfxLayer = screen.createLayer("GfxLayer");
-    canvasContext = gfxLayer.getCanvasContextWrapper();
     screen.render();
 
     element = new C64Style.TextButton({
       screenContext:screen,
-      canvasContextWrapper:canvasContext,
       x:9.5 * C64Style.CELLWIDTH,
       y:7 * C64Style.CELLHEIGHT,
       text:"Download Bundle.JS",
@@ -57,7 +55,6 @@
     gfxLayer.addElement(element);
     element = new C64Style.TextButton({
       screenContext:screen,
-      canvasContextWrapper:canvasContext,
       x:11 * C64Style.CELLWIDTH + 4,
       y:10 * C64Style.CELLHEIGHT,
       text:"View On GitHub",
@@ -71,8 +68,7 @@
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton({
-      screenContext:screen,
-      canvasContextWrapper:canvasContext,
+      screenContext:screen,      
       x:12 * C64Style.CELLWIDTH,
       y:13 * C64Style.CELLHEIGHT,
       text:"Documentation",
@@ -86,8 +82,7 @@
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton({
-      screenContext:screen,
-      canvasContextWrapper:canvasContext,
+      screenContext:screen,      
       x:16 * C64Style.CELLWIDTH,
       y:16 * C64Style.CELLHEIGHT,
       text:"Tools",
@@ -100,8 +95,7 @@
     });
     gfxLayer.addElement(element);
     element = new C64Style.TextButton({
-      screenContext:screen,
-      canvasContextWrapper:canvasContext,
+      screenContext:screen,      
       x:15 * C64Style.CELLWIDTH + 4,
       y:19 * C64Style.CELLHEIGHT,
       text:"Demos!",
@@ -118,8 +112,7 @@
     gfxLayer.addElement(element);
 
     element = new C64Style.TextButton({
-      screenContext:screen,
-      canvasContextWrapper:canvasContext,
+      screenContext:screen,      
       x:14 * C64Style.CELLWIDTH + 4,
       y:22 * C64Style.CELLHEIGHT,
       text:"Tutorial",
@@ -143,7 +136,7 @@
     textLayer.writeText("C64Style is maintained by", 1, 26, C64Style.Color.LIGHTBLUE);
     element = new C64Style.TextLink({
       screenContext:screen,
-      canvasContextWrapper:canvasContext,
+      
       x:27 * C64Style.CELLWIDTH, y:26 * C64Style.CELLHEIGHT,
       text:"shaunlusk",
       color:C64Style.Color.LIGHTBLUE,

@@ -4,7 +4,7 @@ import {Mocks} from './Mocks';
 import EventType from 'slgfx/src/EventType';
 
 describe("TextLink", function() {
-  var link, screenContext, parentLayer, props, calledWindowOpen;
+  var link, screenContext, props, calledWindowOpen;
 
   beforeEach(function() {
     calledWindowOpen = false;
@@ -12,7 +12,6 @@ describe("TextLink", function() {
     props = {
       text : "text",
       screenContext:screenContext,
-      canvasContextWrapper: Mocks.getMockCanvasContext(),
       characterRenderer : Mocks.getMockCharacterRenderer(),
       setDocumentLocation : () => {},
       windowOpen : () => {calledWindowOpen = true;}

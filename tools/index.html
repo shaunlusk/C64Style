@@ -39,10 +39,8 @@
 
     textLayer.writeText("C64Style Tools", 1, 1, C64Style.Color.WHITE, C64Style.Color.BLUE);
 
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
     element = new C64Style.TextLink({
       screenContext:screen,
-      canvasContextWrapper:canvasContext,
       x:1 * C64Style.CELLWIDTH, y:4 * C64Style.CELLHEIGHT,
       text:"PixMap Builder",
       color:C64Style.Color.LIGHTGREEN,
@@ -55,7 +53,6 @@
 
     element = new C64Style.TextLink({
       screenContext:screen,
-      canvasContextWrapper:canvasContext,
       x:1 * C64Style.CELLWIDTH, y:6 * C64Style.CELLHEIGHT,
       text:"PixMap Import Preview",
       color:C64Style.Color.LIGHTGREEN,
@@ -68,7 +65,6 @@
 
     element = new C64Style.TextLink({
       screenContext:screen,
-      canvasContextWrapper:canvasContext,
       x:1 * C64Style.CELLWIDTH, y:8 * C64Style.CELLHEIGHT,
       text:"C64PixMapExtractor Documentation",
       color:C64Style.Color.LIGHTGREEN,
@@ -81,7 +77,6 @@
 
     element = new C64Style.TextLink({
       screenContext:screen,
-      canvasContextWrapper:canvasContext,
       x:1 * C64Style.CELLWIDTH, y:23 * C64Style.CELLHEIGHT,
       text:"Back to Main Index",
       color:C64Style.Color.LIGHTGREEN,

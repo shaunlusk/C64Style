@@ -116,11 +116,11 @@ PixSprite.prototype._setDimensions = function() {
 * @param {PixSpriteFrame} frame The frame to be rendered.
 */
 /** @private */
-PixSprite.prototype.renderFrame = function(time, diff, frame) {
+PixSprite.prototype.renderFrame = function(canvasContext, time, diff, frame) {
   var pixPathArray = frame.getPixArray();
 
   this._pixRenderer.renderPixPathArray(
-    this.getCanvasContextWrapper(),
+    canvasContext,
     this.getScaledX(),
     this.getScaledY(),
     this.getScaledWidth(),

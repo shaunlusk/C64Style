@@ -15,7 +15,6 @@ describe("PixSprite", function() {
     };
     pixSprite = new PixSprite({
       screenContext:mockScreen,
-      canvasContextWrapper:mockCanvasContextWrapper,
       pixRenderer:mockPixRenderer
     });
   });
@@ -29,7 +28,6 @@ describe("PixSprite", function() {
     it("should calculate dimensions correctly", function(done) {
       var pixSprite = new PixSprite({
         screenContext:mockScreen,
-        canvasContextWrapper:mockCanvasContextWrapper,
         pixRenderer:mockPixRenderer,
         frames:[
           new PixSpriteFrame({
@@ -50,7 +48,6 @@ describe("PixSprite", function() {
       var mockScreen = Mocks.getMockScreen({scaleX:3, scaleY:4});
       var props = {
         screenContext:mockScreen,
-        canvasContextWrapper:mockCanvasContextWrapper,
         pixRenderer:mockPixRenderer,
         scaleX:5,
         scaleY:6,
@@ -112,7 +109,7 @@ describe("PixSprite", function() {
         calledRenderPixPathArray = true;
       };
 
-      pixSprite.renderFrame(1,1,frame);
+      pixSprite.renderFrame(mockCanvasContextWrapper, 1,1,frame);
 
       expect(calledRenderPixPathArray).toBeTruthy();
       done();

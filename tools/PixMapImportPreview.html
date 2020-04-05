@@ -43,10 +43,8 @@
     });
     gfxLayer = screen.createLayer("GfxLayer");
 
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
     element = new C64Style.PixElement({
       screenContext: screen,
-      canvasContextWrapper: canvasContext,
       x:2,y:2,scaleX:2, scaleY:2,
       pixPathArray:[],
       defaultPalette:C64Style.Color.getDefaultPalette()
