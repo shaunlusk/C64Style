@@ -1,6 +1,6 @@
 {
   "name": "C64Style",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A library for rendering Commodore 64 style graphics with JavaScript and HTML5 Canvas.",
   "main": "index.js",
   "repository": "https://github.com/shaunlusk/c64Style.git",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "slcommon": "github:shaunlusk/slcommon#1.1.4",
-    "slgfx": "github:shaunlusk/slgfx#3.0.0"
+    "slgfx": "github:shaunlusk/slgfx#3.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
