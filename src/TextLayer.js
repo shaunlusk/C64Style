@@ -1,9 +1,11 @@
 import {CELLWIDTH, CELLHEIGHT} from './Constants';
 import Layer from  'slgfx/src/Layer';
+import Utils from 'slgfx/src/Utils';
 import {Color} from './Color';
-import {CharacterMap} from './CharacterMap';
 import TextPrompt from './TextPrompt';
 import CharacterRenderer from './CharacterRenderer';
+
+const _window = Utils.getWindow();
 
 /** Text-only layer.<br />
 * <b>Extends</b> [Layer]{@link https://shaunlusk.github.io/slgfx/docs/Layer.html}
@@ -34,7 +36,7 @@ function TextLayer(props) {
   this._characterRenderer = props.characterRenderer || new CharacterRenderer();
   this._textPrompt = props.textPrompt || new TextPrompt({
     parentLayer : this,
-    registerKeyHandler : props.registerKeyHandler || window.document.addEventListener.bind(window.document)
+    registerKeyHandler : props.registerKeyHandler || (_window.document ? _window.document.addEventListener.bind(_window.document) : ()=>{})
   });
   this._pendingTextStrings = [];
   this._width = props.width || 320;
