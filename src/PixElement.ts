@@ -1,7 +1,16 @@
-import GfxElement from './GfxElementExtensions';
-import {Color} from './Color';
-import {PixPathTypes} from './PixPathTypes';
-import PixRenderer from './PixRenderer';
+
+import { Color, IColor } from './Color';
+import { PixRenderer } from './PixRenderer';
+import { IPixPath } from './IPixPath';
+import { GfxElement, CanvasContextWrapper, IGfxElementProps } from '@shaunlusk/slgfx';
+import { Palette } from './Palette';
+
+export interface IPixElementProps extends IGfxElementProps{
+  pixPathArray: IPixPath[];
+  defaultPalette: Palette;
+  pixRenderer: PixRenderer;
+
+}
 
 /** Element that draws pixels to a canvas from a PixArray<br />
 * <b>Extends</b> [GfxElement]{@link https://shaunlusk.github.io/slgfx/docs/GfxElement.html}
@@ -40,104 +49,94 @@ import PixRenderer from './PixRenderer';
 *         {type:"PIXEL", x:2, y:3, color:6}]<br />
 *     This will draw a rectangle from 1,1 to 2,2 using the the 3rd color from the element's palette, and  a pixel at 2,3 using the 6th color from the element's palette.
 */
-function PixElement(props) {
-  props = props || {};
-  GfxElement.call(this, props);
-  this._width = 0;
-  this._height = 0;
-  this._pixPathArray = props.pixPathArray || [];
-  this._palette = props.defaultPalette || Color.getDefaultPalette();
-  this._pixRenderer = props.pixRenderer || new PixRenderer();
+export class PixElement extends GfxElement {
+  private _width: number;
+  private _height: number;
+  private _pixPathArray: IPixPath[];
+  private _palette: Palette;
+  private _pixRenderer: PixRenderer;
 
-  this._setDimensions();
-};
+  constructor(props: IPixElementProps) {
+    super(props);
+    this._pixPathArray = props.pixPathArray || [];
+    this._palette = props.defaultPalette || Palette.getDefaultPalette();
+    this._pixRenderer = props.pixRenderer || new PixRenderer();
 
-PixElement.prototype = new GfxElement();
-PixElement.prototype.constructor = PixElement;
-
-/** Return the width for this element
-* @override
-* @returns {number}
-*/
-PixElement.prototype.getWidth = function() {return this._width;};
-
-/** Return the height for this element
-* @override
-* @returns {number}
-*/
-PixElement.prototype.getHeight = function() {return this._height;};
-
-/** Return the palette color for a given palette index.
-* @param {integer} idx
-* @returns {string} Color string
-*/
-PixElement.prototype.getPaletteColor = function(idx) {return this._palette[idx];};
-
-/** Set the palette color for a given palette index.
-* @param {integer} idx
-* @param {string} Color string
-*/
-PixElement.prototype.setPaletteColor = function(idx, color) {
-  this._palette[idx] = color;
-  this.setDirty(true);
-};
-
-/** Return palette array.
-* @returns {array} Array of color strings
-*/
-PixElement.prototype.getPalette = function() {return this._palette;};
-
-/** Sets the palette array.
-* @param {array} palette Array of colors.
-*/
-PixElement.prototype.setPalette = function(palette) {
-  this._palette = palette;
-  this.setDirty(true);
-};
-
-/** @private */
-PixElement.prototype._setDimensions = function() {
-  var width = 0, height = 0;
-  for (var i = 0; i < this._pixPathArray.length; i++) {
-    var pixPath = this._pixPathArray[i];
-    var tx = pixPath.x;
-    var ty = pixPath.y;
-    switch(pixPath.type) {
-      case PixPathTypes.PIXEL:
-      width = tx + 1;
-      height = ty + 1;
-      break;
-      case PixPathTypes.RECTANGLE:
-      width = tx + pixPath.width;
-      height = ty + pixPath.height;
-      break;
-    }
-    if (width > this._width) this._width = width;
-    if (height > this._height) this._height = height;
+    this._setDimensions();
   }
-};
 
+  /** Return the width for this element
+  * @override
+  * @returns {number}
+  */
+  public getWidth() {return this._width;}
 
-/* Render all PixPaths for this element. Automatically called as needed during screen render cycle.
-* @param {number} time The current time (milliseconds)
-* @param {number} diff The difference between the last time and the current time  (milliseconds)
-*/
-/** @private */
-PixElement.prototype.render = function(canvasContext, time,diff) {
-  this._pixRenderer.renderPixPathArray(
-    canvasContext,
-    this.getScaledX(),
-    this.getScaledY(),
-    this.getScaledWidth(),
-    this.getScaledHeight(),
-    this._pixPathArray,
-    this._palette,
-    this.getTotalScaleX(),
-    this.getTotalScaleY(),
-    this.isHorizontallyFlipped(),
-    this.isVerticallyFlipped(),
-    this.getRotation()
-  );
-};
+  /** Return the height for this element
+  * @override
+  * @returns {number}
+  */
+  public getHeight() {return this._height;}
 
-export default PixElement;
+  /** Return the palette color for a given palette index.
+  * @param {integer} idx
+  * @returns {string} Color string
+  */
+  public getPaletteColor(idx: number) {return this._palette.colorFromIndex(idx);}
+
+  /** Set the palette color for a given palette index.
+  * @param {integer} idx
+  * @param {string} Color string
+  */
+  public setPaletteColor(idx: number, color: IColor) {
+    this._palette.setColorAtIndex(idx, color);
+    this.setDirty(true);
+  }
+
+  /** Return palette array.
+  * @returns {array} Array of color strings
+  */
+  public getPalette() {return this._palette;}
+
+  /** Sets the palette array.
+  * @param {array} palette Array of colors.
+  */
+  public setPalette(palette: Palette) {
+    this._palette = palette;
+    this.setDirty(true);
+  }
+
+  /** @private */
+  private _setDimensions() {
+    for (var i = 0; i < this._pixPathArray.length; i++) {
+      var pixPath = this._pixPathArray[i];
+      var tx = pixPath.x;
+      var ty = pixPath.y;
+      var width = tx + pixPath.width;
+      var height = ty + pixPath.height;
+      if (width > this.getWidth()) this._width = width;
+      if (height > this._height) this._height = height;
+    }
+  }
+
+  /* Render all PixPaths for this element. Automatically called as needed during screen render cycle.
+  * @param {number} time The current time (milliseconds)
+  * @param {number} diff The difference between the last time and the current time  (milliseconds)
+  */
+  /** @private */
+  public render(canvasContext: CanvasContextWrapper, time: number, diff: number) {
+    this._pixRenderer.renderPixPathArray(
+      canvasContext,
+      this.getScaledX(),
+      this.getScaledY(),
+      this.getScaledWidth(),
+      this.getScaledHeight(),
+      this._pixPathArray,
+      this._palette,
+      this.getTotalScaleX(),
+      this.getTotalScaleY(),
+      this.isHorizontallyFlipped(),
+      this.isVerticallyFlipped(),
+      this.getRotation()
+    );
+  }
+}
