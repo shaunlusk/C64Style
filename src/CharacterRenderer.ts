@@ -1,13 +1,13 @@
 import { CELLWIDTH, CELLHEIGHT } from './Constants';
 import { CharacterMap } from './CharacterMap';
-import { CanvasContextWrapper } from '@shaunlusk/slgfx';
+import { ICanvasContextWrapper } from '@shaunlusk/slgfx';
 import { IColor } from './Color';
 import { IPixPath } from './IPixPath';
 
 export interface ICharacterRenderer {
-  clearRect(context: CanvasContextWrapper, x: number, y: number, length: number, pixelWidth: number, pixelHeight: number): void;
-  renderSymbol(context: CanvasContextWrapper, char: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight: number): void;
-  renderString(context: CanvasContextWrapper, text: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight: number): void;
+  clearRect(context: ICanvasContextWrapper, x: number, y: number, length: number, pixelWidth: number, pixelHeight: number): void;
+  renderSymbol(context: ICanvasContextWrapper, char: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight: number): void;
+  renderString(context: ICanvasContextWrapper, text: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight: number): void;
 }
 
 /**
@@ -37,7 +37,7 @@ export class CharacterRenderer implements ICharacterRenderer {
   * @param {integer} pixelWidth The width of pixels to draw.
   * @param {integer} pixelHeight The height of pixels to draw.
   */
-  public clearRect(context: CanvasContextWrapper, x: number, y: number, length: number, pixelWidth: number, pixelHeight: number)  {
+  public clearRect(context: ICanvasContextWrapper, x: number, y: number, length: number, pixelWidth: number, pixelHeight: number)  {
     pixelWidth = pixelWidth || 1;
     pixelHeight = pixelHeight || 1;
     this.setCursorLocation(x, y);
@@ -59,7 +59,7 @@ export class CharacterRenderer implements ICharacterRenderer {
   * @param {integer} pixelWidth The width of pixels to draw.
   * @param {integer} pixelHeight The height of pixels to draw.
   */
-  public renderSymbol(context: CanvasContextWrapper, char: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight:number) {
+  public renderSymbol(context: ICanvasContextWrapper, char: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight:number) {
     pixelWidth = pixelWidth || 1;
     pixelHeight = pixelHeight || 1;
     this.setCursorLocation(x, y);
@@ -80,7 +80,7 @@ export class CharacterRenderer implements ICharacterRenderer {
   * @param {integer} pixelWidth The width of pixels to draw.
   * @param {integer} pixelHeight The height of pixels to draw.
   */
-  public renderString(context: CanvasContextWrapper, text: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight: number) {
+  public renderString(context: ICanvasContextWrapper, text: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight: number) {
     pixelWidth = pixelWidth || 1;
     pixelHeight = pixelHeight || 1;
     this.setCursorLocation(x, y);
@@ -97,7 +97,7 @@ export class CharacterRenderer implements ICharacterRenderer {
   /**
   * @private
   */
-  private _renderCharacter(context: CanvasContextWrapper, char: string, pixelWidth: number, pixelHeight: number) {
+  private _renderCharacter(context: ICanvasContextWrapper, char: string, pixelWidth: number, pixelHeight: number) {
     if (this._backgroundColor) {
       context.setFillStyle(this._backgroundColor);
       context.fillRect(this._cx, this._cy, CELLWIDTH * pixelWidth, CELLHEIGHT * pixelHeight);
@@ -118,7 +118,7 @@ export class CharacterRenderer implements ICharacterRenderer {
   /**
   * @private
   */
-  private _renderPixPath(context: CanvasContextWrapper, pixPath: IPixPath, pixelWidth: number, pixelHeight: number) {
+  private _renderPixPath(context: ICanvasContextWrapper, pixPath: IPixPath, pixelWidth: number, pixelHeight: number) {
     context.setFillStyle(pixPath.color ? pixPath.color.value : pixPath.color || this._color);
     var tx = (pixPath.x * pixelWidth) + this._cx;
     var ty = (pixPath.y * pixelHeight) + this._cy;

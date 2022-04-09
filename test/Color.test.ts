@@ -1,4 +1,4 @@
-import {Color} from '../src/Color';
+import { Color } from '../src/Color';
 
 describe("Color", function() {
   describe("#getByIndex()", function() {
@@ -73,31 +73,31 @@ describe("Color", function() {
       done();
     });
   });
-  describe("#getDefaultPalette()", function() {
-    it("should return default palette", function(done) {
-      var expected = [
-        Color.BLACK,
-        Color.WHITE,
-        Color.RED,
-        Color.CYAN,
-        Color.PURPLE,
-        Color.GREEN,
-        Color.BLUE,
-        Color.YELLOW,
-        Color.ORANGE,
-        Color.BROWN,
-        Color.PINK,
-        Color.DARKGREY,
-        Color.GREY,
-        Color.LIGHTGREEN,
-        Color.LIGHTBLUE,
-        Color.LIGHTGREY
-      ];
-      var result = Color.getDefaultPalette();
-      for (var i = 0; i < expected.length; i++) {
-        expect(expected[i]).toBe(result[i]);
-      }
-      done();
-    });
-  });
+  // describe("#getDefaultPalette()", function() {
+  //   it("should return default palette", function(done) {
+  //     var expected = [
+  //       Color.BLACK,
+  //       Color.WHITE,
+  //       Color.RED,
+  //       Color.CYAN,
+  //       Color.PURPLE,
+  //       Color.GREEN,
+  //       Color.BLUE,
+  //       Color.YELLOW,
+  //       Color.ORANGE,
+  //       Color.BROWN,
+  //       Color.PINK,
+  //       Color.DARKGREY,
+  //       Color.GREY,
+  //       Color.LIGHTGREEN,
+  //       Color.LIGHTBLUE,
+  //       Color.LIGHTGREY
+  //     ];
+  //     var result = Color.getDefaultPalette();
+  //     for (var i = 0; i < expected.length; i++) {
+  //       expect(expected[i]).toBe(result[i]);
+  //     }
+  //     done();
+  //   });
+  // });
 });

@@ -1,13 +1,23 @@
 import { CELLWIDTH, CELLHEIGHT } from './Constants';
-import { GfxLayer, ILayerProps, Layer, SLGfxMouseEvent } from  '@shaunlusk/slgfx';
-import { Color } from './Color';
+import { ILayerProps, Layer, SLGfxMouseEvent } from  '@shaunlusk/slgfx';
+import { Color, IColor } from './Color';
 import { ITextPrompt, TextPrompt } from './TextPrompt';
-import { CharacterRenderer } from './CharacterRenderer';
+import { CharacterRenderer, ICharacterRenderer } from './CharacterRenderer';
 
 export interface ITextLayerProps extends ILayerProps {
-  characterRenderer: CharacterRenderer,
+  characterRenderer: ICharacterRenderer,
   textPrompt?: ITextPrompt,
-  registerKeyHandler?: () => void
+  scaleX?: number,
+  scaleY?: number
+}
+
+interface PendingString {
+  string?: string;
+  pixMapId?: string;
+  cellX: number;
+  cellY: number;
+  color?: IColor;
+  backgroundColor?: IColor;
 }
 
 /** Text-only layer.<br />
@@ -19,7 +29,7 @@ export interface ITextLayerProps extends ILayerProps {
 * @param {CanvasContextWrapper} props.canvasContextWrapper The canvasContextWrapper. This layer will draw to the canvas' context, via wrapper's exposed methods.
 * @param {number} props.width The width of the layer.  Should match Screen.
 * @param {number} props.height The height of the layer.  Should match Screen.
-* @param {CharacterRenderer} [props.characterRenderer=new CharacterRenderer] The renderer to use to draw text.
+* @param {ICharacterRenderer} [props.characterRenderer=new CharacterRenderer] The renderer to use to draw text.
 *     This can be shared with a renderer for drawing text elements.  If a renderer is not provided,
 *     This TextLayer will create a {@link CharacterRenderer}.
 * @param {TextPrompt} [props.textPrompt=new TextPrompt] A text prompt for this layer.  If not provided,
@@ -33,18 +43,20 @@ export class TextLayer extends Layer {
   // TODO these aren't used??
   private _cx: number;
   private _cy: number;
-  private _color: Color;
-  private _backgroundColor: Color;
-  private _characterRenderer: any;
+  private _color: IColor;
+  private _backgroundColor: IColor;
+  private _characterRenderer: ICharacterRenderer;
   private _textPrompt: ITextPrompt;
-  private _pendingTextStrings: any[];
-  private _scaleX: any;
-  private _scaleY: any;
+  private _pendingTextStrings: PendingString[];
+  private _scaleX: number;
+  private _scaleY: number;
   private _scaledCellWidth: number;
   private _scaledCellHeight: number;
   
   constructor(props: ITextLayerProps) {
     super(props);
+    this._scaleX = props.scaleX || 1;
+    this._scaleY = props.scaleY || 1;
     this._cx = 0;
     this._cy = 0;
     this._color = Color.LIGHTBLUE;

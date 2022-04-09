@@ -5,4 +5,4 @@ LayerFactory.DefaultTypes['TextLayer'] = function(props: ITextLayerProps): Layer
   return new TextLayer(props);
 };
 
-export default LayerFactory;
+export { LayerFactory };
