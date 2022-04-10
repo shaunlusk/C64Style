@@ -69,7 +69,7 @@
   };
 
   function initialize(targetDiv, config) {
-    screen = new C64Style.C64Screen(targetDiv, new C64Style.LayerFactory(), config);
+    screen = new C64Style.C64Panel(targetDiv, new C64Style.LayerFactory(), config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer");
     gfxLayer = screen.createLayer("GfxLayer");

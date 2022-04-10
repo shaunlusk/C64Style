@@ -27,7 +27,7 @@
 
   function initialize(config) {
     // Create the C64 Screen
-    screen = new C64Style.C64Screen(config);
+    screen = new C64Style.C64Panel(config);
     screen.initialize();
 
     textLayer = screen.createLayer("TextLayer", {

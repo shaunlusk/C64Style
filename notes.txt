@@ -23,11 +23,11 @@ LGrey: 192 192 192
 
 
 
-/** Emmited by a C64Style.C64Screen when the mouse moves over it */
+/** Emmited by a C64Style.C64Panel when the mouse moves over it */
 "MOUSE_MOVE" : "MOUSE_MOVE",
-/** Emmited by a C64Style.C64Screen when a mouse down event occurs on it */
+/** Emmited by a C64Style.C64Panel when a mouse down event occurs on it */
 "MOUSE_DOWN" : "MOUSE_DOWN",
-/** Emmited by a C64Style.C64Screen when a mouse down event occurs on it */
+/** Emmited by a C64Style.C64Panel when a mouse down event occurs on it */
 "MOUSE_UP" : "MOUSE_UP",
 /** Emmited by */
 

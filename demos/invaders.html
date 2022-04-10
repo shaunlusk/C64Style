@@ -36,7 +36,7 @@ var config = {
 };
 
 function initialize(config) {
-  GameContext.screen = new C64Style.C64Screen(config);
+  GameContext.screen = new C64Style.C64Panel(config);
   GameContext.screen.initialize();
 
   GameContext.textLayer = GameContext.screen.createLayer("TextLayer", {

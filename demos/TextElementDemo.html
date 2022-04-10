@@ -35,7 +35,7 @@
     var xBounds = config.cols * C64Style.CELLWIDTH - 16;
     var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
 
-    screen = new C64Style.C64Screen(config);
+    screen = new C64Style.C64Panel(config);
     screen.initialize();
 
     gfxLayer = screen.createLayer("GfxLayer");

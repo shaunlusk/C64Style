@@ -2,7 +2,7 @@ import { GfxPanel, IGfxPanelProps } from "@shaunlusk/slgfx";
 import { Color, IColor } from "./Color";
 import { CELLHEIGHT, CELLWIDTH } from "./Constants";
 
-export interface IC64ScreenProps extends IGfxPanelProps {
+export interface IC64PanelProps extends IGfxPanelProps {
   cols?: number;
   rows?: number;
   borderSize?: number;
@@ -27,13 +27,13 @@ export interface IC64ScreenProps extends IGfxPanelProps {
 * @param {string} [props.backgroundColor=Color.BLUE] The color to set the panel background to. Default: Color.BLUE
 * @param {string} [props.borderColor=Color.LIGHTBLUE] The color to set the panel border to. Default: Color.LIGHTBLUE
 */
-export class C64Screen extends GfxPanel {
+export class C64Panel extends GfxPanel {
   private _cols: number;
   private _rows: number;
   private _mouseRow: number;
   private _mouseCol: number;
 
-  constructor(props: IC64ScreenProps) {
+  constructor(props: IC64PanelProps) {
     const cols = props.cols || 40;
     const rows = props.rows || 25;
     const gfxPanelProps: IGfxPanelProps = {...props};

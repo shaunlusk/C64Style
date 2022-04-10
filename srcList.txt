@@ -1,4 +1,4 @@
-C64Screen
+C64Panel
 CharacterMap
 CharacterRenderer
 Color

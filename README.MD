@@ -34,7 +34,7 @@ var config = {
 };
 
 // create the screen
-screen = new C64Style.C64Screen(config);
+screen = new C64Style.C64Panel(config);
 
 // call initialize on screen
 screen.initialize();

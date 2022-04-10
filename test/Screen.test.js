@@ -1,8 +1,8 @@
-import C64Screen from '../src/C64Screen';
+import C64Panel from '../src/C64Panel';
 import Screen from 'slgfx/src/Screen';
 import {Mocks} from './Mocks';
 
-describe("C64Screen", function() {
+describe("C64Panel", function() {
   var scrn, props, targetDiv, layerFactory, fpsElem, config, calledRequestAnimationFrame,
   windowEventListeners = {};
 
@@ -34,7 +34,7 @@ describe("C64Screen", function() {
       layerFactory:layerFactory,
       targetDiv:targetDiv
     };
-    scrn = new C64Screen(props);
+    scrn = new C64Panel(props);
   });
 
   describe("#xToColumn()", function() {

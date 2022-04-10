@@ -59,7 +59,7 @@
   };
 
   function initialize(config) {
-    screen = new C64Style.C64Screen(config);
+    screen = new C64Style.C64Panel(config);
     screen.initialize();
     textLayer = screen.createLayer("TextLayer", {
       scaleX:config.scaleX,
@@ -67,7 +67,7 @@
     });
     gfxLayer = screen.createLayer("GfxLayer");
 
-    previewScreen = new C64Style.C64Screen({
+    previewScreen = new C64Style.C64Panel({
       targetDiv: document.getElementById("preview"),
       backgroundColor:"#360066", rows:2, cols:2, scaleX:4, scaleY:4, borderSize:2
     });

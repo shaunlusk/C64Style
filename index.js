@@ -25,7 +25,7 @@ import Sprite from 'slgfx/src/Sprite';
 import SpriteAnimationFrame from 'slgfx/src/SpriteAnimationFrame';
 import Utils from 'slgfx/src/Utils';
 
-import C64Screen from './src/C64Screen';
+import C64Panel from './src/C64Panel';
 import {CharacterMap} from './src/CharacterMap';
 import CharacterRenderer from './src/CharacterRenderer';
 import {Color} from './src/Color';
@@ -74,7 +74,7 @@ if (typeof self !== 'undefined' && self) {
   self.C64Style.SpriteAnimationFrame = SpriteAnimationFrame;
   self.C64Style.Utils = Utils;
 
-  self.C64Style.C64Screen = C64Screen;
+  self.C64Style.C64Panel = C64Panel;
   self.C64Style.CharacterMap = CharacterMap;
   self.C64Style.CharacterRenderer = CharacterRenderer;
   self.C64Style.Color = Color;

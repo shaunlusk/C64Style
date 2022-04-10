@@ -22,7 +22,7 @@ interface PendingString {
 
 /** Text-only layer.<br />
 * <b>Extends</b> [Layer]{@link https://shaunlusk.github.io/slgfx/docs/Layer.html}
-* Generally, the use of C64Screen.createLayer("TextLayer") is preferred over creating layer by hand.
+* Generally, the use of C64Panel.createLayer("TextLayer") is preferred over creating layer by hand.
 * @constructor
 * @param {Object} props Properties
 * @param {Screen} props.screenContext The parent screen.
