@@ -1,5 +1,4 @@
-import { CanvasContextWrapper, Utils } from "@shaunlusk/slgfx";
-import { Color, IColor } from "./Color";
+import { CanvasContextWrapper, ICanvasContextWrapper, Utils } from "@shaunlusk/slgfx";
 import { IPixPath } from "./IPixPath";
 import { Palette } from "./Palette";
 
@@ -27,7 +26,7 @@ export class PixRenderer implements IPixRenderer {
   * @param {number} rotation The element's rotation in radians.
   */
   public renderPixPathArray(
-    context: CanvasContextWrapper, 
+    context: ICanvasContextWrapper, 
     x: number, y: number, 
     width: number, height: number, 
     pixPathArray: IPixPath[], 
@@ -36,7 +35,7 @@ export class PixRenderer implements IPixRenderer {
     flipHorizontally: boolean, flipVertically: boolean, 
     rotation: number
   ) {
-    var fillFn = context.fillRect.bind(context);
+    const fillFn = context.fillRect.bind(context);
 
     if (flipHorizontally || flipVertically || rotation) {
       this._renderAllPixPathsTranslated(context, x, y,  width, height, pixPathArray, palette, pixelWidth, pixelHeight, flipHorizontally, flipVertically, rotation);
@@ -47,7 +46,7 @@ export class PixRenderer implements IPixRenderer {
 
   /** @private */
   private _renderAllPixPathsTranslated(
-    context: CanvasContextWrapper, 
+    context: ICanvasContextWrapper, 
     x: number, y: number, 
     width: number, height: number, 
     pixPathArray: IPixPath[], 
@@ -56,18 +55,18 @@ export class PixRenderer implements IPixRenderer {
     flipHorizontally: boolean, flipVertically: boolean, 
     rotation: number
   ) {
-    var scaledWidth = width * pixelWidth;
-    var scaledHeight = height * pixelHeight;
+    const scaledWidth = width * pixelWidth;
+    const scaledHeight = height * pixelHeight;
 
     // where to reposition the canvas context
-    var translationX = x + scaledWidth/2;
-    var translationY = x + scaledHeight/2;
+    const translationX = x + scaledWidth/2;
+    const translationY = x + scaledHeight/2;
 
     // target coordinates to draw the element to on the rotated canvas
-    var rotatedTx = 0 - scaledWidth/2;
-    var rotatedTy = 0 - scaledHeight/2;
+    const rotatedTx = 0 - scaledWidth/2;
+    const rotatedTy = 0 - scaledHeight/2;
 
-    var fillFn = context.fillRectWithTranslation.bind(context);
+    const fillFn = context.fillRectWithTranslation.bind(context);
 
     Utils.renderWithTranslation(context, translationX, translationY, flipHorizontally, flipVertically, rotation, function() {
       this._renderAllPixPaths(context, rotatedTx, rotatedTy, pixPathArray, palette, pixelWidth, pixelHeight, fillFn);
@@ -76,7 +75,7 @@ export class PixRenderer implements IPixRenderer {
 
   /** @private */
   private _renderAllPixPaths(
-    context: CanvasContextWrapper, 
+    context: ICanvasContextWrapper, 
     x: number, 
     y: number, 
     pixPathArray: IPixPath[], 
@@ -84,14 +83,14 @@ export class PixRenderer implements IPixRenderer {
     pixelWidth: number, pixelHeight: number, 
     fillFn: (x: number, y: number, width: number, height: number) => void
   ) {
-    for (var i = 0; i < pixPathArray.length; i++) {
+    for (let i = 0; i < pixPathArray.length; i++) {
       this._renderPixPath(context, x, y, pixPathArray[i], palette, pixelWidth, pixelHeight, fillFn);
     }
   }
 
   /** @private */
   private _renderPixPath(
-    context: CanvasContextWrapper, 
+    context: ICanvasContextWrapper, 
     x: number, 
     y: number, 
     pixPath: IPixPath, 
@@ -103,17 +102,17 @@ export class PixRenderer implements IPixRenderer {
     this.setFillColor(context, pixPath, palette);
 
     // calculate tx, ty, tw, th
-    var tx = (pixPath.x * pixelWidth) + x;
-    var ty = (pixPath.y * pixelHeight) + y;
-    var tw = (pixPath.width || 1) * pixelWidth;
-    var th = (pixPath.height || 1) * pixelHeight;
+    const tx = (pixPath.x * pixelWidth) + x;
+    const ty = (pixPath.y * pixelHeight) + y;
+    const tw = (pixPath.width || 1) * pixelWidth;
+    const th = (pixPath.height || 1) * pixelHeight;
 
     // draw it
     fillFn(tx, ty, tw, th);
   }
 
   /** @private */
-  private setFillColor(context: CanvasContextWrapper, pixPath: IPixPath, palette: Palette) {
+  private setFillColor(context: ICanvasContextWrapper, pixPath: IPixPath, palette: Palette) {
       if  (pixPath.colorIndex !== undefined && pixPath.colorIndex !== null) {
         if (palette.size() === 0 || pixPath.colorIndex >= palette.size()) throw new Error("Color not specified in palette. (" + pixPath.color + ")");
         context.setFillStyle(palette.colorFromIndex(pixPath.colorIndex).value);
