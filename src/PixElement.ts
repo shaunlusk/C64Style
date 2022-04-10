@@ -1,15 +1,14 @@
 
-import { Color, IColor } from './Color';
-import { PixRenderer } from './PixRenderer';
+import { IColor } from './Color';
+import { IPixRenderer, PixRenderer } from './PixRenderer';
 import { IPixPath } from './IPixPath';
 import { GfxElement, CanvasContextWrapper, IGfxElementProps } from '@shaunlusk/slgfx';
 import { Palette } from './Palette';
 
-export interface IPixElementProps extends IGfxElementProps{
+export interface IPixElementProps extends IGfxElementProps {
   pixPathArray: IPixPath[];
   defaultPalette: Palette;
-  pixRenderer: PixRenderer;
-
+  pixRenderer: IPixRenderer;
 }
 
 /** Element that draws pixels to a canvas from a PixArray<br />
@@ -54,7 +53,7 @@ export class PixElement extends GfxElement {
   private _height: number;
   private _pixPathArray: IPixPath[];
   private _palette: Palette;
-  private _pixRenderer: PixRenderer;
+  private _pixRenderer: IPixRenderer;
 
   constructor(props: IPixElementProps) {
     super(props);
@@ -107,12 +106,14 @@ export class PixElement extends GfxElement {
 
   /** @private */
   private _setDimensions() {
-    for (var i = 0; i < this._pixPathArray.length; i++) {
-      var pixPath = this._pixPathArray[i];
-      var tx = pixPath.x;
-      var ty = pixPath.y;
-      var width = tx + pixPath.width;
-      var height = ty + pixPath.height;
+    this._width = 0;
+    this._height = 0;
+    for (let i = 0; i < this._pixPathArray.length; i++) {
+      const pixPath = this._pixPathArray[i];
+      const tx = pixPath.x;
+      const ty = pixPath.y;
+      const width = tx + pixPath.width;
+      const height = ty + pixPath.height;
       if (width > this.getWidth()) this._width = width;
       if (height > this._height) this._height = height;
     }
