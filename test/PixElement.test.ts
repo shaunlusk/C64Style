@@ -1,6 +1,6 @@
 import * as TypeMoq from 'typemoq';
 
-import { ICanvasContextWrapper, IGfxPanel } from '@shaunlusk/slgfx';
+import { IGfxPanel } from '@shaunlusk/slgfx';
 import {Color} from '../src/Color';
 import { IPixRenderer } from '../src/PixRenderer';
 import { IPixElementProps, PixElement } from '../src/PixElement';
@@ -10,13 +10,11 @@ import { PixPathRectangle } from '../src/PixPathRectangle';
 
 describe("PixElement", function() {
   var pixImage,  
-    canvaseContextMock: TypeMoq.IMock<ICanvasContextWrapper>,
     pixRendererMock: TypeMoq.IMock<IPixRenderer>,
     gfxPanelMock: TypeMoq.IMock<IGfxPanel>
     ;
 
   beforeEach(function() {
-    canvaseContextMock = TypeMoq.Mock.ofType<ICanvasContextWrapper>();
     pixRendererMock = TypeMoq.Mock.ofType<IPixRenderer>();
     gfxPanelMock = TypeMoq.Mock.ofType<IGfxPanel>();
 
