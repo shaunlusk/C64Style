@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@shaunlusk/slcommon": "^2.0.8",
-    "@shaunlusk/slgfx": "^4.0.3"
+    "@shaunlusk/slgfx": "^4.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",

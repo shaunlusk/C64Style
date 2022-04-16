@@ -1,4 +1,5 @@
 import { GfxPanel, IGfxPanelProps } from "@shaunlusk/slgfx";
+import { C64MouseEventData } from "./C64MouseEvent";
 import { Color, IColor } from "./Color";
 import { CELLHEIGHT, CELLWIDTH } from "./Constants";
 
@@ -43,6 +44,7 @@ export class C64Panel extends GfxPanel {
     gfxPanelProps.borderColor = gfxPanelProps.borderColor || Color.LIGHTBLUE.value;
     gfxPanelProps.borderSize = gfxPanelProps.borderSize || 20;
 
+    debugger;
     super(gfxPanelProps);
     
     this._cols = cols;
@@ -78,14 +80,17 @@ export class C64Panel extends GfxPanel {
   */
    public getMouseCol() {return this._mouseCol;}
 
-  // /** @private
-  // */
-  // private _getCoordinateDataForMouseEvent(scaledX: number, scaledY: number) {
-  //   var data = GfxPanel.prototype._getCoordinateDataForMouseEvent.call(this, scaledX, scaledY);
-  //   data.col = this._xToColumnFromMouseEvent(data.x);
-  //   data.row = this._yToRowFromMouseEvent(data.y);
-  //   return data;
-  // }
+  /** @protected
+  */
+  protected override _getDataForMouseEvent(scaledX: number, scaledY: number) {
+    var data = super._getDataForMouseEvent(scaledX, scaledY);
+    var c64Data: C64MouseEventData = {
+      ...data,
+      col: this._xToColumnFromMouseEvent(data.x),
+      row: this._yToRowFromMouseEvent(data.y)
+    }
+    return c64Data;
+  }
 
   /** Return the column coordinate from a given X. Factors in Panel scale and view origin.
   * @param {int} x The x coordinate from the event.
