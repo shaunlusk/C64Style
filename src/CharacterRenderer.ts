@@ -17,8 +17,8 @@ export interface ICharacterRenderer {
 export class CharacterRenderer implements ICharacterRenderer {
   _cx: number;
   _cy: number;
-  _color: any;
-  _backgroundColor: any;
+  _color?: IColor;
+  _backgroundColor?: IColor;
 
   constructor() {
     this._cx = 0;
@@ -37,9 +37,7 @@ export class CharacterRenderer implements ICharacterRenderer {
   * @param {integer} pixelWidth The width of pixels to draw.
   * @param {integer} pixelHeight The height of pixels to draw.
   */
-  public clearRect(context: ICanvasContextWrapper, x: number, y: number, length: number, pixelWidth: number, pixelHeight: number)  {
-    pixelWidth = pixelWidth || 1;
-    pixelHeight = pixelHeight || 1;
+  public clearRect(context: ICanvasContextWrapper, x: number, y: number, length: number, pixelWidth: number = 1, pixelHeight: number = 1)  {
     this.setCursorLocation(x, y);
     context.clearRect(
       this._cx,
@@ -59,9 +57,7 @@ export class CharacterRenderer implements ICharacterRenderer {
   * @param {integer} pixelWidth The width of pixels to draw.
   * @param {integer} pixelHeight The height of pixels to draw.
   */
-  public renderSymbol(context: ICanvasContextWrapper, char: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight:number) {
-    pixelWidth = pixelWidth || 1;
-    pixelHeight = pixelHeight || 1;
+  public renderSymbol(context: ICanvasContextWrapper, char: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number = 1, pixelHeight:number = 1) {
     this.setCursorLocation(x, y);
     this.setColor(color);
     this.setBackgroundColor(backgroundColor);
@@ -80,15 +76,13 @@ export class CharacterRenderer implements ICharacterRenderer {
   * @param {integer} pixelWidth The width of pixels to draw.
   * @param {integer} pixelHeight The height of pixels to draw.
   */
-  public renderString(context: ICanvasContextWrapper, text: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number, pixelHeight: number) {
-    pixelWidth = pixelWidth || 1;
-    pixelHeight = pixelHeight || 1;
+  public renderString(context: ICanvasContextWrapper, text: string, x: number, y: number, color: IColor, backgroundColor: IColor, pixelWidth: number = 1, pixelHeight: number = 1) {
     this.setCursorLocation(x, y);
     this.setColor(color);
     this.setBackgroundColor(backgroundColor);
 
-    for (var i = 0; i < text.length; i++) {
-      var char = text.charAt(i);
+    for (let i = 0; i < text.length; i++) {
+      const char = text.charAt(i);
       this._renderCharacter(context, char, pixelWidth, pixelHeight);
       this.advanceCursor(pixelWidth);
     }
@@ -99,18 +93,18 @@ export class CharacterRenderer implements ICharacterRenderer {
   */
   private _renderCharacter(context: ICanvasContextWrapper, char: string, pixelWidth: number, pixelHeight: number) {
     if (this._backgroundColor) {
-      context.setFillStyle(this._backgroundColor);
+      context.setFillStyle(this._backgroundColor.value);
       context.fillRect(this._cx, this._cy, CELLWIDTH * pixelWidth, CELLHEIGHT * pixelHeight);
     }
 
     if (char === " ") return;
-    var pixPathArray = CharacterMap[char];
+    const pixPathArray = CharacterMap[char];
 
     if (!pixPathArray) {
       console.log("No pix path found for character:" + char);
       return;
     }
-    for (var i = 0; i < pixPathArray.length; i++) {
+    for (let i = 0; i < pixPathArray.length; i++) {
       this._renderPixPath(context, pixPathArray[i], pixelWidth, pixelHeight);
     }
   }
@@ -119,9 +113,9 @@ export class CharacterRenderer implements ICharacterRenderer {
   * @private
   */
   private _renderPixPath(context: ICanvasContextWrapper, pixPath: IPixPath, pixelWidth: number, pixelHeight: number) {
-    context.setFillStyle(pixPath.color ? pixPath.color.value : pixPath.color || this._color);
-    var tx = (pixPath.x * pixelWidth) + this._cx;
-    var ty = (pixPath.y * pixelHeight) + this._cy;
+    context.setFillStyle(pixPath.color ? pixPath.color.value : this._color.value);
+    const tx = (pixPath.x * pixelWidth) + this._cx;
+    const ty = (pixPath.y * pixelHeight) + this._cy;
     // switch (pixPath.type) {
     //   case PixPathTypes.PIXEL :
     //     context.fillRect(tx, ty, pixelWidth, pixelHeight);
