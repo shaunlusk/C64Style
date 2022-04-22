@@ -1,24 +1,32 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: "./index.js",
-  target:"web",
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js"
-  },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"]
-          }
-        }
-      }
-    ]
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
+  entry: {
+    index: './src/index.ts',
+    demos: './src/demos/demos.ts'
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'bundle'),
+    library: 'c64style',
+    libraryTarget: 'umd',
+    globalObject: 'this'
   }
 };

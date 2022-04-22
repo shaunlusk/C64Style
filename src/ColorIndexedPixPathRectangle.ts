@@ -1,6 +1,6 @@
 import { IPixPath } from "./IPixPath";
 
-export class PixPathRectangle implements IPixPath {
+export class ColorIndexedPixPathRectangle implements IPixPath {
   private _x: number;
   private _y: number;
   private _width: number;

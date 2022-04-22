@@ -1,4 +1,4 @@
-import { Layer, LayerFactory } from '@shaunlusk/slgfx';
+import { Layer, LayerFactory, ILayerFactory } from '@shaunlusk/slgfx';
 import { ITextLayerProps, TextLayer } from './TextLayer';
 
 LayerFactory.DefaultTypes['TextLayer'] = function(props: ITextLayerProps): Layer {

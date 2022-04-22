@@ -1,6 +1,12 @@
 import { Color, IColor } from "./Color";
 
-export class Palette {
+export interface IPalette {
+  colorFromIndex(index: number): IColor;
+  setColorAtIndex(index: number, color: IColor): void;
+  size(): number;
+}
+
+export class Palette implements IPalette {
   private _colors: IColor[];
 
   constructor(colors: IColor[]) {

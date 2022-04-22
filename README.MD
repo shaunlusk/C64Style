@@ -14,7 +14,7 @@ C64Style is not an emulator.
 ### Basic Usage
 Install it:
 
-    bower install shaunlusk/C64Style
+    npm install @shaunlusk/C64Style
 
 Create a div to hold the screen and its components:
 

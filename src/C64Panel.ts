@@ -2,6 +2,7 @@ import { GfxPanel, IGfxPanelProps } from "@shaunlusk/slgfx";
 import { C64MouseEventData } from "./C64MouseEvent";
 import { Color, IColor } from "./Color";
 import { CELLHEIGHT, CELLWIDTH } from "./Constants";
+import { LayerFactory } from "./LayerFactoryExtensions";
 
 export interface IC64PanelProps extends IGfxPanelProps {
   cols?: number;
@@ -43,8 +44,8 @@ export class C64Panel extends GfxPanel {
     gfxPanelProps.backgroundColor = gfxPanelProps.backgroundColor || Color.BLUE.value;
     gfxPanelProps.borderColor = gfxPanelProps.borderColor || Color.LIGHTBLUE.value;
     gfxPanelProps.borderSize = gfxPanelProps.borderSize || 20;
+    gfxPanelProps.layerFactory = gfxPanelProps.layerFactory || new LayerFactory();
 
-    debugger;
     super(gfxPanelProps);
     
     this._cols = cols;

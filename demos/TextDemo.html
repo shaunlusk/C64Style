@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Text Demo</title>
-  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
+  <script type="text/javascript" src="../bundle/demos.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -13,40 +14,7 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-
-  var config = {
-    targetDiv:document.getElementById("content")
-  };
-
-  var screen = null, textLayer = null;
-
-  function initialize(config) {
-    // Create the C64 Screen
-    screen = new C64Style.C64Panel(config);
-    screen.initialize();
-
-    textLayer = screen.createLayer("TextLayer");
-    screen.render();
-
-    // Write some characters to it
-    textLayer.writeText("This is a demo of the text drawing", 0, 0, C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("capabilities of C64Style.", 0, 1, C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("Enjoy!", 0, 2, C64Style.Color.CYAN);
-
-    // Draw all mapped symbols.
-    var x = 0, y = 5;
-    Object.keys(C64Style.CharacterMap).forEach(function(key) {
-      textLayer.drawSymbol(key, x, y, C64Style.Color.WHITE);
-      // Draw inverse characters
-      textLayer.drawSymbol(key, x, y + 10, C64Style.Color.BLUE, C64Style.Color.LIGHTBLUE);
-      x++;
-      if (x > 24) {
-        x = 0;
-        y++;
-      }
-    });
-  }
-  initialize(config);
+    var demo = new c64style.TextDemo({targetElement: document.getElementById('content')});
   </script>
 </body>
 </html>
