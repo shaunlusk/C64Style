@@ -2,7 +2,7 @@ import { C64Panel } from "../C64Panel";
 
 export interface IBaseDemoProps {
   targetElement: HTMLElement;
-  fpsElement: HTMLElement;
+  fpsElement?: HTMLElement;
 }
 
 export class BaseDemo {

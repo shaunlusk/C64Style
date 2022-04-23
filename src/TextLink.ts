@@ -3,14 +3,13 @@ import { IColor } from "./Color";
 import { Utils } from "@shaunlusk/slgfx";
 
 export interface ITextLinkProps extends ITextElementProps {
-  mouseOverColor: IColor;
-  mouseOverBackgroundColor: IColor;
-  onClick: any;
-  newWindow: boolean;
-  windowOpen: () => void;
-  setDocumentLocation: (location: string) => void;
+  mouseOverColor?: IColor;
+  mouseOverBackgroundColor?: IColor;
+  onClick?: (e: MouseEvent) => void;
+  newWindow?: boolean;
+  windowOpen?: () => void;
+  setDocumentLocation?: (location: string) => void;
   href?: string;
-
 }
 
 /** TextElement that draws a text string or a text symbol to a canvas and provides a Hyperlink to another location.<br />
@@ -56,7 +55,7 @@ export class TextLink extends TextElement {
     this._mouseOverBackgroundColor = props.mouseOverBackgroundColor || this._backgroundColor;
     this._onClick = props.onClick;
     this._href = props.href;
-    this._newWindow = props.newWindow;
+    this._newWindow = (props.newWindow !== null && props.newWindow !== undefined) ? props.newWindow : false;
     this._baseColor = this._color;
     this._baseBackgroundColor = this._backgroundColor;
     this._windowOpen = props.windowOpen || (window.open ? window.open.bind(window) : ()=>{});
