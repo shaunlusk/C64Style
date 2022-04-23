@@ -4,7 +4,7 @@ import { Color, IColor } from "./Color";
 import { CELLHEIGHT, CELLWIDTH } from "./Constants";
 
 export interface ITextElementProps extends IGfxElementProps {
-  text: string;
+  text?: string;
   symbolName?: string;
   color: Color;
   backgroundColor?: Color;

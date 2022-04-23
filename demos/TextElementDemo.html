@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Text Element Demo</title>
-  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
+  <script type="text/javascript" src="../bundle/demos.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -15,97 +16,10 @@
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var screen = null,
-    textLayer = null,
-    textLayer2 = null,
-    gfxLayer = null,
-    element = null,
-    element2 = null,
-    element3 = null;
-  var config = {
-    targetDiv:document.getElementById("content"),
-    rows : 25,
-    cols : 40,
-    scaleX : 1,
-    scaleY : 1,
-    fpsElem : document.getElementById('info')
-  };
-
-  function initialize(config) {
-    var xBounds = config.cols * C64Style.CELLWIDTH - 16;
-    var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
-
-    screen = new C64Style.C64Panel(config);
-    screen.initialize();
-
-    gfxLayer = screen.createLayer("GfxLayer");
-    var canvasContext = gfxLayer.getCanvasContextWrapper();
-
-    element = new C64Style.TextElement({
-      scaleX:1,
-      scaleY:1,
-      text:"Regular Text",
-      color:C64Style.Color.LIGHTBLUE,
-      backgroundColor:C64Style.Color.BLUE,
-      canvasContextWrapper:canvasContext,
-      screenContext:screen
+    var demo = new c64style.TextElementDemo({
+      targetElement: document.getElementById('content'),
+      fpsElement: document.getElementById('info')
     });
-    element.setX(10);
-    element.setY(10);
-    element.setMoveRates(25, 10);
-    gfxLayer.addElement(element);
-
-    element2 = new C64Style.TextElement({
-      scaleX:2,
-      scaleY:2,
-      text:"SCALED TEXT!",
-      color:C64Style.Color.GREEN,
-      backgroundColor:C64Style.Color.BLACK,
-      canvasContextWrapper:canvasContext,
-      screenContext:screen
-    });
-    element2.setX(20);
-    element2.setY(20);
-    element2.setMoveRates(35, 20);
-    gfxLayer.addElement(element2);
-
-    element3 = new C64Style.TextElement({
-      scaleX:2,
-      scaleY:2,
-      symbolName:"HEART",
-      color:C64Style.Color.RED,
-      backgroundColor:C64Style.Color.PINK,
-      canvasContextWrapper:canvasContext,
-      screenContext:screen
-    });
-    element3.setX(50);
-    element3.setY(50);
-    element3.setMoveRates(20,20);
-    gfxLayer.addElement(element3);
-
-    screen.on(SL.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
-    });
-
-    screen.on(SL.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
-    });
-
-    screen.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
-    });
-
-    screen.on(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
-    });
-
-    screen.render();
-  }
-  initialize(config);
   </script>
 </body>
 </html>
