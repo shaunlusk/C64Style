@@ -96,12 +96,12 @@ export class PixSprite extends Sprite {
   private _setDimensions() {
     let width = 0, height = 0;
     const frames = this.getFrames() as PixSpriteFrame[];
-    for (var fidx = 0; fidx < frames.length; fidx++) {
-      var pixPathArray = frames[fidx].getPixArray();
-      for (var i = 0; i < pixPathArray.length; i++) {
-        var pixPath = pixPathArray[i];
-        var tx = pixPath.x;
-        var ty = pixPath.y;
+    for (let fidx = 0; fidx < frames.length; fidx++) {
+      const pixPathArray = frames[fidx].getPixArray();
+      for (let i = 0; i < pixPathArray.length; i++) {
+        const pixPath = pixPathArray[i];
+        const tx = pixPath.x;
+        const ty = pixPath.y;
         // switch(pixPath.type) {
         //   case PixPathTypes.PIXEL:
         //   width = tx + 1;
@@ -126,7 +126,7 @@ export class PixSprite extends Sprite {
   * @param {PixSpriteFrame} frame The frame to be rendered.
   */
   public override renderFrame(canvasContext: CanvasContextWrapper, time: number, diff: number, frame: PixSpriteFrame) {
-    var pixPathArray = frame.getPixArray();
+    const pixPathArray = frame.getPixArray();
 
     this._pixRenderer.renderPixPathArray(
       canvasContext,

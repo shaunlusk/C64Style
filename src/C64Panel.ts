@@ -84,8 +84,8 @@ export class C64Panel extends GfxPanel {
   /** @protected
   */
   protected override _getDataForMouseEvent(scaledX: number, scaledY: number) {
-    var data = super._getDataForMouseEvent(scaledX, scaledY);
-    var c64Data: C64MouseEventData = {
+    const data = super._getDataForMouseEvent(scaledX, scaledY);
+    const c64Data: C64MouseEventData = {
       ...data,
       col: this._xToColumnFromMouseEvent(data.x),
       row: this._yToRowFromMouseEvent(data.y)

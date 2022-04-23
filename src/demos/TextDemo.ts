@@ -26,7 +26,7 @@ export class TextDemo {
     this._textLayer.writeText("Enjoy!", 0, 2, Color.CYAN);
 
     // Draw all mapped symbols.
-    var x = 0, y = 5;
+    let x = 0, y = 5;
     Object.keys(CharacterMap).forEach(key => {
       this._textLayer.drawSymbol(key, x, y, Color.WHITE);
       // Draw inverse characters

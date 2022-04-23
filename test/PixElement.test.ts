@@ -9,7 +9,7 @@ import { PixPath } from '../src/PixPath';
 import { PixPathRectangle } from '../src/PixPathRectangle';
 
 describe("PixElement", function() {
-  var pixImage,  
+  let pixImage,  
     pixRendererMock: TypeMoq.IMock<IPixRenderer>,
     gfxPanelMock: TypeMoq.IMock<IGfxPanel>
     ;
@@ -43,16 +43,16 @@ describe("PixElement", function() {
         ],
       });
 
-      var exectedWidth = 3, expectedHeight = 3;
+      const exectedWidth = 3, expectedHeight = 3;
       expect(pixImage.getWidth()).toBe(exectedWidth);
       expect(pixImage.getHeight()).toBe(expectedHeight);
       done();
     });
     it("should calculate dimensions correctly", function(done) {
-      // var mockScreen = Mocks.getMockScreen({scaleX:3, scaleY:4});
+      // const mockScreen = Mocks.getMockScreen({scaleX:3, scaleY:4});
       gfxPanelMock.setup(x => x.getScaleX()).returns(() => 3);
       gfxPanelMock.setup(x => x.getScaleY()).returns(() => 4);
-      var props: IPixElementProps = {
+      const props: IPixElementProps = {
         scaleX:5,
         scaleY:6,
         gfxPanel: gfxPanelMock.object,
@@ -64,7 +64,7 @@ describe("PixElement", function() {
           new PixPathRectangle(2, 2, 1, 1)
         ]
       };
-      var pixImage = new PixElement(props);
+      const pixImage = new PixElement(props);
 
       expect(pixImage.getWidth()).toBe(4);
       expect(pixImage.getHeight()).toBe(6);
@@ -81,7 +81,7 @@ describe("PixElement", function() {
   });
   describe("#setPalette()", function() {
     it("should set palette", function(done) {
-      var expected = "#1234AA";
+      const expected = "#1234AA";
       pixImage.setPaletteColor(0, expected);
 
       expect(pixImage.getPaletteColor(0)).toBe(expected);

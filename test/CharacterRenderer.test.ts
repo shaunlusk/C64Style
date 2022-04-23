@@ -16,8 +16,8 @@ describe("CharacterRenderer", function() {
 
   describe("#clearRect()", function() {
     it("should clear a rectangle of specified length at specified cell coordinates", function(done) {
-      var x = 2, y = 2, length = 3;
-      var expected = {
+      const x = 2, y = 2, length = 3;
+      const expected = {
         x : x,
         y : y,
         width : length * CELLWIDTH,
@@ -30,9 +30,9 @@ describe("CharacterRenderer", function() {
       done();
     });
     it("should clear a rectangle of specified length at specified cell coordinates (2x2)", function(done) {
-      var x = 2, y = 2, length = 3;
+      const x = 2, y = 2, length = 3;
 
-      var expected = {
+      const expected = {
         x : x,
         y : y,
         width : length * CELLWIDTH * 2,

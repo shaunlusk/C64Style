@@ -3,127 +3,23 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Confetti Demo</title>
-  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
+  <script type="text/javascript" src="../bundle/demos.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <div id="content">
   </div>
-  <div id="buttons"><button onclick="screen.setPaused(!screen.isPaused());">Pause</button></div>
+  <div id="buttons"><button onclick="demo.togglePause();">Pause</button></div>
   <div id="info"></div>
   <div id="backLinks">
     <a href="index.html">Back to Demos Index</a><br /><br />
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var screen = null,
-    textLayer = null,
-    gfxLayer = null,
-    pixPathArray = [
-      {type:"RECTANGLE", x:1, y: 5, width:1, height:6, color: 0},
-      {type:"RECTANGLE", x:5, y: 1, width:6, height:1, color: 0},
-      {type:"RECTANGLE", x:5, y: 14, width:6, height:1, color: 0},
-      {type:"RECTANGLE", x:14, y: 5, width:1, height:6, color: 0},
-
-      {type:"PIXEL", x:2, y: 4, color: 0},
-      {type:"PIXEL", x:3, y: 3, color: 0},
-      {type:"PIXEL", x:4, y: 2, color: 0},
-
-      {type:"PIXEL", x:11, y: 2, color: 0},
-      {type:"PIXEL", x:12, y: 3, color: 0},
-      {type:"PIXEL", x:13, y: 4, color: 0},
-
-      {type:"PIXEL", x:2, y: 11, color: 0},
-      {type:"PIXEL", x:3, y: 12, color: 0},
-      {type:"PIXEL", x:4, y: 13, color: 0},
-
-      {type:"PIXEL", x:11, y: 13, color: 0},
-      {type:"PIXEL", x:12, y: 12, color: 0},
-      {type:"PIXEL", x:13, y: 11, color: 0},
-
-      {type:"RECTANGLE", x:2, y: 5, width:12, height:6, color: 1},
-      {type:"RECTANGLE", x:5, y: 2, width:6, height:12, color: 1},
-      {type:"RECTANGLE", x:3, y: 4, width:10, height:8, color: 1},
-      {type:"RECTANGLE", x:4, y: 3, width:8, height:10, color: 1},
-    ],
-    element = null;
-  var config = {
-    targetDiv:document.getElementById("content"),
-    rows : 50,
-    cols : 80,
-    scaleX : 1,
-    scaleY : 1,
-    fpsElem : document.getElementById('info')
-  };
-
-  var xBounds = config.cols * C64Style.CELLWIDTH - 16;
-  var yBounds = config.rows * C64Style.CELLHEIGHT - 16;
-
-  var moveRateMin = 3;
-  var moveRateMax = 300;
-
-  function getRandomMoveRate() {
-    var rate = Math.floor(Math.random() * (moveRateMax - moveRateMin)) + moveRateMin;
-    rate = Math.random() >= 0.5 ? rate : 0 - rate;
-    return rate;
-  }
-
-  function initialize(config) {
-    screen = new C64Style.C64Panel(config);
-
-    screen.initialize();
-
-    textLayer = screen.createLayer("TextLayer");
-    textLayer.writeText("This is probably a bit more than C64 could have handled.",11,24, C64Style.Color.WHITE);
-
-    gfxLayer = screen.createLayer("GfxLayer");
-
-    for (var i = 0; i < 600; i++) {
-      var x = Math.floor(Math.random() * xBounds);
-      var y = Math.floor(Math.random() * yBounds);
-      element = new C64Style.PixElement({
-        scaleX:1,
-        scaleY:1,
-        pixPathArray : pixPathArray,
-        defaultPalette : [
-         C64Style.Color.getByIndex(Math.floor(Math.random() * 16)),
-         C64Style.Color.getByIndex(Math.floor(Math.random() * 16))
-        ],
-        screenContext:screen
-      });
-      element.setX(x);
-      element.setY(y);
-
-      var xMoveRate = getRandomMoveRate();
-      var yMoveRate = getRandomMoveRate();
-      element.setMoveRates(xMoveRate, yMoveRate);
-
-      gfxLayer.addElement(element);
-    }
-
-    screen.on(SL.EventType.ELEMENT_HIT_LEFT_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(Math.abs(element.getMoveRateX()), element.getMoveRateY());
+    var demo = new c64style.ConfettiDemo({
+      targetElement: document.getElementById('content'),
+      fpsElement: document.getElementById('info')
     });
-
-    screen.on(SL.EventType.ELEMENT_HIT_RIGHT_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(0 - Math.abs(element.getMoveRateX()), element.getMoveRateY());
-    });
-
-    screen.on(SL.EventType.ELEMENT_HIT_TOP_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(element.getMoveRateX(), Math.abs(element.getMoveRateY()));
-    });
-
-    screen.on(SL.EventType.ELEMENT_HIT_BOTTOM_EDGE, function(event) {
-      var element = event.data.element;
-      element.setMoveRates(element.getMoveRateX(), 0 - Math.abs(element.getMoveRateY()));
-    });
-
-    screen.render(1);
-  }
-  initialize(config);
   </script>
 </body>
 </html>

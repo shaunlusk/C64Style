@@ -7,7 +7,7 @@ import { Color } from '../src/Color';
 import { ICharacterRenderer } from '../src/CharacterRenderer';
 
 describe("TextButton", function() {
-  var button, 
+  let button, 
     gfxPanelMock: TypeMoq.IMock<IGfxPanel>, 
     characterRendererMock: TypeMoq.IMock<ICharacterRenderer>, 
     canvasContextMock: TypeMoq.IMock<ICanvasContextWrapper>,
@@ -36,21 +36,21 @@ describe("TextButton", function() {
   describe("#_setWidth()", function() {
     it("should set width", function(done) {
 
-      var expected = (button.getText().length + 2) * CELLWIDTH;
+      const expected = (button.getText().length + 2) * CELLWIDTH;
       expect(button.getWidth()).toBe(expected);
       done();
     });
     it("should set lastWidth and for symbol", function(done) {
       button.setText(null);
 
-      var expected = 3 * CELLWIDTH;
+      const expected = 3 * CELLWIDTH;
       expect(button.getWidth()).toBe(expected);
       done();
     });
   });
   describe("#render()", function() {
     it("should return if hidden", function(done) {
-      var calledIt = false;
+      let calledIt = false;
       button.drawTextButton = function() {calledIt = true;};
       button.setHidden(true);
 
@@ -60,7 +60,7 @@ describe("TextButton", function() {
       done();
     });
     it("should return if not dirty", function(done) {
-      var calledIt = false;
+      let calledIt = false;
       button.drawTextButton = function() {calledIt = true;};
       button.setDirty(false);
 
@@ -70,7 +70,7 @@ describe("TextButton", function() {
       done();
     });
     it("should call drawTextButton", function(done) {
-      var calledIt = false;
+      let calledIt = false;
       button.drawTextButton = function() {calledIt = true;};
 
       button.render(canvasContextMock.object, 1,1);

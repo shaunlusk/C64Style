@@ -103,7 +103,7 @@ describe("TextLayer", function() {
   });
   describe("#getTextPrompt()", function() {
     it("should return text prompt", function(done) {
-      var result = layer.getTextPrompt();
+      const result = layer.getTextPrompt();
 
       expect(result).toBe(textPromptMock.object);
       done();

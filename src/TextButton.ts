@@ -75,13 +75,13 @@ export class TextButton extends TextLink {
 
   /** @private */
   private drawTextButton(canvasContext: CanvasContextWrapper) {
-    var x = this.getX() * this.getPanelScaleX();
-    var y = this.getY() * this.getPanelScaleY();
-    var scaledCellWidth = CELLWIDTH * this.getTotalScaleX();
-    var scaledCellHeight = CELLHEIGHT * this.getTotalScaleY();
-    var edgeX = x + scaledCellWidth;
-    var rightEdge = x + (this.getLength() * scaledCellWidth) + scaledCellWidth;
-    var characterRenderer = this.getCharacterRenderer();
+    const x = this.getX() * this.getPanelScaleX();
+    const y = this.getY() * this.getPanelScaleY();
+    const scaledCellWidth = CELLWIDTH * this.getTotalScaleX();
+    const scaledCellHeight = CELLHEIGHT * this.getTotalScaleY();
+    let edgeX = x + scaledCellWidth;
+    const rightEdge = x + (this.getLength() * scaledCellWidth) + scaledCellWidth;
+    const characterRenderer = this.getCharacterRenderer();
 
     if (this.isMouseOver()) {
       for ( ; edgeX < rightEdge; edgeX += scaledCellWidth) {

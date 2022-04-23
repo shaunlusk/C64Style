@@ -21,9 +21,9 @@ describe("LayerFactory", function() {
     const canvasContextWrapperMock: TypeMoq.IMock<ICanvasContextWrapper> = TypeMoq.Mock.ofType<ICanvasContextWrapper>();
     const textPromptMock: TypeMoq.IMock<ITextPrompt> = TypeMoq.Mock.ofType<ITextPrompt>();
     it("should create TextLayer", function(done) {
-      var lf = new LayerFactory();
+      const lf = new LayerFactory();
 
-      var result = lf.createLayer<TextLayer, ITextLayerProps>("TextLayer", {
+      const result = lf.createLayer<TextLayer, ITextLayerProps>("TextLayer", {
         characterRenderer: characterRendererMock.object,
         canvasContextWrapper: canvasContextWrapperMock.object,
         textPrompt: textPromptMock.object

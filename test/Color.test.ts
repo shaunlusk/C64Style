@@ -3,7 +3,7 @@ import { Color } from '../src/Color';
 describe("Color", function() {
   describe("#getByIndex()", function() {
     it("should return colors", function(done) {
-      var result, expected, idx;
+      let result, expected, idx;
 
       idx = 0;
       expected = Color.BLACK;
@@ -75,7 +75,7 @@ describe("Color", function() {
   });
   // describe("#getDefaultPalette()", function() {
   //   it("should return default palette", function(done) {
-  //     var expected = [
+  //     const expected = [
   //       Color.BLACK,
   //       Color.WHITE,
   //       Color.RED,
@@ -93,8 +93,8 @@ describe("Color", function() {
   //       Color.LIGHTBLUE,
   //       Color.LIGHTGREY
   //     ];
-  //     var result = Color.getDefaultPalette();
-  //     for (var i = 0; i < expected.length; i++) {
+  //     const result = Color.getDefaultPalette();
+  //     for (const i = 0; i < expected.length; i++) {
   //       expect(expected[i]).toBe(result[i]);
   //     }
   //     done();

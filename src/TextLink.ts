@@ -92,7 +92,7 @@ export class TextLink extends TextElement {
   /** @private */
   private _click = function(event: MouseEvent) {
     if (Utils.isFunction(this._onClick)) {
-      var result = this._onClick(event);
+      const result = this._onClick(event);
       if (result !== undefined && !result) return;
     }
     if (this._href) {

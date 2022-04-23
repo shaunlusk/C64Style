@@ -85,7 +85,7 @@ export class TextLayer extends Layer {
   * @override
   */
   public render() {
-    var i, pendingString;
+    let i, pendingString;
 
     this._textPrompt.render();
 
