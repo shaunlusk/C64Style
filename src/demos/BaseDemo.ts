@@ -1,6 +1,6 @@
-import { C64Panel } from "../C64Panel";
+import { C64Panel, IC64PanelProps } from "../C64Panel";
 
-export interface IBaseDemoProps {
+export interface IBaseDemoProps extends IC64PanelProps {
   targetElement: HTMLElement;
   fpsElement?: HTMLElement;
 }

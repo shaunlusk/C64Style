@@ -1,13 +1,27 @@
-import { GfxPanel, IGfxPanelProps } from "@shaunlusk/slgfx";
+import { EventManager } from "@shaunlusk/slcommon";
+import { GfxPanel, IGfxPanelProps, ILayerFactory } from "@shaunlusk/slgfx";
 import { C64MouseEventData } from "./C64MouseEvent";
 import { Color, IColor } from "./Color";
 import { CELLHEIGHT, CELLWIDTH } from "./Constants";
 import { LayerFactory } from "./LayerFactoryExtensions";
 
-export interface IC64PanelProps extends IGfxPanelProps {
+export interface IC64PanelProps {
   cols?: number;
   rows?: number;
   borderSize?: number;
+
+  targetElement: HTMLElement;
+  layerFactory?: ILayerFactory;
+  scaleX?: number;
+  scaleY?: number;
+  fpsElement?: HTMLElement;
+  imageSmoothingEnabled?: boolean;
+  useMouseMoveEvents?: boolean;
+  backgroundColor?: IColor | string;
+  borderColor?: IColor | string;
+  eventManager?: EventManager;
+  requestAnimationFrame?: () => void;
+  document?: Document;
 }
 
 /** The Panel is the overriding container for all C64Style components.
@@ -38,27 +52,36 @@ export class C64Panel extends GfxPanel {
   constructor(props: IC64PanelProps) {
     const cols = props.cols || 40;
     const rows = props.rows || 25;
-    const gfxPanelProps: IGfxPanelProps = {...props};
-    gfxPanelProps.width = gfxPanelProps.width || cols * (props.scaleX || 1) * CELLWIDTH;
-    gfxPanelProps.height = gfxPanelProps.height || rows * (props.scaleY || 1) * CELLWIDTH;
-    gfxPanelProps.backgroundColor = gfxPanelProps.backgroundColor || Color.BLUE.value;
-    gfxPanelProps.borderColor = gfxPanelProps.borderColor || Color.LIGHTBLUE.value;
-    gfxPanelProps.borderSize = gfxPanelProps.borderSize || 20;
-    gfxPanelProps.layerFactory = gfxPanelProps.layerFactory || new LayerFactory();
+    const backgroundIColor = props.backgroundColor as IColor;
+    const backgroundColor: string = (backgroundIColor ? backgroundIColor.value : props.backgroundColor ? props.backgroundColor as string : Color.BLUE.value);
+    const borderIColor = props.borderColor as IColor;
+    const borderColor: string = (borderIColor ? borderIColor.value : props.borderColor ? props.borderColor as string : Color.LIGHTBLUE.value);
+    const gfxPanelProps: IGfxPanelProps = {
+      targetElement: props.targetElement,
+      layerFactory: props.layerFactory || new LayerFactory(),
+      scaleX: props.scaleX,
+      scaleY: props.scaleY,
+      width: cols * (props.scaleX || 1) * CELLWIDTH,
+      height: rows * (props.scaleY || 1) * CELLHEIGHT,
+      fpsElement: props.fpsElement,
+      imageSmoothingEnabled: props.imageSmoothingEnabled,
+      useMouseMoveEvents: props.useMouseMoveEvents,
+      backgroundColor,
+      borderColor,
+      borderSize: props.borderSize || 20,
+      eventManager: props.eventManager,
+      requestAnimationFrame: props.requestAnimationFrame,
+      document: props.document
+    };
 
     super(gfxPanelProps);
     
     this._cols = cols;
     this._rows = rows;
-    // this._width = this._cols * this._scaleX * CELLWIDTH;
-    // this._height = this._rows * this._scaleY * CELLHEIGHT;
 
     this._mouseRow = -1;
     this._mouseCol = -1;
 
-    // this._backgroundColor = props.backgroundColor || Color.BLUE;
-    // this._borderColor = props.borderColor || Color.LIGHTBLUE;
-    // this._setBorderSize(props.borderSize || 20);
   }
 
   /** Return the number of rows.
