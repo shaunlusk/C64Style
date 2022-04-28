@@ -3,181 +3,23 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Image Sprite Demo</title>
-  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
+  <script type="text/javascript" src="../bundle/demos.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <div id="content">
   </div>
-  <div id="buttons"><button onclick="screen.setPaused(!screen.isPaused());">Pause</button></div>
+  <div id="buttons"><button onclick="demo.togglePause();">Pause</button></div>
   <div id="info"></div>
   <div id="backLinks">
     <a href="index.html">Back to Demos Index</a><br /><br />
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var screen = null,
-    image = null,
-    gfxLayer = null,
-    elementFront = null,
-    elementLeft = null,
-    elementRight = null,
-    elementBack = null;
-
-  var config = {
-    targetDiv:document.getElementById("content"),
-    rows : 50,
-    cols : 80,
-    scaleX : 1,
-    scaleY : 1,
-    fpsElem : document.getElementById('info')
-  };
-
-  function initialize(config) {
-    screen = new C64Style.C64Panel(config);
-    screen.initialize();
-
-    gfxLayer = screen.createLayer("GfxLayer");
-
-    image = new Image();
-    image.src = "BlueBallSpriteTest.png";
-
-    image.onload = setupSprites;
-
-    screen.render(1);
-  }
-  initialize(config);
-
-  function setupSprites() {
-    console.log("Image loaded.");
-    var imageRenderer =  new SL.ImageRenderer(config.scaleX, config.scaleY);
-
-    elementFront = new C64Style.ImageSprite({
-      image:image,
-      x : 100, y : 100,
-      scaleX:1, scaleY:1,
-      width:32, height:32,
-      frames:[
-        new C64Style.ImageSpriteFrame({
-          duration:2500,
-          sourceX:0, sourceY:0,
-          sourceWidth:32, sourceHeight:32
-        }),
-        new C64Style.ImageSpriteFrame({
-          duration:200,
-          sourceX:32, sourceY:0,
-          sourceWidth:32, sourceHeight:32
-        }),
-      ],
-      screenContext:screen,
-      imageRenderer:imageRenderer
+     var demo = new c64style.ImageSpriteDemo({
+      targetElement: document.getElementById('content'),
+      fpsElement: document.getElementById('info')
     });
-    gfxLayer.addElement(elementFront);
-
-    elementRight = new C64Style.ImageSprite({
-      image:image,
-      x : 100, y : 300,
-      scaleX:1, scaleY:1,
-      width:32, height:32,
-      hidden: true,
-      frames:[
-        new C64Style.ImageSpriteFrame({
-          duration:2500,
-          sourceX:64, sourceY:0,
-          sourceWidth:32, sourceHeight:32
-        }),
-        new C64Style.ImageSpriteFrame({
-          duration:200,
-          sourceX:96, sourceY:0,
-          sourceWidth:32, sourceHeight:32
-        }),
-      ],
-      screenContext:screen,
-      imageRenderer:imageRenderer
-    });
-    gfxLayer.addElement(elementRight);
-
-    elementLeft = new C64Style.ImageSprite({
-      image:image,
-      x: 500, y: 100,
-      scaleX:1, scaleY:1,
-      width:32, height:32,
-      hidden: true,
-      frames:[
-        new C64Style.ImageSpriteFrame({
-          duration:2500,
-          sourceX:0, sourceY:32,
-          sourceWidth:32, sourceHeight:32
-        }),
-        new C64Style.ImageSpriteFrame({
-          duration:200,
-          sourceX:32, sourceY:32,
-          sourceWidth:32, sourceHeight:32
-        }),
-      ],
-      screenContext:screen,
-      imageRenderer:imageRenderer
-    });
-    gfxLayer.addElement(elementLeft);
-
-    elementBack = new C64Style.ImageSprite({
-      image:image,
-      x:500, y:300,
-      scaleX:1, scaleY:1,
-      width:32, height:32,
-      hidden: true,
-      frames:[
-        new C64Style.ImageSpriteFrame({
-          duration:2500,
-          sourceX:64, sourceY:32,
-          sourceWidth:32, sourceHeight:32
-        })
-      ],
-      screenContext:screen,
-      imageRenderer:imageRenderer
-    });
-    gfxLayer.addElement(elementBack);
-
-    elementFront.on("ELEMENT_STOPPED_MOVING", moveEast);
-    elementRight.on("ELEMENT_STOPPED_MOVING", moveNorth);
-    elementBack.on("ELEMENT_STOPPED_MOVING", moveWest);
-    elementLeft.on("ELEMENT_STOPPED_MOVING", moveSouth);
-
-    moveSouth();
-  }
-
-  function moveSouth(){
-    elementLeft.hide();
-    elementFront.setX(100);
-    elementFront.setY(100);
-    elementFront.show();
-    elementFront.moveTo(100, 300, 4000);
-  }
-
-  function moveEast() {
-    elementFront.hide();
-    elementRight.setX(100);
-    elementRight.setY(300);
-    elementRight.show();
-    elementRight.moveTo(500, 300, 6000);
-  }
-
-  function moveNorth() {
-    elementRight.hide();
-    elementBack.setX(500);
-    elementBack.setY(300);
-    elementBack.show();
-    elementBack.moveTo(500, 100, 4000);
-  }
-
-  function moveWest() {
-    elementBack.hide();
-    elementLeft.setX(500);
-    elementLeft.setY(100);
-    elementLeft.show();
-    elementLeft.moveTo(100, 100, 6000);
-  }
-
   </script>
 </body>
 </html>
