@@ -5,8 +5,8 @@ import { IPixRenderer, PixRenderer } from "./PixRenderer";
 import { PixSpriteFrame } from "./PixSpriteFrame";
 
 export interface IPixSpriteProps extends ISpriteProps {
-  defaultPalette: Palette;
-  pixRenderer: IPixRenderer;
+  defaultPalette?: Palette;
+  pixRenderer?: IPixRenderer;
 }
 
 /** For showing Pix Animations.  Much like PixElement, but uses multiple frames for animations.<br />

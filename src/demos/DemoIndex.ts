@@ -7,8 +7,8 @@ import { BaseDemo, IBaseDemoProps } from "./BaseDemo";
 
 export class DemoIndex extends BaseDemo {
   constructor(props: IBaseDemoProps) {
-    const rows = 14;
-    const cols = 20;
+    const rows = 28;
+    const cols = 40;
     const scaleX = 2;
     const scaleY = 2;
     const superProps = {

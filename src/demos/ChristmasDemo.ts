@@ -11,8 +11,8 @@ function isEven(n: number) {
 
 export class ChristmasDemo extends BaseDemo {
   constructor(props: IBaseDemoProps) {
-    const rows = 15;
-    const cols = 22;
+    const rows = 30;
+    const cols = 44;
     const scaleX = 2;
     const scaleY = 2;
     const superProps: IBaseDemoProps = {

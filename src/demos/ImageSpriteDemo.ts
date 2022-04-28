@@ -8,22 +8,6 @@ export class ImageSpriteDemo extends BaseDemo {
   private _elementRight: ImageSprite;
   private _elementLeft: ImageSprite;
   private _elementBack: ImageSprite;
-// var screen = null,
-// image = null,
-// gfxLayer = null,
-// elementFront = null,
-// elementLeft = null,
-// elementRight = null,
-// elementBack = null;
-
-// var config = {
-// targetDiv:document.getElementById("content"),
-// rows : 50,
-// cols : 80,
-// scaleX : 1,
-// scaleY : 1,
-// fpsElem : document.getElementById('info')
-// };
 
   constructor(props: IBaseDemoProps) {
     const rows = 50;
@@ -35,11 +19,6 @@ export class ImageSpriteDemo extends BaseDemo {
     };
     super(superProps);
     this._gfxLayer = this.panel.createLayer<GfxLayer, ILayerProps>("GfxLayer");
-
-    // const image = new Image();
-    // image.src = "BlueBallSpriteTest.png";
-
-    // image.onload = setupSprites;
 
     const imgLoader = new ImageLoader();
     imgLoader.loadImages({blueBall: BlueBallImage}, imagesHash => {

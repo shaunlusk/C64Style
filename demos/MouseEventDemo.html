@@ -3,139 +3,23 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Mouse Event Demo</title>
-<script type="text/javascript" src="../dist/bundle.dev.js"></script>
+<script type="text/javascript" src="../bundle/demos.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <div id="content">
   </div>
-  <div id="buttons"><button onclick="screen.setPaused(!screen.isPaused());">Pause</button></div>
+  <div id="buttons"><button onclick="demo.togglePause();">Pause</button></div>
   <div id="info"></div>
   <div id="backLinks">
     <a href="index.html">Back to Demos Index</a><br /><br />
     <a href="../index.html">Back to Main Index</a>
   </div>
   <script type="text/javascript">
-  var screen = null,
-    textLayer = null,
-    gfxLayer = null,
-    pixPathArray1 = [{"type":"PIXEL","x":3,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":7,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":7,"color":"#A0A0FF"}],
-    pixPathArray2 = [{"type":"PIXEL","x":3,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":0,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":1,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":2,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":3,"color":"#A0FFA0"},{"type":"PIXEL","x":4,"y":3,"color":"#A0FFA0"},{"type":"PIXEL","x":6,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":3,"color":"#A0A0FF"},{"type":"PIXEL","x":0,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":4,"color":"#A0FFA0"},{"type":"PIXEL","x":4,"y":4,"color":"#A0FFA0"},{"type":"PIXEL","x":6,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":7,"y":4,"color":"#A0A0FF"},{"type":"PIXEL","x":1,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":6,"y":5,"color":"#A0A0FF"},{"type":"PIXEL","x":2,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":5,"y":6,"color":"#A0A0FF"},{"type":"PIXEL","x":3,"y":7,"color":"#A0A0FF"},{"type":"PIXEL","x":4,"y":7,"color":"#A0A0FF"}],
-    pixPathArray3 = [{"type":"PIXEL","x":3,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":7,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":7,"color":"#60FFFF"}],
-    pixPathArray4 = [{"type":"PIXEL","x":3,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":0,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":1,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":2,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":3,"color":C64Style.Color.RED},{"type":"PIXEL","x":4,"y":3,"color":C64Style.Color.RED},{"type":"PIXEL","x":6,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":3,"color":"#60FFFF"},{"type":"PIXEL","x":0,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":4,"color":C64Style.Color.RED},{"type":"PIXEL","x":4,"y":4,"color":C64Style.Color.RED},{"type":"PIXEL","x":6,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":7,"y":4,"color":"#60FFFF"},{"type":"PIXEL","x":1,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":6,"y":5,"color":"#60FFFF"},{"type":"PIXEL","x":2,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":5,"y":6,"color":"#60FFFF"},{"type":"PIXEL","x":3,"y":7,"color":"#60FFFF"},{"type":"PIXEL","x":4,"y":7,"color":"#60FFFF"}],
-    sprite1 = null,
-    sprite2 = null,
-    element = null,
-    xOffset = null,
-    yOffset = null,
-    mouseIsOver = false,
-    dragOn;
-
-  var config = {
-    layerFactory:new C64Style.LayerFactory(),
-    targetDiv:document.getElementById("content"),
-    rows : 25,
-    cols : 40,
-    scaleX : 2,
-    scaleY : 2,
-    fpsElem : document.getElementById('info')
-  };
-
-  function initialize(config) {
-    screen = new C64Style.C64Panel(config);
-
-    screen.initialize();
-
-    textLayer = screen.createLayer("TextLayer", {
-      scaleX:config.scaleX,
-      scaleY:config.scaleY
+     var demo = new c64style.MouseEventDemo({
+      targetElement: document.getElementById('content'),
+      fpsElement: document.getElementById('info')
     });
-    textLayer.writeText("Try clicking and dragging", 4,1,C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("the PixSprite.", 4,2,C64Style.Color.LIGHTBLUE);
-
-    textLayer.writeText("Mouse X:", 1,19,C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("Mouse Y:", 1,20,C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("Mouse Column:", 1,21,C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("Mouse Row:", 1,22,C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("Mouse Over Element?", 1,23,C64Style.Color.LIGHTBLUE);
-
-    gfxLayer = screen.createLayer("GfxLayer");
-
-    sprite1 = new C64Style.PixSprite({
-      x:10, y:10,
-      scaleX:2, scaleY:2,
-      frames:[
-        new C64Style.PixSpriteFrame({pixArray:pixPathArray1, duration:400}),
-        new C64Style.PixSpriteFrame({pixArray:pixPathArray2, duration:400}),
-      ],
-      screenContext:screen
-    });
-    sprite2 = new C64Style.PixSprite({
-      x:10, y:10,
-      scaleX:2, scaleY:2,
-      hidden:true,
-      frames:[
-        new C64Style.PixSpriteFrame({pixArray:pixPathArray3, duration:400}),
-        new C64Style.PixSpriteFrame({pixArray:pixPathArray4, duration:400}),
-      ],
-      screenContext:screen
-    });
-    gfxLayer.addElement(sprite1);
-    gfxLayer.addElement(sprite2);
-
-    screen.on(SL.EventType.MOUSE_DOWN_ON_ELEMENT, function(event) {
-      dragOn = true;
-      xOffset = event.data.x - sprite1.getX();
-      yOffset = event.data.y - sprite1.getY();
-      sprite1.hide();
-      sprite2.show();
-    });
-    screen.on(SL.EventType.MOUSE_UP, function(event) {
-      dragOn = false;
-    });
-    screen.on(SL.EventType.MOUSE_UP_ON_ELEMENT, function(event) {
-      dragOn = false;
-      sprite2.hide();
-      sprite1.show();
-    });
-    screen.on(SL.EventType.MOUSE_MOVE, function(event) {
-      updateMouseStats(event);
-      if (dragOn) {
-        sprite2.setX(event.data.x - xOffset);
-        sprite2.setY(event.data.y - yOffset);
-        sprite1.setX(event.data.x - xOffset);
-        sprite1.setY(event.data.y - yOffset);
-      }
-    });
-    screen.on(SL.EventType.MOUSE_ENTER_ELEMENT, function(event) {
-      mouseIsOver = true;
-    });
-    screen.on(SL.EventType.MOUSE_EXIT_ELEMENT, function(event) {
-      mouseIsOver = false;
-    });
-
-    screen.render(1);
-  }
-
-  function dump() {
-    console.log("x:",sprite1.getX(),"; y:",sprite1.getY(), "; width:", sprite1.getWidth(), "; height;",sprite1.getHeight());
-    console.log("cboxx:",sprite1.getCollisionBoxX(),"; cboxy:",sprite1.getCollisionBoxY(), "; cboxwidth:", sprite1.getCollisionBoxWidth(), "; cboxheight;",sprite1.getCollisionBoxHeight());
-  }
-
-  function updateMouseStats(event) {
-    textLayer.clearLength(15,19,4);
-    textLayer.writeText(event.data.x.toString(), 15,19,C64Style.Color.LIGHTGREEN);
-    textLayer.clearLength(15,20,4);
-    textLayer.writeText(event.data.y.toString(), 15,20,C64Style.Color.LIGHTGREEN);
-    textLayer.clearLength(15,21,4);
-    textLayer.writeText(event.data.col.toString(), 15,21,C64Style.Color.LIGHTGREEN);
-    textLayer.clearLength(15,22,4);
-    textLayer.writeText(event.data.row.toString(), 15,22,C64Style.Color.LIGHTGREEN);
-    textLayer.clearLength(21,23,6);
-    textLayer.writeText(mouseIsOver.toString(), 21,23,C64Style.Color.LIGHTGREEN);
-  }
-
-  initialize(config);
   </script>
 </body>
 </html>
