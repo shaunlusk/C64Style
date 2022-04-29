@@ -3,13 +3,13 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style Text Prompt Demo</title>
-  <script type="text/javascript" src="../dist/bundle.dev.js"></script>
+  <script type="text/javascript" src="../bundle/demos.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   <div id="content">
   </div>
-  <div id="buttons"><button onclick="screen.setPaused(!screen.isPaused());">Pause</button></div>
+  <div id="buttons"><button onclick="demo.togglePause();">Pause</button></div>
   <div id="info"></div>
   <div id="backLinks">
     <a href="index.html">Back to Demos Index</a><br /><br />
@@ -17,37 +17,10 @@
   </div>
   <div id="mCoords"></div>
   <script type="text/javascript">
-  var screen = null,
-    textLayer = null,
-    p = null,
-    gfxLayer = null
-  var debug = false;
-  var config = {
-    targetDiv:document.getElementById("content")
-  };
-
-  function initialize(config) {
-    screen = new C64Style.C64Panel(config);
-
-    screen.initialize();
-
-    textLayer = screen.createLayer("TextLayer");
-
-    p = textLayer.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
-    screen.render(1);
-
-  }
-  initialize(config);
-
-  function promptCallback(value) {
-    console.log("rcvd:" +value);
-    textLayer.clearLength(0, 5, 40);
-    textLayer.writeText("Last Input:", 0, 5, C64Style.Color.LIGHTBLUE);
-    textLayer.writeText(value, 13, 5, C64Style.Color.WHITE);
-
-    p.prompt("Input: ", 0, 1, C64Style.Color.LIGHTBLUE, 10, promptCallback);
-  }
-
+    var demo = new c64style.TextPromptDemo({
+      targetElement: document.getElementById('content'),
+      fpsElement: document.getElementById('info')
+    });
   </script>
 </body>
 </html>
