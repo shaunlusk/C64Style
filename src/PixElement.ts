@@ -7,8 +7,8 @@ import { Palette } from './Palette';
 
 export interface IPixElementProps extends IGfxElementProps {
   pixPathArray: IPixPath[];
-  defaultPalette: Palette;
-  pixRenderer: IPixRenderer;
+  defaultPalette?: Palette;
+  pixRenderer?: IPixRenderer;
 }
 
 /** Element that draws pixels to a canvas from a PixArray<br />
