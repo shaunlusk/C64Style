@@ -393,7 +393,7 @@ export class PaletteDemo extends BaseDemo {
     }
   }
 
-  private updatePaletteColors() {
+  public updatePaletteColors() {
     var inputs = document.getElementsByName("paletteColor");
     for (var i = 0; i < inputs.length; i++) {
       var input = inputs[i] as HTMLInputElement;
@@ -405,9 +405,3 @@ export class PaletteDemo extends BaseDemo {
     }
   }
 }
-
-var demo = new PaletteDemo({
-  targetElement: document.getElementById('content'),
-  fpsElement: document.getElementById('info')
-});
-(window as any)['demo'] = demo;

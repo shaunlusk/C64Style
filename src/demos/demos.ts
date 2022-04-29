@@ -4,5 +4,6 @@ export { ConfettiDemo } from "./ConfettiDemo";
 export { ImageSpriteDemo } from "./ImageSpriteDemo";
 export { MouseEventDemo } from "./MouseEventDemo";
 export { PaletteDemo } from "./PaletteDemo";
+export { PaletteDemo2 } from "./PaletteDemo2";
 export { TextDemo } from "./TextDemo";
 export { TextElementDemo } from "./TextElementDemo";
