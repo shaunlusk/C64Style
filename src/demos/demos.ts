@@ -3,6 +3,7 @@ export { ChristmasDemo } from "./ChristmasDemo";
 export { ConfettiDemo } from "./ConfettiDemo";
 export { ImageSpriteDemo } from "./ImageSpriteDemo";
 export { Invaders } from "./Invaders";
+export { MainIndex } from "./MainIndex";
 export { MouseEventDemo } from "./MouseEventDemo";
 export { PaletteDemo } from "./PaletteDemo";
 export { PaletteDemo2 } from "./PaletteDemo2";

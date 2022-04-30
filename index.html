@@ -3,7 +3,6 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
   <title>C64Style</title>
-  <script type="text/javascript" src="./dist/bundle.dev.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
 #content {
@@ -14,144 +13,9 @@
 <body>
   <div id="content">
   </div>
+  <script type="text/javascript" src="./bundle/demos.dev.js"></script>
   <script type="text/javascript">
-
-  var config = {
-    targetDiv:document.getElementById("content"),
-    rows : 28,
-    cols : 40,
-    scaleX : 2,
-    scaleY : 2
-  };
-
-  var screen = null, textLayer = null, gfxLayer;
-
-  function initialize(config) {
-
-    // Create the C64 Screen
-    screen = new C64Style.C64Panel(config);
-    screen.initialize();
-
-    textLayer = screen.createLayer("TextLayer", {
-      registerKeyHandler : screen.addEventListenerToDocument,
-      scaleX:config.scaleX,
-      scaleY:config.scaleY
-    });
-    gfxLayer = screen.createLayer("GfxLayer");
-    screen.render();
-
-    element = new C64Style.TextButton({
-      screenContext:screen,
-      x:9.5 * C64Style.CELLWIDTH,
-      y:7 * C64Style.CELLHEIGHT,
-      text:"Download Bundle.JS",
-      backgroundColor:C64Style.Color.BLUE,
-      buttonColor : C64Style.Color.LIGHTBLUE,
-      textColor : C64Style.Color.LIGHTBLUE,
-      highlightButtonColor : C64Style.Color.LIGHTBLUE,
-      highlightTextColor : C64Style.Color.BLUE,
-      href:"https://shaunlusk.github.io/C64Style/dist/bundle.js",
-      newWindow : true
-    });
-    gfxLayer.addElement(element);
-    element = new C64Style.TextButton({
-      screenContext:screen,
-      x:11 * C64Style.CELLWIDTH + 4,
-      y:10 * C64Style.CELLHEIGHT,
-      text:"View On GitHub",
-      backgroundColor:C64Style.Color.BLUE,
-      buttonColor : C64Style.Color.LIGHTBLUE,
-      textColor : C64Style.Color.LIGHTBLUE,
-      highlightButtonColor : C64Style.Color.LIGHTBLUE,
-      highlightTextColor : C64Style.Color.BLUE,
-      href:"https://github.com/shaunlusk/C64Style",
-      newWindow : true
-    });
-    gfxLayer.addElement(element);
-    element = new C64Style.TextButton({
-      screenContext:screen,      
-      x:12 * C64Style.CELLWIDTH,
-      y:13 * C64Style.CELLHEIGHT,
-      text:"Documentation",
-      backgroundColor:C64Style.Color.BLUE,
-      buttonColor : C64Style.Color.LIGHTBLUE,
-      textColor : C64Style.Color.LIGHTBLUE,
-      highlightButtonColor : C64Style.Color.LIGHTBLUE,
-      highlightTextColor : C64Style.Color.BLUE,
-      href:"docs/index.html",
-      newWindow : true
-    });
-    gfxLayer.addElement(element);
-    element = new C64Style.TextButton({
-      screenContext:screen,      
-      x:16 * C64Style.CELLWIDTH,
-      y:16 * C64Style.CELLHEIGHT,
-      text:"Tools",
-      backgroundColor:C64Style.Color.BLUE,
-      buttonColor : C64Style.Color.LIGHTBLUE,
-      textColor : C64Style.Color.LIGHTBLUE,
-      highlightButtonColor : C64Style.Color.LIGHTBLUE,
-      highlightTextColor : C64Style.Color.BLUE,
-      href:"tools/index.html"
-    });
-    gfxLayer.addElement(element);
-    element = new C64Style.TextButton({
-      screenContext:screen,      
-      x:15 * C64Style.CELLWIDTH + 4,
-      y:19 * C64Style.CELLHEIGHT,
-      text:"Demos!",
-      backgroundColor:C64Style.Color.BLUE,
-      buttonColor : C64Style.Color.LIGHTBLUE,
-      textColor : C64Style.Color.LIGHTBLUE,
-      highlightButtonColor : C64Style.Color.LIGHTBLUE,
-      highlightTextColor : C64Style.Color.BLUE,
-      href:"demos/index.html",
-      onClick: function(e) {
-        console.log(e);
-      }
-    });
-    gfxLayer.addElement(element);
-
-    element = new C64Style.TextButton({
-      screenContext:screen,      
-      x:14 * C64Style.CELLWIDTH + 4,
-      y:22 * C64Style.CELLHEIGHT,
-      text:"Tutorial",
-      backgroundColor:C64Style.Color.BLUE,
-      buttonColor : C64Style.Color.LIGHTBLUE,
-      textColor : C64Style.Color.LIGHTBLUE,
-      highlightButtonColor : C64Style.Color.LIGHTBLUE,
-      highlightTextColor : C64Style.Color.BLUE,
-      href:"demos/tutorial.html",
-      onClick: function(e) {
-        console.log(e);
-      }
-    });
-    gfxLayer.addElement(element);
-
-    textLayer.writeText("C64Style", 16, 1, C64Style.Color.WHITE, C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("A library for rendering Commodore 64", 1, 3, C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("style graphics with JavaScript and ", 2, 4, C64Style.Color.LIGHTBLUE);
-    textLayer.writeText("HTML5 Canvas.", 13, 5, C64Style.Color.LIGHTBLUE);
-
-    textLayer.writeText("C64Style is maintained by", 1, 26, C64Style.Color.LIGHTBLUE);
-    element = new C64Style.TextLink({
-      screenContext:screen,
-      
-      x:27 * C64Style.CELLWIDTH, y:26 * C64Style.CELLHEIGHT,
-      text:"shaunlusk",
-      color:C64Style.Color.LIGHTBLUE,
-      backgroundColor:C64Style.Color.BLUE,
-      mouseOverColor: C64Style.Color.BLUE,
-      mouseOverBackgroundColor: C64Style.Color.LIGHTBLUE,
-      href:"https://github.com/shaunlusk",
-      newWindow : true
-    });
-    gfxLayer.addElement(element);
-    for (var i = 0; i < "shaunlusk".length; i++) textLayer.drawSymbol("BAR_99", 27 + i, 27, C64Style.Color.LIGHTBLUE);
-  }
-
-  initialize(config);
+    var demo = new c64style.MainIndex();
   </script>
 </body>
 </html>
