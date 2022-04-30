@@ -1,11 +1,11 @@
 import { CanvasContextWrapper, ISpriteProps, Sprite } from "@shaunlusk/slgfx";
 import { IColor } from "./Color";
-import { Palette } from "./Palette";
+import { IPalette, Palette } from "./Palette";
 import { IPixRenderer, PixRenderer } from "./PixRenderer";
 import { PixSpriteFrame } from "./PixSpriteFrame";
 
 export interface IPixSpriteProps extends ISpriteProps {
-  defaultPalette?: Palette;
+  defaultPalette?: IPalette;
   pixRenderer?: IPixRenderer;
 }
 
@@ -38,10 +38,12 @@ export interface IPixSpriteProps extends ISpriteProps {
 * @see ImageSprite
 */
 export class PixSprite extends Sprite {
-  _palette: Palette;
+  _palette: IPalette;
   _width: number;
   _height: number;
   _pixRenderer: IPixRenderer;
+  isAlien: boolean;
+  scoreValue: number;
 
   constructor(props: IPixSpriteProps) {
     super(props);

@@ -3,11 +3,11 @@ import { IColor } from './Color';
 import { IPixRenderer, PixRenderer } from './PixRenderer';
 import { IPixPath } from './IPixPath';
 import { GfxElement, CanvasContextWrapper, IGfxElementProps } from '@shaunlusk/slgfx';
-import { Palette } from './Palette';
+import { IPalette, Palette } from './Palette';
 
 export interface IPixElementProps extends IGfxElementProps {
   pixPathArray: IPixPath[];
-  defaultPalette?: Palette;
+  defaultPalette?: IPalette;
   pixRenderer?: IPixRenderer;
 }
 
@@ -52,7 +52,7 @@ export class PixElement extends GfxElement {
   private _width: number;
   private _height: number;
   private _pixPathArray: IPixPath[];
-  private _palette: Palette;
+  private _palette: IPalette;
   private _pixRenderer: IPixRenderer;
 
   constructor(props: IPixElementProps) {

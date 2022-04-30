@@ -1,9 +1,9 @@
 import { CanvasContextWrapper, ICanvasContextWrapper, Utils } from "@shaunlusk/slgfx";
 import { IPixPath } from "./IPixPath";
-import { Palette } from "./Palette";
+import { IPalette, Palette } from "./Palette";
 
 export interface IPixRenderer {
-  renderPixPathArray(context: CanvasContextWrapper, x: number, y: number, width: number, height: number, pixPathArray: IPixPath[], palette: Palette, pixelWidth: number, pixelHeight: number, flipHorizontally: boolean, flipVertically: boolean, rotation: number): void;
+  renderPixPathArray(context: CanvasContextWrapper, x: number, y: number, width: number, height: number, pixPathArray: IPixPath[], palette: IPalette, pixelWidth: number, pixelHeight: number, flipHorizontally: boolean, flipVertically: boolean, rotation: number): void;
 }
 
 /** Draws Pix Arrays to a canvas.
@@ -30,7 +30,7 @@ export class PixRenderer implements IPixRenderer {
     x: number, y: number, 
     width: number, height: number, 
     pixPathArray: IPixPath[], 
-    palette: Palette, 
+    palette: IPalette, 
     pixelWidth: number, pixelHeight: number, 
     flipHorizontally: boolean, flipVertically: boolean, 
     rotation: number
@@ -50,7 +50,7 @@ export class PixRenderer implements IPixRenderer {
     x: number, y: number, 
     width: number, height: number, 
     pixPathArray: IPixPath[], 
-    palette: Palette, 
+    palette: IPalette, 
     pixelWidth: number, pixelHeight: number, 
     flipHorizontally: boolean, flipVertically: boolean, 
     rotation: number
@@ -79,7 +79,7 @@ export class PixRenderer implements IPixRenderer {
     x: number, 
     y: number, 
     pixPathArray: IPixPath[], 
-    palette: Palette, 
+    palette: IPalette, 
     pixelWidth: number, pixelHeight: number, 
     fillFn: (x: number, y: number, width: number, height: number) => void
   ) {
@@ -94,7 +94,7 @@ export class PixRenderer implements IPixRenderer {
     x: number, 
     y: number, 
     pixPath: IPixPath, 
-    palette: Palette, 
+    palette: IPalette, 
     pixelWidth: number, pixelHeight: number, 
     fillFn: (x: number, y: number, width: number, height: number) => void
   ) {
@@ -112,7 +112,7 @@ export class PixRenderer implements IPixRenderer {
   }
 
   /** @private */
-  private setFillColor(context: ICanvasContextWrapper, pixPath: IPixPath, palette: Palette) {
+  private setFillColor(context: ICanvasContextWrapper, pixPath: IPixPath, palette: IPalette) {
       if  (pixPath.colorIndex !== undefined && pixPath.colorIndex !== null) {
         if (palette.size() === 0 || pixPath.colorIndex >= palette.size()) throw new Error("Color not specified in palette. (" + pixPath.color + ")");
         context.setFillStyle(palette.colorFromIndex(pixPath.colorIndex).value);
