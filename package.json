@@ -9,6 +9,7 @@
   "scripts": {
     "build": "npm run clean && npm run test && tsc && webpack --config webpack.config.js",
     "build:dev": "tsc && webpack --config webpack.dev.config.js",
+    "build:docs": "typedoc",
     "test": "node ./node_modules/jest/bin/jest ./test --colors --coverage",
     "clean": "rimraf dist docs bundle gh-pages"
   },

@@ -31,7 +31,9 @@ The following concepts are covered:
   The complete game can be found here: <a href="../demos/invaders.html">Tutorial - Alien Invasion</a>
 </p>
 <p>
-This tutorial assumes at least a basic working knowledge of HTML and Javascript. </p>
+This tutorial assumes at least a basic working knowledge of HTML and Typescript. 
+All of the demos are packaged via webpack; however, it's usage is not covered here.
+</p>
 <p>
 We will be making an alien invasion type of game, in the spirit of Space Invaders and Gorf.</p>
 <p>
@@ -41,7 +43,7 @@ First, let's get some basic page stuff out of the way.  Start your HTML page and
 <p class="code newCode">&lt;html&gt;
 &lt;head&gt;
   &lt;title&gt;C64Style Tutorial - Alien Invasion&lt;/title&gt;
-  &lt;script type="text/javascript" src="bundle.js"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript" src="path/to/bundle/index.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 </p>
 <p>
@@ -57,7 +59,7 @@ Setup the page body:
 <p>
 The "content" div will hold our C64 screen.
 
-So now, let's create a bare-bones screen:
+So now, let's create a class to manage our game, and setup a bare-bones panel:
 </p><p class="code newCode">&lt;script&gt;
 var GameContext = GameContext || {};
 
